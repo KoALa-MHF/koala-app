@@ -2,31 +2,25 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { NxWelcomeComponent } from './nx-welcome.component';
 import { HttpClientModule } from '@angular/common/http';
-import { SessionsComponent } from './sessions/sessions.component';
-import { RoutingModule } from './routing/routing.module';
 
 import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { InMemoryCache } from '@apollo/client/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { MatListModule } from '@angular/material/list';
-import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
+import { AppRoutingModule } from './app-routing.module';
+import { CoreModule } from './core/core.module';
 
 @NgModule({
-  declarations: [AppComponent, NxWelcomeComponent, SessionsComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
-    RoutingModule,
     ApolloModule,
+    CoreModule,
     BrowserAnimationsModule,
-    MatListModule,
-    MatButtonModule,
-    MatInputModule,
+    AppRoutingModule
   ],
   providers: [
     {
