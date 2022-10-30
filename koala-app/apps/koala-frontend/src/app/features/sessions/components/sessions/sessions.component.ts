@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { SessionsService } from '../../services/sessions.service';
 
-import { Apollo, gql } from 'apollo-angular';
 
 @Component({
   selector: 'koala-app-sessions',
@@ -11,22 +11,10 @@ export class SessionsComponent implements OnInit {
   sessions: any[] = [];
   sessionName: string = 'Session 2';
 
-  constructor(private apollo: Apollo) {}
+  constructor(private sessionService: SessionsService) {}
 
   ngOnInit(): void {
-    this.apollo
-      .watchQuery({
-        query: gql`
-          {
-            sessions {
-              id
-              name
-            }
-          }
-        `,
-        pollInterval: 500
-      })
-      .valueChanges.subscribe((result: any) => {
+    this.sessionService.getAll().subscribe((result: any) => {
         this.sessions = result.data?.sessions;
         //this.loading = result.loading;
         //this.error = result.error;
@@ -34,20 +22,7 @@ export class SessionsComponent implements OnInit {
   }
 
   public createNewSession() {
-    this.apollo
-      .mutate({
-        mutation: gql`
-          mutation createNewSession($sessionName: String!) {
-            createSession(createSessionInput: { name: $sessionName }) {
-              id
-              name
-            }
-          }
-        `,
-        variables: {
-          sessionName: this.sessionName,
-        },
-      })
+    this.sessionService.create(this.sessionName)
       .subscribe(
         () => {
           console.log('Success');

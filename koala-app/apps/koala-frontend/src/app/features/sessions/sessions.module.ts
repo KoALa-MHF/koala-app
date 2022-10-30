@@ -7,6 +7,7 @@ import { SessionsComponent } from './components/sessions/sessions.component';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { SessionsService } from './services/sessions.service';
 
 @NgModule({
   declarations: [SessionsComponent],
@@ -16,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
     MatListModule,
     MatButtonModule,
     MatInputModule,
-  ]
+  ],
+  providers: [SessionsService]
 })
 export class SessionsModule { }
