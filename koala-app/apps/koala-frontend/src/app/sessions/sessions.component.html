@@ -1,0 +1,7 @@
+<mat-list>
+  <mat-list-item matLine *ngFor="let session of sessions">
+    {{ session.name }}</mat-list-item>
+</mat-list>
+
+<input matInput placeholder="Session Name" [value]="sessionName" (input)="onSessionNameInputChanged($event)">
+<button mat-button color="primary" (click)="createNewSession()">Anlegen</button>
