@@ -33,6 +33,6 @@ export class SessionsService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} session`;
+    return this.sessionsRepository.delete(id);
   }
 }

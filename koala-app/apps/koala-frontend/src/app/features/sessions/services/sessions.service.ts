@@ -9,6 +9,8 @@ const GET_SESSIONS = gql`
     sessions {
       id
       name
+      createdDate
+      updatedDate
     }
   }
 `;
@@ -22,30 +24,42 @@ const CREATE_SESSION = gql`
   }
 `;
 
+const DELETE_SESSION = gql`
+  mutation deleteSession($id: Int!) {
+    removeSession(id: $id) {
+        id
+    }
+  }
+`;
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SessionsService {
+  constructor(private apollo: Apollo) {}
 
-  constructor(private apollo: Apollo) { }
-
-  getAll() : Observable<ApolloQueryResult<unknown>> {
-    return this.apollo
-    .watchQuery({
+  getAll(): Observable<ApolloQueryResult<unknown>> {
+    return this.apollo.watchQuery({
       query: GET_SESSIONS,
-      pollInterval: 500
-    })
-    .valueChanges
+      pollInterval: 500,
+    }).valueChanges;
   }
 
-
   create(name: string) {
-    return this.apollo
-      .mutate({
-        mutation: CREATE_SESSION,
+    return this.apollo.mutate({
+      mutation: CREATE_SESSION,
+      variables: {
+        name: name,
+      },
+    });
+  }
+
+  delete(id: number) {
+    return this.apollo.mutate({
+        mutation: DELETE_SESSION,
         variables: {
-          name: name,
+            id
         }
-      })
+    })
   }
 }

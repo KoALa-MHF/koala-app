@@ -1,5 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @ObjectType()
 @Entity()
@@ -8,7 +8,15 @@ export class Session {
   @Field(() => Int, { description: 'Example field (placeholder)' })
   id: number;
 
-  @Field()
   @Column()
+  @Field()
   name: string;
+
+  @CreateDateColumn()
+  @Field()
+  createdDate: Date;
+
+  @UpdateDateColumn()
+  @Field()
+  updatedDate: Date;
 }
