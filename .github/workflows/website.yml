@@ -11,18 +11,16 @@ jobs:
   deploy:
     name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./docs
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: npm
-
       - name: Install dependencies
-        working-directory: ./docs
         run: npm install
       - name: Build website
-        working-directory: ./docs
         run: npm run build
 
       # Popular action to deploy to GitHub Pages:
@@ -32,7 +30,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           # Build output to publish to the `gh-pages` branch:
-          publish_dir: ./docs/build
+          publish_dir: ./build
           # The following lines assign commit authorship to the official
           # GH-Actions bot for deploys to `gh-pages` branch:
           # https://github.com/actions/checkout/issues/13#issuecomment-724415212
