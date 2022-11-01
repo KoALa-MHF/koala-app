@@ -9,6 +9,10 @@ on:
     # Review gh actions docs if you want to further define triggers, paths, etc
     # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on
 
+defaults:
+  run:
+    working-directory: ./website
+
 jobs:
   deploy:
     name: Deploy to GitHub Pages
@@ -21,10 +25,8 @@ jobs:
         with:
           node-version: 18
       - name: Install dependencies
-        working-directory: ./website
         run: npm install
       - name: Build website
-        working-directory: ./website
         run: npm run build
 
       # Popular action to deploy to GitHub Pages:
