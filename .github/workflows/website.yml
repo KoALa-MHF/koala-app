@@ -12,6 +12,8 @@ jobs:
   deploy:
     name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
+    env:
+      working-directory: website
     permissions:
       contents: write
     concurrency:
@@ -19,7 +21,7 @@ jobs:
       group: ${{ github.workflow }}-${{ github.ref }}
     defaults:
       run:
-        working-directory: website
+        working-directory: ${{ env.working-directory }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -34,8 +36,6 @@ jobs:
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
-        # Skip deployment when tested on a different branch than main
-        if: ${{ github.ref == 'refs/heads/main' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./website/build
+          publish_dir: ${{ env.working-directory }}/build
