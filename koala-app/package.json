@@ -7,7 +7,8 @@
     "postinstall": "node ./decorate-angular-cli.js",
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "codegen": "graphql-codegen --config codegen.ts"
   },
   "private": true,
   "dependencies": {
@@ -49,6 +50,10 @@
     "@angular/cli": "~14.2.0",
     "@angular/compiler-cli": "~14.2.0",
     "@angular/language-service": "~14.2.0",
+    "@graphql-codegen/cli": "2.13.10",
+    "@graphql-codegen/typescript": "^2.8.1",
+    "@graphql-codegen/typescript-apollo-angular": "^3.5.6",
+    "@graphql-codegen/typescript-operations": "^2.5.6",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
     "@nrwl/cli": "15.0.4",
