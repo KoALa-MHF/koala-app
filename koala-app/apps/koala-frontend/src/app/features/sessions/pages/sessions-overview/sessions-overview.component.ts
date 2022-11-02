@@ -1,17 +1,21 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Session } from 'apps/koala-frontend/src/app/generated/graphql';
 import { SessionsService } from '../../services/sessions.service';
 
 @Component({
-  selector: 'koala-app-sessions',
-  templateUrl: './sessions.component.html',
-  styleUrls: ['./sessions.component.scss'],
+  selector: 'koala-app-sessions-overview',
+  templateUrl: './sessions-overview.component.html',
+  styleUrls: ['./sessions-overview.component.scss'],
 })
-export class SessionsComponent implements OnInit {
+export class SessionsOverviewPage implements OnInit {
   sessions: any[] = [];
-  sessionName: string = 'Session 2';
   displayedColumns: string[] = ['name', 'createdDate', 'updatedDate', 'delete'];
 
-  constructor(private sessionService: SessionsService) {}
+  constructor(
+    private readonly sessionService: SessionsService,
+    private readonly router: Router
+  ) {}
 
   ngOnInit(): void {
     this.sessionService.getAll().subscribe((result: any) => {
@@ -21,17 +25,8 @@ export class SessionsComponent implements OnInit {
     });
   }
 
-  public createNewSession() {
-    this.sessionService.create(this.sessionName).subscribe(
-      () => {
-        console.log('Success');
-      },
-      (error) => {}
-    );
-  }
-
-  public onSessionNameInputChanged(event: any) {
-    this.sessionName = event.target.value;
+  public onSessionCreate() {
+    this.router.navigate(['sessions/create']);
   }
 
   public onSessionDelete(session: any) {

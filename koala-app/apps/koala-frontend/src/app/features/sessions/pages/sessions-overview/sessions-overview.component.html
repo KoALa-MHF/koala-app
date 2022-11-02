@@ -1,0 +1,17 @@
+<div style="margin: 20px">
+  <koala-app-sessions-overview-table
+    [sessions]="sessions"
+    (sessionDeleted)="onSessionDelete($event)"
+  ></koala-app-sessions-overview-table>
+
+  <div class="create-area">
+    <button
+      mat-fab
+      (click)="onSessionCreate()"
+      color="primary"
+      aria-label="Session Anlegen"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</div>

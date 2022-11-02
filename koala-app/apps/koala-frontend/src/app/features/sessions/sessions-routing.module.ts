@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SessionsComponent } from './components/sessions/sessions.component';
+import { SessionCreatePage } from './pages/session-create/session-create.component';
+import { SessionsOverviewPage } from './pages/sessions-overview/sessions-overview.component';
 
 const routes: Routes = [
-  { path: '', component: SessionsComponent }
+  { path: '', component: SessionsOverviewPage },
+  { path: 'create', component: SessionCreatePage },
 ];
 
 @NgModule({
