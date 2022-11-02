@@ -53,6 +53,21 @@ const config = {
     ],
   ],
 
+  plugins: [
+    [
+      "docusaurus-graphql-plugin",
+      {
+        // can be a path, a glob or an URL
+        schema: "http://localhost:3333/graphql",
+        routeBasePath: "/docs/development/api",
+        sidebar: {
+          label: "GraphQL API",
+          position: 4,
+        },
+      },
+    ],
+  ],
+
   themes: [
     [
       // @ts-ignore
