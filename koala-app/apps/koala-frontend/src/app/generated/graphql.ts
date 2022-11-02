@@ -105,7 +105,7 @@ export const GetSessionsDocument = gql`
     providedIn: 'root'
   })
   export class GetSessionsGQL extends Apollo.Query<GetSessionsQuery, GetSessionsQueryVariables> {
-    document = GetSessionsDocument;
+    override document = GetSessionsDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
@@ -124,7 +124,7 @@ export const CreateNewSessionDocument = gql`
     providedIn: 'root'
   })
   export class CreateNewSessionGQL extends Apollo.Mutation<CreateNewSessionMutation, CreateNewSessionMutationVariables> {
-    document = CreateNewSessionDocument;
+    override document = CreateNewSessionDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
@@ -142,7 +142,7 @@ export const DeleteSessionDocument = gql`
     providedIn: 'root'
   })
   export class DeleteSessionGQL extends Apollo.Mutation<DeleteSessionMutation, DeleteSessionMutationVariables> {
-    document = DeleteSessionDocument;
+    override document = DeleteSessionDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
