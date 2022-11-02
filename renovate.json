@@ -4,12 +4,13 @@
     "config:base"
   ],
   "timezone": "Europe/Berlin",
-  "schedule": ["before 2am on monday"]
+  "schedule": ["before 2am on monday"],
+  "prConcurrentLimit": 5,
   "packageRules": [
     {
       "groupName": "bot: devDependencies",
       "matchDepTypes": ["devDependencies"],
-      "automergeType": "branch"
+      "automergeType": "branch",
       "automerge": true
     },
     {
