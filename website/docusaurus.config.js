@@ -80,15 +80,27 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'intro',
+            docId: 'guide/intro',
             position: 'left',
-            label: 'Tutorial',
+            label: 'Guide',
+          },
+          {
+            type: 'doc',
+            docId: 'development/intro',
+            position: 'left',
+            label: 'Development',
           },
           {to: '/blog', label: 'Blog', position: 'left'},
           {
             href: 'https://github.com/KoALa-MHF/koala-app',
             label: 'GitHub',
             position: 'right',
+          },
+          {
+            type: 'doc',
+            docId: 'community/intro',
+            position: 'left',
+            label: 'Community',
           },
         ],
       },
