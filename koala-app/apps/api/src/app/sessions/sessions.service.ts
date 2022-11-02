@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -8,10 +8,10 @@ import { Session } from './entities/session.entity';
 
 @Injectable()
 export class SessionsService {
-    constructor(
-        @InjectRepository(Session)
-        private sessionsRepository: Repository<Session>,
-      ) {}
+  constructor(
+    @InjectRepository(Session)
+    private sessionsRepository: Repository<Session>
+  ) {}
 
   create(createSessionInput: CreateSessionInput) {
     const newSession = this.sessionsRepository.create();
@@ -25,11 +25,24 @@ export class SessionsService {
   }
 
   findOne(id: number) {
-    return this.sessionsRepository.findOneByOrFail( { id });
+    return this.sessionsRepository.findOneByOrFail({ id });
   }
 
-  update(id: number, updateSessionInput: UpdateSessionInput) {
-    return `This action updates a #${id} session`;
+  async update(id: number, updateSessionInput: UpdateSessionInput) {
+    try {
+      await this.sessionsRepository.update(updateSessionInput.id, {
+        name: updateSessionInput.name,
+      });
+
+      const updatedData = await this.sessionsRepository.findBy({
+        id: updateSessionInput.id,
+      });
+
+      //graphql expects single object, not array
+      return updatedData[0];
+    } catch (error) {
+      throw new BadRequestException(error.detail);
+    }
   }
 
   remove(id: number) {
