@@ -2,5 +2,34 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:base"
-  ]
+  ],
+  "timezone": "Europe/Berlin",
+  "schedule": ["before 2am on monday"]
+  "packageRules": [
+    {
+      "groupName": "bot: devDependencies",
+      "matchDepTypes": ["devDependencies"],
+      "automergeType": "branch"
+      "automerge": true
+    },
+    {
+      "groupName": "bot: dependencies (non-major)",
+      "matchDepTypes": ["dependencies"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": false
+    },
+    {
+      "groupName": "bot: dependencies",
+      "matchDepTypes": ["dependencies"],
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    },
+    {
+      "groupName": "bot: disabled dependencies",
+      "matchPackageNames": [
+      ],
+      "enabled": false
+    }
+  ],
+  "platformAutomerge": true
 }
