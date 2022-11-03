@@ -1,0 +1,12 @@
+<form class="create-session-form">
+    <mat-form-field class="example-form-field" appearance="fill">
+    <mat-label>Name</mat-label>
+    <input
+        matInput
+        placeholder="Session Name"
+        [value]="session.name"
+        (input)="onSessionNameInputChanged($event)"
+        />
+    </mat-form-field>
+    <button mat-button color="primary" (click)="onCreate()">Anlegen</button>
+</form>

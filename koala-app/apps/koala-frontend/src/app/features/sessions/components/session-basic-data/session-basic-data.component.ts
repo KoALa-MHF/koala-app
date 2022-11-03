@@ -3,14 +3,8 @@ import { Session } from 'apps/koala-frontend/src/app/generated/graphql';
 
 @Component({
   selector: 'koala-app-session-basic-data',
-  template: ` <input
-      matInput
-      placeholder="Session Name"
-      [value]="session.name"
-      (input)="onSessionNameInputChanged($event)"
-    />
-    <button mat-button color="primary" (click)="onCreate()">Anlegen</button>`,
-  styles: [],
+  templateUrl: './session-basic-data.component.html',
+  styleUrls: ['./session-basic-data.component.scss']
 })
 export class SessionBasicDataComponent implements OnInit {
   session: Session;
