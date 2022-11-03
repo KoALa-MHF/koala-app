@@ -1,11 +1,11 @@
-FROM node:18 AS build
-RUN apt-get update && apt-get install -y --no-install-recommends dumb-init
+FROM node:18-bullseye-slim AS build
+RUN apt-get update && apt-get install -y --no-install-recommends dumb-init python3 make g++
 WORKDIR /usr/src/app
 COPY ./ /usr/src/app/
 #RUN npm ci --only=production
 RUN npm ci
 RUN npx nx build api
- 
+RUN npm prune --production
 
 FROM node:18-bullseye-slim
 
