@@ -1,22 +1,19 @@
-# Stage 1: Compile and Build angular codebase
-
-# Use official node image as the base image
-FROM node:18 as build
-# Set the working directory
-WORKDIR /usr/local/app
-# Add the source code to app
-COPY ./ /usr/local/app
-# Install all the dependencies
-RUN npm install
-# Generate the build of the application
+FROM node:18 AS build
+RUN apt-get update && apt-get install -y --no-install-recommends dumb-init
+WORKDIR /usr/src/app
+COPY ./ /usr/src/app/
+#RUN npm ci --only=production
+RUN npm ci
 RUN npx nx build api
+ 
 
+FROM node:18-bullseye-slim
 
-FROM node:18-alpine
+ENV NODE_ENV production
+COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
+USER node
+WORKDIR /usr/src/app
+COPY --chown=node:node --from=build /usr/src/app/node_modules /usr/src/app/node_modules
+COPY --chown=node:node --from=build /usr/src/app/dist/apps/api /usr/src/app
 
-RUN npm install -g nodemon
-
-WORKDIR /app/api
-COPY --from=build /usr/local/app/dist/apps/api /app/api
-
-CMD [ "nodemon", "main.js" ]
+CMD ["dumb-init", "node", "main.js"]
