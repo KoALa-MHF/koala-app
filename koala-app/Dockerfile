@@ -9,7 +9,7 @@ COPY ./ /usr/local/app
 # Install all the dependencies
 RUN npm install
 # Generate the build of the application
-RUN npx nx build
+RUN npx nx build api
 
 
 FROM node:18-alpine
@@ -17,6 +17,6 @@ FROM node:18-alpine
 RUN npm install -g nodemon
 
 WORKDIR /app/api
-COPY --from=build /usr/local/app/dist/ /app/api
+COPY --from=build /usr/local/app/dist/apps/api /app/api
 
 CMD [ "nodemon", "main.js" ]
