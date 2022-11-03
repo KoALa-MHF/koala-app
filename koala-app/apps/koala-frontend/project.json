@@ -23,7 +23,8 @@
         ],
         "styles": [
           "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-          "apps/koala-frontend/src/styles.scss"
+          "apps/koala-frontend/src/styles.scss",
+          "apps/koala-frontend/src/theme.scss"
         ],
         "scripts": []
       },
