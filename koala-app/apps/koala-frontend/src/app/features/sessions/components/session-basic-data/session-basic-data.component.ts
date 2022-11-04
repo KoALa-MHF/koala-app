@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Session } from 'apps/koala-frontend/src/app/generated/graphql';
+import { FormBuilder, Validators } from '@angular/forms';
+import { CreateSessionInput } from 'apps/koala-frontend/src/app/generated/graphql';
 
 @Component({
   selector: 'koala-app-session-basic-data',
@@ -7,21 +8,25 @@ import { Session } from 'apps/koala-frontend/src/app/generated/graphql';
   styleUrls: ['./session-basic-data.component.scss']
 })
 export class SessionBasicDataComponent implements OnInit {
-  session: Session;
+
+  createSessionForm = this.fb.group({
+    sessionName: ['', [Validators.required]],
+  });
 
   @Output()
-  created = new EventEmitter<Session>();
+  created = new EventEmitter<CreateSessionInput>();
 
-  constructor() {
-    this.session = <Session>{ name: '' };
-  }
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {}
 
-  public onCreate() {
-    this.created.emit(this.session);
+  onSubmit() {
+    this.created.emit({
+        name: this.createSessionForm.get('sessionName')?.value || ""
+    });
   }
-  public onSessionNameInputChanged(event: any) {
+
+  /*public onSessionNameInputChanged(event: any) {
     this.session.name = event.target.value;
-  }
+  }*/
 }

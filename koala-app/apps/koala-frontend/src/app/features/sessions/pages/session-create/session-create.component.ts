@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Session } from 'apps/koala-frontend/src/app/generated/graphql';
+import { CreateSessionInput } from 'apps/koala-frontend/src/app/generated/graphql';
 import { SessionsService } from '../../services/sessions.service';
 
 @Component({
@@ -9,14 +9,14 @@ import { SessionsService } from '../../services/sessions.service';
   styleUrls: ['./session-create.component.scss'],
 })
 export class SessionCreatePage implements OnInit {
-  sessionName: string = 'Session 2';
+  sessionName: string = '';
 
   constructor(private readonly sessionService: SessionsService,
                 private readonly router: Router) {}
 
   ngOnInit(): void {}
 
-  public onSessionCreated(session: Session) {
+  public onSessionCreated(session: CreateSessionInput) {
     this.sessionService.create(session.name).subscribe(() => {
         this.router.navigate(['sessions']);
     });

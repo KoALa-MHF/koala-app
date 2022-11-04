@@ -15,6 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { SessionsOverviewTableComponent } from './components/sessions-overview-table/sessions-overview-table.component';
 import { SessionCreatePage } from './pages/session-create/session-create.component';
 import { SessionBasicDataComponent } from './components/session-basic-data/session-basic-data.component';
+import { SharedModule } from '../../shared/shared.module';
 
 
 @NgModule({
@@ -25,7 +26,7 @@ import { SessionBasicDataComponent } from './components/session-basic-data/sessi
     SessionBasicDataComponent,
   ],
   imports: [
-    CommonModule,
+    SharedModule,
     SessionsRoutingModule,
     MatButtonModule,
     MatFormFieldModule,
