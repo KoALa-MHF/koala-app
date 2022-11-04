@@ -7,10 +7,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { BaseEntity } from '../../core/base.entity';
 
 @ObjectType()
 @Entity()
-export class Session {
+export class Session extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field(() => Int, { description: 'ID for Session' })
   id: number;
@@ -19,12 +20,4 @@ export class Session {
   @Field({ description: 'Unique Session Name' })
   @IsNotEmpty()
   name: string;
-
-  @CreateDateColumn()
-  @Field({ description: 'Creation Date' })
-  createdDate: Date;
-
-  @UpdateDateColumn()
-  @Field({ description: 'Date of Last Update' })
-  updatedDate: Date;
 }
