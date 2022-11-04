@@ -14,14 +14,14 @@ Welcome to the KoALa project.
 To install the KoALa app on your local mashine, open a terminal window and run the following command:
 
 ```Bash
-cd koala-frontend
+cd koala-app
 npm install
 ```
 
 ### Start Frontend
 
 ```Bash
-cd koala-frontend
+cd koala-app
 nx serve koala-frontend
 ```
 
@@ -30,7 +30,7 @@ Open the url http://localhost:4200 in a browser
 ### Start Backend
 
 ```Bash
-cd koala-frontend
+cd koala-app
 nx serve api
 ```
 
