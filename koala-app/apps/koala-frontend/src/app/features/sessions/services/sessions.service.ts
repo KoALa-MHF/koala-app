@@ -3,6 +3,11 @@ import { ApolloQueryResult } from '@apollo/client/core';
 import { Apollo, gql } from 'apollo-angular';
 import { Observable } from 'rxjs';
 
+import {
+  CreateNewSessionGQL,
+  DeleteSessionGQL,
+} from '../../../generated/graphql';
+
 const GET_SESSIONS = gql`
   query GetSessions {
     sessions {
@@ -10,23 +15,6 @@ const GET_SESSIONS = gql`
       name
       createdDate
       updatedDate
-    }
-  }
-`;
-
-const CREATE_SESSION = gql`
-  mutation createNewSession($name: String!) {
-    createSession(createSessionInput: { name: $name }) {
-      id
-      name
-    }
-  }
-`;
-
-const DELETE_SESSION = gql`
-  mutation deleteSession($id: Int!) {
-    removeSession(id: $id) {
-        id
     }
   }
 `;
