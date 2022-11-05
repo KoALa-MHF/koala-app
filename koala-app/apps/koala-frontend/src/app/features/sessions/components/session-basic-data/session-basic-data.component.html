@@ -1,10 +1,30 @@
-<form [formGroup]="createSessionForm" class="create-session-form" (ngSubmit)="onSubmit()">
-    <mat-form-field appearance="fill">
-    <mat-label>Name</mat-label>
-    <input
-        matInput
-        placeholder="Session Name"
-        formControlName="sessionName"/>
+<form [formGroup]="basicDataForm" >
+  <div class="form-grid">
+    <mat-label id="session-type-label" class="form-row form-row-label">Typ</mat-label>
+    <mat-radio-group
+      aria-labelledby="session-type-label"
+      aria-label="Session Typ"
+      formControlName="sessionType"
+      class="form-row"
+    >
+      <mat-radio-button value="1" style="margin-right: 10px"
+        >Synchron</mat-radio-button
+      >
+      <mat-radio-button value="2">Asynchron</mat-radio-button>
+    </mat-radio-group>
+
+    <mat-label class="form-row form-row-label">Name</mat-label>
+    <mat-form-field appearance="fill" class="form-row">
+      <input matInput formControlName="sessionName" />
     </mat-form-field>
-    <button mat-button color="primary" type="submit" [disabled]="!createSessionForm.valid">Anlegen</button>
+
+    <mat-label class="form-row form-row-label">Beschreibung</mat-label>
+    <mat-form-field appearance="fill" class="form-row">
+      <textarea
+        matInput
+        placeholder="Beschreibung"
+        formControlName="sessionDescription"
+      ></textarea>
+    </mat-form-field>
+  </div>
 </form>

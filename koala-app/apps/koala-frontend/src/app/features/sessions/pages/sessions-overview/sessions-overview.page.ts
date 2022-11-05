@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SessionsService } from '../../services/sessions.service';
 
 @Component({
-  selector: 'koala-app-sessions-overview',
+  selector: 'koala-sessions-overview',
   templateUrl: './sessions-overview.page.html',
   styleUrls: ['./sessions-overview.page.scss'],
 })

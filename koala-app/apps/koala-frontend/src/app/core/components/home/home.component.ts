@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'koala-app-home',
+  selector: 'koala-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })

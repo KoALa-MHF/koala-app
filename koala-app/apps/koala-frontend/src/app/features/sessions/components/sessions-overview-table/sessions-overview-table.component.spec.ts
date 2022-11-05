@@ -54,7 +54,7 @@ describe('Sessions Overview Table Component', () => {
     const headerRow = tableRows[0];
     expect(headerRow.nativeElement.cells[0].innerHTML).toBe('Name');
     expect(headerRow.nativeElement.cells[1].innerHTML).toBe('Erstellungsdatum');
-    expect(headerRow.nativeElement.cells[2].innerHTML).toBe('Änderungsdatum');
+    expect(headerRow.nativeElement.cells[3].innerHTML).toBe('Letzter Zugriff');
 
     // Data rows
     const row1 = tableRows[1];
@@ -62,7 +62,7 @@ describe('Sessions Overview Table Component', () => {
     expect(row1.nativeElement.cells[1].innerHTML.trim()).toBe(
       pipe.transform(sessionMockData[0].createdDate, 'medium')
     );
-    expect(row1.nativeElement.cells[2].innerHTML.trim()).toBe(
+    expect(row1.nativeElement.cells[3].innerHTML.trim()).toBe(
       pipe.transform(sessionMockData[0].updatedDate, 'medium')
     );
 
@@ -71,7 +71,7 @@ describe('Sessions Overview Table Component', () => {
     expect(row2.nativeElement.cells[1].innerHTML.trim()).toBe(
       pipe.transform(sessionMockData[1].createdDate, 'medium')
     );
-    expect(row2.nativeElement.cells[2].innerHTML.trim()).toBe(
+    expect(row2.nativeElement.cells[3].innerHTML.trim()).toBe(
       pipe.transform(sessionMockData[1].updatedDate, 'medium')
     );
 

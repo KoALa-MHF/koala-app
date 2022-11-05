@@ -1,1 +1,61 @@
-<koala-app-session-basic-data (created)="onSessionCreated($event)"></koala-app-session-basic-data>
+<div style="display: grid; grid-template-columns: auto auto">
+  <mat-card class="card">
+    <mat-card-title-group>
+      <mat-card-title>Allgemeine Angaben</mat-card-title>
+    </mat-card-title-group>
+    <mat-card-content class="card-content">
+      <koala-session-basic-data
+        [basicDataForm]="basicDataFormGroup"
+      ></koala-session-basic-data>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="card">
+    <mat-card-title-group>
+      <mat-card-title>Freigaben</mat-card-title>
+    </mat-card-title-group>
+    <mat-card-content class="card-content">
+      <koala-session-details
+        [sessionDetailsForm]="detailsFormGroup"
+      ></koala-session-details>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="card">
+    <mat-card-title-group>
+      <mat-card-title>Verfügbarkeit</mat-card-title>
+    </mat-card-title-group>
+    <mat-card-content class="card-content">
+      <koala-session-dates
+        [sessionDatesForm]="datesFormGroup"
+      ></koala-session-dates>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="card">
+    <mat-card-title-group>
+      <mat-card-title>Audio</mat-card-title>
+    </mat-card-title-group>
+    <mat-card-content class="card-content">
+      <koala-session-audio [audioForm]="audioFormGroup"></koala-session-audio>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div style="display: flex; justify-content: flex-end; margin-right: 30px">
+  <button
+    mat-button
+    color="primary"
+    type="submit"
+    [disabled]="!createSessionForm.valid"
+    (click)="onSessionCreated()"
+  >
+    Anlegen
+  </button>
+
+  <button mat-button (click)="onCancel()">Abbrechen</button>
+</div>
+
+<div style="margin-top: 50px" [formGroup]="createSessionForm">
+  {{createSessionForm.value | json}}
+</div>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'koala-app-footer',
+  selector: 'koala-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
 })

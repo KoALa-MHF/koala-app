@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Message } from '@koala-app/api-interfaces';
 
 @Component({
-  selector: 'koala-app-root',
+  selector: 'koala-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })

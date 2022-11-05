@@ -5,42 +5,46 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
-  Validators,
 } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatRadioModule } from '@angular/material/radio';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { SessionBasicDataComponent } from './session-basic-data.component';
+import { SessionDatesComponent } from './session-dates.component';
 
-describe('SessionBasicDataComponent', () => {
-  let component: SessionBasicDataComponent;
-  let fixture: ComponentFixture<SessionBasicDataComponent>;
+describe('SessionDatesComponent', () => {
+  let component: SessionDatesComponent;
+  let fixture: ComponentFixture<SessionDatesComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SessionBasicDataComponent],
+      declarations: [SessionDatesComponent],
       imports: [
         MatFormFieldModule,
-        MatInputModule,
-        MatRadioModule,
+        MatCheckboxModule,
         BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
+        MatInputModule,
+        MatDatepickerModule,
+        MatNativeDateModule
       ],
     }).compileComponents();
 
     const formBuilder = TestBed.inject(FormBuilder);
 
-    fixture = TestBed.createComponent(SessionBasicDataComponent);
+    fixture = TestBed.createComponent(SessionDatesComponent);
     component = fixture.componentInstance;
 
-    component.basicDataForm = new FormGroup({
-      sessionName: new FormControl<string>('', [Validators.required]),
-      sessionDescription: new FormControl<string>(''),
-      sessionType: new FormControl<string>('1', [Validators.required]),
+    component.sessionDatesForm = new FormGroup({
+      online: new FormControl<boolean>(false),
+      start: new FormControl<Date | null>(null),
+      end: new FormControl<Date | null>(null),
     });
+
     fixture.detectChanges();
   });
 
