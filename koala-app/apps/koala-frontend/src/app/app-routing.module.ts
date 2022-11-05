@@ -5,7 +5,8 @@ import { HomeComponent } from './core/components/home/home.component';
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent 
+    redirectTo: 'sessions',
+    pathMatch: 'full'
   },
   { 
     path: 'sessions',
