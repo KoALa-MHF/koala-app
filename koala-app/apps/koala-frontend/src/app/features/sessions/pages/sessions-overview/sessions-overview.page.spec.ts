@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ApolloModule } from 'apollo-angular';
 import { SessionsModule } from '../../sessions.module';
 
-import { SessionsOverviewPage } from './sessions-overview.component';
+import { SessionsOverviewPage } from './sessions-overview.page';
 
 import { ApolloTestingController, ApolloTestingModule } from "apollo-angular/testing";
 

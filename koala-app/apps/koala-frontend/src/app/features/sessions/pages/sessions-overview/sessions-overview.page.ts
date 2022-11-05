@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Session } from 'apps/koala-frontend/src/app/generated/graphql';
 import { SessionsService } from '../../services/sessions.service';
 
 @Component({
   selector: 'koala-app-sessions-overview',
-  templateUrl: './sessions-overview.component.html',
-  styleUrls: ['./sessions-overview.component.scss'],
+  templateUrl: './sessions-overview.page.html',
+  styleUrls: ['./sessions-overview.page.scss'],
 })
 export class SessionsOverviewPage implements OnInit {
   sessions: any[] = [];

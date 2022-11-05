@@ -5,8 +5,8 @@ import { SessionsService } from '../../services/sessions.service';
 
 @Component({
   selector: 'koala-app-session-create',
-  templateUrl: './session-create.component.html',
-  styleUrls: ['./session-create.component.scss'],
+  templateUrl: './session-create.page.html',
+  styleUrls: ['./session-create.page.scss'],
 })
 export class SessionCreatePage implements OnInit {
   sessionName: string = '';
