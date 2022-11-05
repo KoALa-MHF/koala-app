@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { SessionsService } from '../../services/sessions.service';
 
 @Component({
@@ -11,10 +10,7 @@ export class SessionsOverviewPage implements OnInit {
   sessions: any[] = [];
   displayedColumns: string[] = ['name', 'createdDate', 'updatedDate', 'delete'];
 
-  constructor(
-    private readonly sessionService: SessionsService,
-    private readonly router: Router
-  ) {}
+  constructor(private readonly sessionService: SessionsService) {}
 
   ngOnInit(): void {
     this.sessionService.getAll().subscribe((result: any) => {
@@ -22,10 +18,6 @@ export class SessionsOverviewPage implements OnInit {
       //this.loading = result.loading;
       //this.error = result.error;
     });
-  }
-
-  public onSessionCreate() {
-    this.router.navigate(['sessions/create']);
   }
 
   public onSessionDelete(session: any) {
