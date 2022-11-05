@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ApolloQueryResult } from '@apollo/client/core';
-
 import { Apollo, gql } from 'apollo-angular';
 import { Observable } from 'rxjs';
 
@@ -36,7 +35,11 @@ const DELETE_SESSION = gql`
   providedIn: 'root',
 })
 export class SessionsService {
-  constructor(private apollo: Apollo) {}
+  constructor(
+    private readonly apollo: Apollo,
+    private readonly createSessionGQL: CreateNewSessionGQL,
+    private readonly deleteSessionGQL: DeleteSessionGQL
+  ) {}
 
   getAll(): Observable<ApolloQueryResult<unknown>> {
     return this.apollo.watchQuery({
@@ -46,20 +49,10 @@ export class SessionsService {
   }
 
   create(name: string) {
-    return this.apollo.mutate({
-      mutation: CREATE_SESSION,
-      variables: {
-        name: name,
-      },
-    });
+    return this.createSessionGQL.mutate({ name });
   }
 
   delete(id: number) {
-    return this.apollo.mutate({
-        mutation: DELETE_SESSION,
-        variables: {
-            id
-        }
-    })
+    return this.deleteSessionGQL.mutate({ id });
   }
 }
