@@ -71,11 +71,6 @@ export type UpdateSessionInput = {
   name: Scalars['String'];
 };
 
-export type GetSessionsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetSessionsQuery = { __typename?: 'Query', sessions: Array<{ __typename?: 'Session', id: number, name: string, createdDate: any, updatedDate: any }> };
-
 export type CreateNewSessionMutationVariables = Exact<{
   name: Scalars['String'];
 }>;
@@ -90,27 +85,11 @@ export type DeleteSessionMutationVariables = Exact<{
 
 export type DeleteSessionMutation = { __typename?: 'Mutation', removeSession: { __typename?: 'Session', id: number } };
 
-export const GetSessionsDocument = gql`
-    query GetSessions {
-  sessions {
-    id
-    name
-    createdDate
-    updatedDate
-  }
-}
-    `;
+export type GetSessionsQueryVariables = Exact<{ [key: string]: never; }>;
 
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class GetSessionsGQL extends Apollo.Query<GetSessionsQuery, GetSessionsQueryVariables> {
-    override document = GetSessionsDocument;
-    
-    constructor(apollo: Apollo.Apollo) {
-      super(apollo);
-    }
-  }
+
+export type GetSessionsQuery = { __typename?: 'Query', sessions: Array<{ __typename?: 'Session', id: number, name: string, createdDate: any, updatedDate: any }> };
+
 export const CreateNewSessionDocument = gql`
     mutation createNewSession($name: String!) {
   createSession(createSessionInput: {name: $name}) {
@@ -143,6 +122,27 @@ export const DeleteSessionDocument = gql`
   })
   export class DeleteSessionGQL extends Apollo.Mutation<DeleteSessionMutation, DeleteSessionMutationVariables> {
     override document = DeleteSessionDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetSessionsDocument = gql`
+    query GetSessions {
+  sessions {
+    id
+    name
+    createdDate
+    updatedDate
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetSessionsGQL extends Apollo.Query<GetSessionsQuery, GetSessionsQueryVariables> {
+    override document = GetSessionsDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

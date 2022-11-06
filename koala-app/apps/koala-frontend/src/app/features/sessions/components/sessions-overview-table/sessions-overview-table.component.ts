@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { Session } from 'apps/koala-frontend/src/app/generated/graphql';
+import { Session } from 'apps/koala-frontend/src/app/graphql/generated/graphql';
 
 @Component({
   selector: 'koala-app-sessions-overview-table',

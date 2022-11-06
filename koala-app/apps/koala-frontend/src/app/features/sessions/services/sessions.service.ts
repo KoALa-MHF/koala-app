@@ -1,38 +1,26 @@
 import { Injectable } from '@angular/core';
 import { ApolloQueryResult } from '@apollo/client/core';
-import { Apollo, gql } from 'apollo-angular';
 import { Observable } from 'rxjs';
 
 import {
   CreateNewSessionGQL,
   DeleteSessionGQL,
-} from '../../../generated/graphql';
-
-const GET_SESSIONS = gql`
-  query GetSessions {
-    sessions {
-      id
-      name
-      createdDate
-      updatedDate
-    }
-  }
-`;
+  GetSessionsGQL
+} from '../../../graphql/generated/graphql';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SessionsService {
   constructor(
-    private readonly apollo: Apollo,
+    private readonly getSessionGQL: GetSessionsGQL,
     private readonly createSessionGQL: CreateNewSessionGQL,
     private readonly deleteSessionGQL: DeleteSessionGQL
   ) {}
 
   getAll(): Observable<ApolloQueryResult<unknown>> {
-    return this.apollo.watchQuery({
-      query: GET_SESSIONS,
-      pollInterval: 500,
+    return this.getSessionGQL.watch({}, {
+        pollInterval: 500
     }).valueChanges;
   }
 
