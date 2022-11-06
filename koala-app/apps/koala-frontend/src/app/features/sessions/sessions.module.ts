@@ -16,7 +16,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { SessionsOverviewTableComponent } from './components/sessions-overview-table/sessions-overview-table.component';
-import { SessionCreatePage } from './pages/session-create/session-create.page';
+import { SessionMaintainPage } from './pages/session-maintain/session-maintain.page';
 import { SessionBasicDataComponent } from './components/session-basic-data/session-basic-data.component';
 import { SharedModule } from '../../shared/shared.module';
 import { SessionDetailsComponent } from './components/session-details/session-details.component';
@@ -28,7 +28,7 @@ import { MatNativeDateModule } from '@angular/material/core';
   declarations: [
     SessionsOverviewPage,
     SessionsOverviewTableComponent,
-    SessionCreatePage,
+    SessionMaintainPage,
     SessionBasicDataComponent,
     SessionDetailsComponent,
     SessionDatesComponent,

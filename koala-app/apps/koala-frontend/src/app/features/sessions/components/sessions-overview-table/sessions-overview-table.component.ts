@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Session } from 'apps/koala-frontend/src/app/graphql/generated/graphql';
 
 @Component({
-  selector: 'koala-app-sessions-overview-table',
+  selector: 'koala-sessions-overview-table',
   templateUrl: './sessions-overview-table.component.html',
   styleUrls: ['./sessions-overview-table.component.scss'],
 })
@@ -12,9 +12,13 @@ export class SessionsOverviewTableComponent implements OnInit {
   sessions: Session[] = [];
 
   @Output()
-  sessionDeleted: EventEmitter<Session> = new EventEmitter<Session>();
+  sessionDelete: EventEmitter<Session> = new EventEmitter<Session>();
   @Output()
-  sessionCreate: EventEmitter<null> = new EventEmitter<null>();
+  sessionCreate: EventEmitter<void> = new EventEmitter<void>();
+  @Output()
+  sessionUpdate: EventEmitter<Session> = new EventEmitter<Session>();
+  @Output()
+  sessionExport: EventEmitter<Session> = new EventEmitter<Session>();
 
   displayedColumns: string[] = [
     'name',
@@ -33,16 +37,21 @@ export class SessionsOverviewTableComponent implements OnInit {
   ngOnInit(): void {}
 
   public onSessionDelete(session: Session) {
-    this.sessionDeleted.emit(session);
+    this.sessionDelete.emit(session);
   }
 
   public onSessionCreate() {
-    this.router.navigate(['sessions/create']);
+    this.sessionCreate.emit();
+    
   }
 
   public onCodePressed(session: Session) {}
 
-  public onExport(session: Session) {}
+  public onExport(session: Session) {
+    this.sessionExport.emit(session);
+  }
 
-  public onSettings(session: Session) {}
+  public onSettings(session: Session) {
+    this.sessionUpdate.emit(session);
+  }
 }

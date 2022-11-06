@@ -3,7 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ApolloTestingController, ApolloTestingModule } from 'apollo-angular/testing';
 import { SessionsModule } from '../../sessions.module';
 
-import { SessionCreatePage } from './session-create.page';
+import { SessionCreatePage } from './session-maintain.page';
 
 describe('SessionCreateComponent', () => {
   let component: SessionCreatePage;

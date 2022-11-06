@@ -47,15 +47,15 @@
     mat-button
     color="primary"
     type="submit"
-    [disabled]="!createSessionForm.valid"
-    (click)="onSessionCreated()"
+    [disabled]="!maintainSessionForm.valid"
+    (click)="onSave()"
   >
-    Anlegen
+    {{mode === 1 ? 'Anlegen' : 'Speichern'}}
   </button>
 
   <button mat-button (click)="onCancel()">Abbrechen</button>
 </div>
 
-<div style="margin-top: 50px" [formGroup]="createSessionForm">
-  {{createSessionForm.value | json}}
+<div style="margin-top: 50px" [formGroup]="maintainSessionForm">
+  {{maintainSessionForm.value | json}}
 </div>

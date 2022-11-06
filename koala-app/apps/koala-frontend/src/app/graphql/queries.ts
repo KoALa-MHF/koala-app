@@ -10,3 +10,13 @@ const GET_SESSIONS = gql`
     }
   }
 `;
+
+const GET_ONE_SESSION = gql`
+query GetOneSession($sessionId: Int!) {
+    session(id: $sessionId) {
+        id
+        name
+        createdDate
+        updatedDate
+    }
+}`

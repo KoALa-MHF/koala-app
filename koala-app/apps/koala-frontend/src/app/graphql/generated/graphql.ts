@@ -78,6 +78,14 @@ export type CreateNewSessionMutationVariables = Exact<{
 
 export type CreateNewSessionMutation = { __typename?: 'Mutation', createSession: { __typename?: 'Session', id: number, name: string } };
 
+export type UpdateSessionMutationVariables = Exact<{
+  id: Scalars['Int'];
+  sessionName: Scalars['String'];
+}>;
+
+
+export type UpdateSessionMutation = { __typename?: 'Mutation', updateSession: { __typename?: 'Session', id: number, name: string } };
+
 export type DeleteSessionMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -89,6 +97,13 @@ export type GetSessionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetSessionsQuery = { __typename?: 'Query', sessions: Array<{ __typename?: 'Session', id: number, name: string, createdDate: any, updatedDate: any }> };
+
+export type GetOneSessionQueryVariables = Exact<{
+  sessionId: Scalars['Int'];
+}>;
+
+
+export type GetOneSessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: number, name: string, createdDate: any, updatedDate: any } };
 
 export const CreateNewSessionDocument = gql`
     mutation createNewSession($name: String!) {
@@ -104,6 +119,25 @@ export const CreateNewSessionDocument = gql`
   })
   export class CreateNewSessionGQL extends Apollo.Mutation<CreateNewSessionMutation, CreateNewSessionMutationVariables> {
     override document = CreateNewSessionDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateSessionDocument = gql`
+    mutation updateSession($id: Int!, $sessionName: String!) {
+  updateSession(updateSessionInput: {id: $id, name: $sessionName}) {
+    id
+    name
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateSessionGQL extends Apollo.Mutation<UpdateSessionMutation, UpdateSessionMutationVariables> {
+    override document = UpdateSessionDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
@@ -143,6 +177,27 @@ export const GetSessionsDocument = gql`
   })
   export class GetSessionsGQL extends Apollo.Query<GetSessionsQuery, GetSessionsQueryVariables> {
     override document = GetSessionsDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetOneSessionDocument = gql`
+    query GetOneSession($sessionId: Int!) {
+  session(id: $sessionId) {
+    id
+    name
+    createdDate
+    updatedDate
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetOneSessionGQL extends Apollo.Query<GetOneSessionQuery, GetOneSessionQueryVariables> {
+    override document = GetOneSessionDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
