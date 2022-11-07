@@ -8,9 +8,9 @@ import {
 export class BaseEntity {
   @CreateDateColumn()
   @Field({ description: 'Creation Date' })
-  createdDate: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
   @Field({ description: 'Date of Last Update' })
-  updatedDate: Date;
+  updatedAt: Date;
 }
