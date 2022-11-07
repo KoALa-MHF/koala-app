@@ -11,18 +11,18 @@ import { SessionsService } from '../../services/sessions.service';
 export class SessionsOverviewPage implements OnInit {
   sessions: Session[] = [];
 
-  constructor(private readonly sessionService: SessionsService,
-              private readonly router: Router) {
+  constructor(
+    private readonly sessionService: SessionsService,
+    private readonly router: Router
+  ) {
     this.sessionService.getAll().subscribe((result) => {
-        this.sessions = result.data?.sessions;
-        //this.loading = result.loading;
-        //this.error = result.error;
-      });
+      this.sessions = result.data?.sessions;
+      //this.loading = result.loading;
+      //this.error = result.error;
+    });
   }
 
-  ngOnInit(): void {
-    
-  }
+  ngOnInit(): void {}
 
   public onSessionCreate() {
     this.router.navigate(['sessions/create']);
@@ -33,7 +33,9 @@ export class SessionsOverviewPage implements OnInit {
   }
 
   public onSessionExport(session: Session) {
-    console.log("Session Export Pressed for Session: " + session.id + ", " + session.name);
+    console.log(
+      'Session Export Pressed for Session: ' + session.id + ', ' + session.name
+    );
   }
 
   public onSessionDelete(session: any) {

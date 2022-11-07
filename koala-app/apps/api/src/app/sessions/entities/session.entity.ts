@@ -16,9 +16,13 @@ export class Session {
   id: number;
 
   @Column()
-  @Field({ description: 'Unique Session Name' })
+  @Field({ description: 'Session Name' })
   @IsNotEmpty()
   name: string;
+
+  @Column()
+  @Field({ description: 'Description' })
+  description: string;
 
   @CreateDateColumn()
   @Field({ description: 'Creation Date' })

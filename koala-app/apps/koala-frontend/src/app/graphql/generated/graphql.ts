@@ -18,6 +18,7 @@ export type Scalars = {
 };
 
 export type CreateSessionInput = {
+  description?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
 };
 
@@ -58,33 +59,35 @@ export type Session = {
   __typename?: 'Session';
   /** Creation Date */
   createdDate: Scalars['DateTime'];
+  /** Description */
+  description: Scalars['String'];
   /** ID for Session */
   id: Scalars['Int'];
-  /** Unique Session Name */
+  /** Session Name */
   name: Scalars['String'];
   /** Date of Last Update */
   updatedDate: Scalars['DateTime'];
 };
 
 export type UpdateSessionInput = {
+  description?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   name: Scalars['String'];
 };
 
 export type CreateNewSessionMutationVariables = Exact<{
-  name: Scalars['String'];
+  session: CreateSessionInput;
 }>;
 
 
-export type CreateNewSessionMutation = { __typename?: 'Mutation', createSession: { __typename?: 'Session', id: number, name: string } };
+export type CreateNewSessionMutation = { __typename?: 'Mutation', createSession: { __typename?: 'Session', id: number, name: string, description: string } };
 
 export type UpdateSessionMutationVariables = Exact<{
-  id: Scalars['Int'];
-  sessionName: Scalars['String'];
+  session: UpdateSessionInput;
 }>;
 
 
-export type UpdateSessionMutation = { __typename?: 'Mutation', updateSession: { __typename?: 'Session', id: number, name: string } };
+export type UpdateSessionMutation = { __typename?: 'Mutation', updateSession: { __typename?: 'Session', id: number, name: string, description: string } };
 
 export type DeleteSessionMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -96,20 +99,21 @@ export type DeleteSessionMutation = { __typename?: 'Mutation', removeSession: { 
 export type GetSessionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSessionsQuery = { __typename?: 'Query', sessions: Array<{ __typename?: 'Session', id: number, name: string, createdDate: any, updatedDate: any }> };
+export type GetSessionsQuery = { __typename?: 'Query', sessions: Array<{ __typename?: 'Session', id: number, name: string, description: string, createdDate: any, updatedDate: any }> };
 
 export type GetOneSessionQueryVariables = Exact<{
   sessionId: Scalars['Int'];
 }>;
 
 
-export type GetOneSessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: number, name: string, createdDate: any, updatedDate: any } };
+export type GetOneSessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: number, name: string, description: string, createdDate: any, updatedDate: any } };
 
 export const CreateNewSessionDocument = gql`
-    mutation createNewSession($name: String!) {
-  createSession(createSessionInput: {name: $name}) {
+    mutation createNewSession($session: CreateSessionInput!) {
+  createSession(createSessionInput: $session) {
     id
     name
+    description
   }
 }
     `;
@@ -125,10 +129,11 @@ export const CreateNewSessionDocument = gql`
     }
   }
 export const UpdateSessionDocument = gql`
-    mutation updateSession($id: Int!, $sessionName: String!) {
-  updateSession(updateSessionInput: {id: $id, name: $sessionName}) {
+    mutation updateSession($session: UpdateSessionInput!) {
+  updateSession(updateSessionInput: $session) {
     id
     name
+    description
   }
 }
     `;
@@ -166,6 +171,7 @@ export const GetSessionsDocument = gql`
   sessions {
     id
     name
+    description
     createdDate
     updatedDate
   }
@@ -187,6 +193,7 @@ export const GetOneSessionDocument = gql`
   session(id: $sessionId) {
     id
     name
+    description
     createdDate
     updatedDate
   }

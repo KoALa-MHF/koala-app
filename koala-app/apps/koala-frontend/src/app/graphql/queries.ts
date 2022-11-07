@@ -5,6 +5,7 @@ const GET_SESSIONS = gql`
     sessions {
       id
       name
+      description
       createdDate
       updatedDate
     }
@@ -16,6 +17,7 @@ query GetOneSession($sessionId: Int!) {
     session(id: $sessionId) {
         id
         name
+        description
         createdDate
         updatedDate
     }

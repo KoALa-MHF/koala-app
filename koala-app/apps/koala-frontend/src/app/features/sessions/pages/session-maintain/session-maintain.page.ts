@@ -61,35 +61,52 @@ export class SessionMaintainPage implements OnInit {
       this.mode = 2;
     }
 
-    if(this.mode === 2) {
-        this.sessionService.getOne(this.sessionId).subscribe((result) => {
-            this.session = result.data?.session;
-      
-            this.maintainSessionForm
-              .get('basicData')
-              ?.get('sessionName')
-              ?.setValue(this.session.name);
-          });
+    if (this.mode === 2) {
+      this.sessionService.getOne(this.sessionId).subscribe((result) => {
+        this.session = result.data?.session;
+
+        this.maintainSessionForm
+          .get('basicData')
+          ?.get('sessionName')
+          ?.setValue(this.session.name);
+
+        this.maintainSessionForm
+          .get('basicData')
+          ?.get('sessionDescription')
+          ?.setValue(this.session.description);
+      });
     }
   }
 
   public onSave() {
     const sessionName =
-      this.maintainSessionForm.get('basicData')?.get('sessionName')?.value || '';
+      this.maintainSessionForm.get('basicData')?.get('sessionName')?.value ||
+      '';
+    const sessionDescription =
+      this.maintainSessionForm.get('basicData')?.get('sessionDescription')
+        ?.value || '';
 
-    if(this.mode === 1) {
-        this.sessionService.create(sessionName).subscribe(() => {
-            this.router.navigate(['sessions']);
-          });
+    if (this.mode === 1) {
+      this.sessionService
+        .create({ name: sessionName, description: sessionDescription })
+        .subscribe(() => {
+          this.router.navigate(['sessions']);
+        });
     } else {
-        this.sessionService.update({
-            id: this.session?.id || 0,
-            name: this.maintainSessionForm.get('basicData')?.get('sessionName')?.value || ""
-        }).subscribe(() => {
-            this.router.navigate(['sessions']);
-          });;
+      this.sessionService
+        .update({
+          id: this.session?.id || 0,
+          name:
+            this.maintainSessionForm.get('basicData')?.get('sessionName')
+              ?.value || '',
+          description:
+            this.maintainSessionForm.get('basicData')?.get('sessionDescription')
+              ?.value || '',
+        })
+        .subscribe(() => {
+          this.router.navigate(['sessions']);
+        });
     }
-    
   }
 
   public onCancel() {}

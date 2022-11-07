@@ -10,7 +10,8 @@ import {
   GetOneSessionGQL,
   GetOneSessionQuery,
   UpdateSessionGQL,
-  UpdateSessionInput
+  UpdateSessionInput,
+  CreateSessionInput
 } from '../../../graphql/generated/graphql';
 
 @Injectable({
@@ -37,15 +38,14 @@ export class SessionsService {
     }).valueChanges;
   }
 
-  create(name: string) {
-    return this.createSessionGQL.mutate({ name });
+  create(session: CreateSessionInput) {
+    return this.createSessionGQL.mutate({session});
   }
 
   update(session: UpdateSessionInput) {
     return this.updateSessionGQL.mutate({
-        id: session.id,
-        sessionName: session.name
-    })
+        session
+    });
   }
 
   delete(id: number) {

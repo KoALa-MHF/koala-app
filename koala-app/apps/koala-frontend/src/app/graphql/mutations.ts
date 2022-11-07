@@ -1,19 +1,21 @@
 import { gql } from 'apollo-angular';
 
 const CREATE_SESSION = gql`
-  mutation createNewSession($name: String!) {
-    createSession(createSessionInput: { name: $name }) {
+mutation createNewSession($session: CreateSessionInput!) {
+    createSession(createSessionInput: $session) {
       id
       name
+      description
     }
   }
 `;
 
 const UPDATE_SESSION = gql`
-  mutation updateSession($id: Int!, $sessionName: String!) {
-    updateSession(updateSessionInput: { id: $id, name: $sessionName }) {
+  mutation updateSession($session: UpdateSessionInput!) {
+    updateSession(updateSessionInput: $session) {
       id
       name
+      description
     }
   }
 `;

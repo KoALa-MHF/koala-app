@@ -16,6 +16,7 @@ export class SessionsService {
   create(createSessionInput: CreateSessionInput) {
     const newSession = this.sessionsRepository.create();
     newSession.name = createSessionInput.name;
+    newSession.description = createSessionInput.description;
 
     return this.sessionsRepository.save(newSession);
   }
@@ -32,6 +33,7 @@ export class SessionsService {
     try {
       await this.sessionsRepository.update(updateSessionInput.id, {
         name: updateSessionInput.name,
+        description: updateSessionInput.description
       });
 
       const updatedData = await this.sessionsRepository.findBy({
