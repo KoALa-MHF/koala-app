@@ -5,22 +5,21 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
-  Validators,
 } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { SessionBasicDataComponent } from './session-basic-data.component';
+import { SessionAudioComponent } from './session-audio.component';
 
-describe('SessionBasicDataComponent', () => {
-  let component: SessionBasicDataComponent;
-  let fixture: ComponentFixture<SessionBasicDataComponent>;
+describe('SessionAudioComponent', () => {
+  let component: SessionAudioComponent;
+  let fixture: ComponentFixture<SessionAudioComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SessionBasicDataComponent],
+      declarations: [SessionAudioComponent],
       imports: [
         MatFormFieldModule,
         MatInputModule,
@@ -33,14 +32,14 @@ describe('SessionBasicDataComponent', () => {
 
     const formBuilder = TestBed.inject(FormBuilder);
 
-    fixture = TestBed.createComponent(SessionBasicDataComponent);
+    fixture = TestBed.createComponent(SessionAudioComponent);
     component = fixture.componentInstance;
 
-    component.basicDataForm = new FormGroup({
-      sessionName: new FormControl<string>('', [Validators.required]),
-      sessionDescription: new FormControl<string>(''),
-      sessionType: new FormControl<string>('1', [Validators.required]),
+    component.audioForm = new FormGroup({
+        title: new FormControl<string>(''),
+        composer: new FormControl<string>(''),
     });
+
     fixture.detectChanges();
   });
 

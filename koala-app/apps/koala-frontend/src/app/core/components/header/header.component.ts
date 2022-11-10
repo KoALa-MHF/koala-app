@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'koala-app-header',
+  selector: 'koala-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })

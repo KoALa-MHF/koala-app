@@ -17,7 +17,11 @@ export class Session extends BaseEntity {
   id: number;
 
   @Column()
-  @Field({ description: 'Unique Session Name' })
+  @Field({ description: 'Session Name' })
   @IsNotEmpty()
   name: string;
+
+  @Column()
+  @Field({ description: 'Description' })
+  description: string;
 }

@@ -7,10 +7,11 @@ import { HomeComponent } from './components/home/home.component';
 //Material Modules
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [HeaderComponent, FooterComponent, HomeComponent],
-  imports: [CommonModule, MatToolbarModule, MatButtonModule],
+  imports: [CommonModule, MatToolbarModule, MatButtonModule, MatDividerModule],
   exports: [HeaderComponent, FooterComponent, HomeComponent],
 })
 export class CoreModule {}

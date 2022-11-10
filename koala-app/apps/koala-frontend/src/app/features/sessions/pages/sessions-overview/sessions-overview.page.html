@@ -1,0 +1,9 @@
+<div style="margin: 20px">
+  <koala-sessions-overview-table
+    [sessions]="sessions"
+    (sessionDelete)="onSessionDelete($event)"
+    (sessionCreate)="onSessionCreate()"
+    (sessionExport)="onSessionExport($event)"
+    (sessionUpdate)="onSessionUpdate($event)"
+  ></koala-sessions-overview-table>
+</div>

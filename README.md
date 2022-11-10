@@ -37,3 +37,10 @@ nx serve api
 Open the url http://localhost:3333/graphql in a browser
 
 
+### Generate GraphQL Angular Types/Requests
+
+```Bash
+cd koala-app
+nx serve api
+npm run codegen
+```

@@ -1,0 +1,37 @@
+<form [formGroup]="sessionDetailsForm">
+  <div class="form-grid">
+    <mat-label class="form-row">Bearbeitung</mat-label>
+    <mat-checkbox formControlName="editable"></mat-checkbox>
+
+    <mat-label class="form-row form-row-label">Start</mat-label>
+    <mat-form-field appearance="fill" class="form-row">
+      <input matInput [matDatepicker]="pickerStart" formControlName="start" />
+      <mat-hint>DD.MM.YYYY</mat-hint>
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="pickerStart"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #pickerStart></mat-datepicker>
+    </mat-form-field>
+
+    <mat-label class="form-row form-row-label">Ende</mat-label>
+    <mat-form-field appearance="fill" class="form-row">
+      <input matInput [matDatepicker]="pickerEnd" formControlName="end" />
+      <mat-hint>DD.MM.YYYY</mat-hint>
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="pickerEnd"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #pickerEnd></mat-datepicker>
+    </mat-form-field>
+
+    <mat-label class="form-row form-row-label">Player</mat-label>
+    <mat-checkbox formControlName="player"></mat-checkbox>
+
+    <mat-label class="form-row form-row-label">Musterlösung</mat-label>
+    <mat-checkbox formControlName="sampleSolution"></mat-checkbox>
+
+    <mat-label class="form-row form-row-label">Analyse</mat-label>
+    <mat-checkbox formControlName="analysis"></mat-checkbox>
+  </div>
+</form>
