@@ -24,8 +24,8 @@ export class MediaResolver {
   }
 
   @Mutation(() => Media)
-  updateMedia(@Args('updateMediaInput') updateMediaInput: UpdateMediaInput) {
-    return this.mediaService.update(updateMediaInput.id, updateMediaInput);
+  updateMedia(@Args('id', { type: () => Int }) id: number, @Args('updateMediaInput') updateMediaInput: UpdateMediaInput) {
+    return this.mediaService.update(id, updateMediaInput);
   }
 
   @Mutation(() => Media)

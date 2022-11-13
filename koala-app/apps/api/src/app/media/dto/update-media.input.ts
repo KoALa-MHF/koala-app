@@ -5,9 +5,6 @@ import { MediaType } from '../entities/media.entity';
 
 @InputType()
 export class UpdateMediaInput extends PartialType(CreateMediaInput) {
-  @Field(() => Int)
-  id: number;
-
   @Field(() => MediaType, { description: 'Media Type' })
   @IsEnum(MediaType)
   @IsNotEmpty()
