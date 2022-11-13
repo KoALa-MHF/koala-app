@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent, Info } from '@nestjs/graphql';
 import { SessionsService } from './sessions.service';
 import { Session } from './entities/session.entity';
 import { CreateSessionInput } from './dto/create-session.input';
@@ -31,5 +31,10 @@ export class SessionsResolver {
   @Mutation(() => Session)
   removeSession(@Args('id', { type: () => Int }) id: number) {
     return this.sessionsService.remove(id);
+  }
+
+  @Mutation(() => Session)
+  async setMedia(@Args('id', { type: () => Int }) id: number, @Args('mediaId', { type: () => Int }) mediaId: number) {
+    return this.sessionsService.setMedia(id, mediaId);
   }
 }
