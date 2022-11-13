@@ -36,6 +36,5 @@ export class Media extends BaseEntity {
 
   @Column()
   @Field({ description: 'Media Composer' })
-  @IsNotEmpty()
   composer: string;
 }

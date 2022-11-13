@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateMediaInput } from './dto/create-media.input';
@@ -31,8 +31,23 @@ export class MediaService
     return this.mediaRepository.findOneByOrFail({ id });
   }
 
-  update(id: number, updateMediaInput: UpdateMediaInput) {
-    return `This action updates a #${id} media`;
+  async update(id: number, updateMediaInput: UpdateMediaInput) {
+    try {
+      await this.mediaRepository.update(id, {
+        title: updateMediaInput.title,
+        composer: updateMediaInput.composer,
+        type: updateMediaInput.type
+      });
+
+      const updatedData = await this.mediaRepository.findBy({
+        id
+      });
+
+      //graphql expects single object, not array
+      return updatedData[0];
+    } catch (error) {
+      throw new BadRequestException(error.detail);
+    }
   }
 
   remove(id: number) {

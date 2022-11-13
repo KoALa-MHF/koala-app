@@ -14,6 +14,5 @@ export class CreateMediaInput {
   title: string;
 
   @Field({ description: 'Media Composer' })
-  @IsNotEmpty()
   composer: string;
 }
