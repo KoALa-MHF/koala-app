@@ -13,7 +13,7 @@ export class MediaResolver {
     return this.mediaService.create(createMediaInput);
   }
 
-  @Query(() => [Media], { name: 'mediaAll' })
+  @Query(() => [Media], { name: 'allMedia' })
   findAll() {
     return this.mediaService.findAll();
   }
