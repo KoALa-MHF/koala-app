@@ -6,7 +6,7 @@
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js",
     "start": "nx serve",
-    "start:all": "nx run-many --parallel --target=serve --projects=api,koala-frontend",
+    "start:all": "nx run-many --parallel --target=serve --all",
     "build": "nx build",
     "test": "nx test",
     "codegen": "graphql-codegen --config codegen.ts"
