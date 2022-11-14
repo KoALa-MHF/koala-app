@@ -39,12 +39,7 @@ export class MediaService
         type: updateMediaInput.type
       });
 
-      const updatedData = await this.mediaRepository.findBy({
-        id
-      });
-
-      //graphql expects single object, not array
-      return updatedData[0];
+      return this.findOne(id);
     } catch (error) {
       throw new BadRequestException(error.detail);
     }
