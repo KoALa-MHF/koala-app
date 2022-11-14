@@ -11,6 +11,7 @@ import { SessionsModule } from './sessions/sessions.module';
 import { Session } from './sessions/entities/session.entity';
 import { MediaModule } from './media/media.module';
 import { Media } from './media/entities/media.entity';
+import { MarkersModule } from './markers/markers.module';
 
 @Module({
   imports: [
@@ -20,14 +21,15 @@ import { Media } from './media/entities/media.entity';
       entities: [Session, Media],
       synchronize: true,
     }),
-    SessionsModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       debug: false,
       playground: true,
       autoSchemaFile: true,
     }),
+    SessionsModule,
     MediaModule,
+    MarkersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
