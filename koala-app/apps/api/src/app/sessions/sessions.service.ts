@@ -6,8 +6,11 @@ import { CreateSessionInput } from './dto/create-session.input';
 import { UpdateSessionInput } from './dto/update-session.input';
 import { Session } from './entities/session.entity';
 
+const RELATIONS = [ 'media' ];
+
 @Injectable()
 export class SessionsService {
+
   constructor(
     @InjectRepository(Session)
     private sessionsRepository: Repository<Session>
@@ -22,26 +25,26 @@ export class SessionsService {
   }
 
   findAll() {
-    return this.sessionsRepository.find();
+    return this.sessionsRepository.find({
+      relations: RELATIONS
+    });
   }
 
   findOne(id: number) {
-    return this.sessionsRepository.findOneByOrFail({ id });
+    return this.sessionsRepository.findOneOrFail({
+      where : {id},
+      relations: RELATIONS
+    });
   }
 
-  async update(id: number, updateSessionInput: UpdateSessionInput) {
+  async update(id: number, updateSessionInput: UpdateSessionInput) : Promise<Session> {
     try {
-      await this.sessionsRepository.update(updateSessionInput.id, {
+      await this.sessionsRepository.update(id, {
         name: updateSessionInput.name,
         description: updateSessionInput.description
       });
 
-      const updatedData = await this.sessionsRepository.findBy({
-        id: updateSessionInput.id,
-      });
-
-      //graphql expects single object, not array
-      return updatedData[0];
+      return this.findOne(id);
     } catch (error) {
       throw new BadRequestException(error.detail);
     }
@@ -49,5 +52,18 @@ export class SessionsService {
 
   remove(id: number) {
     return this.sessionsRepository.delete(id);
+  }
+
+  async setMedia(id: number, mediaId: number): Promise<Session> {
+    try {
+      await this.sessionsRepository.update(id, {
+        media : {
+          id : mediaId
+        }
+      });
+      return this.findOne(id);
+    } catch (error) {
+      throw new BadRequestException(error.detail);
+    }
   }
 }

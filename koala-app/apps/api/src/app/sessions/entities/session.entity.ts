@@ -4,10 +4,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { BaseEntity } from '../../core/base.entity';
+import { Media } from '../../media/entities/media.entity';
 
 @ObjectType()
 @Entity()
@@ -24,4 +27,9 @@ export class Session extends BaseEntity {
   @Column()
   @Field({ description: 'Description' })
   description: string;
+
+  @JoinColumn()
+  @OneToOne(() => Media, { nullable: true })
+  @Field(type => Media, { nullable: true, description: 'Associated Media File' })
+  media?: Media;
 }

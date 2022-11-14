@@ -9,13 +9,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SessionsModule } from './sessions/sessions.module';
 
 import { Session } from './sessions/entities/session.entity';
+import { MediaModule } from './media/media.module';
+import { Media } from './media/entities/media.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'koala',
-      entities: [Session],
+      entities: [Session, Media],
       synchronize: true,
     }),
     SessionsModule,
@@ -25,6 +27,7 @@ import { Session } from './sessions/entities/session.entity';
       playground: true,
       autoSchemaFile: true,
     }),
+    MediaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
