@@ -7,6 +7,8 @@ export enum MarkerType {
   EVENT = "event"
 }
 
+export const DEFAULT_COLOR = "black";
+
 registerEnumType(MarkerType, {
   name : "MarkerType"
 });
@@ -32,8 +34,7 @@ export class Marker {
   @IsNotEmpty()
   name: string;
 
-  @Column()
-  @Field({ description: 'Marker Color' })
-  @IsNotEmpty()
+  @Column({default: DEFAULT_COLOR})
+  @Field({ defaultValue: DEFAULT_COLOR, description: 'Marker Color' })
   color: string;
 }

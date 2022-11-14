@@ -1,6 +1,6 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
 import { IsEnum, IsNotEmpty } from 'class-validator';
-import { MarkerType } from '../entities/marker.entity';
+import { DEFAULT_COLOR, MarkerType } from '../entities/marker.entity';
 
 @InputType()
 export class CreateMarkerInput {
@@ -13,7 +13,6 @@ export class CreateMarkerInput {
   @IsNotEmpty()
   name: string;
 
-  @Field({ description: 'Marker Name' })
-  @IsNotEmpty()
-  color: string;
+  @Field({ defaultValue: DEFAULT_COLOR, description: 'Marker Color' })
+  color?: string;
 }
