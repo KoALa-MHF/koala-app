@@ -22,9 +22,9 @@ export class SessionsOverviewTableComponent implements OnInit {
 
   displayedColumns: string[] = [
     'name',
-    'createdDate',
+    'createdAt',
     'participants',
-    'updatedDate',
+    'updatedAt',
     'sessionType',
     'settings',
     'sessionCode',

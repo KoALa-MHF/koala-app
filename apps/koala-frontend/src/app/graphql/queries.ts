@@ -6,8 +6,8 @@ const GET_SESSIONS = gql`
       id
       name
       description
-      createdDate
-      updatedDate
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -18,7 +18,7 @@ query GetOneSession($sessionId: Int!) {
         id
         name
         description
-        createdDate
-        updatedDate
+        createdAt
+        updatedAt
     }
 }`

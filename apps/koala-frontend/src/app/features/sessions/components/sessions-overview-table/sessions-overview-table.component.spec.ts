@@ -31,14 +31,16 @@ describe('Sessions Overview Table Component', () => {
       {
         id: 1,
         name: 'Session 1',
-        createdDate: new Date(),
-        updatedDate: new Date(),
+        description: '',
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         id: 2,
         name: 'Session 2',
-        createdDate: new Date(),
-        updatedDate: new Date(),
+        description: '',
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
     ];
 
@@ -60,19 +62,19 @@ describe('Sessions Overview Table Component', () => {
     const row1 = tableRows[1];
     expect(row1.nativeElement.cells[0].innerHTML).toBe(sessionMockData[0].name);
     expect(row1.nativeElement.cells[1].innerHTML.trim()).toBe(
-      pipe.transform(sessionMockData[0].createdDate, 'medium')
+      pipe.transform(sessionMockData[0].createdAt, 'medium')
     );
     expect(row1.nativeElement.cells[3].innerHTML.trim()).toBe(
-      pipe.transform(sessionMockData[0].updatedDate, 'medium')
+      pipe.transform(sessionMockData[0].updatedAt, 'medium')
     );
 
     const row2 = tableRows[2];
     expect(row2.nativeElement.cells[0].innerHTML).toBe(sessionMockData[1].name);
     expect(row2.nativeElement.cells[1].innerHTML.trim()).toBe(
-      pipe.transform(sessionMockData[1].createdDate, 'medium')
+      pipe.transform(sessionMockData[1].createdAt, 'medium')
     );
     expect(row2.nativeElement.cells[3].innerHTML.trim()).toBe(
-      pipe.transform(sessionMockData[1].updatedDate, 'medium')
+      pipe.transform(sessionMockData[1].updatedAt, 'medium')
     );
 
     done();

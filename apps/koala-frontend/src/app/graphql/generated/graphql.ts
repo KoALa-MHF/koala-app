@@ -17,16 +17,54 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type CreateMediaInput = {
+  /** Media Composer */
+  composer: Scalars['String'];
+  /** Media Title */
+  title: Scalars['String'];
+  /** Media Type */
+  type: MediaType;
+};
+
 export type CreateSessionInput = {
   description?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
 };
 
+export type Media = {
+  __typename?: 'Media';
+  /** Media Composer */
+  composer: Scalars['String'];
+  /** Creation Date */
+  createdAt: Scalars['DateTime'];
+  /** ID for Media */
+  id: Scalars['Int'];
+  /** Media Title */
+  title: Scalars['String'];
+  /** Media Type */
+  type: MediaType;
+  /** Date of Last Update */
+  updatedAt: Scalars['DateTime'];
+};
+
+export enum MediaType {
+  Audio = 'AUDIO'
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
+  createMedia: Media;
   createSession: Session;
+  removeMedia: Media;
   removeSession: Session;
+  setMedia: Session;
+  updateMedia: Media;
   updateSession: Session;
+};
+
+
+export type MutationCreateMediaArgs = {
+  createMediaInput: CreateMediaInput;
 };
 
 
@@ -35,8 +73,25 @@ export type MutationCreateSessionArgs = {
 };
 
 
+export type MutationRemoveMediaArgs = {
+  id: Scalars['Int'];
+};
+
+
 export type MutationRemoveSessionArgs = {
   id: Scalars['Int'];
+};
+
+
+export type MutationSetMediaArgs = {
+  id: Scalars['Int'];
+  mediaId: Scalars['Int'];
+};
+
+
+export type MutationUpdateMediaArgs = {
+  id: Scalars['Int'];
+  updateMediaInput: UpdateMediaInput;
 };
 
 
@@ -46,8 +101,15 @@ export type MutationUpdateSessionArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  allMedia: Array<Media>;
+  media: Media;
   session: Session;
   sessions: Array<Session>;
+};
+
+
+export type QueryMediaArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -58,15 +120,26 @@ export type QuerySessionArgs = {
 export type Session = {
   __typename?: 'Session';
   /** Creation Date */
-  createdDate: Scalars['DateTime'];
+  createdAt: Scalars['DateTime'];
   /** Description */
   description: Scalars['String'];
   /** ID for Session */
   id: Scalars['Int'];
+  /** Associated Media File */
+  media?: Maybe<Media>;
   /** Session Name */
   name: Scalars['String'];
   /** Date of Last Update */
-  updatedDate: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export type UpdateMediaInput = {
+  /** Media Composer */
+  composer: Scalars['String'];
+  /** Media Title */
+  title: Scalars['String'];
+  /** Media Type */
+  type: MediaType;
 };
 
 export type UpdateSessionInput = {
@@ -99,14 +172,14 @@ export type DeleteSessionMutation = { __typename?: 'Mutation', removeSession: { 
 export type GetSessionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSessionsQuery = { __typename?: 'Query', sessions: Array<{ __typename?: 'Session', id: number, name: string, description: string, createdDate: any, updatedDate: any }> };
+export type GetSessionsQuery = { __typename?: 'Query', sessions: Array<{ __typename?: 'Session', id: number, name: string, description: string, createdAt: any, updatedAt: any }> };
 
 export type GetOneSessionQueryVariables = Exact<{
   sessionId: Scalars['Int'];
 }>;
 
 
-export type GetOneSessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: number, name: string, description: string, createdDate: any, updatedDate: any } };
+export type GetOneSessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: number, name: string, description: string, createdAt: any, updatedAt: any } };
 
 export const CreateNewSessionDocument = gql`
     mutation createNewSession($session: CreateSessionInput!) {
@@ -172,8 +245,8 @@ export const GetSessionsDocument = gql`
     id
     name
     description
-    createdDate
-    updatedDate
+    createdAt
+    updatedAt
   }
 }
     `;
@@ -194,8 +267,8 @@ export const GetOneSessionDocument = gql`
     id
     name
     description
-    createdDate
-    updatedDate
+    createdAt
+    updatedAt
   }
 }
     `;

@@ -20,10 +20,10 @@
   </ng-container>
 
   <!-- Creation Date Column -->
-  <ng-container matColumnDef="createdDate">
+  <ng-container matColumnDef="createdAt">
     <th mat-header-cell *matHeaderCellDef>Erstellungsdatum</th>
     <td mat-cell *matCellDef="let session">
-      {{ session.createdDate | date: 'medium' }}
+      {{ session.createdAt | date: 'medium' }}
     </td>
   </ng-container>
 
@@ -34,10 +34,10 @@
   </ng-container>
 
   <!-- Updated Date Column -->
-  <ng-container matColumnDef="updatedDate">
+  <ng-container matColumnDef="updatedAt">
     <th mat-header-cell *matHeaderCellDef>Letzter Zugriff</th>
     <td mat-cell *matCellDef="let session">
-      {{ session.updatedDate | date: 'medium' }}
+      {{ session.updatedAt | date: 'medium' }}
     </td>
   </ng-container>
 
