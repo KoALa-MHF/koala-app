@@ -17,6 +17,15 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type CreateMarkerInput = {
+  /** Marker Color */
+  color?: InputMaybe<Scalars['String']>;
+  /** Marker Name */
+  name: Scalars['String'];
+  /** Marker Type */
+  type: MarkerType;
+};
+
 export type CreateMediaInput = {
   /** Media Composer */
   composer: Scalars['String'];
@@ -29,7 +38,25 @@ export type CreateMediaInput = {
 export type CreateSessionInput = {
   description?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
+  status?: InputMaybe<SessionStatus>;
 };
+
+export type Marker = {
+  __typename?: 'Marker';
+  /** Marker Color */
+  color: Scalars['String'];
+  /** ID for Marker */
+  id: Scalars['Int'];
+  /** Marker Name */
+  name: Scalars['String'];
+  /** Marker Type */
+  type: MarkerType;
+};
+
+export enum MarkerType {
+  Event = 'EVENT',
+  Range = 'RANGE'
+}
 
 export type Media = {
   __typename?: 'Media';
@@ -53,13 +80,21 @@ export enum MediaType {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createMarker: Marker;
   createMedia: Media;
   createSession: Session;
+  removeMarker: Marker;
   removeMedia: Media;
   removeSession: Session;
   setMedia: Session;
+  updateMarker: Marker;
   updateMedia: Media;
   updateSession: Session;
+};
+
+
+export type MutationCreateMarkerArgs = {
+  createMarkerInput: CreateMarkerInput;
 };
 
 
@@ -70,6 +105,11 @@ export type MutationCreateMediaArgs = {
 
 export type MutationCreateSessionArgs = {
   createSessionInput: CreateSessionInput;
+};
+
+
+export type MutationRemoveMarkerArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -89,6 +129,12 @@ export type MutationSetMediaArgs = {
 };
 
 
+export type MutationUpdateMarkerArgs = {
+  id: Scalars['Int'];
+  updateMarkerInput: UpdateMarkerInput;
+};
+
+
 export type MutationUpdateMediaArgs = {
   id: Scalars['Int'];
   updateMediaInput: UpdateMediaInput;
@@ -102,9 +148,16 @@ export type MutationUpdateSessionArgs = {
 export type Query = {
   __typename?: 'Query';
   allMedia: Array<Media>;
+  marker: Marker;
+  markers: Array<Marker>;
   media: Media;
   session: Session;
   sessions: Array<Session>;
+};
+
+
+export type QueryMarkerArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -115,6 +168,11 @@ export type QueryMediaArgs = {
 
 export type QuerySessionArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QuerySessionsArgs = {
+  deleted?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type Session = {
@@ -129,8 +187,24 @@ export type Session = {
   media?: Maybe<Media>;
   /** Session Name */
   name: Scalars['String'];
+  /** Session Status */
+  status: SessionStatus;
   /** Date of Last Update */
   updatedAt: Scalars['DateTime'];
+};
+
+export enum SessionStatus {
+  Closed = 'CLOSED',
+  Open = 'OPEN'
+}
+
+export type UpdateMarkerInput = {
+  /** Marker Color */
+  color?: InputMaybe<Scalars['String']>;
+  /** Marker Name */
+  name: Scalars['String'];
+  /** Marker Type */
+  type: MarkerType;
 };
 
 export type UpdateMediaInput = {
@@ -146,6 +220,7 @@ export type UpdateSessionInput = {
   description?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   name: Scalars['String'];
+  status: SessionStatus;
 };
 
 export type CreateNewSessionMutationVariables = Exact<{
@@ -172,14 +247,14 @@ export type DeleteSessionMutation = { __typename?: 'Mutation', removeSession: { 
 export type GetSessionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSessionsQuery = { __typename?: 'Query', sessions: Array<{ __typename?: 'Session', id: number, name: string, description: string, createdAt: any, updatedAt: any }> };
+export type GetSessionsQuery = { __typename?: 'Query', sessions: Array<{ __typename?: 'Session', id: number, name: string, description: string, status: SessionStatus, createdAt: any, updatedAt: any }> };
 
 export type GetOneSessionQueryVariables = Exact<{
   sessionId: Scalars['Int'];
 }>;
 
 
-export type GetOneSessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: number, name: string, description: string, createdAt: any, updatedAt: any } };
+export type GetOneSessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: number, name: string, description: string, status: SessionStatus, createdAt: any, updatedAt: any } };
 
 export const CreateNewSessionDocument = gql`
     mutation createNewSession($session: CreateSessionInput!) {
@@ -241,10 +316,11 @@ export const DeleteSessionDocument = gql`
   }
 export const GetSessionsDocument = gql`
     query GetSessions {
-  sessions {
+  sessions(deleted: false) {
     id
     name
     description
+    status
     createdAt
     updatedAt
   }
@@ -267,6 +343,7 @@ export const GetOneSessionDocument = gql`
     id
     name
     description
+    status
     createdAt
     updatedAt
   }

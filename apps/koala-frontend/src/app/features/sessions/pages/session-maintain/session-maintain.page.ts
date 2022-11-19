@@ -6,7 +6,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Session } from 'apps/koala-frontend/src/app/graphql/generated/graphql';
+import {
+  Session,
+  SessionStatus,
+} from 'apps/koala-frontend/src/app/graphql/generated/graphql';
 import { SessionsService } from '../../services/sessions.service';
 
 @Component({
@@ -102,6 +105,7 @@ export class SessionMaintainPage implements OnInit {
           description:
             this.maintainSessionForm.get('basicData')?.get('sessionDescription')
               ?.value || '',
+          status: SessionStatus.Open,
         })
         .subscribe(() => {
           this.router.navigate(['sessions']);

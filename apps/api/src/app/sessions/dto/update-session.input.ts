@@ -1,6 +1,7 @@
 import { CreateSessionInput } from './create-session.input';
 import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsEnum, IsNotEmpty } from 'class-validator';
+import { SessionStatus } from '../entities/session.entity';
 
 @InputType()
 export class UpdateSessionInput extends PartialType(CreateSessionInput) {
@@ -12,4 +13,8 @@ export class UpdateSessionInput extends PartialType(CreateSessionInput) {
 
   @Field({ nullable: true })
   description?: string;
+
+  @Field(() => SessionStatus)
+  @IsEnum(SessionStatus)
+  status?: SessionStatus;
 }
