@@ -1,6 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { IsNotEmpty } from 'class-validator';
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Marker } from '../../markers/entities/marker.entity';
 
 @ObjectType()
@@ -20,7 +20,9 @@ export class Annotation {
   end?: number;
 
   @JoinColumn()
-  @OneToOne(() => Marker)
+  @ManyToOne(() => Marker, {
+    eager: true,
+  })
   @Field(type => Marker, { description: 'Associated Marker' })
   @IsNotEmpty()
   marker: Marker;
