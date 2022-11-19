@@ -1,13 +1,7 @@
-<form [formGroup]="audioForm">
-  <div class="form-grid">
-    <mat-label class="form-row form-row-label">Title</mat-label>
-    <mat-form-field appearance="fill" class="form-row">
-      <input matInput formControlName="title" />
-    </mat-form-field>
+<form [formGroup]="audioForm" class="form-grid">
+  <h5 class="form-row-label">Titel</h5>
+  <input type="text" pInputText formControlName="title" />
 
-    <mat-label class="form-row form-row-label">Komponist</mat-label>
-    <mat-form-field appearance="fill" class="form-row">
-      <input matInput formControlName="composer" />
-    </mat-form-field>
-  </div>
+  <h5 class="form-row-label">Komponist</h5>
+  <input type="text" pInputText formControlName="composer" />
 </form>

@@ -1,61 +1,50 @@
-<div style="display: grid; grid-template-columns: auto auto">
-  <mat-card class="card">
-    <mat-card-title-group>
-      <mat-card-title>Allgemeine Angaben</mat-card-title>
-    </mat-card-title-group>
-    <mat-card-content class="card-content">
-      <koala-session-basic-data
-        [basicDataForm]="basicDataFormGroup"
-      ></koala-session-basic-data>
-    </mat-card-content>
-  </mat-card>
+<div style="display: grid; grid-template-columns: 50% 50%">
+  <p-card class="card" header="Allgemeine Angaben">
+    <koala-session-basic-data
+      [basicDataForm]="basicDataFormGroup"
+    ></koala-session-basic-data>
+  </p-card>
 
-  <mat-card class="card">
-    <mat-card-title-group>
-      <mat-card-title>Freigaben</mat-card-title>
-    </mat-card-title-group>
-    <mat-card-content class="card-content">
-      <koala-session-details
-        [sessionDetailsForm]="detailsFormGroup"
-      ></koala-session-details>
-    </mat-card-content>
-  </mat-card>
+  <p-card class="card" header="Freigaben">
+    <koala-session-details
+      [sessionDetailsForm]="detailsFormGroup"
+    ></koala-session-details>
+  </p-card>
 
-  <mat-card class="card">
-    <mat-card-title-group>
-      <mat-card-title>Verfügbarkeit</mat-card-title>
-    </mat-card-title-group>
-    <mat-card-content class="card-content">
-      <koala-session-dates
-        [sessionDatesForm]="datesFormGroup"
-      ></koala-session-dates>
-    </mat-card-content>
-  </mat-card>
+  <p-card class="card" header="Verfügbarkeit">
+    <koala-session-dates
+      [sessionDatesForm]="datesFormGroup"
+    ></koala-session-dates>
+  </p-card>
 
-  <mat-card class="card">
-    <mat-card-title-group>
-      <mat-card-title>Audio</mat-card-title>
-    </mat-card-title-group>
-    <mat-card-content class="card-content">
-      <koala-session-audio [audioForm]="audioFormGroup"></koala-session-audio>
-    </mat-card-content>
-  </mat-card>
-</div>
+  <p-card class="card" header="Audio">
+    <koala-session-audio [audioForm]="audioFormGroup"></koala-session-audio>
+  </p-card>
 
-<div style="display: flex; justify-content: flex-end; margin-right: 30px">
-  <button
-    mat-button
-    color="primary"
-    type="submit"
-    [disabled]="!maintainSessionForm.valid"
-    (click)="onSave()"
+  <div
+    style="
+      display: flex;
+      justify-content: flex-end;
+      margin-right: 30px;
+      margin-top: 50px;
+      grid-column-start: 1;
+      grid-column-end: span 2;
+      grid-row-end: span 2;
+      gap: 10px;
+    "
   >
-    {{mode === 1 ? 'Anlegen' : 'Speichern'}}
-  </button>
+    <p-button
+      color="primary"
+      type="submit"
+      [disabled]="!maintainSessionForm.valid"
+      (click)="onSave()"
+      label="{{mode === 1 ? 'Anlegen' : 'Speichern'}}"
+    ></p-button>
 
-  <button mat-button (click)="onCancel()">Abbrechen</button>
-</div>
+    <p-button (click)="onCancel()" label="Abbrechen"></p-button>
+  </div>
 
-<div style="margin-top: 50px" [formGroup]="maintainSessionForm">
-  {{maintainSessionForm.value | json}}
+  <div style="margin-top: 50px" [formGroup]="maintainSessionForm">
+    {{maintainSessionForm.value | json}}
+  </div>
 </div>
