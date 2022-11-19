@@ -12,13 +12,16 @@ import { Session } from './sessions/entities/session.entity';
 import { MediaModule } from './media/media.module';
 import { Media } from './media/entities/media.entity';
 import { MarkersModule } from './markers/markers.module';
+import { AnnotationsModule } from './annotations/annotations.module';
+import { Marker } from './markers/entities/marker.entity';
+import { Annotation } from './annotations/entities/annotation.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'koala',
-      entities: [Session, Media],
+      entities: [Session, Media, Marker, Annotation],
       synchronize: true,
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -30,6 +33,7 @@ import { MarkersModule } from './markers/markers.module';
     SessionsModule,
     MediaModule,
     MarkersModule,
+    AnnotationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
