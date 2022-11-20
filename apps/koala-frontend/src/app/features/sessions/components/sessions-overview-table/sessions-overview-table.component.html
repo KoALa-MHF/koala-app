@@ -3,6 +3,7 @@
     >Meine Sessions</span
   >
   <button
+    id="session-create-btn"
     mat-mini-fab
     (click)="onSessionCreate()"
     color="primary"
@@ -12,7 +13,7 @@
   </button>
 </div>
 
-<table mat-table [dataSource]="sessions" class="mat-elevation-z8">
+<table id="session-overview" mat-table [dataSource]="sessions" class="mat-elevation-z8">
   <!-- Name Column -->
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef>Name</th>

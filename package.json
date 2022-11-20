@@ -9,6 +9,8 @@
     "start:all": "nx run-many --parallel --target=serve --all",
     "build": "nx build",
     "test": "nx test",
+    "e2e": "nx e2e koala-frontend-e2e",
+    "e2e:watch": "nx e2e koala-frontend-e2e --watch",
     "codegen": "graphql-codegen --config codegen.ts"
   },
   "private": true,
