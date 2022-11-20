@@ -49,7 +49,10 @@ export class SessionsOverviewPage implements OnInit {
       () => {
         this.loadSessions();
       },
-      (error) => {}
+      (error) => {
+        //workaround until the soft delete is merged
+        this.loadSessions();
+      }
     );
   }
 }
