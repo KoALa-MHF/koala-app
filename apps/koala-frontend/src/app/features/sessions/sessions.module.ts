@@ -4,16 +4,15 @@ import { SessionsRoutingModule } from './sessions-routing.module';
 import { SessionsOverviewPage } from './pages/sessions-overview/sessions-overview.page';
 import { SessionsService } from './services/sessions.service';
 
-//material modules
-import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatTableModule } from '@angular/material/table';
-import { MatIconModule } from '@angular/material/icon';
-import { MatCardModule } from '@angular/material/card';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+//primeng modules
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { CardModule } from 'primeng/card';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { CalendarModule } from 'primeng/calendar';
+import { CheckboxModule } from 'primeng/checkbox';
+import { TableModule } from 'primeng/table';
 
 import { SessionsOverviewTableComponent } from './components/sessions-overview-table/sessions-overview-table.component';
 import { SessionMaintainPage } from './pages/session-maintain/session-maintain.page';
@@ -22,7 +21,6 @@ import { SharedModule } from '../../shared/shared.module';
 import { SessionDetailsComponent } from './components/session-details/session-details.component';
 import { SessionDatesComponent } from './components/session-dates/session-dates.component';
 import { SessionAudioComponent } from './components/session-audio/session-audio.component';
-import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -37,16 +35,14 @@ import { MatNativeDateModule } from '@angular/material/core';
   imports: [
     SharedModule,
     SessionsRoutingModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatTableModule,
-    MatIconModule,
-    MatCardModule,
-    MatRadioModule,
-    MatDatepickerModule,
-    MatCheckboxModule,
-    MatNativeDateModule,
+    ButtonModule,
+    InputTextModule,
+    CardModule,
+    RadioButtonModule,
+    CalendarModule,
+    CheckboxModule,
+    TableModule,
+    InputTextareaModule,
   ],
   providers: [SessionsService],
 })

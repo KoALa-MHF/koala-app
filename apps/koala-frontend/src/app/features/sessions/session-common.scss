@@ -1,12 +1,16 @@
-.form-row {
-    margin-bottom: 10px;
-}
-
 .form-row-label {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .form-grid {
-    display: grid;
-    grid-template-columns: auto 1fr
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px;
+  align-items: center;
+}
+
+.form-single-cell {
+  grid-column-start: 1;
+  grid-column-end: span 2;
+  grid-row-end: span 2;
 }

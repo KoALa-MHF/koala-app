@@ -1,30 +1,6 @@
-<form [formGroup]="basicDataForm" >
-  <div class="form-grid">
-    <mat-label id="session-type-label" class="form-row form-row-label">Typ</mat-label>
-    <mat-radio-group
-      aria-labelledby="session-type-label"
-      aria-label="Session Typ"
-      formControlName="sessionType"
-      class="form-row"
-    >
-      <mat-radio-button value="1" style="margin-right: 10px"
-        >Synchron</mat-radio-button
-      >
-      <mat-radio-button value="2">Asynchron</mat-radio-button>
-    </mat-radio-group>
-
-    <mat-label class="form-row form-row-label">Name</mat-label>
-    <mat-form-field appearance="fill" class="form-row">
-      <input matInput formControlName="sessionName" />
-    </mat-form-field>
-
-    <mat-label class="form-row form-row-label">Beschreibung</mat-label>
-    <mat-form-field appearance="fill" class="form-row">
-      <textarea
-        matInput
-        placeholder="Beschreibung"
-        formControlName="sessionDescription"
-      ></textarea>
-    </mat-form-field>
-  </div>
+<form [formGroup]="basicDataForm" class="form-grid">
+  <h5 class="form-row-label">Name</h5>
+  <input type="text" pInputText formControlName="sessionName" />
+  <h5 class="form-row-label">Beschreibung</h5>
+  <textarea pInputTextarea formControlName="sessionDescription"></textarea>
 </form>

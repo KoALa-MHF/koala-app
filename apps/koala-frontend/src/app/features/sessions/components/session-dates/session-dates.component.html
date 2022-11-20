@@ -1,28 +1,14 @@
-<form [formGroup]="sessionDatesForm">
-  <div class="form-grid">
-    <mat-label class="form-row form-row-label">Online</mat-label>
-    <mat-checkbox formControlName="online"></mat-checkbox>
+<form [formGroup]="sessionDatesForm" class="form-grid">
+  <p-checkbox
+    class="form-single-cell"
+    formControlName="online"
+    [binary]="true"
+    label="Online"
+  ></p-checkbox>
 
-    <mat-label class="form-row form-row-label">Start</mat-label>
-    <mat-form-field appearance="fill" class="form-row">
-      <input matInput [matDatepicker]="pickerStart" formControlName="start" />
-      <mat-hint>DD.MM.YYYY</mat-hint>
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="pickerStart"
-      ></mat-datepicker-toggle>
-      <mat-datepicker #pickerStart></mat-datepicker>
-    </mat-form-field>
+  <h5 class="form-row-label">Start</h5>
+  <p-calendar formControlName="start"></p-calendar>
 
-    <mat-label class="form-row form-row-label">Ende</mat-label>
-    <mat-form-field appearance="fill" class="form-row">
-      <input matInput [matDatepicker]="pickerEnd" formControlName="end" />
-      <mat-hint>DD.MM.YYYY</mat-hint>
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="pickerEnd"
-      ></mat-datepicker-toggle>
-      <mat-datepicker #pickerEnd></mat-datepicker>
-    </mat-form-field>
-  </div>
+  <h5 class="form-row-label">Ende</h5>
+  <p-calendar formControlName="end"></p-calendar>
 </form>

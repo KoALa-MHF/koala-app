@@ -3,106 +3,73 @@
     >Meine Sessions</span
   >
   <button
-    mat-mini-fab
+    pButton
+    type="button"
+    icon="pi pi-plus-circle"
+    class="p-button-rounded p-button-text"
     (click)="onSessionCreate()"
-    color="primary"
     aria-label="Session Anlegen"
-  >
-    <mat-icon>add</mat-icon>
-  </button>
+  ></button>
 </div>
 
-<table mat-table [dataSource]="sessions" class="mat-elevation-z8">
-  <!-- Name Column -->
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef>Name</th>
-    <td mat-cell *matCellDef="let session">{{ session.name }}</td>
-  </ng-container>
+<p-table [value]="sessions" class="mat-elevation-z8">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Name</th>
+      <th>Erstellungsdatum</th>
+      <th>Mitgliederanzahl</th>
+      <th>Letzter Zugriff</th>
+      <th>Sessiontyp</th>
+      <th>Einstellung</th>
+      <th>Link/QRCode</th>
+      <th>Export</th>
+      <th>Delete</th>
+    </tr>
+  </ng-template>
 
-  <!-- Creation Date Column -->
-  <ng-container matColumnDef="createdAt">
-    <th mat-header-cell *matHeaderCellDef>Erstellungsdatum</th>
-    <td mat-cell *matCellDef="let session">
-      {{ session.createdAt | date: 'medium' }}
-    </td>
-  </ng-container>
-
-  <!-- Participants Column -->
-  <ng-container matColumnDef="participants">
-    <th mat-header-cell *matHeaderCellDef>Mitgliederanzahl</th>
-    <td mat-cell *matCellDef="let session">0</td>
-  </ng-container>
-
-  <!-- Updated Date Column -->
-  <ng-container matColumnDef="updatedAt">
-    <th mat-header-cell *matHeaderCellDef>Letzter Zugriff</th>
-    <td mat-cell *matCellDef="let session">
-      {{ session.updatedAt | date: 'medium' }}
-    </td>
-  </ng-container>
-
-  <!-- Session Type Column -->
-  <ng-container matColumnDef="sessionType">
-    <th mat-header-cell *matHeaderCellDef>Sessiontyp</th>
-    <td mat-cell *matCellDef="let session">synchron</td>
-  </ng-container>
-
-  <!-- Settings Column -->
-  <ng-container matColumnDef="settings">
-    <th mat-header-cell *matHeaderCellDef>Einstellungen</th>
-    <td mat-cell *matCellDef="let session">
-      <button
-        mat-icon-button
-        aria-label="Settings"
-        (click)="onSettings(session)"
-      >
-        <mat-icon>settings</mat-icon>
-      </button>
-    </td>
-  </ng-container>
-
-  <!-- Link/QRCode Column -->
-  <ng-container matColumnDef="sessionCode">
-    <th mat-header-cell *matHeaderCellDef>Link/QRCode</th>
-    <td mat-cell *matCellDef="let session">
-      <button
-        mat-icon-button
-        aria-label="QRCode"
-        (click)="onCodePressed(session)"
-      >
-        <mat-icon>qr_code_scanner</mat-icon>
-      </button>
-    </td>
-  </ng-container>
-
-  <!-- Export Column -->
-  <ng-container matColumnDef="export">
-    <th mat-header-cell *matHeaderCellDef>Export</th>
-    <td mat-cell *matCellDef="let session">
-      <button
-        mat-icon-button
-        aria-label="QRCode"
-        (click)="onExport(session)"
-      >
-        <mat-icon>file_download</mat-icon>
-      </button>
-    </td>
-  </ng-container>
-
-  <!-- Delete Action Column -->
-  <ng-container matColumnDef="delete">
-    <th mat-header-cell *matHeaderCellDef>Delete</th>
-    <td mat-cell *matCellDef="let session">
-      <button
-        mat-icon-button
-        aria-label="Delete Session"
-        (click)="onSessionDelete(session)"
-      >
-        <mat-icon>delete</mat-icon>
-      </button>
-    </td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-</table>
+  <ng-template pTemplate="body" let-session>
+    <tr>
+      <td>{{ session.name }}</td>
+      <td>{{ session.createdAt | date: 'medium' }}</td>
+      <td>0</td>
+      <td>{{ session.updatedAt | date: 'medium' }}</td>
+      <td>synchron</td>
+      <td>
+        <button
+          pButton
+          aria-label="Settings"
+          (click)="onSettings(session)"
+          class="p-button-text"
+          icon="pi pi-cog"
+        ></button>
+      </td>
+      <td>
+        <button
+          pButton
+          icon="pi pi-qrcode"
+          class="p-button-text"
+          aria-label="QRCode"
+          (click)="onCodePressed(session)"
+        ></button>
+      </td>
+      <td>
+        <button
+          pButton
+          icon="pi pi-file-export"
+          class="p-button-text"
+          aria-label="QRCode"
+          (click)="onExport(session)"
+        ></button>
+      </td>
+      <td>
+        <button
+          pButton
+          icon="pi pi-trash"
+          class="p-button-text"
+          aria-label="Delete Session"
+          (click)="onSessionDelete(session)"
+        ></button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
