@@ -1,6 +1,7 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
 import { IsEnum, IsNotEmpty } from 'class-validator';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity } from '../../core/base.entity';
 
 export enum MarkerType {
   RANGE = "range",
@@ -15,7 +16,7 @@ registerEnumType(MarkerType, {
 
 @ObjectType()
 @Entity()
-export class Marker {
+export class Marker extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field(() => Int, { description: 'ID for Marker' })
   id: number;

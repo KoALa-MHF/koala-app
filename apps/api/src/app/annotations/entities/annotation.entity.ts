@@ -1,11 +1,12 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { IsNotEmpty } from 'class-validator';
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity } from '../../core/base.entity';
 import { Marker } from '../../markers/entities/marker.entity';
 
 @ObjectType()
 @Entity()
-export class Annotation {
+export class Annotation extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field(() => Int, { description: 'ID for Annotation' })
   id: number;
