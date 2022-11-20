@@ -13,12 +13,12 @@ export class MarkersService {
     private markersRepository: Repository<Marker>
   ) {}
   
-  create(CreateMarkerInput: CreateMarkerInput) {
+  create(createMarkerInput: CreateMarkerInput) {
     const newMarker = this.markersRepository.create();
 
-    newMarker.name = CreateMarkerInput.name;
-    newMarker.type = CreateMarkerInput.type;
-    newMarker.color = CreateMarkerInput.color;
+    newMarker.name = createMarkerInput.name;
+    newMarker.type = createMarkerInput.type;
+    newMarker.color = createMarkerInput.color;
 
     return this.markersRepository.save(newMarker);
   }
@@ -31,12 +31,12 @@ export class MarkersService {
     return this.markersRepository.findOneByOrFail({ id });
   }
 
-  async update(id: number, UpdateMarkerInput: UpdateMarkerInput) {
+  async update(id: number, updateMarkerInput: UpdateMarkerInput) {
     try {
       await this.markersRepository.update(id, {
-        name: UpdateMarkerInput.name,
-        type: UpdateMarkerInput.type,
-        color: UpdateMarkerInput.color
+        name: updateMarkerInput.name,
+        type: updateMarkerInput.type,
+        color: updateMarkerInput.color
       });
 
       return this.findOne(id);
