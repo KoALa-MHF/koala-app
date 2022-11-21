@@ -35,8 +35,7 @@ export class MediaService
     try {
       await this.mediaRepository.update(id, {
         title: updateMediaInput.title,
-        composer: updateMediaInput.composer,
-        type: updateMediaInput.type
+        composer: updateMediaInput.composer
       });
 
       return this.findOne(id);

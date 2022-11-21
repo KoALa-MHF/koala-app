@@ -1,19 +1,9 @@
 import { CreateMediaInput } from './create-media.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
-import { IsEnum, IsNotEmpty } from 'class-validator';
-import { MediaType } from '../entities/media.entity';
+import { InputType, PartialType, OmitType } from '@nestjs/graphql';
 
 @InputType()
-export class UpdateMediaInput extends PartialType(CreateMediaInput) {
-  @Field(() => MediaType, { description: 'Media Type' })
-  @IsEnum(MediaType)
-  @IsNotEmpty()
-  type: MediaType;
+export class UpdateMediaInput extends PartialType(
+  OmitType(CreateMediaInput, ['type'] as const)
+) {
 
-  @Field({ description: 'Media Title' })
-  @IsNotEmpty()
-  title: string;
-
-  @Field({ description: 'Media Composer' })
-  composer: string;
 }

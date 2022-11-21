@@ -33,10 +33,11 @@ export class SessionsResolver {
 
   @Mutation(() => Session)
   updateSession(
+    @Args('id', { type: () => Int }) id: number,
     @Args('updateSessionInput') updateSessionInput: UpdateSessionInput
   ) {
     return this.sessionsService.update(
-      updateSessionInput.id,
+      id,
       updateSessionInput
     );
   }
