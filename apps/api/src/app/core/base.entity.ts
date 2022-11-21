@@ -1,6 +1,7 @@
 import { ObjectType, Field } from '@nestjs/graphql';
 import {
   CreateDateColumn,
+  DeleteDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -13,4 +14,7 @@ export class BaseEntity {
   @UpdateDateColumn()
   @Field({ description: 'Date of Last Update' })
   updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }

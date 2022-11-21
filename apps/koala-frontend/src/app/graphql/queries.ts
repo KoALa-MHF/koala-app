@@ -2,10 +2,11 @@ import { gql } from "apollo-angular";
 
 const GET_SESSIONS = gql`
   query GetSessions {
-    sessions {
+    sessions(deleted:false) {
       id
       name
       description
+      status
       createdAt
       updatedAt
     }
@@ -18,6 +19,7 @@ query GetOneSession($sessionId: Int!) {
         id
         name
         description
+        status
         createdAt
         updatedAt
     }
