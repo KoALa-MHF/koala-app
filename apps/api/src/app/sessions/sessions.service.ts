@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -24,19 +24,17 @@ export class SessionsService {
     return this.sessionsRepository.save(newSession);
   }
 
-  findAll(deleted: boolean) {
+  findAll() {
     return this.sessionsRepository.find({
       relations: RELATIONS,
-      where: {
-        deleted,
-      },
     });
   }
 
-  findOne(id: number) {
+  findOne(id: number, withDeleted = false) {
     return this.sessionsRepository.findOneOrFail({
       where: { id },
       relations: RELATIONS,
+      withDeleted
     });
   }
 
@@ -58,13 +56,13 @@ export class SessionsService {
   }
 
   async remove(id: number) {
-    //TODO: soft delete
+    const deleteResult = await this.sessionsRepository.softDelete(id);
 
-    await this.sessionsRepository.update(id, {
-      deleted: true,
-    });
-
-    return this.findOne(id);
+    if(deleteResult.affected === 1) {
+        return this.findOne(id, true);
+    } else {
+        throw new NotFoundException();
+    }
   }
 
   async setMedia(id: number, mediaId: number): Promise<Session> {

@@ -22,10 +22,8 @@ export class SessionsResolver {
   }
 
   @Query(() => [Session], { name: 'sessions' })
-  findAll(
-    @Args('deleted', { type: () => Boolean, nullable: true }) deleted: boolean
-  ) {
-    return this.sessionsService.findAll(deleted);
+  findAll() {
+    return this.sessionsService.findAll();
   }
 
   @Query(() => Session, { name: 'session' })
