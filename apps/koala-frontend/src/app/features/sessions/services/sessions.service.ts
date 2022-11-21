@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApolloQueryResult } from '@apollo/client/core';
+import { QueryRef } from 'apollo-angular';
 import { Observable } from 'rxjs';
 
 import {
@@ -11,40 +12,43 @@ import {
   GetOneSessionQuery,
   UpdateSessionGQL,
   UpdateSessionInput,
-  CreateSessionInput
+  CreateSessionInput,
+  Exact,
 } from '../../../graphql/generated/graphql';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SessionsService {
+  allSessionsQuery: QueryRef<GetSessionsQuery, Exact<{ [key: string]: never }>>;
+
   constructor(
     private readonly getSessionGQL: GetSessionsGQL,
     private readonly getOneSessionGQL: GetOneSessionGQL,
     private readonly createSessionGQL: CreateNewSessionGQL,
     private readonly updateSessionGQL: UpdateSessionGQL,
     private readonly deleteSessionGQL: DeleteSessionGQL
-  ) {}
+  ) {
+    this.allSessionsQuery = this.getSessionGQL.watch({});
+  }
 
-  getAll(): Observable<ApolloQueryResult<GetSessionsQuery>>{
-    return this.getSessionGQL.watch({}, {
-        pollInterval: 500
-    }).valueChanges;
+  getAll(): Promise<ApolloQueryResult<GetSessionsQuery>> {
+    return this.allSessionsQuery.refetch();
   }
 
   getOne(id: number): Observable<ApolloQueryResult<GetOneSessionQuery>> {
     return this.getOneSessionGQL.watch({
-        sessionId: id
+      sessionId: id,
     }).valueChanges;
   }
 
   create(session: CreateSessionInput) {
-    return this.createSessionGQL.mutate({session});
+    return this.createSessionGQL.mutate({ session });
   }
 
   update(session: UpdateSessionInput) {
     return this.updateSessionGQL.mutate({
-        session
+      session,
     });
   }
 
