@@ -11,7 +11,7 @@ name: Create and publish frontend Docker image
 
 on:
   push:
-    branches: ['docker-action']
+    branches: ['main']
 
 env:
   REGISTRY: ghcr.io
