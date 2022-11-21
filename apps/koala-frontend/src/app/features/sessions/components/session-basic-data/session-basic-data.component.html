@@ -1,6 +1,11 @@
 <form [formGroup]="basicDataForm" class="form-grid">
   <h5 class="form-row-label">Name</h5>
-  <input type="text" pInputText formControlName="sessionName" />
+  <input
+    id="session-name-input"
+    type="text"
+    pInputText
+    formControlName="sessionName"
+  />
   <h5 class="form-row-label">Beschreibung</h5>
   <textarea pInputTextarea formControlName="sessionDescription"></textarea>
 </form>

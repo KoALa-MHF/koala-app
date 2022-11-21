@@ -7,6 +7,7 @@
     type="button"
     icon="pi pi-plus-circle"
     class="p-button-rounded p-button-text"
+    id="session-create-btn"
     (click)="onSessionCreate()"
     aria-label="Session Anlegen"
   ></button>
@@ -64,6 +65,7 @@
       <td>
         <button
           pButton
+          name="deleteButton"
           icon="pi pi-trash"
           class="p-button-text"
           aria-label="Delete Session"

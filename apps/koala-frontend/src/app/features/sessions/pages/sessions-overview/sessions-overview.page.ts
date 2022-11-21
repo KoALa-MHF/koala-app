@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Session } from 'apps/koala-frontend/src/app/graphql/generated/graphql';
 import { SessionsService } from '../../services/sessions.service';
 
@@ -10,19 +10,25 @@ import { SessionsService } from '../../services/sessions.service';
 })
 export class SessionsOverviewPage implements OnInit {
   sessions: Session[] = [];
+  routeSubscription: any;
 
   constructor(
     private readonly sessionService: SessionsService,
-    private readonly router: Router
-  ) {
-    this.sessionService.getAll().subscribe((result) => {
-      this.sessions = result.data?.sessions;
-      //this.loading = result.loading;
-      //this.error = result.error;
+    private readonly router: Router,
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit(): void {
+    this.routeSubscription = this.route.data.subscribe(() => {
+      this.loadSessions();
     });
   }
 
-  ngOnInit(): void {}
+  private loadSessions() {
+    this.sessionService.getAll().then((result) => {
+      this.sessions = result.data?.sessions;
+    });
+  }
 
   public onSessionCreate() {
     this.router.navigate(['sessions/create']);
@@ -41,9 +47,9 @@ export class SessionsOverviewPage implements OnInit {
   public onSessionDelete(session: any) {
     this.sessionService.delete(session.id).subscribe(
       () => {
-        console.log('Success');
+        this.loadSessions();
       },
-      (error) => {}
+      (error) => { }
     );
   }
 }
