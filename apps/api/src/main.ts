@@ -3,11 +3,11 @@
  * This is only a minimal backend to get started.
  */
 import "reflect-metadata";
-import { Logger, ValidationError, ValidationPipe } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
-import { GraphQLValidationPipe } from "./app/core/graphql/validation.pipe";
+import { GraphQLValidationPipe } from "./app/core/graphql/graphql-validation.pipe";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

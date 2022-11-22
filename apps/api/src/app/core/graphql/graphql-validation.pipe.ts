@@ -1,5 +1,5 @@
 import { ValidationPipe, ValidationError } from '@nestjs/common';
-import { UserInputError } from "apollo-server-errors";
+import { UserInputError } from 'apollo-server-express';
 
 export class GraphQLValidationPipe extends ValidationPipe {
   constructor() {
