@@ -3,14 +3,17 @@
  * This is only a minimal backend to get started.
  */
 import "reflect-metadata";
-import { BadRequestException, Logger, ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationError, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
+import { GraphQLValidationPipe } from "./app/core/graphql/validation.pipe";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new GraphQLValidationPipe()
+  );
   const globalPrefix =  'api';
   app.setGlobalPrefix(globalPrefix);
   const port = process.env.PORT || 3333;

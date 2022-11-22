@@ -33,6 +33,7 @@
     "@nestjs/typeorm": "^9.0.1",
     "@nrwl/angular": "15.0.4",
     "apollo-angular": "^4.1.0",
+    "apollo-server-errors": "^3.3.1",
     "apollo-server-express": "^3.10.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",

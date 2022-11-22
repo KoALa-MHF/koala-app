@@ -17,6 +17,7 @@ import { UserSessionsModule } from './user-sessions/user-sessions.module';
 import { UserSession } from './user-sessions/entities/user-session.entity';
 import { AnnotationsModule } from './annotations/annotations.module';
 import { Annotation } from './annotations/entities/annotation.entity';
+import { formatError } from './core/graphql/grapqhl-error';
 
 
 @Module({
@@ -32,6 +33,7 @@ import { Annotation } from './annotations/entities/annotation.entity';
       debug: false,
       playground: true,
       autoSchemaFile: true,
+      formatError: formatError,
     }),
     SessionsModule,
     MediaModule,
