@@ -6,26 +6,22 @@ import {
   pressCreateSessionButton,
   getSessionOverviewTableRows,
   pressAllDeleteSessionButtons,
+  pressEditOnSession,
+  pressDeleteOnSession,
 } from '../support/session-overview.po';
 
 describe('koala-frontend', () => {
   beforeEach(() => {
+    cy.intercept('/api').as('api');
+
     cy.visit('/');
 
-    let counter = 0;
-    getSessionOverviewTableRows().each((button) => {
-      counter++;
-      console.log(button);
-    });
+    cy.wait(['@api']);
 
-    if (counter > 1) {
-      cy.get('button[name="deleteButton"]', {}).each((button) => {
-        cy.wrap(button).click();
-      });
-    }
+    pressAllDeleteSessionButtons();
   });
 
-  it('Create of a session', () => {
+  it('Create of a session with session name', () => {
     // Custom command example, see `../support/commands.ts` file
     //cy.login('my-email@something.com', 'myPassword');
 
@@ -37,7 +33,32 @@ describe('koala-frontend', () => {
     pressSaveButton();
 
     getSessionOverviewTableRows().should((t) => expect(t.length).equal(2));
+  });
 
-    pressAllDeleteSessionButtons();
+  it('Update session', () => {
+    pressCreateSessionButton();
+
+    getSessionNameField().type('New Session');
+    pressSaveButton();
+
+    pressEditOnSession(0);
+
+    getSessionNameField().type('New Session - Update');
+    pressSaveButton();
+
+    cy.contains('New Session - Update');
+  });
+
+  it('Delete session', () => {
+    pressCreateSessionButton();
+
+    getSessionNameField().type('New Session');
+    pressSaveButton();
+
+    pressDeleteOnSession(0);
+
+    getSessionOverviewTableRows().should((t) => expect(t.length).equal(1));
+
+    cy.contains('New Session').should('not.exist');
   });
 });
