@@ -46,8 +46,9 @@ export class SessionsService {
     return this.createSessionGQL.mutate({ session });
   }
 
-  update(session: UpdateSessionInput) {
+  update(id: number, session: UpdateSessionInput) {
     return this.updateSessionGQL.mutate({
+      id,
       session,
     });
   }

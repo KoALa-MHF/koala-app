@@ -97,8 +97,7 @@ export class SessionMaintainPage implements OnInit {
         });
     } else {
       this.sessionService
-        .update({
-          id: this.session?.id || 0,
+        .update(this.session?.id || 0, {
           name:
             this.maintainSessionForm.get('basicData')?.get('sessionName')
               ?.value || '',

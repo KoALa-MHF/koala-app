@@ -11,11 +11,12 @@ mutation createNewSession($session: CreateSessionInput!) {
 `;
 
 const UPDATE_SESSION = gql`
-  mutation updateSession($session: UpdateSessionInput!) {
-    updateSession(updateSessionInput: $session) {
+mutation updateSession($id: Int!, $session: UpdateSessionInput!) {
+    updateSession(id: $id, updateSessionInput: $session){
       id
       name
       description
+      status
     }
   }
 `;
