@@ -68,7 +68,6 @@ export class Session extends BaseEntity {
   media?: Media;
 
   @Column()
-  @Field({ description: 'Session Name' })
   @Index({ unique: true })
   @IsNotEmpty()
   code: string
