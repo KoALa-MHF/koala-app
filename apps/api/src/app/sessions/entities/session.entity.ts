@@ -1,14 +1,20 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
 import { IsEnum, IsNotEmpty } from 'class-validator';
 import {
+  BeforeInsert,
   Column,
   Entity,
+  Index,
   JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { BaseEntity } from '../../core/base.entity';
 import { Media } from '../../media/entities/media.entity';
+import { customAlphabet } from 'nanoid'
+import { nolookalikes } from 'nanoid-dictionary';
+
+const nanoid = customAlphabet(nolookalikes, 7);
 
 export enum SessionStatus {
   OPEN = 'open',
@@ -60,4 +66,15 @@ export class Session extends BaseEntity {
     description: 'Associated Media File',
   })
   media?: Media;
+
+  @Column()
+  @Field({ description: 'Session Name' })
+  @Index({ unique: true })
+  @IsNotEmpty()
+  code: string
+
+  @BeforeInsert()
+  async generateCode() {
+    this.code = await nanoid();
+  }
 }
