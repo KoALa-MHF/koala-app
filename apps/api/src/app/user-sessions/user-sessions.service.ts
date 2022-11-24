@@ -14,9 +14,10 @@ export class UserSessionsService {
 
   create(createUserSessionInput: CreateUserSessionInput) {
     const userSession = this.userSessionsRepository.create({
-      session : {
-        id : createUserSessionInput.sessionId
-      }
+      note: createUserSessionInput.note,
+      session: {
+        id: createUserSessionInput.sessionId,
+      },
     });
     return this.userSessionsRepository.save(userSession);
   }
@@ -32,7 +33,7 @@ export class UserSessionsService {
   async update(id: number, updateUserSessionInput: UpdateUserSessionInput) {
     try {
       await this.userSessionsRepository.update(id, {
-        note: updateUserSessionInput.note
+        note: updateUserSessionInput.note,
       });
 
       return this.findOne(id);
