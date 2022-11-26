@@ -7,6 +7,12 @@ const GET_SESSIONS = gql`
       name
       description
       status
+      start
+      end
+      isEditable
+      isPlayerEnabled
+      isSampleSolutionDisplayed
+      isLiveAnalysisDisplayed
       createdAt
       updatedAt
     }
@@ -20,6 +26,12 @@ const GET_ONE_SESSION = gql`
       name
       description
       status
+      start
+      end
+      isEditable
+      isPlayerEnabled
+      isSampleSolutionDisplayed
+      isLiveAnalysisDisplayed
       createdAt
       updatedAt
     }

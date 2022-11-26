@@ -31,9 +31,8 @@ export class SessionMaintainPage implements OnInit {
   ) {
     this.maintainSessionForm = this.formBuilder.group({
       basicData: this.formBuilder.group({
-        sessionName: new FormControl<string>('', [Validators.required]),
-        sessionDescription: new FormControl<string>(''),
-        sessionType: new FormControl<string>('1', [Validators.required]),
+        name: new FormControl<string>('', [Validators.required]),
+        description: new FormControl<string>(''),
       }),
       dates: this.formBuilder.group({
         online: new FormControl<boolean>(false),
@@ -41,12 +40,10 @@ export class SessionMaintainPage implements OnInit {
         end: new FormControl<Date | null>(null),
       }),
       details: this.formBuilder.group({
-        editable: new FormControl<boolean>(false),
-        start: new FormControl<Date | null>(null),
-        end: new FormControl<Date | null>(null),
-        player: new FormControl<boolean>(false),
-        sampleSolution: new FormControl<boolean>(false),
-        analysis: new FormControl<boolean>(false),
+        isEditable: new FormControl<boolean>(false),
+        isPlayerEnabled: new FormControl<boolean>(false),
+        isSampleSolutionDisplayed: new FormControl<boolean>(false),
+        isLiveAnalysisDisplayed: new FormControl<boolean>(false),
       }),
       audio: this.formBuilder.group({
         title: new FormControl<string>(''),
@@ -70,41 +67,102 @@ export class SessionMaintainPage implements OnInit {
 
         this.maintainSessionForm
           .get('basicData')
-          ?.get('sessionName')
+          ?.get('name')
           ?.setValue(this.session.name);
 
         this.maintainSessionForm
           .get('basicData')
-          ?.get('sessionDescription')
+          ?.get('description')
           ?.setValue(this.session.description);
+
+        this.maintainSessionForm
+          .get('details')
+          ?.get('isEditable')
+          ?.setValue(this.session.isEditable);
+
+        this.maintainSessionForm
+          .get('details')
+          ?.get('isPlayerEnabled')
+          ?.setValue(this.session.isPlayerEnabled);
+
+        this.maintainSessionForm
+          .get('details')
+          ?.get('isSampleSolutionDisplayed')
+          ?.setValue(this.session.isSampleSolutionDisplayed);
+
+        this.maintainSessionForm
+          .get('details')
+          ?.get('isLiveAnalysisDisplayed')
+          ?.setValue(this.session.isLiveAnalysisDisplayed);
+
+        this.maintainSessionForm
+          .get('dates')
+          ?.get('start')
+          ?.setValue(new Date(this.session.start));
+
+        this.maintainSessionForm
+          .get('dates')
+          ?.get('end')
+          ?.setValue(new Date(this.session.end));
       });
     }
   }
 
   public onSave() {
-    const sessionName =
-      this.maintainSessionForm.get('basicData')?.get('sessionName')?.value ||
+    const name =
+      this.maintainSessionForm.get('basicData')?.get('name')?.value || '';
+    const description =
+      this.maintainSessionForm.get('basicData')?.get('description')?.value ||
       '';
-    const sessionDescription =
-      this.maintainSessionForm.get('basicData')?.get('sessionDescription')
-        ?.value || '';
+
+    const start =
+      this.maintainSessionForm.get('dates')?.get('start')?.value || new Date();
+    const end =
+      this.maintainSessionForm.get('dates')?.get('end')?.value || new Date();
+
+    const isEditable =
+      this.maintainSessionForm.get('details')?.get('isEditable')?.value ||
+      false;
+
+    const isPlayerEnabled =
+      this.maintainSessionForm.get('details')?.get('isPlayerEnabled')?.value ||
+      false;
+
+    const isSampleSolutionDisplayed =
+      this.maintainSessionForm.get('details')?.get('isSampleSolutionDisplayed')
+        ?.value || false;
+
+    const isLiveAnalysisDisplayed =
+      this.maintainSessionForm.get('details')?.get('isLiveAnalysisDisplayed')
+        ?.value || false;
 
     if (this.mode === 1) {
       this.sessionService
-        .create({ name: sessionName, description: sessionDescription })
+        .create({
+          name,
+          description,
+          start,
+          end,
+          isEditable,
+          isPlayerEnabled,
+          isSampleSolutionDisplayed,
+          isLiveAnalysisDisplayed,
+        })
         .subscribe(() => {
           this.router.navigate(['sessions']);
         });
     } else {
       this.sessionService
         .update(this.session?.id || 0, {
-          name:
-            this.maintainSessionForm.get('basicData')?.get('sessionName')
-              ?.value || '',
-          description:
-            this.maintainSessionForm.get('basicData')?.get('sessionDescription')
-              ?.value || '',
-          status: SessionStatus.Open,
+          name,
+          description,
+          start,
+          end,
+          isEditable,
+          isPlayerEnabled,
+          isSampleSolutionDisplayed,
+          isLiveAnalysisDisplayed,
+          //status: SessionStatus.Open,
         })
         .subscribe(() => {
           this.router.navigate(['sessions']);
@@ -112,7 +170,9 @@ export class SessionMaintainPage implements OnInit {
     }
   }
 
-  public onCancel() {}
+  public onCancel() {
+    this.router.navigate(['sessions']);
+  }
 
   get basicDataFormGroup(): FormGroup {
     return this.maintainSessionForm.get('basicData') as FormGroup;

@@ -62,7 +62,13 @@ export type CreateMediaInput = {
 
 export type CreateSessionInput = {
   description?: InputMaybe<Scalars['String']>;
+  end: Scalars['DateTime'];
+  isEditable: Scalars['Boolean'];
+  isLiveAnalysisDisplayed: Scalars['Boolean'];
+  isPlayerEnabled: Scalars['Boolean'];
+  isSampleSolutionDisplayed: Scalars['Boolean'];
   name: Scalars['String'];
+  start: Scalars['DateTime'];
   status?: InputMaybe<SessionStatus>;
 };
 
@@ -265,12 +271,24 @@ export type Session = {
   createdAt: Scalars['DateTime'];
   /** Description */
   description: Scalars['String'];
+  /** End of Session */
+  end: Scalars['DateTime'];
   /** ID for Session */
   id: Scalars['Int'];
+  /** Default for Session - Editable for Participants */
+  isEditable: Scalars['Boolean'];
+  /** Default for Session - Annotations are Directly Displayed in Analysis */
+  isLiveAnalysisDisplayed: Scalars['Boolean'];
+  /** Default for Session - Player Enabled for Participants */
+  isPlayerEnabled: Scalars['Boolean'];
+  /** Default for Session - Sample Solution Displayed */
+  isSampleSolutionDisplayed: Scalars['Boolean'];
   /** Associated Media File */
   media?: Maybe<Media>;
   /** Session Name */
   name: Scalars['String'];
+  /** Start of Session */
+  start: Scalars['DateTime'];
   /** Session Status */
   status: SessionStatus;
   /** Date of Last Update */
@@ -309,7 +327,13 @@ export type UpdateMediaInput = {
 
 export type UpdateSessionInput = {
   description?: InputMaybe<Scalars['String']>;
+  end?: InputMaybe<Scalars['DateTime']>;
+  isEditable?: InputMaybe<Scalars['Boolean']>;
+  isLiveAnalysisDisplayed?: InputMaybe<Scalars['Boolean']>;
+  isPlayerEnabled?: InputMaybe<Scalars['Boolean']>;
+  isSampleSolutionDisplayed?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
+  start?: InputMaybe<Scalars['DateTime']>;
   status?: InputMaybe<SessionStatus>;
 };
 
@@ -345,7 +369,7 @@ export type CreateNewSessionMutationVariables = Exact<{
 }>;
 
 
-export type CreateNewSessionMutation = { __typename?: 'Mutation', createSession: { __typename?: 'Session', id: number, name: string, description: string } };
+export type CreateNewSessionMutation = { __typename?: 'Mutation', createSession: { __typename?: 'Session', id: number, name: string, description: string, status: SessionStatus, start: any, end: any, isEditable: boolean, isPlayerEnabled: boolean, isSampleSolutionDisplayed: boolean, isLiveAnalysisDisplayed: boolean, createdAt: any, updatedAt: any } };
 
 export type UpdateSessionMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -353,7 +377,7 @@ export type UpdateSessionMutationVariables = Exact<{
 }>;
 
 
-export type UpdateSessionMutation = { __typename?: 'Mutation', updateSession: { __typename?: 'Session', id: number, name: string, description: string, status: SessionStatus } };
+export type UpdateSessionMutation = { __typename?: 'Mutation', updateSession: { __typename?: 'Session', name: string, description: string, status: SessionStatus, start: any, end: any, isEditable: boolean, isPlayerEnabled: boolean, isSampleSolutionDisplayed: boolean, isLiveAnalysisDisplayed: boolean, createdAt: any, updatedAt: any } };
 
 export type DeleteSessionMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -365,14 +389,14 @@ export type DeleteSessionMutation = { __typename?: 'Mutation', removeSession: { 
 export type GetSessionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSessionsQuery = { __typename?: 'Query', sessions: Array<{ __typename?: 'Session', id: number, name: string, description: string, status: SessionStatus, createdAt: any, updatedAt: any }> };
+export type GetSessionsQuery = { __typename?: 'Query', sessions: Array<{ __typename?: 'Session', id: number, name: string, description: string, status: SessionStatus, start: any, end: any, isEditable: boolean, isPlayerEnabled: boolean, isSampleSolutionDisplayed: boolean, isLiveAnalysisDisplayed: boolean, createdAt: any, updatedAt: any }> };
 
 export type GetOneSessionQueryVariables = Exact<{
   sessionId: Scalars['Int'];
 }>;
 
 
-export type GetOneSessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: number, name: string, description: string, status: SessionStatus, createdAt: any, updatedAt: any } };
+export type GetOneSessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: number, name: string, description: string, status: SessionStatus, start: any, end: any, isEditable: boolean, isPlayerEnabled: boolean, isSampleSolutionDisplayed: boolean, isLiveAnalysisDisplayed: boolean, createdAt: any, updatedAt: any } };
 
 export const CreateNewSessionDocument = gql`
     mutation createNewSession($session: CreateSessionInput!) {
@@ -380,6 +404,15 @@ export const CreateNewSessionDocument = gql`
     id
     name
     description
+    status
+    start
+    end
+    isEditable
+    isPlayerEnabled
+    isSampleSolutionDisplayed
+    isLiveAnalysisDisplayed
+    createdAt
+    updatedAt
   }
 }
     `;
@@ -397,10 +430,17 @@ export const CreateNewSessionDocument = gql`
 export const UpdateSessionDocument = gql`
     mutation updateSession($id: Int!, $session: UpdateSessionInput!) {
   updateSession(id: $id, updateSessionInput: $session) {
-    id
     name
     description
     status
+    start
+    end
+    isEditable
+    isPlayerEnabled
+    isSampleSolutionDisplayed
+    isLiveAnalysisDisplayed
+    createdAt
+    updatedAt
   }
 }
     `;
@@ -440,6 +480,12 @@ export const GetSessionsDocument = gql`
     name
     description
     status
+    start
+    end
+    isEditable
+    isPlayerEnabled
+    isSampleSolutionDisplayed
+    isLiveAnalysisDisplayed
     createdAt
     updatedAt
   }
@@ -463,6 +509,12 @@ export const GetOneSessionDocument = gql`
     name
     description
     status
+    start
+    end
+    isEditable
+    isPlayerEnabled
+    isSampleSolutionDisplayed
+    isLiveAnalysisDisplayed
     createdAt
     updatedAt
   }
