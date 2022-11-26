@@ -67,6 +67,8 @@ export type CreateSessionInput = {
 };
 
 export type CreateUserSessionInput = {
+  /** User Session Note */
+  note?: InputMaybe<Scalars['String']>;
   /** Associated Session */
   sessionId: Scalars['Int'];
 };
@@ -313,7 +315,7 @@ export type UpdateSessionInput = {
 
 export type UpdateUserSessionInput = {
   /** User Session Note */
-  note: Scalars['String'];
+  note?: InputMaybe<Scalars['String']>;
 };
 
 export type UserSession = {
