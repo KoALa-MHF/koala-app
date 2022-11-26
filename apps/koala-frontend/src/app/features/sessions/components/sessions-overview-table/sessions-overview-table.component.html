@@ -20,7 +20,6 @@
       <th>Erstellungsdatum</th>
       <th>Mitgliederanzahl</th>
       <th>Letzter Zugriff</th>
-      <th>Sessiontyp</th>
       <th>Einstellung</th>
       <th>Link/QRCode</th>
       <th>Export</th>
@@ -30,14 +29,14 @@
 
   <ng-template pTemplate="body" let-session>
     <tr>
-      <td>{{ session.name }}</td>
-      <td>{{ session.createdAt | date: 'medium' }}</td>
-      <td>0</td>
-      <td>{{ session.updatedAt | date: 'medium' }}</td>
-      <td>synchron</td>
+      <td data-column="sessionName">{{ session.name }}</td>
+      <td data-column="createdAt">{{ session.createdAt | date: 'medium' }}</td>
+      <td data-column="participants">0</td>
+      <td data-column="updatedAt">{{ session.updatedAt | date: 'medium' }}</td>
       <td>
         <button
           pButton
+          data-column="settings"
           name="settingsButton"
           aria-label="Settings"
           (click)="onSettings(session)"
@@ -48,6 +47,7 @@
       <td>
         <button
           pButton
+          data-column="qrCode"
           icon="pi pi-qrcode"
           class="p-button-text"
           aria-label="QRCode"
@@ -57,15 +57,17 @@
       <td>
         <button
           pButton
+          data-column="export"
           icon="pi pi-file-export"
           class="p-button-text"
-          aria-label="QRCode"
+          aria-label="Export"
           (click)="onExport(session)"
         ></button>
       </td>
       <td>
         <button
           pButton
+          data-column="delete"
           name="deleteButton"
           icon="pi pi-trash"
           class="p-button-text"

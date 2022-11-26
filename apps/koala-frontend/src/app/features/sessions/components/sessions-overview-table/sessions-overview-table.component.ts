@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
 import { Session } from 'apps/koala-frontend/src/app/graphql/generated/graphql';
 
 @Component({
@@ -25,14 +24,13 @@ export class SessionsOverviewTableComponent implements OnInit {
     'createdAt',
     'participants',
     'updatedAt',
-    'sessionType',
     'settings',
     'sessionCode',
     'export',
     'delete',
   ];
 
-  constructor(private readonly router: Router) {}
+  constructor() {}
 
   ngOnInit(): void {}
 
