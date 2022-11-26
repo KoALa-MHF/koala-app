@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -16,10 +20,9 @@ export class SessionsService {
   ) {}
 
   create(createSessionInput: CreateSessionInput) {
-    const newSession = this.sessionsRepository.create();
-    newSession.name = createSessionInput.name;
-    newSession.description = createSessionInput.description;
-    newSession.status = createSessionInput.status;
+    const newSession = this.sessionsRepository.create({
+      ...createSessionInput,
+    });
 
     return this.sessionsRepository.save(newSession);
   }
@@ -34,7 +37,7 @@ export class SessionsService {
     return this.sessionsRepository.findOneOrFail({
       where: { id },
       relations: RELATIONS,
-      withDeleted
+      withDeleted,
     });
   }
 
@@ -44,9 +47,7 @@ export class SessionsService {
   ): Promise<Session> {
     try {
       await this.sessionsRepository.update(id, {
-        name: updateSessionInput.name,
-        description: updateSessionInput.description,
-        status: updateSessionInput.status,
+        ...updateSessionInput,
       });
 
       return this.findOne(id);
@@ -58,10 +59,10 @@ export class SessionsService {
   async remove(id: number) {
     const deleteResult = await this.sessionsRepository.softDelete(id);
 
-    if(deleteResult.affected === 1) {
-        return this.findOne(id, true);
+    if (deleteResult.affected === 1) {
+      return this.findOne(id, true);
     } else {
-        throw new NotFoundException();
+      throw new NotFoundException();
     }
   }
 

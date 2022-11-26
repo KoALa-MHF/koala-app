@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 import { BaseEntity } from '../../core/base.entity';
 import { Media } from '../../media/entities/media.entity';
-import { customAlphabet } from 'nanoid'
+import { customAlphabet } from 'nanoid';
 import { nolookalikes } from 'nanoid-dictionary';
 
 const nanoid = customAlphabet(nolookalikes, 7);
@@ -44,7 +44,7 @@ export class Session extends BaseEntity {
   @Column({
     type: 'simple-enum',
     enum: SessionStatus,
-    default: SessionStatus.OPEN
+    default: SessionStatus.OPEN,
   })
   @Field(() => SessionStatus, {
     defaultValue: SessionStatus.OPEN,
@@ -55,9 +55,33 @@ export class Session extends BaseEntity {
   status: SessionStatus;
 
   @Column({
-    default: false
+    default: false,
   })
   deleted: boolean;
+
+  @Column()
+  @Field({ description: 'Start of Session' })
+  start: Date;
+
+  @Column()
+  @Field({ description: 'End of Session' })
+  end: Date;
+
+  @Column()
+  @Field({ description: 'Default for Session - Editable for Participants' })
+  isEditable: boolean;
+
+  @Column()
+  @Field({ description: 'Default for Session - Player Enabled for Participants' })
+  isPlayerEnabled: boolean;
+
+  @Column()
+  @Field({ description: 'Default for Session - Sample Solution Displayed' })
+  isSampleSolutionDisplayed: boolean;
+
+  @Column()
+  @Field({ description: 'Default for Session - Annotations are Directly Displayed in Analysis' })
+  isLiveAnalysisDisplayed: boolean;
 
   @JoinColumn()
   @OneToOne(() => Media, { nullable: true })
@@ -70,7 +94,7 @@ export class Session extends BaseEntity {
   @Column()
   @Index({ unique: true })
   @IsNotEmpty()
-  code: string
+  code: string;
 
   @BeforeInsert()
   async generateCode() {
