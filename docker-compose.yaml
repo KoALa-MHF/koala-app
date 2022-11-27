@@ -2,7 +2,7 @@ version: "3.9"
 services:
   api:
     build:
-      context: ./koala-app
+      context: ./
       dockerfile: Dockerfile
     ports:
       - "4200:3333"
@@ -11,7 +11,7 @@ services:
        - ./api:/usr/src/app/api
   frontend:
     build:
-      context: ./koala-app
+      context: ./
       dockerfile: frontend.Dockerfile
     ports:
       - "8888:80"

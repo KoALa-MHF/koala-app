@@ -30,10 +30,11 @@ import { formatError } from './core/graphql/grapqhl-error';
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      debug: false,
+      debug: true,
       playground: true,
       autoSchemaFile: true,
       formatError: formatError,
+      introspection:true,
     }),
     SessionsModule,
     MediaModule,

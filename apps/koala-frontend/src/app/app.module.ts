@@ -29,7 +29,7 @@ import { CoreModule } from './core/core.module';
         return {
           cache: new InMemoryCache(),
           link: httpLink.create({
-            uri: 'http://localhost:4200/api',
+            uri: 'http://localhost:4200/graphql',
           }),
         };
       },
