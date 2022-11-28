@@ -2,7 +2,10 @@
 sidebar_position: 3
 ---
 
-# Delete a Session
+# Delete or Leave a Session
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+### How to Delete a Session
+To delete a Session, please move to your Session overview page. A Session that you own can be deleted by clicking on the trash symbol at the right side of the row.
 
+### How to Leave a Session
+To leave a Session that you participated go to your Sessions overview page and just click on the exit/trash icon. When you leave a Session your annotations stay in the Session but won't be linked to you anymore.
