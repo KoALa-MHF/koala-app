@@ -14,6 +14,7 @@ import {
   UpdateSessionInput,
   CreateSessionInput,
   Exact,
+  CreateMediaInput,
 } from '../../../graphql/generated/graphql';
 
 @Injectable({

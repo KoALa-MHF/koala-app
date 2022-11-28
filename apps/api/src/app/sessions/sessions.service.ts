@@ -19,12 +19,17 @@ export class SessionsService {
     private sessionsRepository: Repository<Session>
   ) {}
 
-  create(createSessionInput: CreateSessionInput) {
+  async create(createSessionInput: CreateSessionInput) {
     const newSession = this.sessionsRepository.create({
       ...createSessionInput,
+      media: {
+        id: createSessionInput.mediaId
+      }
     });
 
-    return this.sessionsRepository.save(newSession);
+    const savedSession = await this.sessionsRepository.save(newSession);
+
+    return this.findOne(savedSession.id);
   }
 
   findAll() {
@@ -63,19 +68,6 @@ export class SessionsService {
       return this.findOne(id, true);
     } else {
       throw new NotFoundException();
-    }
-  }
-
-  async setMedia(id: number, mediaId: number): Promise<Session> {
-    try {
-      await this.sessionsRepository.update(id, {
-        media: {
-          id: mediaId,
-        },
-      });
-      return this.findOne(id);
-    } catch (error) {
-      throw new BadRequestException(error.detail);
     }
   }
 }

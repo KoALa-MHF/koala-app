@@ -7,9 +7,10 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
+  MediaType,
   Session,
-  SessionStatus,
 } from 'apps/koala-frontend/src/app/graphql/generated/graphql';
+import { MediaService } from '../../services/media.service';
 import { SessionsService } from '../../services/sessions.service';
 
 @Component({
@@ -25,6 +26,7 @@ export class SessionMaintainPage implements OnInit {
 
   constructor(
     private readonly sessionService: SessionsService,
+    private readonly mediaService: MediaService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private formBuilder: FormBuilder
@@ -40,10 +42,10 @@ export class SessionMaintainPage implements OnInit {
         end: new FormControl<Date | null>(null),
       }),
       details: this.formBuilder.group({
-        isEditable: new FormControl<boolean>(false),
-        isPlayerEnabled: new FormControl<boolean>(false),
-        isSampleSolutionDisplayed: new FormControl<boolean>(false),
-        isLiveAnalysisDisplayed: new FormControl<boolean>(false),
+        editable: new FormControl<boolean>(false),
+        enablePlayer: new FormControl<boolean>(false),
+        displaySampleSolution: new FormControl<boolean>(false),
+        enableLiveAnalysis: new FormControl<boolean>(false),
       }),
       audio: this.formBuilder.group({
         title: new FormControl<string>(''),
@@ -63,7 +65,10 @@ export class SessionMaintainPage implements OnInit {
 
     if (this.mode === 2) {
       this.sessionService.getOne(this.sessionId).subscribe((result) => {
-        this.session = result.data?.session;
+        this.session = {
+          ...result.data?.session,
+          media: result.data?.session.media || null,
+        };
 
         this.maintainSessionForm
           .get('basicData')
@@ -77,23 +82,23 @@ export class SessionMaintainPage implements OnInit {
 
         this.maintainSessionForm
           .get('details')
-          ?.get('isEditable')
-          ?.setValue(this.session.isEditable);
+          ?.get('editable')
+          ?.setValue(this.session.editable);
 
         this.maintainSessionForm
           .get('details')
-          ?.get('isPlayerEnabled')
-          ?.setValue(this.session.isPlayerEnabled);
+          ?.get('enablePlayer')
+          ?.setValue(this.session.enablePlayer);
 
         this.maintainSessionForm
           .get('details')
-          ?.get('isSampleSolutionDisplayed')
-          ?.setValue(this.session.isSampleSolutionDisplayed);
+          ?.get('displaySampleSolution')
+          ?.setValue(this.session.displaySampleSolution);
 
         this.maintainSessionForm
           .get('details')
-          ?.get('isLiveAnalysisDisplayed')
-          ?.setValue(this.session.isLiveAnalysisDisplayed);
+          ?.get('enableLiveAnalysis')
+          ?.setValue(this.session.enableLiveAnalysis);
 
         this.maintainSessionForm
           .get('dates')
@@ -104,6 +109,18 @@ export class SessionMaintainPage implements OnInit {
           .get('dates')
           ?.get('end')
           ?.setValue(new Date(this.session.end));
+
+        this.maintainSessionForm
+          .get('audio')
+          ?.get('title')
+          ?.setValue(this.session.media?.title);
+
+        this.maintainSessionForm
+          .get('audio')
+          ?.get('composer')
+          ?.setValue(this.session.media?.composer);
+
+        console.log(this.maintainSessionForm);
       });
     }
   }
@@ -120,52 +137,70 @@ export class SessionMaintainPage implements OnInit {
     const end =
       this.maintainSessionForm.get('dates')?.get('end')?.value || new Date();
 
-    const isEditable =
-      this.maintainSessionForm.get('details')?.get('isEditable')?.value ||
-      false;
+    const editable =
+      this.maintainSessionForm.get('details')?.get('editable')?.value || false;
 
-    const isPlayerEnabled =
-      this.maintainSessionForm.get('details')?.get('isPlayerEnabled')?.value ||
-      false;
-
-    const isSampleSolutionDisplayed =
-      this.maintainSessionForm.get('details')?.get('isSampleSolutionDisplayed')
+    const enablePlayer =
+      this.maintainSessionForm.get('details')?.get('enablePlayer')
         ?.value || false;
 
-    const isLiveAnalysisDisplayed =
-      this.maintainSessionForm.get('details')?.get('isLiveAnalysisDisplayed')
+    const displaySampleSolution =
+      this.maintainSessionForm.get('details')?.get('displaySampleSolution')
         ?.value || false;
+
+    const enableLiveAnalysis =
+      this.maintainSessionForm.get('details')?.get('enableLiveAnalysis')
+        ?.value || false;
+
+    const audioTitle: string =
+      this.maintainSessionForm.get('audio')?.get('title')?.value || '';
+
+    const composer: string =
+      this.maintainSessionForm.get('audio')?.get('composer')?.value || '';
 
     if (this.mode === 1) {
-      this.sessionService
+      this.mediaService
         .create({
-          name,
-          description,
-          start,
-          end,
-          isEditable,
-          isPlayerEnabled,
-          isSampleSolutionDisplayed,
-          isLiveAnalysisDisplayed,
+          type: MediaType.Audio,
+          title: audioTitle,
+          composer,
         })
-        .subscribe(() => {
-          this.router.navigate(['sessions']);
+        .subscribe((result) => {
+          this.sessionService
+            .create({
+              name,
+              description,
+              start,
+              end,
+              editable,
+              enablePlayer,
+              displaySampleSolution,
+              enableLiveAnalysis,
+              mediaId: result.data?.createMedia.id || 0,
+            })
+            .subscribe(() => {
+              this.router.navigate(['sessions']);
+            });
         });
     } else {
-      this.sessionService
-        .update(this.session?.id || 0, {
-          name,
-          description,
-          start,
-          end,
-          isEditable,
-          isPlayerEnabled,
-          isSampleSolutionDisplayed,
-          isLiveAnalysisDisplayed,
-          //status: SessionStatus.Open,
-        })
+      this.mediaService
+        .update(this.session?.media?.id || 0, { title: audioTitle, composer })
         .subscribe(() => {
-          this.router.navigate(['sessions']);
+          this.sessionService
+            .update(this.session?.id || 0, {
+              name,
+              description,
+              start,
+              end,
+              editable,
+              enablePlayer,
+              displaySampleSolution,
+              enableLiveAnalysis,
+              //status: SessionStatus.Open,
+            })
+            .subscribe(() => {
+              this.router.navigate(['sessions']);
+            });
         });
     }
   }
