@@ -12,6 +12,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
 
+import { environment } from '../environments/environment';
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -26,10 +28,13 @@ import { CoreModule } from './core/core.module';
     {
       provide: APOLLO_OPTIONS,
       useFactory(httpLink: HttpLink) {
+        const uri: string = environment.production
+          ? 'http://193.197.162.7/graphql'
+          : 'http://localhost:4200/graphql';
         return {
           cache: new InMemoryCache(),
           link: httpLink.create({
-            uri: 'http://localhost:4200/graphql',
+            uri: uri,
           }),
         };
       },
