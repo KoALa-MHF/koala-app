@@ -1,5 +1,7 @@
-import { InputType, Field } from '@nestjs/graphql';
+import { InputType, Field, Int } from '@nestjs/graphql';
 import { IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
+import { CreateMediaInput } from '../../media/dto/create-media.input';
+import { Media } from '../../media/entities/media.entity';
 import { SessionStatus } from '../entities/session.entity';
 
 @InputType()
@@ -23,14 +25,18 @@ export class CreateSessionInput {
   end: Date;
 
   @Field()
-  isEditable: boolean;
+  editable: boolean;
 
   @Field()
-  isPlayerEnabled: boolean;
+  enablePlayer: boolean;
 
   @Field()
-  isSampleSolutionDisplayed: boolean;
+  displaySampleSolution: boolean;
 
   @Field()
-  isLiveAnalysisDisplayed: boolean;
+  enableLiveAnalysis: boolean;
+
+  @Field(() => Int, { nullable: true, description: 'Assigned Media' })
+  @IsOptional()
+  mediaId: number;
 }

@@ -46,12 +46,4 @@ export class SessionsResolver {
   removeSession(@Args('id', { type: () => Int }) id: number) {
     return this.sessionsService.remove(id);
   }
-
-  @Mutation(() => Session)
-  async setMedia(
-    @Args('id', { type: () => Int }) id: number,
-    @Args('mediaId', { type: () => Int }) mediaId: number
-  ) {
-    return this.sessionsService.setMedia(id, mediaId);
-  }
 }

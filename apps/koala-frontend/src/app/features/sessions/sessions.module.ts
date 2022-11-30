@@ -21,6 +21,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { SessionDetailsComponent } from './components/session-details/session-details.component';
 import { SessionDatesComponent } from './components/session-dates/session-dates.component';
 import { SessionAudioComponent } from './components/session-audio/session-audio.component';
+import { MediaService } from './services/media.service';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,6 @@ import { SessionAudioComponent } from './components/session-audio/session-audio.
     TableModule,
     InputTextareaModule,
   ],
-  providers: [SessionsService],
+  providers: [SessionsService, MediaService],
 })
 export class SessionsModule {}

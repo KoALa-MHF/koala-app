@@ -69,19 +69,19 @@ export class Session extends BaseEntity {
 
   @Column()
   @Field({ description: 'Default for Session - Editable for Participants' })
-  isEditable: boolean;
+  editable: boolean;
 
   @Column()
   @Field({ description: 'Default for Session - Player Enabled for Participants' })
-  isPlayerEnabled: boolean;
+  enablePlayer: boolean;
 
   @Column()
   @Field({ description: 'Default for Session - Sample Solution Displayed' })
-  isSampleSolutionDisplayed: boolean;
+  displaySampleSolution: boolean;
 
   @Column()
   @Field({ description: 'Default for Session - Annotations are Directly Displayed in Analysis' })
-  isLiveAnalysisDisplayed: boolean;
+  enableLiveAnalysis: boolean;
 
   @JoinColumn()
   @OneToOne(() => Media, { nullable: true })

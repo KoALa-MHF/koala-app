@@ -1,28 +1,28 @@
 <form [formGroup]="sessionDetailsForm" class="form-grid">
   <p-checkbox
     class="form-single-cell"
-    formControlName="isEditable"
+    formControlName="editable"
     [binary]="true"
     label="Bearbeitung"
   ></p-checkbox>
 
   <p-checkbox
     class="form-single-cell"
-    formControlName="isPlayerEnabled"
+    formControlName="enablePlayer"
     [binary]="true"
     label="Player"
   ></p-checkbox>
 
   <p-checkbox
     class="form-single-cell"
-    formControlName="isSampleSolutionDisplayed"
+    formControlName="displaySampleSolution"
     [binary]="true"
     label="Musterlösung"
   ></p-checkbox>
 
   <p-checkbox
     class="form-single-cell"
-    formControlName="isLiveAnalysisDisplayed"
+    formControlName="enableLiveAnalysis"
     [binary]="true"
     label="Analyse"
   ></p-checkbox>

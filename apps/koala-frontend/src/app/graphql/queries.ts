@@ -9,10 +9,18 @@ const GET_SESSIONS = gql`
       status
       start
       end
-      isEditable
-      isPlayerEnabled
-      isSampleSolutionDisplayed
-      isLiveAnalysisDisplayed
+      editable
+      enablePlayer
+      displaySampleSolution
+      enableLiveAnalysis
+      media {
+        id
+        type
+        title
+        composer
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -28,10 +36,18 @@ const GET_ONE_SESSION = gql`
       status
       start
       end
-      isEditable
-      isPlayerEnabled
-      isSampleSolutionDisplayed
-      isLiveAnalysisDisplayed
+      editable
+      enablePlayer
+      displaySampleSolution
+      enableLiveAnalysis
+      media {
+        id
+        type
+        title
+        composer
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }

@@ -62,11 +62,13 @@ export type CreateMediaInput = {
 
 export type CreateSessionInput = {
   description?: InputMaybe<Scalars['String']>;
+  displaySampleSolution: Scalars['Boolean'];
+  editable: Scalars['Boolean'];
+  enableLiveAnalysis: Scalars['Boolean'];
+  enablePlayer: Scalars['Boolean'];
   end: Scalars['DateTime'];
-  isEditable: Scalars['Boolean'];
-  isLiveAnalysisDisplayed: Scalars['Boolean'];
-  isPlayerEnabled: Scalars['Boolean'];
-  isSampleSolutionDisplayed: Scalars['Boolean'];
+  /** Assigned Media */
+  mediaId?: InputMaybe<Scalars['Int']>;
   name: Scalars['String'];
   start: Scalars['DateTime'];
   status?: InputMaybe<SessionStatus>;
@@ -132,7 +134,6 @@ export type Mutation = {
   removeMedia: Media;
   removeSession: Session;
   removeUserSession: UserSession;
-  setMedia: Session;
   updateAnnotation: Annotation;
   updateMarker: Marker;
   updateMedia: Media;
@@ -188,12 +189,6 @@ export type MutationRemoveSessionArgs = {
 
 export type MutationRemoveUserSessionArgs = {
   id: Scalars['Int'];
-};
-
-
-export type MutationSetMediaArgs = {
-  id: Scalars['Int'];
-  mediaId: Scalars['Int'];
 };
 
 
@@ -271,18 +266,18 @@ export type Session = {
   createdAt: Scalars['DateTime'];
   /** Description */
   description: Scalars['String'];
+  /** Default for Session - Sample Solution Displayed */
+  displaySampleSolution: Scalars['Boolean'];
+  /** Default for Session - Editable for Participants */
+  editable: Scalars['Boolean'];
+  /** Default for Session - Annotations are Directly Displayed in Analysis */
+  enableLiveAnalysis: Scalars['Boolean'];
+  /** Default for Session - Player Enabled for Participants */
+  enablePlayer: Scalars['Boolean'];
   /** End of Session */
   end: Scalars['DateTime'];
   /** ID for Session */
   id: Scalars['Int'];
-  /** Default for Session - Editable for Participants */
-  isEditable: Scalars['Boolean'];
-  /** Default for Session - Annotations are Directly Displayed in Analysis */
-  isLiveAnalysisDisplayed: Scalars['Boolean'];
-  /** Default for Session - Player Enabled for Participants */
-  isPlayerEnabled: Scalars['Boolean'];
-  /** Default for Session - Sample Solution Displayed */
-  isSampleSolutionDisplayed: Scalars['Boolean'];
   /** Associated Media File */
   media?: Maybe<Media>;
   /** Session Name */
@@ -327,11 +322,13 @@ export type UpdateMediaInput = {
 
 export type UpdateSessionInput = {
   description?: InputMaybe<Scalars['String']>;
+  displaySampleSolution?: InputMaybe<Scalars['Boolean']>;
+  editable?: InputMaybe<Scalars['Boolean']>;
+  enableLiveAnalysis?: InputMaybe<Scalars['Boolean']>;
+  enablePlayer?: InputMaybe<Scalars['Boolean']>;
   end?: InputMaybe<Scalars['DateTime']>;
-  isEditable?: InputMaybe<Scalars['Boolean']>;
-  isLiveAnalysisDisplayed?: InputMaybe<Scalars['Boolean']>;
-  isPlayerEnabled?: InputMaybe<Scalars['Boolean']>;
-  isSampleSolutionDisplayed?: InputMaybe<Scalars['Boolean']>;
+  /** Assigned Media */
+  mediaId?: InputMaybe<Scalars['Int']>;
   name?: InputMaybe<Scalars['String']>;
   start?: InputMaybe<Scalars['DateTime']>;
   status?: InputMaybe<SessionStatus>;
@@ -369,7 +366,7 @@ export type CreateNewSessionMutationVariables = Exact<{
 }>;
 
 
-export type CreateNewSessionMutation = { __typename?: 'Mutation', createSession: { __typename?: 'Session', id: number, name: string, description: string, status: SessionStatus, start: any, end: any, isEditable: boolean, isPlayerEnabled: boolean, isSampleSolutionDisplayed: boolean, isLiveAnalysisDisplayed: boolean, createdAt: any, updatedAt: any } };
+export type CreateNewSessionMutation = { __typename?: 'Mutation', createSession: { __typename?: 'Session', id: number, name: string, description: string, status: SessionStatus, start: any, end: any, editable: boolean, enablePlayer: boolean, displaySampleSolution: boolean, enableLiveAnalysis: boolean, createdAt: any, updatedAt: any, media?: { __typename?: 'Media', id: number, type: MediaType, title: string, composer: string, createdAt: any, updatedAt: any } | null } };
 
 export type UpdateSessionMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -377,7 +374,7 @@ export type UpdateSessionMutationVariables = Exact<{
 }>;
 
 
-export type UpdateSessionMutation = { __typename?: 'Mutation', updateSession: { __typename?: 'Session', name: string, description: string, status: SessionStatus, start: any, end: any, isEditable: boolean, isPlayerEnabled: boolean, isSampleSolutionDisplayed: boolean, isLiveAnalysisDisplayed: boolean, createdAt: any, updatedAt: any } };
+export type UpdateSessionMutation = { __typename?: 'Mutation', updateSession: { __typename?: 'Session', name: string, description: string, status: SessionStatus, start: any, end: any, editable: boolean, enablePlayer: boolean, displaySampleSolution: boolean, enableLiveAnalysis: boolean, createdAt: any, updatedAt: any, media?: { __typename?: 'Media', id: number, type: MediaType, title: string, composer: string, createdAt: any, updatedAt: any } | null } };
 
 export type DeleteSessionMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -386,17 +383,32 @@ export type DeleteSessionMutationVariables = Exact<{
 
 export type DeleteSessionMutation = { __typename?: 'Mutation', removeSession: { __typename?: 'Session', id: number } };
 
+export type CreateMediaMutationVariables = Exact<{
+  media: CreateMediaInput;
+}>;
+
+
+export type CreateMediaMutation = { __typename?: 'Mutation', createMedia: { __typename?: 'Media', title: string, composer: string, type: MediaType, id: number } };
+
+export type UpdateMediaMutationVariables = Exact<{
+  id: Scalars['Int'];
+  updateMedia: UpdateMediaInput;
+}>;
+
+
+export type UpdateMediaMutation = { __typename?: 'Mutation', updateMedia: { __typename?: 'Media', title: string, composer: string, type: MediaType, id: number } };
+
 export type GetSessionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSessionsQuery = { __typename?: 'Query', sessions: Array<{ __typename?: 'Session', id: number, name: string, description: string, status: SessionStatus, start: any, end: any, isEditable: boolean, isPlayerEnabled: boolean, isSampleSolutionDisplayed: boolean, isLiveAnalysisDisplayed: boolean, createdAt: any, updatedAt: any }> };
+export type GetSessionsQuery = { __typename?: 'Query', sessions: Array<{ __typename?: 'Session', id: number, name: string, description: string, status: SessionStatus, start: any, end: any, editable: boolean, enablePlayer: boolean, displaySampleSolution: boolean, enableLiveAnalysis: boolean, createdAt: any, updatedAt: any, media?: { __typename?: 'Media', id: number, type: MediaType, title: string, composer: string, createdAt: any, updatedAt: any } | null }> };
 
 export type GetOneSessionQueryVariables = Exact<{
   sessionId: Scalars['Int'];
 }>;
 
 
-export type GetOneSessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: number, name: string, description: string, status: SessionStatus, start: any, end: any, isEditable: boolean, isPlayerEnabled: boolean, isSampleSolutionDisplayed: boolean, isLiveAnalysisDisplayed: boolean, createdAt: any, updatedAt: any } };
+export type GetOneSessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: number, name: string, description: string, status: SessionStatus, start: any, end: any, editable: boolean, enablePlayer: boolean, displaySampleSolution: boolean, enableLiveAnalysis: boolean, createdAt: any, updatedAt: any, media?: { __typename?: 'Media', id: number, type: MediaType, title: string, composer: string, createdAt: any, updatedAt: any } | null } };
 
 export const CreateNewSessionDocument = gql`
     mutation createNewSession($session: CreateSessionInput!) {
@@ -407,10 +419,18 @@ export const CreateNewSessionDocument = gql`
     status
     start
     end
-    isEditable
-    isPlayerEnabled
-    isSampleSolutionDisplayed
-    isLiveAnalysisDisplayed
+    editable
+    enablePlayer
+    displaySampleSolution
+    enableLiveAnalysis
+    media {
+      id
+      type
+      title
+      composer
+      createdAt
+      updatedAt
+    }
     createdAt
     updatedAt
   }
@@ -435,10 +455,18 @@ export const UpdateSessionDocument = gql`
     status
     start
     end
-    isEditable
-    isPlayerEnabled
-    isSampleSolutionDisplayed
-    isLiveAnalysisDisplayed
+    editable
+    enablePlayer
+    displaySampleSolution
+    enableLiveAnalysis
+    media {
+      id
+      type
+      title
+      composer
+      createdAt
+      updatedAt
+    }
     createdAt
     updatedAt
   }
@@ -473,6 +501,48 @@ export const DeleteSessionDocument = gql`
       super(apollo);
     }
   }
+export const CreateMediaDocument = gql`
+    mutation createMedia($media: CreateMediaInput!) {
+  createMedia(createMediaInput: $media) {
+    title
+    composer
+    type
+    id
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateMediaGQL extends Apollo.Mutation<CreateMediaMutation, CreateMediaMutationVariables> {
+    override document = CreateMediaDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateMediaDocument = gql`
+    mutation updateMedia($id: Int!, $updateMedia: UpdateMediaInput!) {
+  updateMedia(id: $id, updateMediaInput: $updateMedia) {
+    title
+    composer
+    type
+    id
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateMediaGQL extends Apollo.Mutation<UpdateMediaMutation, UpdateMediaMutationVariables> {
+    override document = UpdateMediaDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const GetSessionsDocument = gql`
     query GetSessions {
   sessions {
@@ -482,10 +552,18 @@ export const GetSessionsDocument = gql`
     status
     start
     end
-    isEditable
-    isPlayerEnabled
-    isSampleSolutionDisplayed
-    isLiveAnalysisDisplayed
+    editable
+    enablePlayer
+    displaySampleSolution
+    enableLiveAnalysis
+    media {
+      id
+      type
+      title
+      composer
+      createdAt
+      updatedAt
+    }
     createdAt
     updatedAt
   }
@@ -511,10 +589,18 @@ export const GetOneSessionDocument = gql`
     status
     start
     end
-    isEditable
-    isPlayerEnabled
-    isSampleSolutionDisplayed
-    isLiveAnalysisDisplayed
+    editable
+    enablePlayer
+    displaySampleSolution
+    enableLiveAnalysis
+    media {
+      id
+      type
+      title
+      composer
+      createdAt
+      updatedAt
+    }
     createdAt
     updatedAt
   }

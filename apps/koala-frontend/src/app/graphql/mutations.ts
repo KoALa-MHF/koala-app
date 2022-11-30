@@ -9,10 +9,18 @@ const CREATE_SESSION = gql`
       status
       start
       end
-      isEditable
-      isPlayerEnabled
-      isSampleSolutionDisplayed
-      isLiveAnalysisDisplayed
+      editable
+      enablePlayer
+      displaySampleSolution
+      enableLiveAnalysis
+      media {
+        id
+        type
+        title
+        composer
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -27,10 +35,18 @@ const UPDATE_SESSION = gql`
       status
       start
       end
-      isEditable
-      isPlayerEnabled
-      isSampleSolutionDisplayed
-      isLiveAnalysisDisplayed
+      editable
+      enablePlayer
+      displaySampleSolution
+      enableLiveAnalysis
+      media {
+        id
+        type
+        title
+        composer
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -40,6 +56,28 @@ const UPDATE_SESSION = gql`
 const DELETE_SESSION = gql`
   mutation deleteSession($id: Int!) {
     removeSession(id: $id) {
+      id
+    }
+  }
+`;
+
+const CREATE_MEDIA = gql`
+  mutation createMedia($media: CreateMediaInput!) {
+    createMedia(createMediaInput: $media) {
+      title
+      composer
+      type
+      id
+    }
+  }
+`;
+
+const UPDATE_MEDIA = gql`
+  mutation updateMedia($id: Int!, $updateMedia: UpdateMediaInput!) {
+    updateMedia(id: $id, updateMediaInput: $updateMedia) {
+      title
+      composer
+      type
       id
     }
   }
