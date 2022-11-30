@@ -96,7 +96,7 @@
     }
   },
   "lint-staged": {
-    "*.{js,json,css,scss,md,ts,html}": [
+    "*.{js,json,css,scss,md,ts,html,graphql}": [
       "nx format --uncommitted"
     ]
   }
