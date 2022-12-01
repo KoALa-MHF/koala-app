@@ -29,7 +29,7 @@ import { environment } from '../environments/environment';
       provide: APOLLO_OPTIONS,
       useFactory(httpLink: HttpLink) {
         const uri: string = environment.production
-          ? 'http://193.197.162.7/graphql'
+          ? 'https://koala-app.de/graphql'
           : 'http://localhost:4200/graphql';
         return {
           cache: new InMemoryCache(),
