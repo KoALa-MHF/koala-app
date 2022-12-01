@@ -13,4 +13,8 @@ export class CreateAnnotationInput {
   @Field(() => Int, { description: 'Associated Marker' })
   @IsNotEmpty()
   markerId: number;
+
+  @Field(() => Int, { description: 'Associated User Session' })
+  @IsNotEmpty()
+  userSessionId: number;
 }

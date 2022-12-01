@@ -19,6 +19,9 @@ export class AnnotationsService {
       end : createMarkerInput.end,
       marker : {
         id : createMarkerInput.markerId
+      },
+      userSession : {
+        id : createMarkerInput.userSessionId
       }
     });
 
