@@ -13,6 +13,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TableModule } from 'primeng/table';
+import { StepsModule } from 'primeng/steps';
 
 import { SessionsOverviewTableComponent } from './components/sessions-overview-table/sessions-overview-table.component';
 import { SessionMaintainPage } from './pages/session-maintain/session-maintain.page';
@@ -22,6 +23,7 @@ import { SessionDetailsComponent } from './components/session-details/session-de
 import { SessionDatesComponent } from './components/session-dates/session-dates.component';
 import { SessionAudioComponent } from './components/session-audio/session-audio.component';
 import { MediaService } from './services/media.service';
+import { SessionDataComponent } from './components/session-data/session-data.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import { MediaService } from './services/media.service';
     SessionDetailsComponent,
     SessionDatesComponent,
     SessionAudioComponent,
+    SessionDataComponent,
   ],
   imports: [
     SharedModule,
@@ -44,6 +47,7 @@ import { MediaService } from './services/media.service';
     CheckboxModule,
     TableModule,
     InputTextareaModule,
+    StepsModule,
   ],
   providers: [SessionsService, MediaService],
 })

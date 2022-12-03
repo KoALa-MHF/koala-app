@@ -10,8 +10,15 @@ import {
   MediaType,
   Session,
 } from 'apps/koala-frontend/src/app/graphql/generated/graphql';
+import { MenuItem } from 'primeng/api';
 import { MediaService } from '../../services/media.service';
 import { SessionsService } from '../../services/sessions.service';
+
+enum mode {
+  CREATE = 1,
+  UPDATE = 2,
+  DISPLAY = 3,
+}
 
 @Component({
   selector: 'koala-session-maintain',
@@ -22,7 +29,20 @@ export class SessionMaintainPage implements OnInit {
   maintainSessionForm: FormGroup;
   sessionId: number = 0;
   session: Session | null = null;
-  mode: number = 1;
+  mode: number = mode.CREATE;
+  stepIndex: number = 0;
+
+  steps: MenuItem[] = [
+    {
+      label: 'Session Einstellung',
+    },
+    {
+      label: 'Marker',
+    },
+    {
+      label: 'Teilnehmer',
+    },
+  ];
 
   constructor(
     private readonly sessionService: SessionsService,
@@ -60,10 +80,10 @@ export class SessionMaintainPage implements OnInit {
     );
 
     if (this.sessionId != 0) {
-      this.mode = 2;
+      this.mode = mode.CREATE;
     }
 
-    if (this.mode === 2) {
+    if (this.mode === mode.UPDATE) {
       this.sessionService.getOne(this.sessionId).subscribe((result) => {
         this.session = {
           ...result.data?.session,
@@ -119,8 +139,6 @@ export class SessionMaintainPage implements OnInit {
           .get('audio')
           ?.get('composer')
           ?.setValue(this.session.media?.composer);
-
-        console.log(this.maintainSessionForm);
       });
     }
   }
@@ -141,8 +159,8 @@ export class SessionMaintainPage implements OnInit {
       this.maintainSessionForm.get('details')?.get('editable')?.value || false;
 
     const enablePlayer =
-      this.maintainSessionForm.get('details')?.get('enablePlayer')
-        ?.value || false;
+      this.maintainSessionForm.get('details')?.get('enablePlayer')?.value ||
+      false;
 
     const displaySampleSolution =
       this.maintainSessionForm.get('details')?.get('displaySampleSolution')
@@ -158,7 +176,7 @@ export class SessionMaintainPage implements OnInit {
     const composer: string =
       this.maintainSessionForm.get('audio')?.get('composer')?.value || '';
 
-    if (this.mode === 1) {
+    if (this.mode === mode.CREATE) {
       this.mediaService
         .create({
           type: MediaType.Audio,
@@ -223,5 +241,9 @@ export class SessionMaintainPage implements OnInit {
 
   get audioFormGroup(): FormGroup {
     return this.maintainSessionForm.get('audio') as FormGroup;
+  }
+
+  public stepIndexChanged(selectedStep: number) {
+    this.stepIndex = selectedStep;
   }
 }

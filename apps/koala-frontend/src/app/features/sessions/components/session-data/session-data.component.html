@@ -1,0 +1,23 @@
+<div style="display: grid; grid-template-columns: 50% 50%">
+  <p-card class="card" header="Allgemeine Angaben">
+    <koala-session-basic-data
+      [basicDataForm]="basicDataForm"
+    ></koala-session-basic-data>
+  </p-card>
+
+  <p-card class="card" header="Freigaben">
+    <koala-session-details
+      [sessionDetailsForm]="sessionDetailsForm"
+    ></koala-session-details>
+  </p-card>
+
+  <p-card class="card" header="Verfügbarkeit">
+    <koala-session-dates
+      [sessionDatesForm]="sessionDatesForm"
+    ></koala-session-dates>
+  </p-card>
+
+  <p-card class="card" header="Audio">
+    <koala-session-audio [audioForm]="audioForm"></koala-session-audio>
+  </p-card>
+</div>
