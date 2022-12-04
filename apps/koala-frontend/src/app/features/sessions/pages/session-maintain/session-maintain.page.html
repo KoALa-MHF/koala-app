@@ -37,7 +37,7 @@
       type="submit"
       [disabled]="!maintainSessionForm.valid"
       (click)="onSave()"
-      label="{{mode === 1 ? 'Anlegen' : 'Speichern'}}"
+      label="{{ stepIndex === (steps.length - 1) ? 'Speichern und Schließen' : 'Speichern und Weiter' }} "
     ></p-button>
 
     <p-button (click)="onCancel()" label="Abbrechen"></p-button>

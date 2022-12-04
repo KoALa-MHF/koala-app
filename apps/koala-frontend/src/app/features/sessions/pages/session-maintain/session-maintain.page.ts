@@ -34,13 +34,13 @@ export class SessionMaintainPage implements OnInit {
 
   steps: MenuItem[] = [
     {
-      label: 'Session Einstellung',
+      label: 'Session Einstellungen',
     },
     {
       label: 'Marker',
     },
     {
-      label: 'Teilnehmer',
+      label: 'Mitglieder',
     },
   ];
 
@@ -80,6 +80,8 @@ export class SessionMaintainPage implements OnInit {
     );
 
     if (this.sessionId != 0) {
+      this.mode = mode.UPDATE;
+    } else {
       this.mode = mode.CREATE;
     }
 
@@ -144,6 +146,52 @@ export class SessionMaintainPage implements OnInit {
   }
 
   public onSave() {
+    switch (this.stepIndex) {
+      case 0:
+        this.saveSession();
+        break;
+      case 1:
+        this.nextStep();
+        break;
+      case 2:
+        this.nextStep();
+        break;
+    }
+  }
+
+  public onCancel() {
+    this.router.navigate(['sessions']);
+  }
+
+  get basicDataFormGroup(): FormGroup {
+    return this.maintainSessionForm.get('basicData') as FormGroup;
+  }
+
+  get datesFormGroup(): FormGroup {
+    return this.maintainSessionForm.get('dates') as FormGroup;
+  }
+
+  get detailsFormGroup(): FormGroup {
+    return this.maintainSessionForm.get('details') as FormGroup;
+  }
+
+  get audioFormGroup(): FormGroup {
+    return this.maintainSessionForm.get('audio') as FormGroup;
+  }
+
+  public stepIndexChanged(selectedStep: number) {
+    this.stepIndex = selectedStep;
+  }
+
+  private nextStep() {
+    if (this.stepIndex < this.steps.length - 1) {
+      this.stepIndex++;
+    } else {
+      this.router.navigate(['sessions']);
+    }
+  }
+
+  private saveSession() {
     const name =
       this.maintainSessionForm.get('basicData')?.get('name')?.value || '';
     const description =
@@ -177,73 +225,82 @@ export class SessionMaintainPage implements OnInit {
       this.maintainSessionForm.get('audio')?.get('composer')?.value || '';
 
     if (this.mode === mode.CREATE) {
-      this.mediaService
-        .create({
-          type: MediaType.Audio,
-          title: audioTitle,
-          composer,
-        })
-        .subscribe((result) => {
-          this.sessionService
-            .create({
-              name,
-              description,
-              start,
-              end,
-              editable,
-              enablePlayer,
-              displaySampleSolution,
-              enableLiveAnalysis,
-              mediaId: result.data?.createMedia.id || 0,
-            })
-            .subscribe(() => {
-              this.router.navigate(['sessions']);
-            });
-        });
+      if (audioTitle || composer) {
+        this.mediaService
+          .create({
+            type: MediaType.Audio,
+            title: audioTitle,
+            composer,
+          })
+          .subscribe((result) => {
+            this.sessionService
+              .create({
+                name,
+                description,
+                start,
+                end,
+                editable,
+                enablePlayer,
+                displaySampleSolution,
+                enableLiveAnalysis,
+                mediaId: result.data?.createMedia.id || 0,
+              })
+              .subscribe(() => {
+                this.nextStep();
+              });
+          });
+      } else {
+        this.sessionService
+          .create({
+            name,
+            description,
+            start,
+            end,
+            editable,
+            enablePlayer,
+            displaySampleSolution,
+            enableLiveAnalysis,
+          })
+          .subscribe(() => {
+            this.nextStep();
+          });
+      }
     } else {
-      this.mediaService
-        .update(this.session?.media?.id || 0, { title: audioTitle, composer })
-        .subscribe(() => {
-          this.sessionService
-            .update(this.session?.id || 0, {
-              name,
-              description,
-              start,
-              end,
-              editable,
-              enablePlayer,
-              displaySampleSolution,
-              enableLiveAnalysis,
-              //status: SessionStatus.Open,
-            })
-            .subscribe(() => {
-              this.router.navigate(['sessions']);
-            });
-        });
+      if (audioTitle || composer) {
+        this.mediaService
+          .update(this.session?.media?.id || 0, { title: audioTitle, composer })
+          .subscribe(() => {
+            this.sessionService
+              .update(this.session?.id || 0, {
+                name,
+                description,
+                start,
+                end,
+                editable,
+                enablePlayer,
+                displaySampleSolution,
+                enableLiveAnalysis,
+              })
+              .subscribe(() => {
+                this.nextStep();
+              });
+          });
+      } else {
+        this.sessionService
+          .update(this.session?.id || 0, {
+            name,
+            description,
+            start,
+            end,
+            editable,
+            enablePlayer,
+            displaySampleSolution,
+            enableLiveAnalysis,
+          })
+          .subscribe(() => {
+            this.nextStep();
+          });
+      }
     }
-  }
-
-  public onCancel() {
-    this.router.navigate(['sessions']);
-  }
-
-  get basicDataFormGroup(): FormGroup {
-    return this.maintainSessionForm.get('basicData') as FormGroup;
-  }
-
-  get datesFormGroup(): FormGroup {
-    return this.maintainSessionForm.get('dates') as FormGroup;
-  }
-
-  get detailsFormGroup(): FormGroup {
-    return this.maintainSessionForm.get('details') as FormGroup;
-  }
-
-  get audioFormGroup(): FormGroup {
-    return this.maintainSessionForm.get('audio') as FormGroup;
-  }
-
-  public stepIndexChanged(selectedStep: number) {
-    this.stepIndex = selectedStep;
   }
 }

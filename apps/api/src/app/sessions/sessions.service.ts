@@ -23,8 +23,8 @@ export class SessionsService {
     const newSession = this.sessionsRepository.create({
       ...createSessionInput,
       media: {
-        id: createSessionInput.mediaId
-      }
+        id: createSessionInput.mediaId,
+      },
     });
 
     const savedSession = await this.sessionsRepository.save(newSession);
@@ -53,6 +53,9 @@ export class SessionsService {
     try {
       await this.sessionsRepository.update(id, {
         ...updateSessionInput,
+        media: {
+          id: updateSessionInput.mediaId,
+        },
       });
 
       return this.findOne(id);
