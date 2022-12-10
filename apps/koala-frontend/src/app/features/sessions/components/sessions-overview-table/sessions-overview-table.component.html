@@ -3,7 +3,7 @@
     >Meine Sessions</span
   >
   <button
-    pButton
+    pButton pRipple
     type="button"
     icon="pi pi-plus-circle"
     class="p-button-rounded p-button-text"
@@ -35,7 +35,7 @@
       <td data-column="updatedAt">{{ session.updatedAt | date: 'medium' }}</td>
       <td>
         <button
-          pButton
+          pButton pRipple
           data-column="settings"
           name="settingsButton"
           aria-label="Settings"
@@ -46,7 +46,7 @@
       </td>
       <td>
         <button
-          pButton
+          pButton pRipple
           data-column="qrCode"
           icon="pi pi-qrcode"
           class="p-button-text"
@@ -56,7 +56,7 @@
       </td>
       <td>
         <button
-          pButton
+          pButton pRipple
           data-column="export"
           icon="pi pi-file-export"
           class="p-button-text"
@@ -66,7 +66,7 @@
       </td>
       <td>
         <button
-          pButton
+          pButton pRipple
           data-column="delete"
           name="deleteButton"
           icon="pi pi-trash"

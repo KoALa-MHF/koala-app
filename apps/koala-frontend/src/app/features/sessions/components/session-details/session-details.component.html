@@ -1,4 +1,10 @@
-<form [formGroup]="sessionDetailsForm" class="form-grid">
+<p>
+  Hier legen Sie vorab fest, welche Funktionen für die Benutzer verfügbar /
+  sichtbar sein werden. Diese Einstellungen lassen sich später innerhalb der
+  Session flexibel ändern.
+</p>
+
+<form [formGroup]="sessionDetailsForm" class="form">
   <p-checkbox
     class="form-single-cell"
     formControlName="editable"

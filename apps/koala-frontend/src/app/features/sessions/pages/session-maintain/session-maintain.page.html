@@ -15,9 +15,13 @@
     ></koala-session-data>
   </div>
 
-  <div *ngIf="stepIndex === 1">To be defined</div>
+  <div *ngIf="stepIndex === 1">
+    <koala-session-marker-data></koala-session-marker-data>
+  </div>
 
-  <div *ngIf="stepIndex === 2">To be defined</div>
+  <div *ngIf="stepIndex === 2">
+    <koala-session-participants></koala-session-participants>
+  </div>
 
   <div
     style="
@@ -31,15 +35,23 @@
       gap: 10px;
     "
   >
-    <p-button
+    <button
+      pButton
+      pRipple
       id="save-btn"
-      color="primary"
+      class="p-button-raised p-button-primary"
       type="submit"
       [disabled]="!maintainSessionForm.valid"
       (click)="onSave()"
       label="{{ stepIndex === (steps.length - 1) ? 'Speichern und Schließen' : 'Speichern und Weiter' }} "
-    ></p-button>
+    ></button>
 
-    <p-button (click)="onCancel()" label="Abbrechen"></p-button>
+    <button
+      pButton
+      pRipple
+      (click)="onCancel()"
+      label="Abbrechen"
+      class="p-button-raised p-button-plain p-button-text"
+    ></button>
   </div>
 </div>

@@ -1,0 +1,82 @@
+<h4 class="section-heading">Marker Erstellen</h4>
+
+<div class="form">
+  <div>
+    <p-dropdown
+      placeholder="Markertyp"
+      [options]="markerTypes"
+      [(ngModel)]="selectedMarkerType"
+      optionLabel="name"
+      optionValue="type"
+      [style]="{ minWidth: '100%' }"
+    ></p-dropdown>
+    <small id="marker-name-help" class="field-explanation">
+      Wählen Sie den gewünschten Markertyp.
+    </small>
+  </div>
+
+  <div>
+    <span class="p-float-label">
+      <input
+        id="marker-name-input"
+        type="text"
+        pInputText
+        aria-describedby="marker-name-help"
+      />
+      <label for="marker-name-input">Name des Markers</label>
+    </span>
+    <small id="marker-name-help" class="field-explanation">
+      Geben Sie dem Marker einen Namen.
+    </small>
+  </div>
+
+  <div>
+    <span class="p-float-label">
+      <textarea
+        id="marker-description-textarea"
+        rows="5"
+        cols="30"
+        pInputTextarea
+      ></textarea>
+      <label for="marker-description-textarea">Beschreibung</label>
+    </span>
+    <small id="marker-name-help" class="field-explanation">
+      Fügen Sie dem Marker ggf. eine Beschreibung hinzu.
+    </small>
+  </div>
+
+  <div>
+    <span class="p-float-label">
+      <input id="marker-abbreviation-input" type="text" pInputText />
+      <label for="marker-abbreviation-input">Abkürzung</label>
+    </span>
+    <small id="marker-name-help" class="field-explanation">
+      Wählen Sie ggf. eine Abkürzung für den Marker.
+    </small>
+  </div>
+
+  <div>
+    <h5 style="display: inline; margin-right: 15px; opacity: 100%">Farbe</h5>
+    <p-colorPicker
+      [(ngModel)]="color"
+      style="margin-right: 15px"
+    ></p-colorPicker>
+    <small id="marker-name-help" class="field-explanation">
+      Wählen Sie eine Farbe für Ihren Marker.
+    </small>
+  </div>
+
+  <div>
+    <p-dropdown
+      placeholder="Icon"
+      [options]="icons"
+      [(ngModel)]="selectedIcon"
+      optionLabel="name"
+      optionValue="code"
+      [style]="{ minWidth: '100%' }"
+    ></p-dropdown>
+    <small id="marker-name-help" class="field-explanation">
+      Wählen Sie ggf. ein Icon für Ihren Marker.
+    </small>
+  </div>
+</div>

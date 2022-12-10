@@ -1,16 +1,24 @@
-.form-row-label {
-  margin-right: 10px;
+.section-heading {
+  opacity: 50%;
 }
 
-.form-grid {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 4px;
-  align-items: center;
+.form {
+  display: flex;
+  align-content: space-between;
+  flex-direction: column;
+  gap: 25px;
 }
 
-.form-single-cell {
-  grid-column-start: 1;
-  grid-column-end: span 2;
-  grid-row-end: span 2;
+.form * {
+  width: 100%;
+}
+
+.form > * {
+  padding-right: 30px;
+}
+
+.field-explanation {
+  opacity: 50%;
+  display: inline-block;
+  padding-left: 15px;
 }

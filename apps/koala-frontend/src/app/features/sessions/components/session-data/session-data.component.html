@@ -1,23 +1,29 @@
+<h3>Session Einstellungen</h3>
+
 <div style="display: grid; grid-template-columns: 50% 50%">
-  <p-card class="card" header="Allgemeine Angaben">
+  <div>
+    <h4 class="section-heading">Allgemeine Informationen</h4>
     <koala-session-basic-data
       [basicDataForm]="basicDataForm"
     ></koala-session-basic-data>
-  </p-card>
+  </div>
 
-  <p-card class="card" header="Freigaben">
-    <koala-session-details
-      [sessionDetailsForm]="sessionDetailsForm"
-    ></koala-session-details>
-  </p-card>
+  <div>
+    <h4 class="section-heading" >Audio</h4>
+    <koala-session-audio [audioForm]="audioForm"></koala-session-audio>
+  </div>
 
-  <p-card class="card" header="Verfügbarkeit">
+  <div>
+    <h4 class="section-heading">Verfügbarkeit</h4>
     <koala-session-dates
       [sessionDatesForm]="sessionDatesForm"
     ></koala-session-dates>
-  </p-card>
+  </div>
 
-  <p-card class="card" header="Audio">
-    <koala-session-audio [audioForm]="audioForm"></koala-session-audio>
-  </p-card>
+  <div>
+    <h4 class="section-heading">Freigaben</h4>
+    <koala-session-details
+      [sessionDetailsForm]="sessionDetailsForm"
+    ></koala-session-details>
+  </div>
 </div>

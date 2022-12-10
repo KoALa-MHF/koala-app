@@ -1,7 +1,14 @@
-<form [formGroup]="audioForm" class="form-grid">
-  <h5 class="form-row-label">Titel</h5>
+<p>
+  Hier können Sie eine Audio-Datei wählen und hochladen. Wenn Sie keine Datei
+  hochladen, können Sie eine Live-Annotation innerhalb der Session starten.
+</p>
+<p>Maximale Upload-Größe: 250 MB</p>
+<p>Erlaubter Dateityp: .mp3</p>
+
+<form [formGroup]="audioForm" class="form">
+  <!--<h5 class="form-row-label">Titel</h5>
   <input type="text" pInputText formControlName="title" />
 
   <h5 class="form-row-label">Komponist</h5>
-  <input type="text" pInputText formControlName="composer" />
+  <input type="text" pInputText formControlName="composer" />-->
 </form>
