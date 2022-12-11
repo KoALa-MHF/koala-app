@@ -1,15 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  MediaType,
-  Session,
-} from 'apps/koala-frontend/src/app/graphql/generated/graphql';
+import { MediaType, Session } from 'apps/koala-frontend/src/app/graphql/generated/graphql';
 import { MenuItem } from 'primeng/api';
 import { MediaService } from '../../services/media.service';
 import { SessionsService } from '../../services/sessions.service';
@@ -23,11 +15,14 @@ enum mode {
 @Component({
   selector: 'koala-session-maintain',
   templateUrl: './session-maintain.page.html',
-  styleUrls: ['./session-maintain.page.scss'],
+  styleUrls: [
+    './session-maintain.page.scss',
+  ],
 })
 export class SessionMaintainPage implements OnInit {
   maintainSessionForm: FormGroup;
   maintainMarkerForm: FormGroup;
+
   sessionId: number = 0;
   session: Session | null = null;
   mode: number = mode.CREATE;
@@ -55,7 +50,9 @@ export class SessionMaintainPage implements OnInit {
   ) {
     this.maintainSessionForm = this.formBuilder.group({
       basicData: this.formBuilder.group({
-        name: new FormControl<string>('', [Validators.required]),
+        name: new FormControl<string>('', [
+          Validators.required,
+        ]),
         description: new FormControl<string>(''),
       }),
       dates: this.formBuilder.group({
@@ -76,19 +73,21 @@ export class SessionMaintainPage implements OnInit {
     });
 
     this.maintainMarkerForm = this.formBuilder.group({
-      type: new FormControl<string>('', [Validators.required]),
-      name: new FormControl<string>('', [Validators.required]),
+      type: new FormControl<string>('', [
+        Validators.required,
+      ]),
+      name: new FormControl<string>('', [
+        Validators.required,
+      ]),
       description: new FormControl<string>(''),
       abbreviation: new FormControl<string>(''),
-      color: new FormControl<string>(''),
+      color: new FormControl<string>('#555bcf', { nonNullable: true }),
       icon: new FormControl<string>(''),
     });
   }
 
   ngOnInit(): void {
-    this.sessionId = parseInt(
-      this.route.snapshot.paramMap.get('sessionId') || '0'
-    );
+    this.sessionId = parseInt(this.route.snapshot.paramMap.get('sessionId') || '0');
 
     if (this.sessionId != 0) {
       this.mode = mode.UPDATE;
@@ -103,55 +102,28 @@ export class SessionMaintainPage implements OnInit {
           media: result.data?.session.media || null,
         };
 
-        this.maintainSessionForm
-          .get('basicData')
-          ?.get('name')
-          ?.setValue(this.session.name);
+        this.maintainSessionForm.get('basicData')?.get('name')?.setValue(this.session.name);
 
-        this.maintainSessionForm
-          .get('basicData')
-          ?.get('description')
-          ?.setValue(this.session.description);
+        this.maintainSessionForm.get('basicData')?.get('description')?.setValue(this.session.description);
 
-        this.maintainSessionForm
-          .get('details')
-          ?.get('editable')
-          ?.setValue(this.session.editable);
+        this.maintainSessionForm.get('details')?.get('editable')?.setValue(this.session.editable);
 
-        this.maintainSessionForm
-          .get('details')
-          ?.get('enablePlayer')
-          ?.setValue(this.session.enablePlayer);
+        this.maintainSessionForm.get('details')?.get('enablePlayer')?.setValue(this.session.enablePlayer);
 
         this.maintainSessionForm
           .get('details')
           ?.get('displaySampleSolution')
           ?.setValue(this.session.displaySampleSolution);
 
-        this.maintainSessionForm
-          .get('details')
-          ?.get('enableLiveAnalysis')
-          ?.setValue(this.session.enableLiveAnalysis);
+        this.maintainSessionForm.get('details')?.get('enableLiveAnalysis')?.setValue(this.session.enableLiveAnalysis);
 
-        this.maintainSessionForm
-          .get('dates')
-          ?.get('start')
-          ?.setValue(new Date(this.session.start));
+        this.maintainSessionForm.get('dates')?.get('start')?.setValue(new Date(this.session.start));
 
-        this.maintainSessionForm
-          .get('dates')
-          ?.get('end')
-          ?.setValue(new Date(this.session.end));
+        this.maintainSessionForm.get('dates')?.get('end')?.setValue(new Date(this.session.end));
 
-        this.maintainSessionForm
-          .get('audio')
-          ?.get('title')
-          ?.setValue(this.session.media?.title);
+        this.maintainSessionForm.get('audio')?.get('title')?.setValue(this.session.media?.title);
 
-        this.maintainSessionForm
-          .get('audio')
-          ?.get('composer')
-          ?.setValue(this.session.media?.composer);
+        this.maintainSessionForm.get('audio')?.get('composer')?.setValue(this.session.media?.composer);
       });
     }
   }
@@ -171,7 +143,9 @@ export class SessionMaintainPage implements OnInit {
   }
 
   public onCancel() {
-    this.router.navigate(['sessions']);
+    this.router.navigate([
+      'sessions',
+    ]);
   }
 
   public onParticipantRemove(participant: any) {
@@ -195,52 +169,49 @@ export class SessionMaintainPage implements OnInit {
     return this.maintainSessionForm.get('audio') as FormGroup;
   }
 
+  get markerData(): any {
+    return {
+      abbreviation: this.maintainMarkerForm.get('abbreviation')?.value,
+      color: this.maintainMarkerForm.get('color')?.value,
+    };
+  }
+
   public stepIndexChanged(selectedStep: number) {
     this.stepIndex = selectedStep;
   }
 
-  public onNewMarkerDataChange(event: any) {}
+  public onResetMarkerData() {
+    this.maintainMarkerForm.reset();
+  }
 
   private nextStep() {
     if (this.stepIndex < this.steps.length - 1) {
       this.stepIndex++;
     } else {
-      this.router.navigate(['sessions']);
+      this.router.navigate([
+        'sessions',
+      ]);
     }
   }
 
   private saveSession() {
-    const name =
-      this.maintainSessionForm.get('basicData')?.get('name')?.value || '';
-    const description =
-      this.maintainSessionForm.get('basicData')?.get('description')?.value ||
-      '';
+    const name = this.maintainSessionForm.get('basicData')?.get('name')?.value || '';
+    const description = this.maintainSessionForm.get('basicData')?.get('description')?.value || '';
 
-    const start =
-      this.maintainSessionForm.get('dates')?.get('start')?.value || new Date();
-    const end =
-      this.maintainSessionForm.get('dates')?.get('end')?.value || new Date();
+    const start = this.maintainSessionForm.get('dates')?.get('start')?.value || new Date();
+    const end = this.maintainSessionForm.get('dates')?.get('end')?.value || new Date();
 
-    const editable =
-      this.maintainSessionForm.get('details')?.get('editable')?.value || false;
+    const editable = this.maintainSessionForm.get('details')?.get('editable')?.value || false;
 
-    const enablePlayer =
-      this.maintainSessionForm.get('details')?.get('enablePlayer')?.value ||
-      false;
+    const enablePlayer = this.maintainSessionForm.get('details')?.get('enablePlayer')?.value || false;
 
-    const displaySampleSolution =
-      this.maintainSessionForm.get('details')?.get('displaySampleSolution')
-        ?.value || false;
+    const displaySampleSolution = this.maintainSessionForm.get('details')?.get('displaySampleSolution')?.value || false;
 
-    const enableLiveAnalysis =
-      this.maintainSessionForm.get('details')?.get('enableLiveAnalysis')
-        ?.value || false;
+    const enableLiveAnalysis = this.maintainSessionForm.get('details')?.get('enableLiveAnalysis')?.value || false;
 
-    const audioTitle: string =
-      this.maintainSessionForm.get('audio')?.get('title')?.value || '';
+    const audioTitle: string = this.maintainSessionForm.get('audio')?.get('title')?.value || '';
 
-    const composer: string =
-      this.maintainSessionForm.get('audio')?.get('composer')?.value || '';
+    const composer: string = this.maintainSessionForm.get('audio')?.get('composer')?.value || '';
 
     if (this.mode === mode.CREATE) {
       if (audioTitle || composer) {
@@ -285,24 +256,22 @@ export class SessionMaintainPage implements OnInit {
       }
     } else {
       if (audioTitle || composer) {
-        this.mediaService
-          .update(this.session?.media?.id || 0, { title: audioTitle, composer })
-          .subscribe(() => {
-            this.sessionService
-              .update(this.session?.id || 0, {
-                name,
-                description,
-                start,
-                end,
-                editable,
-                enablePlayer,
-                displaySampleSolution,
-                enableLiveAnalysis,
-              })
-              .subscribe(() => {
-                this.nextStep();
-              });
-          });
+        this.mediaService.update(this.session?.media?.id || 0, { title: audioTitle, composer }).subscribe(() => {
+          this.sessionService
+            .update(this.session?.id || 0, {
+              name,
+              description,
+              start,
+              end,
+              editable,
+              enablePlayer,
+              displaySampleSolution,
+              enableLiveAnalysis,
+            })
+            .subscribe(() => {
+              this.nextStep();
+            });
+        });
       } else {
         this.sessionService
           .update(this.session?.id || 0, {

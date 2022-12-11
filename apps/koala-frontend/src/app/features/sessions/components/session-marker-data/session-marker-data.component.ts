@@ -11,15 +11,15 @@ import { FormGroup } from '@angular/forms';
 })
 export class SessionMarkerDataComponent implements OnInit {
   @Input() markerDataForm!: FormGroup;
-  @Output() newMarkerDataChange = new EventEmitter<any>();
-  
+  @Input() markerData!: any;
+
+  @Output() resetMarkerData = new EventEmitter();
+
   constructor() {}
 
   ngOnInit(): void {}
 
-  public onAbbreviationChange(abbreviation: string) {
-    this.newMarkerDataChange.emit({
-      abbreviation,
-    });
+  public onReset() {
+    this.resetMarkerData.emit();
   }
 }

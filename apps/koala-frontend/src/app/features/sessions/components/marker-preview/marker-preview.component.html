@@ -2,14 +2,21 @@
 
 <p>Hier sehen Sie eine Vorschau Ihres Markers.</p>
 
-<p-skeleton size="3rem" styleClass="mr-2" animation="none"> </p-skeleton>
-<button pButton pRipple [label]="label"></button>
+<div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px ;">
+  <div
+    style="height: 0; width: 40%; padding-bottom: 40%; background-color: rgba(155, 155, 158, 0.3); position: relative"
+  >
+    <div
+      style="display: flex; align-items: center; justify-content: center; position: absolute; height: 100%; width: 100%"
+    >
+      <button *ngIf="label" pButton pRipple [label]="label" [style.background-color]="color"></button>
+    </div>
+  </div>
+</div>
 
-<div style="display: flex; gap: 10px; justify-content: center">
-  <button pButton pRipple>Marker Hinzufügen</button>
-  <button pButton pRipple class="p-button-raised p-button-plain p-button-text">
-    Zurücksetzen
-  </button>
+<div style="display: flex; gap: 10px; justify-content: flex-end; margin-right: 30px">
+  <button pButton pRipple [disabled]="!createEnabled">Marker Hinzufügen</button>
+  <button pButton pRipple class="p-button-raised p-button-plain p-button-text" (click)="onReset()">Zurücksetzen</button>
 </div>
 
 <h4 class="section-heading">Aus Bibliothek Laden</h4>

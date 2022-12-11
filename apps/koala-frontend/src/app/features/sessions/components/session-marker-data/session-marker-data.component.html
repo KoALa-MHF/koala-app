@@ -1,13 +1,16 @@
 <h3>Marker</h3>
 <div class="container">
   <div style="width: 33%">
-    <koala-marker-maintain
-    [markerDataForm]="markerDataForm"
-    (abbreviationChange)="onAbbreviationChange($event)"></koala-marker-maintain>
+    <koala-marker-maintain [markerDataForm]="markerDataForm"></koala-marker-maintain>
   </div>
 
   <div style="width: 33%">
-    <koala-marker-preview></koala-marker-preview>
+    <koala-marker-preview
+      [label]="markerData.abbreviation"
+      [color]="markerData.color"
+      [createEnabled]="markerDataForm.valid"
+      (resetMarkerData)="onReset()"
+    ></koala-marker-preview>
   </div>
 
   <div style="width: 33%">

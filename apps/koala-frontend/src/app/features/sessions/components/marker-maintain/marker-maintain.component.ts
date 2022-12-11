@@ -4,7 +4,10 @@ import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'koala-marker-maintain',
   templateUrl: './marker-maintain.component.html',
-  styleUrls: ['./marker-maintain.component.scss', '../../session-common.scss'],
+  styleUrls: [
+    './marker-maintain.component.scss',
+    '../../session-common.scss',
+  ],
 })
 export class MarkerMaintainComponent implements OnInit {
   @Input() markerDataForm!: FormGroup;
@@ -35,17 +38,7 @@ export class MarkerMaintainComponent implements OnInit {
   color: string = '';
   abbreviation: string = '';
 
-  @Output() markerTypeChange = new EventEmitter<string>();
-  @Output() abbreviationChange = new EventEmitter<string>();
-
   constructor() {}
 
   ngOnInit(): void {}
-
-  public onAbbreviationChange(event: Event) {
-    const input = event.target as HTMLInputElement;
-
-    this.abbreviation = input.value;
-    this.abbreviationChange.emit(this.abbreviation);
-  }
 }

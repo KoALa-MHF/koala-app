@@ -18,7 +18,8 @@
   <div *ngIf="stepIndex === 1">
     <koala-session-marker-data
       [markerDataForm]="maintainMarkerForm"
-      (newMarkerDataChange)="onNewMarkerDataChange($event)"
+      [markerData]="markerData"
+      (resetMarkerData)="onResetMarkerData()"
     ></koala-session-marker-data>
   </div>
 
@@ -29,15 +30,7 @@
     ></koala-session-participants>
   </div>
 
-  <div
-    style="
-      display: flex;
-      justify-content: flex-end;
-      margin-right: 30px;
-      margin-top: 50px;
-      gap: 10px;
-    "
-  >
+  <div style="display: flex; justify-content: flex-end; margin-right: 30px; margin-top: 50px; gap: 10px">
     <button
       pButton
       pRipple

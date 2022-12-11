@@ -3,33 +3,22 @@
 <form [formGroup]="markerDataForm" class="form">
   <div>
     <p-dropdown
-      placeholder="Markertyp"
+      placeholder="Markertyp*"
       [options]="markerTypes"
-      [(ngModel)]="selectedMarkerType"
       optionLabel="name"
       optionValue="type"
       [style]="{ minWidth: '100%' }"
       formControlName="type"
     ></p-dropdown>
-    <small id="marker-name-help" class="field-explanation">
-      Wählen Sie den gewünschten Markertyp.
-    </small>
+    <small id="marker-name-help" class="field-explanation"> Wählen Sie den gewünschten Markertyp. </small>
   </div>
 
   <div>
     <span class="p-float-label">
-      <input
-        id="marker-name-input"
-        type="text"
-        pInputText
-        aria-describedby="marker-name-help"
-        formControlName="name"
-      />
-      <label for="marker-name-input">Name des Markers</label>
+      <input id="marker-name-input" type="text" pInputText aria-describedby="marker-name-help" formControlName="name" />
+      <label for="marker-name-input">Name des Markers*</label>
     </span>
-    <small id="marker-name-help" class="field-explanation">
-      Geben Sie dem Marker einen Namen.
-    </small>
+    <small id="marker-name-help" class="field-explanation"> Geben Sie dem Marker einen Namen. </small>
   </div>
 
   <div>
@@ -43,24 +32,15 @@
       ></textarea>
       <label for="marker-description-textarea">Beschreibung</label>
     </span>
-    <small id="marker-name-help" class="field-explanation">
-      Fügen Sie dem Marker ggf. eine Beschreibung hinzu.
-    </small>
+    <small id="marker-name-help" class="field-explanation"> Fügen Sie dem Marker ggf. eine Beschreibung hinzu. </small>
   </div>
 
   <div>
     <span class="p-float-label">
-      <input
-        id="marker-abbreviation-input"
-        type="text"
-        formControlName="abbreviation"
-        pInputText
-      />
+      <input id="marker-abbreviation-input" type="text" formControlName="abbreviation" pInputText />
       <label for="marker-abbreviation-input">Abkürzung</label>
     </span>
-    <small id="marker-name-help" class="field-explanation">
-      Wählen Sie ggf. eine Abkürzung für den Marker.
-    </small>
+    <small id="marker-name-help" class="field-explanation"> Wählen Sie ggf. eine Abkürzung für den Marker. </small>
   </div>
 
   <div>
@@ -68,11 +48,7 @@
     <div style="display: inline; margin-right: 15px">
       <p-colorPicker formControlName="color"></p-colorPicker>
     </div>
-    <small
-      style="display: inline"
-      id="marker-name-help"
-      class="field-explanation"
-    >
+    <small style="display: inline" id="marker-name-help" class="field-explanation">
       Wählen Sie eine Farbe für Ihren Marker.
     </small>
   </div>
@@ -81,14 +57,11 @@
     <p-dropdown
       placeholder="Icon"
       [options]="icons"
-      [(ngModel)]="selectedIcon"
       optionLabel="name"
       optionValue="code"
       [style]="{ minWidth: '100%' }"
       formControlName="icon"
     ></p-dropdown>
-    <small id="marker-name-help" class="field-explanation">
-      Wählen Sie ggf. ein Icon für Ihren Marker.
-    </small>
+    <small id="marker-name-help" class="field-explanation"> Wählen Sie ggf. ein Icon für Ihren Marker. </small>
   </div>
 </form>
