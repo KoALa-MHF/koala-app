@@ -17,6 +17,8 @@ import { StepsModule } from 'primeng/steps';
 import { DropdownModule } from 'primeng/dropdown';
 import { ColorPickerModule } from 'primeng/colorpicker';
 import { RippleModule } from 'primeng/ripple';
+import { FileUploadModule } from 'primeng/fileupload';
+import { DragDropModule } from 'primeng/dragdrop';
 
 import { SessionsOverviewTableComponent } from './components/sessions-overview-table/sessions-overview-table.component';
 import { SessionMaintainPage } from './pages/session-maintain/session-maintain.page';
@@ -70,6 +72,8 @@ import { SessionParticipantsInvitationComponent } from './components/session-par
     ColorPickerModule,
     SkeletonModule,
     RippleModule,
+    FileUploadModule,
+    DragDropModule,
   ],
   providers: [SessionsService, MediaService],
 })

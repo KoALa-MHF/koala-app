@@ -2,12 +2,15 @@
 
 <p>Hier sehen Sie eine Vorschau Ihres Markers.</p>
 
-<div></div>
+<p-skeleton size="3rem" styleClass="mr-2" animation="none"> </p-skeleton>
+<button pButton pRipple [label]="label"></button>
 
-<button pButton pRipple>Marker Hinzufügen</button>
-<button pButton pRipple class="p-button-raised p-button-plain p-button-text">
-  Zurücksetzen
-</button>
+<div style="display: flex; gap: 10px; justify-content: center">
+  <button pButton pRipple>Marker Hinzufügen</button>
+  <button pButton pRipple class="p-button-raised p-button-plain p-button-text">
+    Zurücksetzen
+  </button>
+</div>
 
 <h4 class="section-heading">Aus Bibliothek Laden</h4>
 

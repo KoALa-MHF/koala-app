@@ -6,6 +6,9 @@
   </div>
 
   <div style="width: 50%">
-    <koala-session-participants-overview></koala-session-participants-overview>
+    <koala-session-participants-overview
+      [participants]="participants"
+      (participantRemove)="onParticipantRemove($event)"
+    ></koala-session-participants-overview>
   </div>
 </div>

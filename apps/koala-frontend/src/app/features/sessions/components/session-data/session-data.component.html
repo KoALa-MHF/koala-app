@@ -1,27 +1,23 @@
 <h3>Session Einstellungen</h3>
 
-<div style="display: grid; grid-template-columns: 50% 50%">
-  <div>
-    <h4 class="section-heading">Allgemeine Informationen</h4>
+<div class="container">
+  <div style="width: 50%">
     <koala-session-basic-data
       [basicDataForm]="basicDataForm"
     ></koala-session-basic-data>
   </div>
 
-  <div>
-    <h4 class="section-heading" >Audio</h4>
+  <div style="width: 50%">
     <koala-session-audio [audioForm]="audioForm"></koala-session-audio>
   </div>
 
-  <div>
-    <h4 class="section-heading">Verfügbarkeit</h4>
+  <div style="width: 50%">
     <koala-session-dates
       [sessionDatesForm]="sessionDatesForm"
     ></koala-session-dates>
   </div>
 
-  <div>
-    <h4 class="section-heading">Freigaben</h4>
+  <div style="width: 50%">
     <koala-session-details
       [sessionDetailsForm]="sessionDetailsForm"
     ></koala-session-details>

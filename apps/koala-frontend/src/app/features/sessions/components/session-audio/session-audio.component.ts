@@ -12,4 +12,8 @@ export class SessionAudioComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
+
+  public onFileUpload(event: any) {
+    //event.files == files to upload
+  }
 }

@@ -27,10 +27,12 @@ enum mode {
 })
 export class SessionMaintainPage implements OnInit {
   maintainSessionForm: FormGroup;
+  maintainMarkerForm: FormGroup;
   sessionId: number = 0;
   session: Session | null = null;
   mode: number = mode.CREATE;
   stepIndex: number = 0;
+  participants: any = [];
 
   steps: MenuItem[] = [
     {
@@ -71,6 +73,15 @@ export class SessionMaintainPage implements OnInit {
         title: new FormControl<string>(''),
         composer: new FormControl<string>(''),
       }),
+    });
+
+    this.maintainMarkerForm = this.formBuilder.group({
+      type: new FormControl<string>('', [Validators.required]),
+      name: new FormControl<string>('', [Validators.required]),
+      description: new FormControl<string>(''),
+      abbreviation: new FormControl<string>(''),
+      color: new FormControl<string>(''),
+      icon: new FormControl<string>(''),
     });
   }
 
@@ -163,6 +174,11 @@ export class SessionMaintainPage implements OnInit {
     this.router.navigate(['sessions']);
   }
 
+  public onParticipantRemove(participant: any) {
+    console.log('=== Participant Deleted ===');
+    console.log(participant);
+  }
+
   get basicDataFormGroup(): FormGroup {
     return this.maintainSessionForm.get('basicData') as FormGroup;
   }
@@ -182,6 +198,8 @@ export class SessionMaintainPage implements OnInit {
   public stepIndexChanged(selectedStep: number) {
     this.stepIndex = selectedStep;
   }
+
+  public onNewMarkerDataChange(event: any) {}
 
   private nextStep() {
     if (this.stepIndex < this.steps.length - 1) {

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'koala-session-marker-data',
@@ -9,7 +10,16 @@ import { Component, OnInit } from '@angular/core';
   ],
 })
 export class SessionMarkerDataComponent implements OnInit {
+  @Input() markerDataForm!: FormGroup;
+  @Output() newMarkerDataChange = new EventEmitter<any>();
+  
   constructor() {}
 
   ngOnInit(): void {}
+
+  public onAbbreviationChange(abbreviation: string) {
+    this.newMarkerDataChange.emit({
+      abbreviation,
+    });
+  }
 }

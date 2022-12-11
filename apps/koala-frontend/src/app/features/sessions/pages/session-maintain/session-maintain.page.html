@@ -16,11 +16,17 @@
   </div>
 
   <div *ngIf="stepIndex === 1">
-    <koala-session-marker-data></koala-session-marker-data>
+    <koala-session-marker-data
+      [markerDataForm]="maintainMarkerForm"
+      (newMarkerDataChange)="onNewMarkerDataChange($event)"
+    ></koala-session-marker-data>
   </div>
 
   <div *ngIf="stepIndex === 2">
-    <koala-session-participants></koala-session-participants>
+    <koala-session-participants
+      [participants]="participants"
+      (participantRemove)="onParticipantRemove($event)"
+    ></koala-session-participants>
   </div>
 
   <div
@@ -29,9 +35,6 @@
       justify-content: flex-end;
       margin-right: 30px;
       margin-top: 50px;
-      grid-column-start: 1;
-      grid-column-end: span 2;
-      grid-row-end: span 2;
       gap: 10px;
     "
   >
