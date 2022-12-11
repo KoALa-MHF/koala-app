@@ -19,13 +19,18 @@ import { AnnotationsModule } from './annotations/annotations.module';
 import { Annotation } from './annotations/entities/annotation.entity';
 import { formatError } from './core/graphql/grapqhl-error';
 
-
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'sqlite',
+      type: 'better-sqlite3',
       database: 'koala',
-      entities: [Session, Media, Marker, Annotation, UserSession],
+      entities: [
+        Session,
+        Media,
+        Marker,
+        Annotation,
+        UserSession,
+      ],
       synchronize: true,
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -34,7 +39,7 @@ import { formatError } from './core/graphql/grapqhl-error';
       playground: true,
       autoSchemaFile: true,
       formatError: formatError,
-      introspection:true,
+      introspection: true,
     }),
     SessionsModule,
     MediaModule,
@@ -42,7 +47,11 @@ import { formatError } from './core/graphql/grapqhl-error';
     UserSessionsModule,
     AnnotationsModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [
+    AppController,
+  ],
+  providers: [
+    AppService,
+  ],
 })
 export class AppModule {}
