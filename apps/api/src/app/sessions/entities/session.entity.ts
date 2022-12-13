@@ -1,14 +1,6 @@
-import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
+import { ObjectType, Field, Int, registerEnumType, ID } from '@nestjs/graphql';
 import { IsEnum, IsNotEmpty } from 'class-validator';
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { BeforeInsert, Column, Entity, Index, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '../../core/base.entity';
 import { Media } from '../../media/entities/media.entity';
 import { customAlphabet } from 'nanoid';
@@ -29,7 +21,7 @@ registerEnumType(SessionStatus, {
 @Entity()
 export class Session extends BaseEntity {
   @PrimaryGeneratedColumn()
-  @Field(() => Int, { description: 'ID for Session' })
+  @Field((type) => ID, { description: 'ID for Session' })
   id: number;
 
   @Column()
