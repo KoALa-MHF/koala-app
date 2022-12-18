@@ -1,10 +1,21 @@
 import { ObjectType, Field, Int, registerEnumType, ID } from '@nestjs/graphql';
 import { IsEnum, IsNotEmpty } from 'class-validator';
-import { BeforeInsert, Column, Entity, Index, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { BaseEntity } from '../../core/base.entity';
 import { Media } from '../../media/entities/media.entity';
 import { customAlphabet } from 'nanoid';
 import { nolookalikes } from 'nanoid-dictionary';
+import { Marker } from '../../markers/entities/marker.entity';
 
 const nanoid = customAlphabet(nolookalikes, 7);
 
@@ -82,6 +93,19 @@ export class Session extends BaseEntity {
     description: 'Associated Media File',
   })
   media?: Media;
+
+  @JoinTable()
+  @ManyToMany(() => Marker, { nullable: true })
+  @Field(
+    (type) => [
+      Marker,
+    ],
+    {
+      nullable: true,
+      description: 'Associated Markers',
+    }
+  )
+  markers?: Marker[];
 
   @Column()
   @Index({ unique: true })
