@@ -16,6 +16,7 @@ export class MarkerPreviewComponent implements OnInit {
 
   @Input() createEnabled: boolean = false;
   @Output() resetMarkerData = new EventEmitter();
+  @Output() markerAdd = new EventEmitter();
 
   constructor() {}
 
@@ -23,5 +24,9 @@ export class MarkerPreviewComponent implements OnInit {
 
   public onReset() {
     this.resetMarkerData.emit();
+  }
+
+  public onAddMarker() {
+    this.markerAdd.emit();
   }
 }

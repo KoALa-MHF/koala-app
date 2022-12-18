@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { MarkerType } from 'apps/koala-frontend/src/app/graphql/generated/graphql';
 
 @Component({
   selector: 'koala-marker-maintain',
@@ -14,11 +15,11 @@ export class MarkerMaintainComponent implements OnInit {
 
   markerTypes = [
     {
-      type: 1,
-      name: 'Spot',
+      type: MarkerType.Event,
+      name: 'Event',
     },
     {
-      type: 2,
+      type: MarkerType.Range,
       name: 'Range',
     },
   ];

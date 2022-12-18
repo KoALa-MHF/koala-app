@@ -9,6 +9,7 @@ export class CreateSessionInput {
   name: string;
 
   @Field({ nullable: true })
+  @IsOptional()
   description?: string;
 
   @Field(() => SessionStatus, { defaultValue: SessionStatus.OPEN })
@@ -16,25 +17,31 @@ export class CreateSessionInput {
   @IsOptional()
   status?: SessionStatus;
 
-  @Field()
-  start: Date;
+  @Field({ nullable: true })
+  @IsOptional()
+  start?: Date;
 
-  @Field()
-  end: Date;
+  @Field({ nullable: true })
+  @IsOptional()
+  end?: Date;
 
-  @Field()
-  editable: boolean;
+  @Field({ nullable: true })
+  @IsOptional()
+  editable?: boolean;
 
-  @Field()
-  enablePlayer: boolean;
+  @Field({ nullable: true })
+  @IsOptional()
+  enablePlayer?: boolean;
 
-  @Field()
-  displaySampleSolution: boolean;
+  @Field({ nullable: true })
+  @IsOptional()
+  displaySampleSolution?: boolean;
 
-  @Field()
-  enableLiveAnalysis: boolean;
+  @Field({ nullable: true })
+  @IsOptional()
+  enableLiveAnalysis?: boolean;
 
   @Field(() => Int, { nullable: true, description: 'Assigned Media' })
   @IsOptional()
-  mediaId: number;
+  mediaId?: number;
 }

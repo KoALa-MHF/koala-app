@@ -17,6 +17,13 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type AddMarkerToSessionInput = {
+  /** Associated Marker */
+  markerId: Scalars['Int'];
+  /** Session ID */
+  sessionId: Scalars['Int'];
+};
+
 export type Annotation = {
   __typename?: 'Annotation';
   /** Creation Date */
@@ -31,6 +38,8 @@ export type Annotation = {
   start: Scalars['Int'];
   /** Date of Last Update */
   updatedAt: Scalars['DateTime'];
+  /** Associated UserSession */
+  userSession: UserSession;
 };
 
 export type CreateAnnotationInput = {
@@ -40,6 +49,8 @@ export type CreateAnnotationInput = {
   markerId: Scalars['Int'];
   /** Annotation Start Seconds */
   start: Scalars['Int'];
+  /** Associated User Session */
+  userSessionId: Scalars['Int'];
 };
 
 export type CreateMarkerInput = {
@@ -62,15 +73,15 @@ export type CreateMediaInput = {
 
 export type CreateSessionInput = {
   description?: InputMaybe<Scalars['String']>;
-  displaySampleSolution: Scalars['Boolean'];
-  editable: Scalars['Boolean'];
-  enableLiveAnalysis: Scalars['Boolean'];
-  enablePlayer: Scalars['Boolean'];
-  end: Scalars['DateTime'];
+  displaySampleSolution?: InputMaybe<Scalars['Boolean']>;
+  editable?: InputMaybe<Scalars['Boolean']>;
+  enableLiveAnalysis?: InputMaybe<Scalars['Boolean']>;
+  enablePlayer?: InputMaybe<Scalars['Boolean']>;
+  end?: InputMaybe<Scalars['DateTime']>;
   /** Assigned Media */
   mediaId?: InputMaybe<Scalars['Int']>;
   name: Scalars['String'];
-  start: Scalars['DateTime'];
+  start?: InputMaybe<Scalars['DateTime']>;
   status?: InputMaybe<SessionStatus>;
 };
 
@@ -99,7 +110,7 @@ export type Marker = {
 
 export enum MarkerType {
   Event = 'EVENT',
-  Range = 'RANGE'
+  Range = 'RANGE',
 }
 
 export type Media = {
@@ -119,11 +130,12 @@ export type Media = {
 };
 
 export enum MediaType {
-  Audio = 'AUDIO'
+  Audio = 'AUDIO',
 }
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addMarkerToSession: Session;
   createAnnotation: Annotation;
   createMarker: Marker;
   createMedia: Media;
@@ -141,80 +153,69 @@ export type Mutation = {
   updateUserSession: UserSession;
 };
 
+export type MutationAddMarkerToSessionArgs = {
+  addMarkerToSessionInput: AddMarkerToSessionInput;
+};
 
 export type MutationCreateAnnotationArgs = {
   createAnnotationInput: CreateAnnotationInput;
 };
 
-
 export type MutationCreateMarkerArgs = {
   createMarkerInput: CreateMarkerInput;
 };
-
 
 export type MutationCreateMediaArgs = {
   createMediaInput: CreateMediaInput;
 };
 
-
 export type MutationCreateSessionArgs = {
   createSessionInput: CreateSessionInput;
 };
-
 
 export type MutationCreateUserSessionArgs = {
   createUserSessionInput: CreateUserSessionInput;
 };
 
-
 export type MutationRemoveAnnotationArgs = {
   id: Scalars['Int'];
 };
-
 
 export type MutationRemoveMarkerArgs = {
   id: Scalars['Int'];
 };
 
-
 export type MutationRemoveMediaArgs = {
   id: Scalars['Int'];
 };
-
 
 export type MutationRemoveSessionArgs = {
   id: Scalars['Int'];
 };
 
-
 export type MutationRemoveUserSessionArgs = {
   id: Scalars['Int'];
 };
-
 
 export type MutationUpdateAnnotationArgs = {
   id: Scalars['Int'];
   updateAnnotationInput: UpdateAnnotationInput;
 };
 
-
 export type MutationUpdateMarkerArgs = {
   id: Scalars['Int'];
   updateMarkerInput: UpdateMarkerInput;
 };
-
 
 export type MutationUpdateMediaArgs = {
   id: Scalars['Int'];
   updateMediaInput: UpdateMediaInput;
 };
 
-
 export type MutationUpdateSessionArgs = {
   id: Scalars['Int'];
   updateSessionInput: UpdateSessionInput;
 };
-
 
 export type MutationUpdateUserSessionArgs = {
   id: Scalars['Int'];
@@ -235,26 +236,21 @@ export type Query = {
   userSessions: Array<UserSession>;
 };
 
-
 export type QueryAnnotationArgs = {
   id: Scalars['Int'];
 };
-
 
 export type QueryMarkerArgs = {
   id: Scalars['Int'];
 };
 
-
 export type QueryMediaArgs = {
   id: Scalars['Int'];
 };
 
-
 export type QuerySessionArgs = {
   id: Scalars['Int'];
 };
-
 
 export type QueryUserSessionArgs = {
   id: Scalars['Int'];
@@ -265,34 +261,36 @@ export type Session = {
   /** Creation Date */
   createdAt: Scalars['DateTime'];
   /** Description */
-  description: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
   /** Default for Session - Sample Solution Displayed */
-  displaySampleSolution: Scalars['Boolean'];
+  displaySampleSolution?: Maybe<Scalars['Boolean']>;
   /** Default for Session - Editable for Participants */
-  editable: Scalars['Boolean'];
+  editable?: Maybe<Scalars['Boolean']>;
   /** Default for Session - Annotations are Directly Displayed in Analysis */
-  enableLiveAnalysis: Scalars['Boolean'];
+  enableLiveAnalysis?: Maybe<Scalars['Boolean']>;
   /** Default for Session - Player Enabled for Participants */
-  enablePlayer: Scalars['Boolean'];
+  enablePlayer?: Maybe<Scalars['Boolean']>;
   /** End of Session */
-  end: Scalars['DateTime'];
+  end?: Maybe<Scalars['DateTime']>;
   /** ID for Session */
   id: Scalars['Int'];
+  /** Associated Markers */
+  markers?: Maybe<Array<Marker>>;
   /** Associated Media File */
   media?: Maybe<Media>;
   /** Session Name */
   name: Scalars['String'];
   /** Start of Session */
-  start: Scalars['DateTime'];
+  start?: Maybe<Scalars['DateTime']>;
   /** Session Status */
-  status: SessionStatus;
+  status?: Maybe<SessionStatus>;
   /** Date of Last Update */
   updatedAt: Scalars['DateTime'];
 };
 
 export enum SessionStatus {
   Closed = 'CLOSED',
-  Open = 'OPEN'
+  Open = 'OPEN',
 }
 
 export type UpdateAnnotationInput = {
@@ -358,262 +356,432 @@ export type UserSession = {
 export enum UserSessionStatus {
   Initial = 'INITIAL',
   Started = 'STARTED',
-  Submitted = 'SUBMITTED'
+  Submitted = 'SUBMITTED',
 }
 
 export type CreateNewSessionMutationVariables = Exact<{
   session: CreateSessionInput;
 }>;
 
-
-export type CreateNewSessionMutation = { __typename?: 'Mutation', createSession: { __typename?: 'Session', id: number, name: string, description: string, status: SessionStatus, start: any, end: any, editable: boolean, enablePlayer: boolean, displaySampleSolution: boolean, enableLiveAnalysis: boolean, createdAt: any, updatedAt: any, media?: { __typename?: 'Media', id: number, type: MediaType, title: string, composer: string, createdAt: any, updatedAt: any } | null } };
+export type CreateNewSessionMutation = {
+  __typename?: 'Mutation';
+  createSession: {
+    __typename?: 'Session';
+    id: number;
+    name: string;
+    description?: string | null;
+    status?: SessionStatus | null;
+    start?: any | null;
+    end?: any | null;
+    editable?: boolean | null;
+    enablePlayer?: boolean | null;
+    displaySampleSolution?: boolean | null;
+    enableLiveAnalysis?: boolean | null;
+    createdAt: any;
+    updatedAt: any;
+    media?: {
+      __typename?: 'Media';
+      id: number;
+      type: MediaType;
+      title: string;
+      composer: string;
+      createdAt: any;
+      updatedAt: any;
+    } | null;
+  };
+};
 
 export type UpdateSessionMutationVariables = Exact<{
   id: Scalars['Int'];
   session: UpdateSessionInput;
 }>;
 
-
-export type UpdateSessionMutation = { __typename?: 'Mutation', updateSession: { __typename?: 'Session', name: string, description: string, status: SessionStatus, start: any, end: any, editable: boolean, enablePlayer: boolean, displaySampleSolution: boolean, enableLiveAnalysis: boolean, createdAt: any, updatedAt: any, media?: { __typename?: 'Media', id: number, type: MediaType, title: string, composer: string, createdAt: any, updatedAt: any } | null } };
+export type UpdateSessionMutation = {
+  __typename?: 'Mutation';
+  updateSession: {
+    __typename?: 'Session';
+    name: string;
+    description?: string | null;
+    status?: SessionStatus | null;
+    start?: any | null;
+    end?: any | null;
+    editable?: boolean | null;
+    enablePlayer?: boolean | null;
+    displaySampleSolution?: boolean | null;
+    enableLiveAnalysis?: boolean | null;
+    createdAt: any;
+    updatedAt: any;
+    media?: {
+      __typename?: 'Media';
+      id: number;
+      type: MediaType;
+      title: string;
+      composer: string;
+      createdAt: any;
+      updatedAt: any;
+    } | null;
+  };
+};
 
 export type DeleteSessionMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
-
-export type DeleteSessionMutation = { __typename?: 'Mutation', removeSession: { __typename?: 'Session', id: number } };
+export type DeleteSessionMutation = { __typename?: 'Mutation'; removeSession: { __typename?: 'Session'; id: number } };
 
 export type CreateMediaMutationVariables = Exact<{
   media: CreateMediaInput;
 }>;
 
-
-export type CreateMediaMutation = { __typename?: 'Mutation', createMedia: { __typename?: 'Media', title: string, composer: string, type: MediaType, id: number } };
+export type CreateMediaMutation = {
+  __typename?: 'Mutation';
+  createMedia: { __typename?: 'Media'; title: string; composer: string; type: MediaType; id: number };
+};
 
 export type UpdateMediaMutationVariables = Exact<{
   id: Scalars['Int'];
   updateMedia: UpdateMediaInput;
 }>;
 
+export type UpdateMediaMutation = {
+  __typename?: 'Mutation';
+  updateMedia: { __typename?: 'Media'; title: string; composer: string; type: MediaType; id: number };
+};
 
-export type UpdateMediaMutation = { __typename?: 'Mutation', updateMedia: { __typename?: 'Media', title: string, composer: string, type: MediaType, id: number } };
+export type CreateMarkerMutationVariables = Exact<{
+  createMarker: CreateMarkerInput;
+}>;
 
-export type GetSessionsQueryVariables = Exact<{ [key: string]: never; }>;
+export type CreateMarkerMutation = {
+  __typename?: 'Mutation';
+  createMarker: { __typename?: 'Marker'; id: number; type: MarkerType; name: string; color: string };
+};
 
+export type AddMarkerMutationVariables = Exact<{
+  addMarkerToSession: AddMarkerToSessionInput;
+}>;
 
-export type GetSessionsQuery = { __typename?: 'Query', sessions: Array<{ __typename?: 'Session', id: number, name: string, description: string, status: SessionStatus, start: any, end: any, editable: boolean, enablePlayer: boolean, displaySampleSolution: boolean, enableLiveAnalysis: boolean, createdAt: any, updatedAt: any, media?: { __typename?: 'Media', id: number, type: MediaType, title: string, composer: string, createdAt: any, updatedAt: any } | null }> };
+export type AddMarkerMutation = {
+  __typename?: 'Mutation';
+  addMarkerToSession: {
+    __typename?: 'Session';
+    id: number;
+    name: string;
+    markers?: Array<{ __typename?: 'Marker'; id: number; name: string; type: MarkerType }> | null;
+  };
+};
+
+export type GetSessionsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetSessionsQuery = {
+  __typename?: 'Query';
+  sessions: Array<{
+    __typename?: 'Session';
+    id: number;
+    name: string;
+    description?: string | null;
+    status?: SessionStatus | null;
+    start?: any | null;
+    end?: any | null;
+    editable?: boolean | null;
+    enablePlayer?: boolean | null;
+    displaySampleSolution?: boolean | null;
+    enableLiveAnalysis?: boolean | null;
+    createdAt: any;
+    updatedAt: any;
+    media?: {
+      __typename?: 'Media';
+      id: number;
+      type: MediaType;
+      title: string;
+      composer: string;
+      createdAt: any;
+      updatedAt: any;
+    } | null;
+  }>;
+};
 
 export type GetOneSessionQueryVariables = Exact<{
   sessionId: Scalars['Int'];
 }>;
 
-
-export type GetOneSessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: number, name: string, description: string, status: SessionStatus, start: any, end: any, editable: boolean, enablePlayer: boolean, displaySampleSolution: boolean, enableLiveAnalysis: boolean, createdAt: any, updatedAt: any, media?: { __typename?: 'Media', id: number, type: MediaType, title: string, composer: string, createdAt: any, updatedAt: any } | null } };
+export type GetOneSessionQuery = {
+  __typename?: 'Query';
+  session: {
+    __typename?: 'Session';
+    id: number;
+    name: string;
+    description?: string | null;
+    status?: SessionStatus | null;
+    start?: any | null;
+    end?: any | null;
+    editable?: boolean | null;
+    enablePlayer?: boolean | null;
+    displaySampleSolution?: boolean | null;
+    enableLiveAnalysis?: boolean | null;
+    createdAt: any;
+    updatedAt: any;
+    media?: {
+      __typename?: 'Media';
+      id: number;
+      type: MediaType;
+      title: string;
+      composer: string;
+      createdAt: any;
+      updatedAt: any;
+    } | null;
+  };
+};
 
 export const CreateNewSessionDocument = gql`
-    mutation createNewSession($session: CreateSessionInput!) {
-  createSession(createSessionInput: $session) {
-    id
-    name
-    description
-    status
-    start
-    end
-    editable
-    enablePlayer
-    displaySampleSolution
-    enableLiveAnalysis
-    media {
+  mutation createNewSession($session: CreateSessionInput!) {
+    createSession(createSessionInput: $session) {
       id
-      type
-      title
-      composer
+      name
+      description
+      status
+      start
+      end
+      editable
+      enablePlayer
+      displaySampleSolution
+      enableLiveAnalysis
+      media {
+        id
+        type
+        title
+        composer
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
-    createdAt
-    updatedAt
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateNewSessionGQL extends Apollo.Mutation<CreateNewSessionMutation, CreateNewSessionMutationVariables> {
+  override document = CreateNewSessionDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
   }
 }
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class CreateNewSessionGQL extends Apollo.Mutation<CreateNewSessionMutation, CreateNewSessionMutationVariables> {
-    override document = CreateNewSessionDocument;
-    
-    constructor(apollo: Apollo.Apollo) {
-      super(apollo);
-    }
-  }
 export const UpdateSessionDocument = gql`
-    mutation updateSession($id: Int!, $session: UpdateSessionInput!) {
-  updateSession(id: $id, updateSessionInput: $session) {
-    name
-    description
-    status
-    start
-    end
-    editable
-    enablePlayer
-    displaySampleSolution
-    enableLiveAnalysis
-    media {
-      id
-      type
-      title
-      composer
+  mutation updateSession($id: Int!, $session: UpdateSessionInput!) {
+    updateSession(id: $id, updateSessionInput: $session) {
+      name
+      description
+      status
+      start
+      end
+      editable
+      enablePlayer
+      displaySampleSolution
+      enableLiveAnalysis
+      media {
+        id
+        type
+        title
+        composer
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
-    createdAt
-    updatedAt
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateSessionGQL extends Apollo.Mutation<UpdateSessionMutation, UpdateSessionMutationVariables> {
+  override document = UpdateSessionDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
   }
 }
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class UpdateSessionGQL extends Apollo.Mutation<UpdateSessionMutation, UpdateSessionMutationVariables> {
-    override document = UpdateSessionDocument;
-    
-    constructor(apollo: Apollo.Apollo) {
-      super(apollo);
-    }
-  }
 export const DeleteSessionDocument = gql`
-    mutation deleteSession($id: Int!) {
-  removeSession(id: $id) {
-    id
-  }
-}
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class DeleteSessionGQL extends Apollo.Mutation<DeleteSessionMutation, DeleteSessionMutationVariables> {
-    override document = DeleteSessionDocument;
-    
-    constructor(apollo: Apollo.Apollo) {
-      super(apollo);
+  mutation deleteSession($id: Int!) {
+    removeSession(id: $id) {
+      id
     }
   }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DeleteSessionGQL extends Apollo.Mutation<DeleteSessionMutation, DeleteSessionMutationVariables> {
+  override document = DeleteSessionDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const CreateMediaDocument = gql`
-    mutation createMedia($media: CreateMediaInput!) {
-  createMedia(createMediaInput: $media) {
-    title
-    composer
-    type
-    id
-  }
-}
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class CreateMediaGQL extends Apollo.Mutation<CreateMediaMutation, CreateMediaMutationVariables> {
-    override document = CreateMediaDocument;
-    
-    constructor(apollo: Apollo.Apollo) {
-      super(apollo);
+  mutation createMedia($media: CreateMediaInput!) {
+    createMedia(createMediaInput: $media) {
+      title
+      composer
+      type
+      id
     }
   }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateMediaGQL extends Apollo.Mutation<CreateMediaMutation, CreateMediaMutationVariables> {
+  override document = CreateMediaDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const UpdateMediaDocument = gql`
-    mutation updateMedia($id: Int!, $updateMedia: UpdateMediaInput!) {
-  updateMedia(id: $id, updateMediaInput: $updateMedia) {
-    title
-    composer
-    type
-    id
-  }
-}
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class UpdateMediaGQL extends Apollo.Mutation<UpdateMediaMutation, UpdateMediaMutationVariables> {
-    override document = UpdateMediaDocument;
-    
-    constructor(apollo: Apollo.Apollo) {
-      super(apollo);
+  mutation updateMedia($id: Int!, $updateMedia: UpdateMediaInput!) {
+    updateMedia(id: $id, updateMediaInput: $updateMedia) {
+      title
+      composer
+      type
+      id
     }
   }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateMediaGQL extends Apollo.Mutation<UpdateMediaMutation, UpdateMediaMutationVariables> {
+  override document = UpdateMediaDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateMarkerDocument = gql`
+  mutation createMarker($createMarker: CreateMarkerInput!) {
+    createMarker(createMarkerInput: $createMarker) {
+      id
+      type
+      name
+      color
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateMarkerGQL extends Apollo.Mutation<CreateMarkerMutation, CreateMarkerMutationVariables> {
+  override document = CreateMarkerDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AddMarkerDocument = gql`
+  mutation addMarker($addMarkerToSession: AddMarkerToSessionInput!) {
+    addMarkerToSession(addMarkerToSessionInput: $addMarkerToSession) {
+      id
+      name
+      markers {
+        id
+        name
+        type
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AddMarkerGQL extends Apollo.Mutation<AddMarkerMutation, AddMarkerMutationVariables> {
+  override document = AddMarkerDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const GetSessionsDocument = gql`
-    query GetSessions {
-  sessions {
-    id
-    name
-    description
-    status
-    start
-    end
-    editable
-    enablePlayer
-    displaySampleSolution
-    enableLiveAnalysis
-    media {
+  query GetSessions {
+    sessions {
       id
-      type
-      title
-      composer
+      name
+      description
+      status
+      start
+      end
+      editable
+      enablePlayer
+      displaySampleSolution
+      enableLiveAnalysis
+      media {
+        id
+        type
+        title
+        composer
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
-    createdAt
-    updatedAt
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class GetSessionsGQL extends Apollo.Query<GetSessionsQuery, GetSessionsQueryVariables> {
+  override document = GetSessionsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
   }
 }
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class GetSessionsGQL extends Apollo.Query<GetSessionsQuery, GetSessionsQueryVariables> {
-    override document = GetSessionsDocument;
-    
-    constructor(apollo: Apollo.Apollo) {
-      super(apollo);
-    }
-  }
 export const GetOneSessionDocument = gql`
-    query GetOneSession($sessionId: Int!) {
-  session(id: $sessionId) {
-    id
-    name
-    description
-    status
-    start
-    end
-    editable
-    enablePlayer
-    displaySampleSolution
-    enableLiveAnalysis
-    media {
+  query GetOneSession($sessionId: Int!) {
+    session(id: $sessionId) {
       id
-      type
-      title
-      composer
+      name
+      description
+      status
+      start
+      end
+      editable
+      enablePlayer
+      displaySampleSolution
+      enableLiveAnalysis
+      media {
+        id
+        type
+        title
+        composer
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
-    createdAt
-    updatedAt
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class GetOneSessionGQL extends Apollo.Query<GetOneSessionQuery, GetOneSessionQueryVariables> {
+  override document = GetOneSessionDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
   }
 }
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class GetOneSessionGQL extends Apollo.Query<GetOneSessionQuery, GetOneSessionQueryVariables> {
-    override document = GetOneSessionDocument;
-    
-    constructor(apollo: Apollo.Apollo) {
-      super(apollo);
-    }
-  }

@@ -2,8 +2,36 @@
   <koala-sessions-overview-table
     [sessions]="sessions"
     (sessionDelete)="onSessionDelete($event)"
-    (sessionCreate)="onSessionCreate()"
+    (sessionCreate)="onSessionCreateRequested()"
     (sessionExport)="onSessionExport($event)"
     (sessionUpdate)="onSessionUpdate($event)"
   ></koala-sessions-overview-table>
 </div>
+
+<p-dialog
+  header="Neue Session Anlegen"
+  [(visible)]="createSessionModal"
+  [modal]="true"
+  [style]="{width: '50vw'}"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <form [formGroup]="createSessionForm">
+    <div>
+      <span class="p-float-label">
+        <input
+          id="session-name-input"
+          type="text"
+          pInputText
+          aria-describedby="session-name-help"
+          formControlName="name"
+        />
+        <label for="session-name-input">Session Name*</label>
+      </span>
+      <small id="session-name-help" class="field-explanation"> Geben Sie der Session einen Namen. </small>
+    </div>
+  </form>
+  <ng-template pTemplate="footer">
+    <p-button icon="pi pi-check" (click)="onCreateSession()" label="Ok" styleClass="p-button-text"></p-button>
+  </ng-template>
+</p-dialog>

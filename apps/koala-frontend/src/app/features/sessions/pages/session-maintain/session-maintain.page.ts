@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { MediaType, Session } from 'apps/koala-frontend/src/app/graphql/generated/graphql';
 import { MenuItem } from 'primeng/api';
+import { MarkerService } from '../../services/marker.service';
 import { MediaService } from '../../services/media.service';
 import { SessionsService } from '../../services/sessions.service';
 
@@ -29,21 +30,10 @@ export class SessionMaintainPage implements OnInit {
   stepIndex: number = 0;
   participants: any = [];
 
-  steps: MenuItem[] = [
-    {
-      label: 'Session Einstellungen',
-    },
-    {
-      label: 'Marker',
-    },
-    {
-      label: 'Mitglieder',
-    },
-  ];
-
   constructor(
     private readonly sessionService: SessionsService,
     private readonly mediaService: MediaService,
+    private readonly markerService: MarkerService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private formBuilder: FormBuilder
@@ -190,72 +180,56 @@ export class SessionMaintainPage implements OnInit {
     const composer: string = this.maintainSessionForm.get('audio')?.get('composer')?.value || '';
 
     if (this.mode === mode.CREATE) {
-      if (audioTitle || composer) {
-        this.mediaService
-          .create({
-            type: MediaType.Audio,
-            title: audioTitle,
-            composer,
-          })
-          .subscribe((result) => {
-            this.sessionService
-              .create({
-                name,
-                description,
-                start,
-                end,
-                editable,
-                enablePlayer,
-                displaySampleSolution,
-                enableLiveAnalysis,
-                mediaId: result.data?.createMedia.id || 0,
-              })
-              .subscribe(() => {});
-          });
-      } else {
-        this.sessionService
-          .create({
-            name,
-            description,
-            start,
-            end,
-            editable,
-            enablePlayer,
-            displaySampleSolution,
-            enableLiveAnalysis,
-          })
-          .subscribe(() => {});
-      }
+      this.sessionService
+        .create({
+          name,
+          description,
+          start,
+          end,
+          editable,
+          enablePlayer,
+          displaySampleSolution,
+          enableLiveAnalysis,
+        })
+        .subscribe(() => {});
     } else {
-      if (audioTitle || composer) {
-        this.mediaService.update(this.session?.media?.id || 0, { title: audioTitle, composer }).subscribe(() => {
-          this.sessionService
-            .update(this.session?.id || 0, {
-              name,
-              description,
-              start,
-              end,
-              editable,
-              enablePlayer,
-              displaySampleSolution,
-              enableLiveAnalysis,
-            })
-            .subscribe(() => {});
-        });
-      } else {
-        this.sessionService
-          .update(this.session?.id || 0, {
-            name,
-            description,
-            start,
-            end,
-            editable,
-            enablePlayer,
-            displaySampleSolution,
-            enableLiveAnalysis,
-          })
-          .subscribe(() => {});
-      }
+      this.sessionService
+        .update(this.session?.id || 0, {
+          name,
+          description,
+          start,
+          end,
+          editable,
+          enablePlayer,
+          displaySampleSolution,
+          enableLiveAnalysis,
+        })
+        .subscribe(() => {});
     }
+  }
+
+  public onAddMarker() {
+    const type = this.maintainMarkerForm.get('type')?.value || '';
+    const name = this.maintainMarkerForm.get('name')?.value || '';
+    const description = this.maintainMarkerForm.get('description')?.value || '';
+    const abbreviation = this.maintainMarkerForm.get('abbreviation')?.value || '';
+    const color = this.maintainMarkerForm.get('color')?.value || '';
+    const icon = this.maintainMarkerForm.get('icon')?.value || '';
+
+    this.markerService
+      .create({
+        name,
+        type,
+        color,
+      })
+      .subscribe({
+        next: (result) => {
+          const markerId = result.data?.createMarker.id;
+
+          if (markerId) {
+            this.sessionService.addMarker(markerId, this.sessionId).subscribe();
+          }
+        },
+      });
   }
 }

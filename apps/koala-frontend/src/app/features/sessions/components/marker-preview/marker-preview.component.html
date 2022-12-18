@@ -2,7 +2,7 @@
 
 <p>Hier sehen Sie eine Vorschau Ihres Markers.</p>
 
-<div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px ;">
+<div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px">
   <div
     style="height: 0; width: 40%; padding-bottom: 40%; background-color: rgba(155, 155, 158, 0.3); position: relative"
   >
@@ -15,7 +15,7 @@
 </div>
 
 <div style="display: flex; gap: 10px; justify-content: flex-end; margin-right: 30px">
-  <button pButton pRipple [disabled]="!createEnabled">Marker Hinzufügen</button>
+  <button pButton pRipple [disabled]="!createEnabled" (click)="onAddMarker()">Marker Hinzufügen</button>
   <button pButton pRipple class="p-button-raised p-button-plain p-button-text" (click)="onReset()">Zurücksetzen</button>
 </div>
 

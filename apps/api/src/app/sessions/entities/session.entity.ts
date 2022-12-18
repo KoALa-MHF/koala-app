@@ -1,5 +1,5 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
-import { IsEnum, IsNotEmpty } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
 import {
   BeforeInsert,
   Column,
@@ -40,51 +40,60 @@ export class Session extends BaseEntity {
   @IsNotEmpty()
   name: string;
 
-  @Column()
-  @Field({ description: 'Description' })
-  description: string;
+  @Column({ nullable: true, default: '' })
+  @Field({ nullable: true, description: 'Description', defaultValue: '' })
+  @IsOptional()
+  description?: string;
 
   @Column({
     type: 'simple-enum',
     enum: SessionStatus,
     default: SessionStatus.OPEN,
+    nullable: true,
   })
   @Field(() => SessionStatus, {
     defaultValue: SessionStatus.OPEN,
     description: 'Session Status',
+    nullable: true,
   })
   @IsEnum(SessionStatus)
-  @IsNotEmpty()
-  status: SessionStatus;
+  @IsOptional()
+  status?: SessionStatus;
 
   @Column({
     default: false,
   })
   deleted: boolean;
 
-  @Column()
-  @Field({ description: 'Start of Session' })
-  start: Date;
+  @Column({ nullable: true })
+  @Field({ nullable: true, description: 'Start of Session' })
+  @IsOptional()
+  start?: Date;
 
-  @Column()
-  @Field({ description: 'End of Session' })
-  end: Date;
+  @Column({ nullable: true })
+  @Field({ nullable: true, description: 'End of Session' })
+  @IsOptional()
+  end?: Date;
 
-  @Column()
-  @Field({ description: 'Default for Session - Editable for Participants' })
-  editable: boolean;
+  @Column({ nullable: true })
+  @Field({ nullable: true, description: 'Default for Session - Editable for Participants' })
+  @IsOptional()
+  editable?: boolean;
 
-  @Column()
-  @Field({ description: 'Default for Session - Player Enabled for Participants' })
-  enablePlayer: boolean;
+  @Column({ nullable: true })
+  @Field({ nullable: true, description: 'Default for Session - Player Enabled for Participants' })
+  @IsOptional()
+  enablePlayer?: boolean;
 
-  @Column()
-  @Field({ description: 'Default for Session - Sample Solution Displayed' })
-  displaySampleSolution: boolean;
+  @Column({ nullable: true })
+  @Field({ nullable: true, description: 'Default for Session - Sample Solution Displayed' })
+  @IsOptional()
+  displaySampleSolution?: boolean;
 
-  @Column()
-  @Field({ description: 'Default for Session - Annotations are Directly Displayed in Analysis' })
-  enableLiveAnalysis: boolean;
+  @Column({ nullable: true })
+  @Field({ nullable: true, description: 'Default for Session - Annotations are Directly Displayed in Analysis' })
+  @IsOptional()
+  enableLiveAnalysis?: boolean;
 
   @JoinColumn()
   @OneToOne(() => Media, { nullable: true })
@@ -92,6 +101,7 @@ export class Session extends BaseEntity {
     nullable: true,
     description: 'Associated Media File',
   })
+  @IsOptional()
   media?: Media;
 
   @JoinTable()

@@ -83,4 +83,26 @@ const UPDATE_MEDIA = gql`
   }
 `;
 
-const SET_MEDIA_IN_SESSION = gql``;
+const CREATE_MARKER = gql`
+  mutation createMarker($createMarker: CreateMarkerInput!) {
+    createMarker(createMarkerInput: $createMarker) {
+      id
+      type
+      name
+      color
+    }
+  }
+`;
+
+const ADD_MARKER_TO_SESSION = gql`
+  mutation addMarker($addMarkerToSession: AddMarkerToSessionInput!) {
+    addMarkerToSession(addMarkerToSessionInput: $addMarkerToSession) {
+      id
+      markers {
+        id
+        name
+        type
+      }
+    }
+  }
+`;

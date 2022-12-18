@@ -19,6 +19,7 @@ import { RippleModule } from 'primeng/ripple';
 import { FileUploadModule } from 'primeng/fileupload';
 import { DragDropModule } from 'primeng/dragdrop';
 import { TabViewModule } from 'primeng/tabview';
+import { DialogModule } from 'primeng/dialog';
 
 import { SessionsOverviewTableComponent } from './components/sessions-overview-table/sessions-overview-table.component';
 import { SessionMaintainPage } from './pages/session-maintain/session-maintain.page';
@@ -37,6 +38,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { SessionParticipantsComponent } from './components/session-participants/session-participants.component';
 import { SessionParticipantsOverviewComponent } from './components/session-participants-overview/session-participants-overview.component';
 import { SessionParticipantsInvitationComponent } from './components/session-participants-invitation/session-participants-invitation.component';
+import { MarkerService } from './services/marker.service';
 
 @NgModule({
   declarations: [
@@ -74,10 +76,12 @@ import { SessionParticipantsInvitationComponent } from './components/session-par
     FileUploadModule,
     DragDropModule,
     TabViewModule,
+    DialogModule,
   ],
   providers: [
     SessionsService,
     MediaService,
+    MarkerService,
   ],
 })
 export class SessionsModule {}

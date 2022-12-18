@@ -14,6 +14,7 @@ export class SessionMarkerDataComponent implements OnInit {
   @Input() markerData!: any;
 
   @Output() resetMarkerData = new EventEmitter();
+  @Output() markerAdd = new EventEmitter();
 
   constructor() {}
 
@@ -21,5 +22,9 @@ export class SessionMarkerDataComponent implements OnInit {
 
   public onReset() {
     this.resetMarkerData.emit();
+  }
+
+  public onAddMarker() {
+    this.markerAdd.emit();
   }
 }
