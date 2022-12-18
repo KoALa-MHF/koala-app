@@ -15,7 +15,7 @@ export class CreateMarkerInput {
 
   @Field({ description: 'Marker Name Abbreviation (e.g. for small screen sizes' })
   @IsNotEmpty()
-  abbreviation?: string;
+  abbreviation: string;
 
   @Field({ defaultValue: '', description: 'Marker Descritpion' })
   description?: string;
