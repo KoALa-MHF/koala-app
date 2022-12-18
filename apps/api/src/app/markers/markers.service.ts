@@ -7,16 +7,17 @@ import { Marker } from './entities/marker.entity';
 
 @Injectable()
 export class MarkersService {
-
   constructor(
     @InjectRepository(Marker)
     private markersRepository: Repository<Marker>
   ) {}
-  
+
   create(createMarkerInput: CreateMarkerInput) {
     const newMarker = this.markersRepository.create();
 
     newMarker.name = createMarkerInput.name;
+    newMarker.abbreviation = createMarkerInput.abbreviation;
+    newMarker.description = createMarkerInput.description;
     newMarker.type = createMarkerInput.type;
     newMarker.color = createMarkerInput.color;
 
@@ -35,8 +36,10 @@ export class MarkersService {
     try {
       await this.markersRepository.update(id, {
         name: updateMarkerInput.name,
+        abbreviation: updateMarkerInput.abbreviation,
+        description: updateMarkerInput.description,
         type: updateMarkerInput.type,
-        color: updateMarkerInput.color
+        color: updateMarkerInput.color,
       });
 
       return this.findOne(id);

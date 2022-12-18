@@ -13,6 +13,13 @@ export class CreateMarkerInput {
   @IsNotEmpty()
   name: string;
 
+  @Field({ description: 'Marker Name Abbreviation (e.g. for small screen sizes' })
+  @IsNotEmpty()
+  abbreviation: string;
+
+  @Field({ defaultValue: '', description: 'Marker Descritpion' })
+  description?: string;
+
   @Field({ defaultValue: DEFAULT_COLOR, description: 'Marker Color' })
   color?: string;
 }

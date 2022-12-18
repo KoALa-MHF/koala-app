@@ -1,28 +1,26 @@
-import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
-import { isEnum, IsEnum, IsNotEmpty } from 'class-validator';
-import { type } from 'os';
+import { ObjectType, Field, Int, registerEnumType, ID } from '@nestjs/graphql';
+import { IsEnum, IsNotEmpty } from 'class-validator';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '../../core/base.entity';
 
-
 export enum MediaType {
-  AUDIO = "audio"
+  AUDIO = 'audio',
 }
 
 registerEnumType(MediaType, {
-  name : "MediaType"
+  name: 'MediaType',
 });
 
 @ObjectType()
 @Entity()
 export class Media extends BaseEntity {
   @PrimaryGeneratedColumn()
-  @Field(() => Int, { description: 'ID for Media' })
+  @Field(() => ID, { description: 'ID for Media' })
   id: number;
 
   @Column({
-    type: "simple-enum",
-    enum: MediaType
+    type: 'simple-enum',
+    enum: MediaType,
   })
   @Field(() => MediaType, { description: 'Media Type' })
   @IsEnum(MediaType)
