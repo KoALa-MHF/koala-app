@@ -18,12 +18,14 @@ import { UserSession } from './user-sessions/entities/user-session.entity';
 import { AnnotationsModule } from './annotations/annotations.module';
 import { Annotation } from './annotations/entities/annotation.entity';
 import { formatError } from './core/graphql/grapqhl-error';
+import { ConfigModule, databaseConfig } from './config/config.module';
 
 @Module({
   imports: [
+    ConfigModule,
     TypeOrmModule.forRoot({
       type: 'better-sqlite3',
-      database: 'koala',
+      database: databaseConfig.name,
       entities: [
         Session,
         Media,
