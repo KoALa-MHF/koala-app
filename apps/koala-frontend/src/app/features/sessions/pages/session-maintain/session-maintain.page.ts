@@ -129,17 +129,7 @@ export class SessionMaintainPage implements OnInit {
   }
 
   public onSave() {
-    switch (this.stepIndex) {
-      case 0:
-        this.saveSession();
-        break;
-      case 1:
-        this.nextStep();
-        break;
-      case 2:
-        this.nextStep();
-        break;
-    }
+    this.saveSession();
   }
 
   public onCancel() {
@@ -176,22 +166,8 @@ export class SessionMaintainPage implements OnInit {
     };
   }
 
-  public stepIndexChanged(selectedStep: number) {
-    this.stepIndex = selectedStep;
-  }
-
   public onResetMarkerData() {
     this.maintainMarkerForm.reset();
-  }
-
-  private nextStep() {
-    if (this.stepIndex < this.steps.length - 1) {
-      this.stepIndex++;
-    } else {
-      this.router.navigate([
-        'sessions',
-      ]);
-    }
   }
 
   private saveSession() {
@@ -234,9 +210,7 @@ export class SessionMaintainPage implements OnInit {
                 enableLiveAnalysis,
                 mediaId: result.data?.createMedia.id || 0,
               })
-              .subscribe(() => {
-                this.nextStep();
-              });
+              .subscribe(() => {});
           });
       } else {
         this.sessionService
@@ -250,9 +224,7 @@ export class SessionMaintainPage implements OnInit {
             displaySampleSolution,
             enableLiveAnalysis,
           })
-          .subscribe(() => {
-            this.nextStep();
-          });
+          .subscribe(() => {});
       }
     } else {
       if (audioTitle || composer) {
@@ -268,9 +240,7 @@ export class SessionMaintainPage implements OnInit {
               displaySampleSolution,
               enableLiveAnalysis,
             })
-            .subscribe(() => {
-              this.nextStep();
-            });
+            .subscribe(() => {});
         });
       } else {
         this.sessionService
@@ -284,9 +254,7 @@ export class SessionMaintainPage implements OnInit {
             displaySampleSolution,
             enableLiveAnalysis,
           })
-          .subscribe(() => {
-            this.nextStep();
-          });
+          .subscribe(() => {});
       }
     }
   }

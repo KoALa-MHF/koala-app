@@ -82,3 +82,5 @@ const UPDATE_MEDIA = gql`
     }
   }
 `;
+
+const SET_MEDIA_IN_SESSION = gql``;

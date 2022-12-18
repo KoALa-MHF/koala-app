@@ -13,12 +13,12 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TableModule } from 'primeng/table';
-import { StepsModule } from 'primeng/steps';
 import { DropdownModule } from 'primeng/dropdown';
 import { ColorPickerModule } from 'primeng/colorpicker';
 import { RippleModule } from 'primeng/ripple';
 import { FileUploadModule } from 'primeng/fileupload';
 import { DragDropModule } from 'primeng/dragdrop';
+import { TabViewModule } from 'primeng/tabview';
 
 import { SessionsOverviewTableComponent } from './components/sessions-overview-table/sessions-overview-table.component';
 import { SessionMaintainPage } from './pages/session-maintain/session-maintain.page';
@@ -67,14 +67,17 @@ import { SessionParticipantsInvitationComponent } from './components/session-par
     CheckboxModule,
     TableModule,
     InputTextareaModule,
-    StepsModule,
     DropdownModule,
     ColorPickerModule,
     SkeletonModule,
     RippleModule,
     FileUploadModule,
     DragDropModule,
+    TabViewModule,
   ],
-  providers: [SessionsService, MediaService],
+  providers: [
+    SessionsService,
+    MediaService,
+  ],
 })
 export class SessionsModule {}

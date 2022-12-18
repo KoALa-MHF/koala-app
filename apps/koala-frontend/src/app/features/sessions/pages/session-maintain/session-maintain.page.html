@@ -1,53 +1,27 @@
 <div class="session-container">
-  <p-steps
-    [model]="steps"
-    [readonly]="false"
-    [activeIndex]="stepIndex"
-    (activeIndexChange)="stepIndexChanged($event)"
-  ></p-steps>
-
-  <div *ngIf="stepIndex === 0">
-    <koala-session-data
-      [basicDataForm]="basicDataFormGroup"
-      [audioForm]="audioFormGroup"
-      [sessionDatesForm]="datesFormGroup"
-      [sessionDetailsForm]="detailsFormGroup"
-    ></koala-session-data>
-  </div>
-
-  <div *ngIf="stepIndex === 1">
-    <koala-session-marker-data
-      [markerDataForm]="maintainMarkerForm"
-      [markerData]="markerData"
-      (resetMarkerData)="onResetMarkerData()"
-    ></koala-session-marker-data>
-  </div>
-
-  <div *ngIf="stepIndex === 2">
-    <koala-session-participants
-      [participants]="participants"
-      (participantRemove)="onParticipantRemove($event)"
-    ></koala-session-participants>
-  </div>
-
-  <div style="display: flex; justify-content: flex-end; margin-right: 30px; margin-top: 50px; gap: 10px">
-    <button
-      pButton
-      pRipple
-      id="save-btn"
-      class="p-button-raised p-button-primary"
-      type="submit"
-      [disabled]="!maintainSessionForm.valid"
-      (click)="onSave()"
-      label="{{ stepIndex === (steps.length - 1) ? 'Speichern und Schließen' : 'Speichern und Weiter' }} "
-    ></button>
-
-    <button
-      pButton
-      pRipple
-      (click)="onCancel()"
-      label="Abbrechen"
-      class="p-button-raised p-button-plain p-button-text"
-    ></button>
-  </div>
+  <p-tabView>
+    <p-tabPanel header="Session Einstellungen"
+      ><koala-session-data
+        [basicDataForm]="basicDataFormGroup"
+        [audioForm]="audioFormGroup"
+        [sessionDatesForm]="datesFormGroup"
+        [sessionDetailsForm]="detailsFormGroup"
+        (sessionDataSave)="onSave()"
+        (sessionDataCancel)="onCancel()"
+      ></koala-session-data
+    ></p-tabPanel>
+    <p-tabPanel header="Marker">
+      <koala-session-marker-data
+        [markerDataForm]="maintainMarkerForm"
+        [markerData]="markerData"
+        (resetMarkerData)="onResetMarkerData()"
+      ></koala-session-marker-data>
+    </p-tabPanel>
+    <p-tabPanel header="Mitglieder">
+      <koala-session-participants
+        [participants]="participants"
+        (participantRemove)="onParticipantRemove($event)"
+      ></koala-session-participants>
+    </p-tabPanel>
+  </p-tabView>
 </div>
