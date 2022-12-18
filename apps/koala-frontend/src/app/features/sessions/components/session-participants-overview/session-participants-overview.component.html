@@ -1,0 +1,28 @@
+<h4 class="section-heading" style="margin-top: 0">Mitglieder der Session</h4>
+
+<p-table [value]="participants" [tableStyle]="{ 'min-width': '50rem' }">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Nr.</th>
+      <th>Email-Adresse</th>
+      <th>Entfernen</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-participant>
+    <tr>
+      <td>{{ participant.nr }}</td>
+      <td>{{ participant.email }}</td>
+      <td>
+        <button
+          pButton
+          pRipple
+          data-column="delete"
+          icon="pi pi-trash"
+          class="p-button-text"
+          aria-label="Delete"
+          (click)="onDelete(participant)"
+        ></button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

@@ -1,0 +1,40 @@
+<h3>Session Einstellungen</h3>
+
+<div class="container">
+  <div style="width: 50%">
+    <koala-session-basic-data [basicDataForm]="basicDataForm"></koala-session-basic-data>
+  </div>
+
+  <div style="width: 50%">
+    <koala-session-audio [audioForm]="audioForm"></koala-session-audio>
+  </div>
+
+  <div style="width: 50%">
+    <koala-session-dates [sessionDatesForm]="sessionDatesForm"></koala-session-dates>
+  </div>
+
+  <div style="width: 50%">
+    <koala-session-details [sessionDetailsForm]="sessionDetailsForm"></koala-session-details>
+  </div>
+
+  <div style="display: flex; width: 100%; justify-content: flex-end; margin-right: 30px; margin-top: 50px; gap: 10px">
+    <button
+      pButton
+      pRipple
+      id="save-btn"
+      class="p-button-raised p-button-primary"
+      type="submit"
+      [disabled]="!basicDataForm.valid || !audioForm.valid || !sessionDatesForm.valid || !sessionDetailsForm.valid"
+      (click)="onSave()"
+      label="Speichern"
+    ></button>
+
+    <button
+      pButton
+      pRipple
+      (click)="onCancel()"
+      label="Abbrechen"
+      class="p-button-raised p-button-plain p-button-text"
+    ></button>
+  </div>
+</div>

@@ -1,4 +1,9 @@
-<form [formGroup]="sessionDatesForm" class="form-grid">
+<h4 class="section-heading">Verfügbarkeit</h4>
+<p>
+  Nur wenn die Session online geschaltet ist, können Benutzer diese zugreifen.
+  Wenn nicht, ist die Session nur für Sie als Administrator verfügbar.
+</p>
+<form [formGroup]="sessionDatesForm" class="form">
   <p-checkbox
     class="form-single-cell"
     formControlName="online"
@@ -6,9 +11,27 @@
     label="Online"
   ></p-checkbox>
 
-  <h5 class="form-row-label">Start</h5>
-  <p-calendar formControlName="start"></p-calendar>
+  <div>
+    <span class="p-float-label">
+      <p-calendar
+        [style]="{ minWidth: '100%' }"
+        dateFormat="dd.mm.yy"
+        id="session-start-input"
+        formControlName="start"
+      ></p-calendar>
+      <label for="session-start-input">Start</label>
+    </span>
+  </div>
 
-  <h5 class="form-row-label">Ende</h5>
-  <p-calendar formControlName="end"></p-calendar>
+  <div>
+    <span class="p-float-label">
+      <p-calendar
+        [style]="{ minWidth: '100%' }"
+        dateFormat="dd.mm.yy"
+        id="session-end-input"
+        formControlName="end"
+      ></p-calendar>
+      <label for="session-end-input">Ende</label>
+    </span>
+  </div>
 </form>

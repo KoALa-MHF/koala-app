@@ -1,0 +1,14 @@
+<h3>Mitglieder Hinzufügen</h3>
+
+<div class="container">
+  <div style="width: 50%">
+    <koala-session-participants-invitation></koala-session-participants-invitation>
+  </div>
+
+  <div style="width: 50%">
+    <koala-session-participants-overview
+      [participants]="participants"
+      (participantRemove)="onParticipantRemove($event)"
+    ></koala-session-participants-overview>
+  </div>
+</div>

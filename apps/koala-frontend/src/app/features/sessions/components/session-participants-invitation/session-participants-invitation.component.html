@@ -1,0 +1,65 @@
+<div style="margin-bottom: 10px">
+  Sie können Ihrer Session neue Mitglieder hinzufügen, indem Sie Einladungslinks
+  per Email versenden.
+</div>
+
+<div class="form">
+  <div>
+    <span class="p-float-label">
+      <textarea
+        id="session-participants-email-addresses"
+        rows="5"
+        cols="30"
+        pInputTextarea
+      ></textarea>
+      <label for="session-participants-email-addresses">Email-Adresse(n)</label>
+    </span>
+    <small id="session-name-help" class="field-explanation">
+      Fügen Sie eine Email-Adresse pro Zeile hinzu.
+    </small>
+  </div>
+
+  <div>
+    <span class="p-float-label">
+      <textarea
+        id="session-participants-email-message"
+        rows="5"
+        cols="30"
+        pInputTextarea
+      ></textarea>
+      <label for="session-participants-email-message">Nachricht</label>
+    </span>
+    <small id="session-name-help" class="field-explanation">
+      Hier können Sie ggf. eine Nachricht an die eingeladenen Personen einfügen,
+      die mit dem Einladungslink versendet wird.
+    </small>
+  </div>
+</div>
+
+<div
+  style="
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 30px;
+    margin-top: 50px;
+    gap: 10px;
+  "
+>
+  <button
+    pButton
+    pRipple
+    id="add-participant-btn"
+    class="p-button-raised p-button-primary"
+    type="submit"
+    (click)="onAddParticipant()"
+    label="Mitglieder Hinzufügen"
+  ></button>
+
+  <button
+    pButton
+    pRipple
+    (click)="onCancel()"
+    label="Abbrechen"
+    class="p-button-raised p-button-plain p-button-text"
+  ></button>
+</div>

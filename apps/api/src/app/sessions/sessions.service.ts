@@ -50,6 +50,9 @@ export class SessionsService {
     try {
       await this.sessionsRepository.update(id, {
         ...updateSessionInput,
+        media: {
+          id: updateSessionInput.mediaId,
+        },
       });
 
       return this.findOne(id);

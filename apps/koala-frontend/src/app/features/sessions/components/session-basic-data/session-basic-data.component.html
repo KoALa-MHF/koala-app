@@ -1,11 +1,35 @@
-<form [formGroup]="basicDataForm" class="form-grid">
-  <h5 class="form-row-label">Name</h5>
-  <input
-    id="session-name-input"
-    type="text"
-    pInputText
-    formControlName="name"
-  />
-  <h5 class="form-row-label">Beschreibung</h5>
-  <textarea pInputTextarea formControlName="description"></textarea>
+<h4 class="section-heading">Allgemeine Informationen</h4>
+
+<form [formGroup]="basicDataForm" class="form">
+  <div>
+    <span class="p-float-label">
+      <input
+        id="session-name-input"
+        formControlName="name"
+        type="text"
+        pInputText
+      />
+      <label for="session-name-input">Name</label>
+    </span>
+    <small id="session-name-help" class="field-explanation">
+      Geben Sie der Session bitte einen Namen.
+    </small>
+  </div>
+
+  <div>
+    <span class="p-float-label">
+      <textarea
+        id="session-description-textarea"
+        rows="5"
+        cols="30"
+        pInputTextarea
+        formControlName="description"
+      ></textarea>
+      <label for="session-description-textarea">Beschreibung</label>
+    </span>
+    <small id="session-name-help" class="field-explanation">
+      Fügen Sie der Session ggf. eine Beschreibung oder eine Aufgabenstellung
+      hinzu.
+    </small>
+  </div>
 </form>
