@@ -1,0 +1,32 @@
+<div [formGroup]="loginForm">
+  <div>
+    <span class="p-float-label">
+      <input id="login-username-input" type="text" pInputText formControlName="username" />
+      <label for="login-username-input">Username</label>
+    </span>
+  </div>
+
+  <div>
+    <span class="p-float-label">
+      <input id="login-password-input" type="text" pInputText formControlName="password" />
+      <label for="login-password-input">Password</label>
+    </span>
+  </div>
+
+  <div>
+    <span class="p-float-label">
+      <input id="login-session-code-input" type="text" pInputText formControlName="sessionCode" />
+      <label for="login-session-code-input">Session Code</label>
+    </span>
+  </div>
+
+  <button
+    pButton
+    pRipple
+    class="p-button-raised p-button-primary"
+    type="submmit"
+    (click)="onLogin()"
+    label="Anmelden"
+    [disabled]="!loginForm.valid"
+  ></button>
+</div>
