@@ -1,20 +1,11 @@
 import { Injectable } from '@angular/core';
-
-import {
-  CreateMediaGQL,
-  UpdateMediaGQL,
-  CreateMediaInput,
-  UpdateMediaInput,
-} from '../../../graphql/generated/graphql';
+import { CreateMediaGQL, UpdateMediaGQL, CreateMediaInput, UpdateMediaInput } from '../../../graphql/generated/graphql';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MediaService {
-  constructor(
-    private readonly createMediaGQL: CreateMediaGQL,
-    private readonly updateMediaGQL: UpdateMediaGQL
-  ) {}
+  constructor(private readonly createMediaGQL: CreateMediaGQL, private readonly updateMediaGQL: UpdateMediaGQL) {}
 
   create(media: CreateMediaInput) {
     return this.createMediaGQL.mutate({ media });

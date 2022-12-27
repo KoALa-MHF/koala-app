@@ -4,12 +4,19 @@
 
 <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px">
   <div
-    style="height: 0; width: 40%; padding-bottom: 40%; background-color: rgba(155, 155, 158, 0.3); position: relative"
+    style="
+      height: 0;
+      width: 40%;
+      padding-bottom: 40%;
+      background-color: rgba(155, 155, 158, 0.3);
+      position: relative;
+      border-radius: 25px;
+    "
   >
     <div
       style="display: flex; align-items: center; justify-content: center; position: absolute; height: 100%; width: 100%"
     >
-      <button *ngIf="label" pButton pRipple [label]="label" [style.background-color]="color"></button>
+      <koala-marker-button *ngIf="marker.type" [marker]="marker"></koala-marker-button>
     </div>
   </div>
 </div>

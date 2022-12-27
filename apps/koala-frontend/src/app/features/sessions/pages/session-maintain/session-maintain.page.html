@@ -1,19 +1,22 @@
 <div class="session-container">
   <p-tabView>
-    <p-tabPanel header="Session Einstellungen"
-      ><koala-session-data
+    <p-tabPanel header="Session Einstellungen">
+      <koala-session-data
         [basicDataForm]="basicDataFormGroup"
-        [audioForm]="audioFormGroup"
         [sessionDatesForm]="datesFormGroup"
         [sessionDetailsForm]="detailsFormGroup"
         (sessionDataSave)="onSave()"
         (sessionDataCancel)="onCancel()"
-      ></koala-session-data
-    ></p-tabPanel>
+      ></koala-session-data>
+    </p-tabPanel>
+    <p-tabPanel header="Audio">
+      <koala-session-audio [media]="session?.media" (fileUpload)="onFileUpload($event)"></koala-session-audio>
+    </p-tabPanel>
     <p-tabPanel header="Marker">
       <koala-session-marker-data
         [markerDataForm]="maintainMarkerForm"
-        [markerData]="markerData"
+        [previewMarker]="markerData"
+        [markers]="session?.markers || []"
         (resetMarkerData)="onResetMarkerData()"
         (markerAdd)="onAddMarker()"
       ></koala-session-marker-data>

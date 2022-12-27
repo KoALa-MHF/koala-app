@@ -39,6 +39,7 @@ import { SessionParticipantsComponent } from './components/session-participants/
 import { SessionParticipantsOverviewComponent } from './components/session-participants-overview/session-participants-overview.component';
 import { SessionParticipantsInvitationComponent } from './components/session-participants-invitation/session-participants-invitation.component';
 import { MarkerService } from './services/marker.service';
+import { MarkerButtonComponent } from './components/marker-button/marker-button.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { MarkerService } from './services/marker.service';
     SessionParticipantsComponent,
     SessionParticipantsOverviewComponent,
     SessionParticipantsInvitationComponent,
+    MarkerButtonComponent,
   ],
   imports: [
     SharedModule,

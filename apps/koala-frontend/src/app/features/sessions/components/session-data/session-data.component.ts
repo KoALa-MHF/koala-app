@@ -11,7 +11,6 @@ import { FormGroup } from '@angular/forms';
 })
 export class SessionDataComponent implements OnInit {
   @Input() basicDataForm!: FormGroup;
-  @Input() audioForm!: FormGroup;
   @Input() sessionDatesForm!: FormGroup;
   @Input() sessionDetailsForm!: FormGroup;
 

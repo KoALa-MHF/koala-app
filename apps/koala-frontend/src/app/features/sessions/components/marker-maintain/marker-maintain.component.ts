@@ -39,7 +39,13 @@ export class MarkerMaintainComponent implements OnInit {
   color: string = '';
   abbreviation: string = '';
 
+  MarkerType = MarkerType;
+
   constructor() {}
 
   ngOnInit(): void {}
+
+  get markerType() {
+    return this.markerDataForm.get('type')?.value;
+  }
 }

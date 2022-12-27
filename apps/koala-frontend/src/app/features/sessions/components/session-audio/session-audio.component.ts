@@ -1,19 +1,23 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Media } from 'apps/koala-frontend/src/app/graphql/generated/graphql';
 
 @Component({
   selector: 'koala-session-audio',
   templateUrl: './session-audio.component.html',
-  styleUrls: ['./session-audio.component.scss', '../../session-common.scss'],
+  styleUrls: [
+    './session-audio.component.scss',
+    '../../session-common.scss',
+  ],
 })
 export class SessionAudioComponent implements OnInit {
-  @Input() audioForm!: FormGroup;
+  @Input() media: Media | null | undefined;
+  @Output() fileUpload: EventEmitter<File> = new EventEmitter<File>();
 
   constructor() {}
 
   ngOnInit(): void {}
 
   public onFileUpload(event: any) {
-    //event.files == files to upload
+    this.fileUpload.emit(event.files[0]);
   }
 }

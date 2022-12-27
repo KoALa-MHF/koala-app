@@ -7,6 +7,7 @@
     "postinstall": "node ./decorate-angular-cli.js",
     "prepare": "husky install",
     "start": "NODE_ENV=development nx serve",
+    "start:api": "NODE_ENV=development nx serve api",
     "start:all": "NODE_ENV=development nx run-many --parallel --target=serve --all",
     "build": "nx build",
     "test": "nx test",
