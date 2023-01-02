@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MarkerType, MediaType, Session } from 'apps/koala-frontend/src/app/graphql/generated/graphql';
+import { MarkerType, MediaType, Session } from '../../../../graphql/generated/graphql';
 import { MarkerService } from '../../services/marker.service';
 import { MediaService } from '../../services/media.service';
 import { SessionsService } from '../../services/sessions.service';
 import { MarkerEntity } from '../../types/marker-preview';
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'koala-session-maintain',
   templateUrl: './session-maintain.page.html',
   styleUrls: [
@@ -15,6 +16,7 @@ import { MarkerEntity } from '../../types/marker-preview';
     '../../session-common.scss',
   ],
 })
+// eslint-disable-next-line @angular-eslint/component-class-suffix
 export class SessionMaintainPage implements OnInit {
   maintainSessionForm: FormGroup;
   maintainMarkerForm: FormGroup;
@@ -250,13 +252,18 @@ export class SessionMaintainPage implements OnInit {
   }
 
   public onFileUpload(file: File) {
-    /*this.createMediaGQL.mutate({ composer: '', title: '', type: MediaType.Audio, file }).subscribe({
-      next(value) {
-        console.log(value);
-      },
-      error(err) {
-        console.log(err);
-      },
-    });*/
+    this.mediaService
+      .create({
+        type: MediaType.Audio,
+        file,
+      })
+      .subscribe({
+        next(value) {
+          console.log(value);
+        },
+        error(err) {
+          console.log(err);
+        },
+      });
   }
 }

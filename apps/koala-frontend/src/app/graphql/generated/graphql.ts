@@ -69,11 +69,7 @@ export type CreateMarkerInput = {
 };
 
 export type CreateMediaInput = {
-  /** Media Composer */
-  composer: Scalars['String'];
   file: Scalars['Upload'];
-  /** Media Title */
-  title: Scalars['String'];
   /** Media Type */
   type: MediaType;
 };
@@ -127,13 +123,13 @@ export enum MarkerType {
 export type Media = {
   __typename?: 'Media';
   /** Media Composer */
-  composer: Scalars['String'];
+  composer?: Maybe<Scalars['String']>;
   /** Creation Date */
   createdAt: Scalars['DateTime'];
   /** ID for Media */
   id: Scalars['ID'];
   /** Media Title */
-  title: Scalars['String'];
+  title?: Maybe<Scalars['String']>;
   /** Media Type */
   type: MediaType;
   /** Date of Last Update */
@@ -327,11 +323,7 @@ export type UpdateMarkerInput = {
 };
 
 export type UpdateMediaInput = {
-  /** Media Composer */
-  composer?: InputMaybe<Scalars['String']>;
   file?: InputMaybe<Scalars['Upload']>;
-  /** Media Title */
-  title?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateSessionInput = {
@@ -399,8 +391,8 @@ export type CreateNewSessionMutation = {
       __typename?: 'Media';
       id: string;
       type: MediaType;
-      title: string;
-      composer: string;
+      title?: string | null;
+      composer?: string | null;
       createdAt: any;
       updatedAt: any;
     } | null;
@@ -431,8 +423,8 @@ export type UpdateSessionMutation = {
       __typename?: 'Media';
       id: string;
       type: MediaType;
-      title: string;
-      composer: string;
+      title?: string | null;
+      composer?: string | null;
       createdAt: any;
       updatedAt: any;
     } | null;
@@ -451,7 +443,7 @@ export type CreateMediaMutationVariables = Exact<{
 
 export type CreateMediaMutation = {
   __typename?: 'Mutation';
-  createMedia: { __typename?: 'Media'; title: string; composer: string; type: MediaType; id: string };
+  createMedia: { __typename?: 'Media'; title?: string | null; composer?: string | null; type: MediaType; id: string };
 };
 
 export type UpdateMediaMutationVariables = Exact<{
@@ -461,7 +453,7 @@ export type UpdateMediaMutationVariables = Exact<{
 
 export type UpdateMediaMutation = {
   __typename?: 'Mutation';
-  updateMedia: { __typename?: 'Media'; title: string; composer: string; type: MediaType; id: string };
+  updateMedia: { __typename?: 'Media'; title?: string | null; composer?: string | null; type: MediaType; id: string };
 };
 
 export type CreateMarkerMutationVariables = Exact<{
@@ -508,8 +500,8 @@ export type GetSessionsQuery = {
       __typename?: 'Media';
       id: string;
       type: MediaType;
-      title: string;
-      composer: string;
+      title?: string | null;
+      composer?: string | null;
       createdAt: any;
       updatedAt: any;
     } | null;
@@ -540,8 +532,8 @@ export type GetOneSessionQuery = {
       __typename?: 'Media';
       id: string;
       type: MediaType;
-      title: string;
-      composer: string;
+      title?: string | null;
+      composer?: string | null;
       createdAt: any;
       updatedAt: any;
     } | null;
