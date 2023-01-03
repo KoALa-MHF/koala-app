@@ -95,9 +95,13 @@ export class SessionMaintainPage implements OnInit {
 
       this.maintainSessionForm.get('details')?.get('enableLiveAnalysis')?.setValue(this.session.enableLiveAnalysis);
 
-      this.maintainSessionForm.get('dates')?.get('start')?.setValue(new Date(this.session.start));
+      if (this.maintainSessionForm.get('dates')?.get('start')?.value) {
+        this.maintainSessionForm.get('dates')?.get('start')?.setValue(new Date(this.session.start));
+      }
 
-      this.maintainSessionForm.get('dates')?.get('end')?.setValue(new Date(this.session.end));
+      if (this.maintainSessionForm.get('dates')?.get('end')?.value) {
+        this.maintainSessionForm.get('dates')?.get('end')?.setValue(new Date(this.session.end));
+      }
 
       this.maintainSessionForm.get('audio')?.get('title')?.setValue(this.session.media?.title);
 
@@ -182,8 +186,8 @@ export class SessionMaintainPage implements OnInit {
     const name = this.maintainSessionForm.get('basicData')?.get('name')?.value || '';
     const description = this.maintainSessionForm.get('basicData')?.get('description')?.value || '';
 
-    const start = this.maintainSessionForm.get('dates')?.get('start')?.value || new Date();
-    const end = this.maintainSessionForm.get('dates')?.get('end')?.value || new Date();
+    const start = this.maintainSessionForm.get('dates')?.get('start')?.value;
+    const end = this.maintainSessionForm.get('dates')?.get('end')?.value;
 
     const editable = this.maintainSessionForm.get('details')?.get('editable')?.value || false;
 
