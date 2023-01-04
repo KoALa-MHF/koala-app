@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MarkerEntity } from '../../types/marker-preview';
+import { MarkerEntity } from '../../types/marker-entity';
 
 @Component({
   selector: 'koala-marker-preview',

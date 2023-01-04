@@ -105,6 +105,8 @@ export type Marker = {
   createdAt: Scalars['DateTime'];
   /** Marker Description */
   description: Scalars['String'];
+  /** Marker Icon */
+  icon?: Maybe<Scalars['String']>;
   /** ID for Marker */
   id: Scalars['Int'];
   /** Marker Name */

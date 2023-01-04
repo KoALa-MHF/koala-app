@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MarkerEntity } from '../../types/marker-preview';
+import { Component, Input } from '@angular/core';
+import { MarkerEntity } from '../../types/marker-entity';
 
 @Component({
   selector: 'koala-marker-button',
@@ -8,10 +8,6 @@ import { MarkerEntity } from '../../types/marker-preview';
     './marker-button.component.scss',
   ],
 })
-export class MarkerButtonComponent implements OnInit {
+export class MarkerButtonComponent {
   @Input() marker!: MarkerEntity;
-
-  constructor() {}
-
-  ngOnInit(): void {}
 }

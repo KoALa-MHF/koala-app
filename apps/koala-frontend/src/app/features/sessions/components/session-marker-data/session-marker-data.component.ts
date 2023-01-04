@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { MarkerEntity } from '../../types/marker-preview';
+import { MarkerEntity } from '../../types/marker-entity';
 
 @Component({
   selector: 'koala-session-marker-data',

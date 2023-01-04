@@ -7,4 +7,5 @@ export interface MarkerEntity {
   type: MarkerType;
   abbreviation: string;
   color: string;
+  icon?: string | null;
 }

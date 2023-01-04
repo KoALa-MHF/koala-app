@@ -5,7 +5,7 @@ import { MarkerType, MediaType, Session } from '../../../../graphql/generated/gr
 import { MarkerService } from '../../services/marker.service';
 import { MediaService } from '../../services/media.service';
 import { SessionsService } from '../../services/sessions.service';
-import { MarkerEntity } from '../../types/marker-preview';
+import { MarkerEntity } from '../../types/marker-entity';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -148,6 +148,7 @@ export class SessionMaintainPage implements OnInit {
       type: this.getMarkerTypeValue(),
       abbreviation: this.getMarkerAbbreviationValue(),
       color: this.getMarkerColorValue(),
+      icon: this.getMarkerIconValue(),
     };
   }
 
@@ -161,9 +162,14 @@ export class SessionMaintainPage implements OnInit {
           description: marker.description,
           type: marker.type,
           color: '',
+          icon: '',
         };
       }) || []
     );
+  }
+
+  private getMarkerIconValue(): string {
+    return this.maintainMarkerForm.get('icon')?.value || '';
   }
 
   private getMarkerTypeValue(): MarkerType {

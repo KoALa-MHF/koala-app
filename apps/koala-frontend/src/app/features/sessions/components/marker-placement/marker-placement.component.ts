@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MarkerType } from 'apps/koala-frontend/src/app/graphql/generated/graphql';
-import { MarkerEntity } from '../../types/marker-preview';
+import { Component, Input } from '@angular/core';
+import { MarkerType } from '../../../../graphql/generated/graphql';
+import { MarkerEntity } from '../../types/marker-entity';
 
 @Component({
   selector: 'koala-marker-placement',
@@ -10,11 +10,7 @@ import { MarkerEntity } from '../../types/marker-preview';
     '../../session-common.scss',
   ],
 })
-export class MarkerPlacementComponent implements OnInit {
+export class MarkerPlacementComponent {
   @Input() markers!: MarkerEntity[];
   MarkerType = MarkerType;
-
-  constructor() {}
-
-  ngOnInit(): void {}
 }
