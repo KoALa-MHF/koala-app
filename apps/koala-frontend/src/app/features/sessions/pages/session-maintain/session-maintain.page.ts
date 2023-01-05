@@ -122,6 +122,19 @@ export class SessionMaintainPage implements OnInit {
   public onParticipantRemove(participant: any) {
     console.log('=== Participant Deleted ===');
     console.log(participant);
+    const index = this.participants.findIndex((p: any) => {
+      return p.email === participant.email ? true : false;
+    });
+
+    if (index >= 0) {
+      this.participants.splice(index, 1);
+    }
+  }
+
+  public onParticipantAdd(participant: any) {
+    this.participants.push({
+      email: participant,
+    });
   }
 
   get basicDataFormGroup(): FormGroup {

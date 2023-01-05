@@ -25,6 +25,7 @@
       <koala-session-participants
         [participants]="participants"
         (participantRemove)="onParticipantRemove($event)"
+        (participantAdd)="onParticipantAdd($event)"
       ></koala-session-participants>
     </p-tabPanel>
   </p-tabView>
