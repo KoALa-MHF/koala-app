@@ -1,0 +1,18 @@
+<div class="session-container">
+  <p-tabView>
+    <p-tabPanel header="{{session?.name}}">
+      <div class="container">
+        <div class="content">
+          <koala-app-session-audio-wave [waveContainer]="waveContainer"></koala-app-session-audio-wave>
+        </div>
+        <div class="sideBar">
+          <koala-app-session-audio-player
+            [mediaData]="media"
+            (mediaEvent)="onMediaEvent($event)"
+          ></koala-app-session-audio-player>
+        </div>
+      </div>
+    </p-tabPanel>
+    <p-tabPanel header="Auswertung"> </p-tabPanel>
+  </p-tabView>
+</div>

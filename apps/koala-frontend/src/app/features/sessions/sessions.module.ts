@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CardModule } from 'primeng/card';
+import { SliderModule } from 'primeng/slider';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -23,11 +24,14 @@ import { DialogModule } from 'primeng/dialog';
 
 import { SessionsOverviewTableComponent } from './components/sessions-overview-table/sessions-overview-table.component';
 import { SessionMaintainPage } from './pages/session-maintain/session-maintain.page';
+import { SessionPage } from './pages/session/session.page';
 import { SessionBasicDataComponent } from './components/session-basic-data/session-basic-data.component';
 import { SharedModule } from '../../shared/shared.module';
 import { SessionDetailsComponent } from './components/session-details/session-details.component';
 import { SessionDatesComponent } from './components/session-dates/session-dates.component';
 import { SessionAudioComponent } from './components/session-audio/session-audio.component';
+import { SessionAudioPlayerComponent } from './components/session-audio-player/session-audio-player.component';
+import { SessionAudioWaveComponent } from './components/session-audio-wave/session-audio-wave.component';
 import { MediaService } from './services/media.service';
 import { SessionDataComponent } from './components/session-data/session-data.component';
 import { SessionMarkerDataComponent } from './components/session-marker-data/session-marker-data.component';
@@ -39,9 +43,11 @@ import { SessionParticipantsComponent } from './components/session-participants/
 import { SessionParticipantsOverviewComponent } from './components/session-participants-overview/session-participants-overview.component';
 import { SessionParticipantsInvitationComponent } from './components/session-participants-invitation/session-participants-invitation.component';
 import { MarkerService } from './services/marker.service';
+import { MediaControlService } from './services/media-control.service';
 
 @NgModule({
   declarations: [
+    SessionPage,
     SessionsOverviewPage,
     SessionsOverviewTableComponent,
     SessionMaintainPage,
@@ -57,6 +63,14 @@ import { MarkerService } from './services/marker.service';
     SessionParticipantsComponent,
     SessionParticipantsOverviewComponent,
     SessionParticipantsInvitationComponent,
+    SessionAudioPlayerComponent,
+    SessionAudioWaveComponent,
+  ],
+  providers: [
+    SessionsService,
+    MediaService,
+    MarkerService,
+    MediaControlService,
   ],
   imports: [
     SharedModule,
@@ -77,11 +91,7 @@ import { MarkerService } from './services/marker.service';
     DragDropModule,
     TabViewModule,
     DialogModule,
-  ],
-  providers: [
-    SessionsService,
-    MediaService,
-    MarkerService,
+    SliderModule,
   ],
 })
 export class SessionsModule {}
