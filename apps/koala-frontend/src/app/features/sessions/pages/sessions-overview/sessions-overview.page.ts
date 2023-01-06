@@ -84,6 +84,7 @@ export class SessionsOverviewPage implements OnInit {
   }
 
   public onCancel() {
+    this.createSessionForm.reset();
     this.createSessionModal = false;
   }
 }
