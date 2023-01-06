@@ -12,14 +12,16 @@
   header="Neue Session Anlegen"
   [(visible)]="createSessionModal"
   [modal]="true"
-  [style]="{width: '50vw'}"
+  [style]="{width: '30vw'}"
   [draggable]="false"
   [resizable]="false"
 >
-  <form [formGroup]="createSessionForm">
+  <form style="margin-top: 10px" class="form" [formGroup]="createSessionForm">
     <div>
       <span class="p-float-label">
         <input
+          pAutoFocus
+          [autofocus]="true"
           id="session-name-input"
           type="text"
           pInputText
@@ -32,6 +34,20 @@
     </div>
   </form>
   <ng-template pTemplate="footer">
-    <p-button icon="pi pi-check" (click)="onCreateSession()" label="Ok" styleClass="p-button-text"></p-button>
+    <button
+      pButton
+      pRipple
+      (click)="onCreateSession()"
+      label="Anlegen"
+      class="p-button-raised p-button-primary"
+    ></button>
+
+    <button
+      pButton
+      pRipple
+      (click)="onCancel()"
+      label="Abbrechen"
+      class="p-button-raised p-button-plain p-button-text"
+    ></button>
   </ng-template>
 </p-dialog>

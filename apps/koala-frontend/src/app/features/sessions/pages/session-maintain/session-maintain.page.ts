@@ -1,33 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MediaType, Session } from 'apps/koala-frontend/src/app/graphql/generated/graphql';
-import { MenuItem } from 'primeng/api';
+import { MarkerType, MediaType, Session } from '../../../../graphql/generated/graphql';
 import { MarkerService } from '../../services/marker.service';
 import { MediaService } from '../../services/media.service';
 import { SessionsService } from '../../services/sessions.service';
-
-enum mode {
-  CREATE = 1,
-  UPDATE = 2,
-  DISPLAY = 3,
-}
+import { MarkerEntity } from '../../types/marker-entity';
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'koala-session-maintain',
   templateUrl: './session-maintain.page.html',
   styleUrls: [
     './session-maintain.page.scss',
+    '../../session-common.scss',
   ],
 })
+// eslint-disable-next-line @angular-eslint/component-class-suffix
 export class SessionMaintainPage implements OnInit {
   maintainSessionForm: FormGroup;
   maintainMarkerForm: FormGroup;
 
-  sessionId: number = 0;
+  sessionId!: number;
   session: Session | null = null;
-  mode: number = mode.CREATE;
-  stepIndex: number = 0;
   participants: any = [];
 
   constructor(
@@ -36,7 +31,7 @@ export class SessionMaintainPage implements OnInit {
     private readonly markerService: MarkerService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private formBuilder: FormBuilder
+    private readonly formBuilder: FormBuilder
   ) {
     this.maintainSessionForm = this.formBuilder.group({
       basicData: this.formBuilder.group({
@@ -79,43 +74,39 @@ export class SessionMaintainPage implements OnInit {
   ngOnInit(): void {
     this.sessionId = parseInt(this.route.snapshot.paramMap.get('sessionId') || '0');
 
-    if (this.sessionId != 0) {
-      this.mode = mode.UPDATE;
-    } else {
-      this.mode = mode.CREATE;
-    }
+    this.sessionService.getOne(this.sessionId).subscribe((result) => {
+      this.session = {
+        ...result.data?.session,
+        media: result.data?.session.media || null,
+      };
 
-    if (this.mode === mode.UPDATE) {
-      this.sessionService.getOne(this.sessionId).subscribe((result) => {
-        this.session = {
-          ...result.data?.session,
-          media: result.data?.session.media || null,
-        };
+      this.maintainSessionForm.get('basicData')?.get('name')?.setValue(this.session.name);
 
-        this.maintainSessionForm.get('basicData')?.get('name')?.setValue(this.session.name);
+      this.maintainSessionForm.get('basicData')?.get('description')?.setValue(this.session.description);
 
-        this.maintainSessionForm.get('basicData')?.get('description')?.setValue(this.session.description);
+      this.maintainSessionForm.get('details')?.get('editable')?.setValue(this.session.editable);
 
-        this.maintainSessionForm.get('details')?.get('editable')?.setValue(this.session.editable);
+      this.maintainSessionForm.get('details')?.get('enablePlayer')?.setValue(this.session.enablePlayer);
 
-        this.maintainSessionForm.get('details')?.get('enablePlayer')?.setValue(this.session.enablePlayer);
+      this.maintainSessionForm
+        .get('details')
+        ?.get('displaySampleSolution')
+        ?.setValue(this.session.displaySampleSolution);
 
-        this.maintainSessionForm
-          .get('details')
-          ?.get('displaySampleSolution')
-          ?.setValue(this.session.displaySampleSolution);
+      this.maintainSessionForm.get('details')?.get('enableLiveAnalysis')?.setValue(this.session.enableLiveAnalysis);
 
-        this.maintainSessionForm.get('details')?.get('enableLiveAnalysis')?.setValue(this.session.enableLiveAnalysis);
-
+      if (this.maintainSessionForm.get('dates')?.get('start')?.value) {
         this.maintainSessionForm.get('dates')?.get('start')?.setValue(new Date(this.session.start));
+      }
 
+      if (this.maintainSessionForm.get('dates')?.get('end')?.value) {
         this.maintainSessionForm.get('dates')?.get('end')?.setValue(new Date(this.session.end));
+      }
 
-        this.maintainSessionForm.get('audio')?.get('title')?.setValue(this.session.media?.title);
+      this.maintainSessionForm.get('audio')?.get('title')?.setValue(this.session.media?.title);
 
-        this.maintainSessionForm.get('audio')?.get('composer')?.setValue(this.session.media?.composer);
-      });
-    }
+      this.maintainSessionForm.get('audio')?.get('composer')?.setValue(this.session.media?.composer);
+    });
   }
 
   public onSave() {
@@ -131,6 +122,19 @@ export class SessionMaintainPage implements OnInit {
   public onParticipantRemove(participant: any) {
     console.log('=== Participant Deleted ===');
     console.log(participant);
+    const index = this.participants.findIndex((p: any) => {
+      return p.email === participant.email ? true : false;
+    });
+
+    if (index >= 0) {
+      this.participants.splice(index, 1);
+    }
+  }
+
+  public onParticipantAdd(participant: any) {
+    this.participants.push({
+      email: participant,
+    });
   }
 
   get basicDataFormGroup(): FormGroup {
@@ -149,11 +153,48 @@ export class SessionMaintainPage implements OnInit {
     return this.maintainSessionForm.get('audio') as FormGroup;
   }
 
-  get markerData(): any {
+  get markerData(): MarkerEntity {
     return {
-      abbreviation: this.maintainMarkerForm.get('abbreviation')?.value,
-      color: this.maintainMarkerForm.get('color')?.value,
+      id: 0,
+      description: '',
+      name: '',
+      type: this.getMarkerTypeValue(),
+      abbreviation: this.getMarkerAbbreviationValue(),
+      color: this.getMarkerColorValue(),
+      icon: this.getMarkerIconValue(),
     };
+  }
+
+  get markers(): MarkerEntity[] {
+    return (
+      this.session?.markers?.map((marker) => {
+        return {
+          id: marker.id,
+          name: marker.name,
+          abbreviation: marker.abbreviation,
+          description: marker.description,
+          type: marker.type,
+          color: '',
+          icon: '',
+        };
+      }) || []
+    );
+  }
+
+  private getMarkerIconValue(): string {
+    return this.maintainMarkerForm.get('icon')?.value || '';
+  }
+
+  private getMarkerTypeValue(): MarkerType {
+    return this.maintainMarkerForm.get('type')?.value || '';
+  }
+
+  private getMarkerAbbreviationValue(): string {
+    return this.maintainMarkerForm.get('abbreviation')?.value;
+  }
+
+  private getMarkerColorValue(): string {
+    return this.maintainMarkerForm.get('color')?.value;
   }
 
   public onResetMarkerData() {
@@ -164,8 +205,8 @@ export class SessionMaintainPage implements OnInit {
     const name = this.maintainSessionForm.get('basicData')?.get('name')?.value || '';
     const description = this.maintainSessionForm.get('basicData')?.get('description')?.value || '';
 
-    const start = this.maintainSessionForm.get('dates')?.get('start')?.value || new Date();
-    const end = this.maintainSessionForm.get('dates')?.get('end')?.value || new Date();
+    const start = this.maintainSessionForm.get('dates')?.get('start')?.value;
+    const end = this.maintainSessionForm.get('dates')?.get('end')?.value;
 
     const editable = this.maintainSessionForm.get('details')?.get('editable')?.value || false;
 
@@ -175,37 +216,25 @@ export class SessionMaintainPage implements OnInit {
 
     const enableLiveAnalysis = this.maintainSessionForm.get('details')?.get('enableLiveAnalysis')?.value || false;
 
-    const audioTitle: string = this.maintainSessionForm.get('audio')?.get('title')?.value || '';
-
-    const composer: string = this.maintainSessionForm.get('audio')?.get('composer')?.value || '';
-
-    if (this.mode === mode.CREATE) {
-      this.sessionService
-        .create({
-          name,
-          description,
-          start,
-          end,
-          editable,
-          enablePlayer,
-          displaySampleSolution,
-          enableLiveAnalysis,
-        })
-        .subscribe(() => {});
-    } else {
-      this.sessionService
-        .update(this.session?.id || 0, {
-          name,
-          description,
-          start,
-          end,
-          editable,
-          enablePlayer,
-          displaySampleSolution,
-          enableLiveAnalysis,
-        })
-        .subscribe(() => {});
-    }
+    this.sessionService
+      .update(parseInt(this.session?.id || '0'), {
+        name,
+        description,
+        start,
+        end,
+        editable,
+        enablePlayer,
+        displaySampleSolution,
+        enableLiveAnalysis,
+      })
+      .subscribe({
+        next: () => {
+          console.log('Save successful');
+        },
+        error: () => {
+          console.log('Save Error');
+        },
+      });
   }
 
   public onAddMarker() {
@@ -221,14 +250,42 @@ export class SessionMaintainPage implements OnInit {
         name,
         type,
         color,
+        abbreviation,
+        description,
       })
       .subscribe({
         next: (result) => {
           const markerId = result.data?.createMarker.id;
 
           if (markerId) {
-            this.sessionService.addMarker(markerId, this.sessionId).subscribe();
+            this.sessionService.addMarker(markerId, this.sessionId).subscribe({
+              next: () => {
+                this.maintainMarkerForm.reset();
+              },
+              error: () => {
+                console.error('Add Marker to Session Error');
+              },
+            });
           }
+        },
+        error: () => {
+          console.error('Create Marker Error');
+        },
+      });
+  }
+
+  public onFileUpload(file: File) {
+    this.mediaService
+      .create({
+        type: MediaType.Audio,
+        file,
+      })
+      .subscribe({
+        next(value) {
+          console.log(value);
+        },
+        error(err) {
+          console.log(err);
         },
       });
   }

@@ -27,12 +27,11 @@ export class Media extends BaseEntity {
   @IsNotEmpty()
   type: MediaType;
 
-  @Column()
-  @Field({ description: 'Media Title' })
-  @IsNotEmpty()
+  @Column({ nullable: true })
+  @Field({ nullable: true, description: 'Media Title' })
   title: string;
 
-  @Column()
-  @Field({ description: 'Media Composer' })
+  @Column({ nullable: true })
+  @Field({ nullable: true, description: 'Media Composer' })
   composer: string;
 }

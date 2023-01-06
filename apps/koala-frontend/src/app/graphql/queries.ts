@@ -48,6 +48,16 @@ const GET_ONE_SESSION = gql`
         createdAt
         updatedAt
       }
+      markers {
+        id
+        name
+        type
+        abbreviation
+        description
+        color
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }

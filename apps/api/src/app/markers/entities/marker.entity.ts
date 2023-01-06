@@ -48,4 +48,8 @@ export class Marker extends BaseEntity {
   @Column({ default: DEFAULT_COLOR })
   @Field({ defaultValue: DEFAULT_COLOR, description: 'Marker Color' })
   color: string;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true, description: 'Marker Icon' })
+  icon: string;
 }

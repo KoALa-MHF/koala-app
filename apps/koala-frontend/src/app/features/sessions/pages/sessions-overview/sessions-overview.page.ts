@@ -9,6 +9,7 @@ import { SessionsService } from '../../services/sessions.service';
   templateUrl: './sessions-overview.page.html',
   styleUrls: [
     './sessions-overview.page.scss',
+    '../../session-common.scss',
   ],
 })
 export class SessionsOverviewPage implements OnInit {
@@ -43,8 +44,6 @@ export class SessionsOverviewPage implements OnInit {
 
   public onSessionCreateRequested() {
     this.createSessionModal = true;
-
-    //this.router.navigate(['sessions/create']);
   }
 
   public onCreateSession() {
@@ -75,12 +74,16 @@ export class SessionsOverviewPage implements OnInit {
     console.log('Session Export Pressed for Session: ' + session.id + ', ' + session.name);
   }
 
-  public onSessionDelete(session: any) {
-    this.sessionService.delete(session.id).subscribe(
-      () => {
+  public onSessionDelete(session: Session) {
+    this.sessionService.delete(parseInt(session.id)).subscribe({
+      next: (value) => {
         this.loadSessions();
       },
-      (error) => {}
-    );
+      error: (err) => {},
+    });
+  }
+
+  public onCancel() {
+    this.createSessionModal = false;
   }
 }

@@ -6,10 +6,6 @@
   </div>
 
   <div style="width: 50%">
-    <koala-session-audio [audioForm]="audioForm"></koala-session-audio>
-  </div>
-
-  <div style="width: 50%">
     <koala-session-dates [sessionDatesForm]="sessionDatesForm"></koala-session-dates>
   </div>
 
@@ -24,7 +20,7 @@
       id="save-btn"
       class="p-button-raised p-button-primary"
       type="submit"
-      [disabled]="!basicDataForm.valid || !audioForm.valid || !sessionDatesForm.valid || !sessionDetailsForm.valid"
+      [disabled]="!basicDataForm.valid || !sessionDatesForm.valid || !sessionDetailsForm.valid"
       (click)="onSave()"
       label="Speichern"
     ></button>

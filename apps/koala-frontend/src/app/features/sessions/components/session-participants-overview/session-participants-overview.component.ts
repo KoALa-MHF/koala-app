@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'koala-session-participants-overview',
@@ -10,14 +11,38 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class SessionParticipantsOverviewComponent implements OnInit {
   @Input() participants = [];
-  @Output()
-  participantRemove: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor() {}
+  @Output() participantRemove: EventEmitter<any> = new EventEmitter<any>();
+  @Output() participantAdd: EventEmitter<any> = new EventEmitter<any>();
 
-  ngOnInit(): void {}
+  addParticipantModal = false;
+  participantForm!: FormGroup;
 
-  public onDelete(particpant: any) {
+  constructor(private readonly formBuilder: FormBuilder) {}
+
+  ngOnInit(): void {
+    this.participantForm = this.formBuilder.group({
+      email: new FormControl<string>('', [
+        Validators.required,
+      ]),
+    });
+  }
+
+  onDelete(particpant: any) {
     this.participantRemove.emit(particpant);
+  }
+
+  onAddParticipantRequested() {
+    this.addParticipantModal = true;
+  }
+
+  onAddParticipant() {
+    //API call to add participant to invitation list
+    this.participantAdd.emit(this.participantForm.get('email')?.value);
+  }
+
+  onCancel() {
+    this.participantForm.reset();
+    this.addParticipantModal = false;
   }
 }

@@ -1,14 +1,19 @@
 <h3>Mitglieder Hinzufügen</h3>
 
-<div class="container">
-  <div style="width: 50%">
-    <koala-session-participants-invitation></koala-session-participants-invitation>
-  </div>
+<div style="margin-bottom: 10px">
+  Sie können Ihrer Session neue Mitglieder hinzufügen, indem Sie Einladungslinks per Email versenden.
+</div>
 
-  <div style="width: 50%">
+<div class="container">
+  <div style="width: 72%">
     <koala-session-participants-overview
       [participants]="participants"
       (participantRemove)="onParticipantRemove($event)"
+      (participantAdd)="onParticipantAdd($event)"
     ></koala-session-participants-overview>
+  </div>
+
+  <div style="width: 22%">
+    <koala-session-participants-invitation></koala-session-participants-invitation>
   </div>
 </div>

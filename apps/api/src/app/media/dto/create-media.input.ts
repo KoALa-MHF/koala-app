@@ -1,7 +1,7 @@
 import { InputType, Field } from '@nestjs/graphql';
 import { IsEnum, IsNotEmpty } from 'class-validator';
 import { MediaType } from '../entities/media.entity';
-import { GraphQLUpload, FileUpload } from 'graphql-upload-minimal';
+import { GraphQLUpload, FileUpload } from 'graphql-upload';
 
 @InputType()
 export class CreateMediaInput {
@@ -9,13 +9,6 @@ export class CreateMediaInput {
   @IsEnum(MediaType)
   @IsNotEmpty()
   type: MediaType;
-
-  @Field({ description: 'Media Title' })
-  @IsNotEmpty()
-  title: string;
-
-  @Field({ description: 'Media Composer' })
-  composer: string;
 
   @Field(() => GraphQLUpload)
   file: Promise<FileUpload>;

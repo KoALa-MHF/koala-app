@@ -17,9 +17,10 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ColorPickerModule } from 'primeng/colorpicker';
 import { RippleModule } from 'primeng/ripple';
 import { FileUploadModule } from 'primeng/fileupload';
-import { DragDropModule } from 'primeng/dragdrop';
 import { TabViewModule } from 'primeng/tabview';
 import { DialogModule } from 'primeng/dialog';
+
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { SessionsOverviewTableComponent } from './components/sessions-overview-table/sessions-overview-table.component';
 import { SessionMaintainPage } from './pages/session-maintain/session-maintain.page';
@@ -39,6 +40,7 @@ import { SessionParticipantsComponent } from './components/session-participants/
 import { SessionParticipantsOverviewComponent } from './components/session-participants-overview/session-participants-overview.component';
 import { SessionParticipantsInvitationComponent } from './components/session-participants-invitation/session-participants-invitation.component';
 import { MarkerService } from './services/marker.service';
+import { MarkerButtonComponent } from './components/marker-button/marker-button.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +59,7 @@ import { MarkerService } from './services/marker.service';
     SessionParticipantsComponent,
     SessionParticipantsOverviewComponent,
     SessionParticipantsInvitationComponent,
+    MarkerButtonComponent,
   ],
   imports: [
     SharedModule,

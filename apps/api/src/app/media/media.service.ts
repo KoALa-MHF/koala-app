@@ -17,9 +17,7 @@ export class MediaService {
   async create(createMediaInput: CreateMediaInput): Promise<Media> {
     const newMedia = this.mediaRepository.create();
 
-    newMedia.title = createMediaInput.title;
     newMedia.type = createMediaInput.type;
-    newMedia.composer = createMediaInput.composer;
 
     const { createReadStream, filename } = await createMediaInput.file;
 
@@ -27,14 +25,17 @@ export class MediaService {
 
     await ensureDir(`./uploads/media/${savedMedia.id}`);
 
-    return new Promise((resolve) =>
+    return new Promise((resolve, reject) =>
       createReadStream()
         .pipe(createWriteStream(`./uploads/media/${savedMedia.id}/${filename}`))
         .on('finish', () => {
           resolve(savedMedia);
         })
+        .on('drain', () => {
+          reject(new BadRequestException('File too large'));
+        })
         .on('error', () => {
-          new BadRequestException('Could not save file');
+          reject(new BadRequestException('Could not save file'));
         })
     );
   }
@@ -49,10 +50,7 @@ export class MediaService {
 
   async update(id: number, updateMediaInput: UpdateMediaInput): Promise<Media> {
     try {
-      await this.mediaRepository.update(id, {
-        title: updateMediaInput.title,
-        composer: updateMediaInput.composer,
-      });
+      await this.mediaRepository.update(id, {});
 
       return this.findOne(id);
     } catch (error) {
