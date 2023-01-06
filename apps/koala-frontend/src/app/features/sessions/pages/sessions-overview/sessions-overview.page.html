@@ -41,6 +41,7 @@
       (click)="onCreateSession()"
       label="Anlegen"
       class="p-button-raised p-button-primary"
+      [disabled]="!createSessionForm.valid"
     ></button>
 
     <button
