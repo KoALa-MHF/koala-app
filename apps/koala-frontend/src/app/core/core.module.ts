@@ -7,10 +7,27 @@ import { HomeComponent } from './components/home/home.component';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
+import { MenuModule } from 'primeng/menu';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
-  declarations: [HeaderComponent, FooterComponent, HomeComponent],
-  imports: [CommonModule, ToolbarModule, ButtonModule, DividerModule],
-  exports: [HeaderComponent, FooterComponent, HomeComponent],
+  declarations: [
+    HeaderComponent,
+    FooterComponent,
+    HomeComponent,
+  ],
+  imports: [
+    CommonModule,
+    ToolbarModule,
+    ButtonModule,
+    DividerModule,
+    MenuModule,
+    SharedModule,
+  ],
+  exports: [
+    HeaderComponent,
+    FooterComponent,
+    HomeComponent,
+  ],
 })
 export class CoreModule {}

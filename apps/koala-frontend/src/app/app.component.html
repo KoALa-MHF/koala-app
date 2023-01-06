@@ -1,5 +1,5 @@
 <div class="app-container">
-  <koala-header class="header"></koala-header>
+  <koala-header class="header" (languageChange)="onLanguageChange($event)"></koala-header>
   <div class="content">
     <router-outlet></router-outlet>
   </div>

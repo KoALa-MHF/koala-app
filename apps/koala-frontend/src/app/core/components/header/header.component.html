@@ -1,7 +1,19 @@
 <p-toolbar color="primary">
-  <span class="clickable" (click)="onToolbarHomePressed()">KoALa Project</span>
+  <span class="clickable" (click)="onToolbarHomePressed()">{{ 'KOALA_PROJECT_TITLE' | translate }}</span>
 
   <span class="toolbar-spacer"></span>
 
-  <button pButton pRipple (click)="onToolbarSessionsPressed()" class="p-button-text">Sessions</button>
+  <button pButton pRipple (click)="onToolbarSessionsPressed()" class="p-button-text">
+    {{ 'SESSION.SESSIONS_OVERVIEW_MENU_LABEL' | translate }}
+  </button>
+
+  <button
+    type="button"
+    pButton
+    pRipple
+    icon="pi pi-language"
+    (click)="menu.toggle($event)"
+    class="p-button-text"
+  ></button>
+  <p-menu #menu [popup]="true" [model]="languages"></p-menu>
 </p-toolbar>
