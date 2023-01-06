@@ -15,6 +15,8 @@ export type Scalars = {
   Float: number;
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: any;
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: any;
 };
 
 export type AddMarkerToSessionInput = {
@@ -54,8 +56,12 @@ export type CreateAnnotationInput = {
 };
 
 export type CreateMarkerInput = {
+  /** Marker Name Abbreviation (e.g. for small screen sizes */
+  abbreviation: Scalars['String'];
   /** Marker Color */
   color?: InputMaybe<Scalars['String']>;
+  /** Marker Descritpion */
+  description?: InputMaybe<Scalars['String']>;
   /** Marker Name */
   name: Scalars['String'];
   /** Marker Type */
@@ -63,10 +69,7 @@ export type CreateMarkerInput = {
 };
 
 export type CreateMediaInput = {
-  /** Media Composer */
-  composer: Scalars['String'];
-  /** Media Title */
-  title: Scalars['String'];
+  file: Scalars['Upload'];
   /** Media Type */
   type: MediaType;
 };
@@ -94,10 +97,16 @@ export type CreateUserSessionInput = {
 
 export type Marker = {
   __typename?: 'Marker';
+  /** Marker Name Abbreviation (e.g. for small screen sizes */
+  abbreviation: Scalars['String'];
   /** Marker Color */
   color: Scalars['String'];
   /** Creation Date */
   createdAt: Scalars['DateTime'];
+  /** Marker Description */
+  description: Scalars['String'];
+  /** Marker Icon */
+  icon?: Maybe<Scalars['String']>;
   /** ID for Marker */
   id: Scalars['Int'];
   /** Marker Name */
@@ -116,13 +125,13 @@ export enum MarkerType {
 export type Media = {
   __typename?: 'Media';
   /** Media Composer */
-  composer: Scalars['String'];
+  composer?: Maybe<Scalars['String']>;
   /** Creation Date */
   createdAt: Scalars['DateTime'];
   /** ID for Media */
-  id: Scalars['Int'];
+  id: Scalars['ID'];
   /** Media Title */
-  title: Scalars['String'];
+  title?: Maybe<Scalars['String']>;
   /** Media Type */
   type: MediaType;
   /** Date of Last Update */
@@ -273,7 +282,7 @@ export type Session = {
   /** End of Session */
   end?: Maybe<Scalars['DateTime']>;
   /** ID for Session */
-  id: Scalars['Int'];
+  id: Scalars['ID'];
   /** Associated Markers */
   markers?: Maybe<Array<Marker>>;
   /** Associated Media File */
@@ -303,8 +312,12 @@ export type UpdateAnnotationInput = {
 };
 
 export type UpdateMarkerInput = {
+  /** Marker Name Abbreviation (e.g. for small screen sizes */
+  abbreviation?: InputMaybe<Scalars['String']>;
   /** Marker Color */
   color?: InputMaybe<Scalars['String']>;
+  /** Marker Descritpion */
+  description?: InputMaybe<Scalars['String']>;
   /** Marker Name */
   name?: InputMaybe<Scalars['String']>;
   /** Marker Type */
@@ -312,10 +325,7 @@ export type UpdateMarkerInput = {
 };
 
 export type UpdateMediaInput = {
-  /** Media Composer */
-  composer?: InputMaybe<Scalars['String']>;
-  /** Media Title */
-  title?: InputMaybe<Scalars['String']>;
+  file?: InputMaybe<Scalars['Upload']>;
 };
 
 export type UpdateSessionInput = {
@@ -367,7 +377,7 @@ export type CreateNewSessionMutation = {
   __typename?: 'Mutation';
   createSession: {
     __typename?: 'Session';
-    id: number;
+    id: string;
     name: string;
     description?: string | null;
     status?: SessionStatus | null;
@@ -381,10 +391,10 @@ export type CreateNewSessionMutation = {
     updatedAt: any;
     media?: {
       __typename?: 'Media';
-      id: number;
+      id: string;
       type: MediaType;
-      title: string;
-      composer: string;
+      title?: string | null;
+      composer?: string | null;
       createdAt: any;
       updatedAt: any;
     } | null;
@@ -413,10 +423,10 @@ export type UpdateSessionMutation = {
     updatedAt: any;
     media?: {
       __typename?: 'Media';
-      id: number;
+      id: string;
       type: MediaType;
-      title: string;
-      composer: string;
+      title?: string | null;
+      composer?: string | null;
       createdAt: any;
       updatedAt: any;
     } | null;
@@ -427,7 +437,7 @@ export type DeleteSessionMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
-export type DeleteSessionMutation = { __typename?: 'Mutation'; removeSession: { __typename?: 'Session'; id: number } };
+export type DeleteSessionMutation = { __typename?: 'Mutation'; removeSession: { __typename?: 'Session'; id: string } };
 
 export type CreateMediaMutationVariables = Exact<{
   media: CreateMediaInput;
@@ -435,7 +445,7 @@ export type CreateMediaMutationVariables = Exact<{
 
 export type CreateMediaMutation = {
   __typename?: 'Mutation';
-  createMedia: { __typename?: 'Media'; title: string; composer: string; type: MediaType; id: number };
+  createMedia: { __typename?: 'Media'; title?: string | null; composer?: string | null; type: MediaType; id: string };
 };
 
 export type UpdateMediaMutationVariables = Exact<{
@@ -445,7 +455,7 @@ export type UpdateMediaMutationVariables = Exact<{
 
 export type UpdateMediaMutation = {
   __typename?: 'Mutation';
-  updateMedia: { __typename?: 'Media'; title: string; composer: string; type: MediaType; id: number };
+  updateMedia: { __typename?: 'Media'; title?: string | null; composer?: string | null; type: MediaType; id: string };
 };
 
 export type CreateMarkerMutationVariables = Exact<{
@@ -465,8 +475,7 @@ export type AddMarkerMutation = {
   __typename?: 'Mutation';
   addMarkerToSession: {
     __typename?: 'Session';
-    id: number;
-    name: string;
+    id: string;
     markers?: Array<{ __typename?: 'Marker'; id: number; name: string; type: MarkerType }> | null;
   };
 };
@@ -477,7 +486,7 @@ export type GetSessionsQuery = {
   __typename?: 'Query';
   sessions: Array<{
     __typename?: 'Session';
-    id: number;
+    id: string;
     name: string;
     description?: string | null;
     status?: SessionStatus | null;
@@ -491,10 +500,10 @@ export type GetSessionsQuery = {
     updatedAt: any;
     media?: {
       __typename?: 'Media';
-      id: number;
+      id: string;
       type: MediaType;
-      title: string;
-      composer: string;
+      title?: string | null;
+      composer?: string | null;
       createdAt: any;
       updatedAt: any;
     } | null;
@@ -509,7 +518,7 @@ export type GetOneSessionQuery = {
   __typename?: 'Query';
   session: {
     __typename?: 'Session';
-    id: number;
+    id: string;
     name: string;
     description?: string | null;
     status?: SessionStatus | null;
@@ -523,13 +532,24 @@ export type GetOneSessionQuery = {
     updatedAt: any;
     media?: {
       __typename?: 'Media';
-      id: number;
+      id: string;
       type: MediaType;
-      title: string;
-      composer: string;
+      title?: string | null;
+      composer?: string | null;
       createdAt: any;
       updatedAt: any;
     } | null;
+    markers?: Array<{
+      __typename?: 'Marker';
+      id: number;
+      name: string;
+      type: MarkerType;
+      abbreviation: string;
+      description: string;
+      color: string;
+      createdAt: any;
+      updatedAt: any;
+    }> | null;
   };
 };
 
@@ -691,7 +711,6 @@ export const AddMarkerDocument = gql`
   mutation addMarker($addMarkerToSession: AddMarkerToSessionInput!) {
     addMarkerToSession(addMarkerToSessionInput: $addMarkerToSession) {
       id
-      name
       markers {
         id
         name
@@ -766,6 +785,16 @@ export const GetOneSessionDocument = gql`
         type
         title
         composer
+        createdAt
+        updatedAt
+      }
+      markers {
+        id
+        name
+        type
+        abbreviation
+        description
+        color
         createdAt
         updatedAt
       }

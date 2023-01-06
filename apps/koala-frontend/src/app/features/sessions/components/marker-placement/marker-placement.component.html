@@ -4,7 +4,8 @@
 
 <h5>Horizontal (iPad & Desktop)</h5>
 
-<div style="display: flex; justify-content: space-between; align-items: end">
+<!--show placeholders until first marker has been assigned to session-->
+<div *ngIf="markers.length === 0" style="display: flex; justify-content: space-between; align-items: end">
   <p-skeleton size="3rem" styleClass="mr-2" animation="none"></p-skeleton>
   <p-skeleton size="3rem" styleClass="mr-2" animation="none"></p-skeleton>
   <p-skeleton size="3rem" styleClass="mr-2" animation="none"></p-skeleton>
@@ -15,9 +16,23 @@
   <p-skeleton size="3rem" styleClass="mr-2" animation="none"></p-skeleton>
 </div>
 
+<!--switch to real buttons as soon as one marker is assigned-->
+<div
+  cdkDropList
+  cdkDropListOrientation="horizontal"
+  (cdkDropListDropped)="drop($event)"
+  *ngIf="markers.length !== 0"
+  style="display: flex; justify-content: flex-start; flex-wrap: wrap; gap: 10px"
+>
+  <div cdkDrag *ngFor="let marker of markers" style="flex: 1 0 10%">
+    <koala-marker-button *ngIf="marker" [marker]="marker"></koala-marker-button>
+  </div>
+</div>
+
 <h5>Vertikal (Handy)</h5>
 
-<div style="display: flex; align-items: end; gap: 10px">
+<!--show placeholders until first marker has been assigned to session-->
+<div *ngIf="markers.length === 0" style="display: flex; align-items: end; gap: 10px">
   <div style="display: flex; flex-direction: column; gap: 10px">
     <p-skeleton size="3rem" styleClass="mr-2" animation="none"></p-skeleton>
     <p-skeleton size="3rem" styleClass="mr-2" animation="none"></p-skeleton>
@@ -29,5 +44,18 @@
     <p-skeleton size="3rem" styleClass="mr-2" animation="none"></p-skeleton>
     <p-skeleton size="3rem" styleClass="mr-2" animation="none"></p-skeleton>
     <p-skeleton size="3rem" styleClass="mr-2" animation="none"></p-skeleton>
+  </div>
+</div>
+
+<!--switch to real buttons as soon as one marker is assigned-->
+<div
+  cdkDropList
+  (cdkDropListDropped)="drop($event)"
+  *ngIf="markers.length !== 0"
+  style="display: grid; gap: 10px"
+  [style.grid-template-columns]="markers.length < 5 ? 'fit-content(98%)' : 'fit-content(46%) fit-content(46%)'"
+>
+  <div cdkDrag *ngFor="let marker of markers">
+    <koala-marker-button *ngIf="marker" [marker]="marker"></koala-marker-button>
   </div>
 </div>

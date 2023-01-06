@@ -15,22 +15,22 @@ import { CoreModule } from './core/core.module';
 import { environment } from '../environments/environment';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+  ],
   imports: [
     BrowserModule,
     HttpClientModule,
     ApolloModule,
     CoreModule,
     BrowserAnimationsModule,
-    AppRoutingModule
+    AppRoutingModule,
   ],
   providers: [
     {
       provide: APOLLO_OPTIONS,
       useFactory(httpLink: HttpLink) {
-        const uri: string = environment.production
-          ? 'https://koala-app.de/graphql'
-          : 'http://localhost:4200/graphql';
+        const uri: string = environment.production ? 'https://koala-app.de/graphql' : 'http://localhost:4200/graphql';
         return {
           cache: new InMemoryCache(),
           link: httpLink.create({
@@ -38,9 +38,13 @@ import { environment } from '../environments/environment';
           }),
         };
       },
-      deps: [HttpLink],
+      deps: [
+        HttpLink,
+      ],
     },
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [
+    AppComponent,
+  ],
 })
 export class AppModule {}

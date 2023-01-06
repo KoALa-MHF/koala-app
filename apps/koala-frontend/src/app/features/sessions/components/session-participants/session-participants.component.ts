@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'koala-session-participants',
@@ -8,16 +8,17 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
     '../../session-common.scss',
   ],
 })
-export class SessionParticipantsComponent implements OnInit {
+export class SessionParticipantsComponent {
   @Input() participants = [];
-  @Output()
-  participantRemove: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor() {}
-
-  ngOnInit(): void {}
+  @Output() participantRemove: EventEmitter<any> = new EventEmitter<any>();
+  @Output() participantAdd: EventEmitter<any> = new EventEmitter<any>();
 
   public onParticipantRemove(participant: any) {
     this.participantRemove.emit(participant);
+  }
+
+  public onParticipantAdd(participant: any) {
+    this.participantAdd.emit(participant);
   }
 }

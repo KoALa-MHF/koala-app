@@ -6,8 +6,7 @@
 
   <div style="width: 33%">
     <koala-marker-preview
-      [label]="markerData.abbreviation"
-      [color]="markerData.color"
+      [marker]="previewMarker"
       [createEnabled]="markerDataForm.valid"
       (resetMarkerData)="onReset()"
       (markerAdd)="onAddMarker()"
@@ -15,6 +14,6 @@
   </div>
 
   <div style="width: 33%">
-    <koala-marker-placement></koala-marker-placement>
+    <koala-marker-placement [markers]="markers"></koala-marker-placement>
   </div>
 </div>

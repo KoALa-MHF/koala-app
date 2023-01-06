@@ -37,7 +37,13 @@
 
   <div>
     <span class="p-float-label">
-      <input id="marker-abbreviation-input" type="text" formControlName="abbreviation" pInputText />
+      <input
+        [maxlength]="markerType === MarkerType.Range ? 3 : 2"
+        id="marker-abbreviation-input"
+        type="text"
+        formControlName="abbreviation"
+        pInputText
+      />
       <label for="marker-abbreviation-input">Abkürzung</label>
     </span>
     <small id="marker-name-help" class="field-explanation"> Wählen Sie ggf. eine Abkürzung für den Marker. </small>

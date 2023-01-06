@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MarkerEntity } from '../../types/marker-entity';
 
 @Component({
   selector: 'koala-marker-preview',
@@ -9,12 +10,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   ],
 })
 export class MarkerPreviewComponent implements OnInit {
-  @Input() label: string = '';
-  @Input() color: string = '';
-  @Input() markerType: string = '';
-  @Input() icon: string = '';
-
+  @Input() marker!: MarkerEntity;
   @Input() createEnabled: boolean = false;
+
   @Output() resetMarkerData = new EventEmitter();
   @Output() markerAdd = new EventEmitter();
 

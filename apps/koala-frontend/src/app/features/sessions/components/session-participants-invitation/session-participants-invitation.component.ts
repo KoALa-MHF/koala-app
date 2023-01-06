@@ -8,14 +8,8 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
     '../../session-common.scss',
   ],
 })
-export class SessionParticipantsInvitationComponent implements OnInit {
+export class SessionParticipantsInvitationComponent {
   @Output() invite: EventEmitter<any[]> = new EventEmitter<any[]>();
 
-  constructor() {}
-
-  ngOnInit(): void {}
-
-  public onAddParticipant() {}
-
-  public onCancel() {}
+  public onInviteParticipants() {}
 }
