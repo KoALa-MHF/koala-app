@@ -16,8 +16,6 @@ const GET_SESSIONS = gql`
       media {
         id
         type
-        title
-        composer
         createdAt
         updatedAt
       }
@@ -43,8 +41,6 @@ const GET_ONE_SESSION = gql`
       media {
         id
         type
-        title
-        composer
         createdAt
         updatedAt
       }
