@@ -23,4 +23,8 @@ export class ToolbarsService {
   remove(id: number) {
     return `This action removes a #${id} toolbar`;
   }
+
+  addMarkerToToolbar(toolbarId: number, markerId) {
+    return `This action removes a #${id} toolbar`;
+  }
 }

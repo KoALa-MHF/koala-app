@@ -3,6 +3,7 @@ import { ToolbarsService } from './toolbars.service';
 import { Toolbar } from './entities/toolbar.entity';
 import { CreateToolbarInput } from './dto/create-toolbar.input';
 import { UpdateToolbarInput } from './dto/update-toolbar.input';
+import { AddMarkerToToolbarInput } from './dto/add-marker-to-toolbar.input';
 
 @Resolver(() => Toolbar)
 export class ToolbarsResolver {
@@ -36,5 +37,13 @@ export class ToolbarsResolver {
   @Mutation(() => Toolbar)
   removeToolbar(@Args('id', { type: () => Int }) id: number) {
     return this.toolbarsService.remove(id);
+  }
+
+  @Mutation(() => Toolbar)
+  addMarkerToToolbar(@Args('addMarkerToToolbarInput') addMarkertToToolbarInput: AddMarkerToToolbarInput) {
+    return this.toolbarsService.addMarkerToToolbar(
+      addMarkertToToolbarInput.toolbarId,
+      addMarkertToToolbarInput.markerId
+    );
   }
 }
