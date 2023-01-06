@@ -9,7 +9,7 @@
 </div>
 
 <p-dialog
-  header="Neue Session Anlegen"
+  header="{{ 'SESSION.CREATE_DIALOG.TITLE' | translate }}"
   [(visible)]="createSessionModal"
   [modal]="true"
   [style]="{width: '30vw'}"
@@ -28,9 +28,11 @@
           aria-describedby="session-name-help"
           formControlName="name"
         />
-        <label for="session-name-input">Session Name*</label>
+        <label for="session-name-input">{{ 'SESSION.CREATE_DIALOG.NAME_INPUT_LABEL' | translate }}</label>
       </span>
-      <small id="session-name-help" class="field-explanation"> Geben Sie der Session einen Namen. </small>
+      <small id="session-name-help" class="field-explanation"
+        >{{ 'SESSION.CREATE_DIALOG.NAME_INPUT_EXPLANATION' | translate }}</small
+      >
     </div>
   </form>
   <ng-template pTemplate="footer">
@@ -38,7 +40,7 @@
       pButton
       pRipple
       (click)="onCreateSession()"
-      label="Anlegen"
+      label="{{ 'SESSION.CREATE_DIALOG.CREATE_BTN' | translate }}"
       class="p-button-raised p-button-primary"
     ></button>
 
@@ -46,7 +48,7 @@
       pButton
       pRipple
       (click)="onCancel()"
-      label="Abbrechen"
+      label="{{ 'SESSION.CREATE_DIALOG.CANCEL_BTN' | translate }}"
       class="p-button-raised p-button-plain p-button-text"
     ></button>
   </ng-template>

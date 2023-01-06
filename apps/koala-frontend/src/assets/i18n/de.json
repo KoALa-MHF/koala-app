@@ -1,6 +1,29 @@
 {
   "KOALA_PROJECT_TITLE": "KoALa Projekt",
   "SESSION": {
-    "SESSIONS_OVERVIEW_MENU_LABEL": "Sessions"
+    "SESSIONS_OVERVIEW_MENU_LABEL": "Sessions",
+    "CREATE_DIALOG": {
+      "TITLE": "Neue Session Anlegen",
+      "NAME_INPUT_LABEL": "Session Name*",
+      "NAME_INPUT_EXPLANATION": "Geben Sie der Session einen Namen.",
+      "CREATE_BTN": "Anlegen",
+      "CANCEL_BTN": "Abbrechen"
+    },
+    "OVERVIEW": {
+      "TABLE_TITLE": "Meine Sessions",
+      "TABLE_HEADER": {
+        "NAME_COL_LABEL": "Name",
+        "CREATION_DATE_COL_LABEL": "Erstellungsdatum",
+        "PARTICIPANTS_COL_LABEL": "Mitgliederanzahl",
+        "CHANGED_DATE_COL_LABEL": "Letzter Zugriff",
+        "SETTINGS_COL_LABEL": "Einstellungen",
+        "LINK_COL_LABEL": "Link/QRCode",
+        "EXPORT_COL_LABEL": "Export",
+        "DELETE_COL_LABEL": "Löschen"
+      },
+      "ACC": {
+        "CREATE": "Session Anlegen"
+      }
+    }
   }
 }
