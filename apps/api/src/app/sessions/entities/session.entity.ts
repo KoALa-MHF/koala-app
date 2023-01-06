@@ -8,6 +8,7 @@ import {
   JoinColumn,
   JoinTable,
   ManyToMany,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -16,6 +17,7 @@ import { Media } from '../../media/entities/media.entity';
 import { customAlphabet } from 'nanoid';
 import { nolookalikes } from 'nanoid-dictionary';
 import { Marker } from '../../markers/entities/marker.entity';
+import { Toolbar } from '../../toolbars/entities/toolbar.entity';
 
 const nanoid = customAlphabet(nolookalikes, 7);
 
@@ -121,6 +123,19 @@ export class Session extends BaseEntity {
   @Index({ unique: true })
   @IsNotEmpty()
   code: string;
+
+  @JoinColumn()
+  @OneToMany(() => Toolbar, (toolbar) => toolbar.session, {
+    cascade: true,
+  })
+  @Field(
+    (type) => [
+      Toolbar,
+    ],
+    { description: 'Associated Session' }
+  )
+  @IsNotEmpty()
+  toolbars: Toolbar[];
 
   @BeforeInsert()
   async generateCode() {

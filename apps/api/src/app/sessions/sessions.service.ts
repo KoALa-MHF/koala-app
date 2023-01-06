@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Marker } from '../markers/entities/marker.entity';
+import { Toolbar } from '../toolbars/entities/toolbar.entity';
 
 import { CreateSessionInput } from './dto/create-session.input';
 import { UpdateSessionInput } from './dto/update-session.input';
@@ -10,6 +11,7 @@ import { Session } from './entities/session.entity';
 const RELATIONS = [
   'media',
   'markers',
+  'toolbars',
 ];
 
 @Injectable()
@@ -25,10 +27,12 @@ export class SessionsService {
       media: {
         id: createSessionInput.mediaId,
       },
+      toolbars: [
+        new Toolbar(),
+      ],
     });
 
     const savedSession = await this.sessionsRepository.save(newSession);
-
     return this.findOne(savedSession.id);
   }
 
