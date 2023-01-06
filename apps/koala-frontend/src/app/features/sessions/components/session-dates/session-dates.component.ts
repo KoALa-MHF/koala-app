@@ -1,15 +1,26 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'koala-session-dates',
   templateUrl: './session-dates.component.html',
-  styleUrls: ['./session-dates.component.scss', '../../session-common.scss'],
+  styleUrls: [
+    './session-dates.component.scss',
+    '../../session-common.scss',
+  ],
 })
-export class SessionDatesComponent implements OnInit {
+export class SessionDatesComponent {
   @Input() sessionDatesForm!: FormGroup;
 
-  constructor() {}
+  get start() {
+    return this.sessionDatesForm.get('start')?.value;
+  }
 
-  ngOnInit(): void {}
+  get end() {
+    return this.sessionDatesForm.get('end')?.value;
+  }
+
+  get online(): boolean {
+    return this.sessionDatesForm.get('online')?.value;
+  }
 }

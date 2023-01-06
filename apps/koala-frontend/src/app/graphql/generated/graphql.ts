@@ -498,15 +498,7 @@ export type GetSessionsQuery = {
     enableLiveAnalysis?: boolean | null;
     createdAt: any;
     updatedAt: any;
-    media?: {
-      __typename?: 'Media';
-      id: string;
-      type: MediaType;
-      title?: string | null;
-      composer?: string | null;
-      createdAt: any;
-      updatedAt: any;
-    } | null;
+    media?: { __typename?: 'Media'; id: string; type: MediaType; createdAt: any; updatedAt: any } | null;
   }>;
 };
 
@@ -530,15 +522,7 @@ export type GetOneSessionQuery = {
     enableLiveAnalysis?: boolean | null;
     createdAt: any;
     updatedAt: any;
-    media?: {
-      __typename?: 'Media';
-      id: string;
-      type: MediaType;
-      title?: string | null;
-      composer?: string | null;
-      createdAt: any;
-      updatedAt: any;
-    } | null;
+    media?: { __typename?: 'Media'; id: string; type: MediaType; createdAt: any; updatedAt: any } | null;
     markers?: Array<{
       __typename?: 'Marker';
       id: number;
@@ -746,8 +730,6 @@ export const GetSessionsDocument = gql`
       media {
         id
         type
-        title
-        composer
         createdAt
         updatedAt
       }
@@ -783,8 +765,6 @@ export const GetOneSessionDocument = gql`
       media {
         id
         type
-        title
-        composer
         createdAt
         updatedAt
       }
