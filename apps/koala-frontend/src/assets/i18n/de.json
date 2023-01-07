@@ -44,7 +44,10 @@
         "MARKER_LIBRARY": "Aus Bibliothek Laden",
         "MARKER_PLACEMENT": "Platzierung",
         "MARKER_PLACEMENT_HORIZONTAL": "Horizontal (iPad & Desktop)",
-        "MARKER_PLACEMENT_VERTICAL": "Vertikal (Handy)"
+        "MARKER_PLACEMENT_VERTICAL": "Vertikal (Handy)",
+        "PARTICIPANTS": "Mitglieder Hinzufügen",
+        "INVITED_PARTICIPANTS": "Mitglieder der Session",
+        "PARTICIPANT_INVITATION": "Einladung"
       },
       "SESSION_SETTINGS": {
         "SESSION_NAME_INPUT_LABEL": "Name",
@@ -89,6 +92,23 @@
         "MARKER_RESET_BTN": "Zurücksetzen",
         "MARKER_LIBRARY_EXPLANATION": "Hier können Sie gespeicherte Toolbars oder einzelne Marker laden.",
         "MARKER_PLACEMENT_EXPLANATION": "Per Drag&Drop lassen sich die Marker individuell anordnen."
+      },
+      "PARTICIPANTS": {
+        "PARTICIPANT_EXPLANATION": "Sie können Ihrer Session neue Mitglieder hinzufügen, indem Sie Einladungslinks per Email versenden.",
+        "ADD_BTN": "+",
+        "EMAIL_COL": "Email-Adresse",
+        "DELETE_COL": "Entfernen",
+        "ADD_DIALOG": {
+          "TITLE": "Teilnehmer Hinzufügen",
+          "EMAIL_INPUT_LABEL": "Email-Adresse",
+          "EMAIL_INPUT_EXPLANATION": "Fügen Sie eine Email-Adresse pro Zeile hinzu."
+        },
+        "INVITATION_TEXT_LABEL": "Nachricht",
+        "INVITATION_TEXT_EXPLANATION": "Hier können Sie ggf. eine Nachricht an die eingeladenen Personen einfügen, die mit dem Einladungslink versendet wird.",
+        "INVITE_BTN": "Einladen",
+        "ACC": {
+          "DELETE_BTN_ACC": "Entfernen"
+        }
       }
     }
   }
