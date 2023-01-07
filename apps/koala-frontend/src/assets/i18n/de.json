@@ -34,7 +34,8 @@
       },
       "SECTION_HEADINGS": {
         "SETTINGS": "Session Einstellungen",
-        "GENERAL_DATA": "Allgemeine Informationen"
+        "GENERAL_DATA": "Allgemeine Informationen",
+        "AUDIO": "Audio"
       },
       "SESSION_SETTINGS": {
         "SESSION_NAME_INPUT_LABEL": "Name",
@@ -43,6 +44,14 @@
         "SESSION_DESCRIPTION_INPUT_EXPLANATION": "Fügen Sie der Session ggf. eine Beschreibung oder eine Aufgabenstellung hinzu.",
         "SAVE_BTN": "Speichern",
         "CANCEL_BTN": "Abbrechen"
+      },
+      "AUDIO": {
+        "AUDIO_UPLOAD_EXPLANATION": "Hier können Sie eine Audio-Datei wählen und hochladen. Wenn Sie keine Datei hochladen, können Sie eine Live-Annotation innerhalb der Session starten.",
+        "MAX_UPLOAD_SIZE_EXPLANATION": "Maximale Upload-Größe: 100 MB",
+        "ALLOWED_FILE_TYPES_EXPLANATION": "Erlaubter Dateityp: .mp3, .wav",
+        "CHOOSE_BTN": "Datei wählen",
+        "CANCEL_BTN": "Abbrechen",
+        "UPLOAD_BTN": "Hochladen"
       }
     }
   }
