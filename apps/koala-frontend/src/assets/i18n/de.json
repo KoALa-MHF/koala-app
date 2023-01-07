@@ -39,7 +39,12 @@
         "AVAILABILITY": "Verfügbarkeit",
         "DETAILS": "Freigaben",
         "MARKER": "Marker",
-        "CREATE_MARKER": "Marker Erstellen"
+        "CREATE_MARKER": "Marker Erstellen",
+        "MARKER_PREVIEW": "Vorschau",
+        "MARKER_LIBRARY": "Aus Bibliothek Laden",
+        "MARKER_PLACEMENT": "Platzierung",
+        "MARKER_PLACEMENT_HORIZONTAL": "Horizontal (iPad & Desktop)",
+        "MARKER_PLACEMENT_VERTICAL": "Vertikal (Handy)"
       },
       "SESSION_SETTINGS": {
         "SESSION_NAME_INPUT_LABEL": "Name",
@@ -55,7 +60,6 @@
         "PLAYER_ENABLED_LABEL": "Player",
         "SAMPLE_SOLUTION_ENABLED_LABEL": "Musterlösung",
         "ANALYSIS_ENABLED_LABEL": "Analyse",
-
         "SAVE_BTN": "Speichern",
         "CANCEL_BTN": "Abbrechen"
       },
@@ -79,7 +83,12 @@
         "MARKER_COLOR_INPUT_LABEL": "Farbe",
         "MARKER_COLOR_INPUT_EXPLANATION": "Wählen Sie eine Farbe für Ihren Marker.",
         "MARKER_ICON_INPUT_LABEL": "Icon",
-        "MARKER_ICON_INPUT_EXPLANATION": "Wählen Sie ggf. ein Icon für Ihren Marker."
+        "MARKER_ICON_INPUT_EXPLANATION": "Wählen Sie ggf. ein Icon für Ihren Marker.",
+        "MARKER_PREVIEW_EXPLANATION": "Hier sehen Sie eine Vorschau Ihres Markers.",
+        "MARKER_ADD_BTN": "Marker Hinzufügen",
+        "MARKER_RESET_BTN": "Zurücksetzen",
+        "MARKER_LIBRARY_EXPLANATION": "Hier können Sie gespeicherte Toolbars oder einzelne Marker laden.",
+        "MARKER_PLACEMENT_EXPLANATION": "Per Drag&Drop lassen sich die Marker individuell anordnen."
       }
     }
   }
