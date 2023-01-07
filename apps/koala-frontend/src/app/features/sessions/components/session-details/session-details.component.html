@@ -1,9 +1,8 @@
 <h4 class="section-heading">Freigaben</h4>
 
 <p>
-  Hier legen Sie vorab fest, welche Funktionen für die Benutzer verfügbar /
-  sichtbar sein werden. Diese Einstellungen lassen sich später innerhalb der
-  Session flexibel ändern.
+  Hier legen Sie vorab fest, welche Funktionen für die Benutzer verfügbar / sichtbar sein werden. Diese Einstellungen
+  lassen sich später innerhalb der Session flexibel ändern.
 </p>
 
 <form [formGroup]="sessionDetailsForm" class="form">
@@ -12,6 +11,7 @@
     formControlName="editable"
     [binary]="true"
     label="Bearbeitung"
+    data-cy="session-maintain-editable-check"
   ></p-checkbox>
 
   <p-checkbox
@@ -19,6 +19,7 @@
     formControlName="enablePlayer"
     [binary]="true"
     label="Player"
+    data-cy="session-maintain-player-check"
   ></p-checkbox>
 
   <p-checkbox
@@ -26,6 +27,7 @@
     formControlName="displaySampleSolution"
     [binary]="true"
     label="Musterlösung"
+    data-cy="session-maintain-sample-solution-check"
   ></p-checkbox>
 
   <p-checkbox
@@ -33,5 +35,6 @@
     formControlName="enableLiveAnalysis"
     [binary]="true"
     label="Analyse"
+    data-cy="session-maintain-analysis-check"
   ></p-checkbox>
 </form>

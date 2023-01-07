@@ -16,6 +16,7 @@ import { environment } from '../environments/environment';
 
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { LANGUAGE_CODE } from './core/components/header/header.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -33,7 +34,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserAnimationsModule,
     AppRoutingModule,
     TranslateModule.forRoot({
-      defaultLanguage: 'de',
+      defaultLanguage: LANGUAGE_CODE.GERMAN,
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,

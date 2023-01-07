@@ -10,6 +10,7 @@
     formControlName="online"
     [binary]="true"
     label="Online"
+    data-cy="session-maintain-online-check"
   ></p-checkbox>
 
   <div *ngIf="!online">
@@ -19,6 +20,7 @@
         dateFormat="dd.mm.yy"
         id="session-start-input"
         formControlName="start"
+        data-cy="session-maintain-start-date-input"
       ></p-calendar>
       <label for="session-start-input">Start</label>
     </span>
@@ -31,6 +33,7 @@
         dateFormat="dd.mm.yy"
         id="session-end-input"
         formControlName="end"
+        data-cy="session-maintain-end-date-input"
       ></p-calendar>
       <label for="session-end-input">Ende</label>
     </span>
