@@ -4,7 +4,9 @@ import { Session } from 'apps/koala-frontend/src/app/graphql/generated/graphql';
 @Component({
   selector: 'koala-sessions-overview-table',
   templateUrl: './sessions-overview-table.component.html',
-  styleUrls: ['./sessions-overview-table.component.scss'],
+  styleUrls: [
+    './sessions-overview-table.component.scss',
+  ],
 })
 export class SessionsOverviewTableComponent implements OnInit {
   @Input()
@@ -40,7 +42,6 @@ export class SessionsOverviewTableComponent implements OnInit {
 
   public onSessionCreate() {
     this.sessionCreate.emit();
-    
   }
 
   public onCodePressed(session: Session) {}
@@ -51,5 +52,10 @@ export class SessionsOverviewTableComponent implements OnInit {
 
   public onSettings(session: Session) {
     this.sessionUpdate.emit(session);
+  }
+
+  public onRowSelect(event: any) {
+    this.sessionUpdate.emit(event.data);
+    console.log(event);
   }
 }
