@@ -1,4 +1,4 @@
-<h3>Session Einstellungen</h3>
+<h3>{{ 'SESSION.MAINTAIN.SECTION_HEADINGS.SETTINGS' | translate }}</h3>
 
 <div class="container">
   <div style="width: 50%">
@@ -27,14 +27,14 @@
         (!basicDataForm.dirty && !sessionDatesForm.dirty && !sessionDetailsForm.dirty)
       "
       (click)="onSave()"
-      label="Speichern"
+      label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.SAVE_BTN' | translate }}"
     ></button>
 
     <button
       pButton
       pRipple
       (click)="onCancel()"
-      label="Abbrechen"
+      label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.CANCEL_BTN' | translate }}"
       class="p-button-raised p-button-plain p-button-text"
     ></button>
   </div>

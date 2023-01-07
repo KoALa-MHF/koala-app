@@ -24,6 +24,26 @@
       "ACC": {
         "CREATE": "Session Anlegen"
       }
+    },
+    "MAINTAIN": {
+      "TABS": {
+        "SETTINGS": "Session Einstellungen",
+        "AUDIO": "Audio",
+        "MARKER": "Marker",
+        "PARTICIPANTS": "Mitglieder"
+      },
+      "SECTION_HEADINGS": {
+        "SETTINGS": "Session Einstellungen",
+        "GENERAL_DATA": "Allgemeine Informationen"
+      },
+      "SESSION_SETTINGS": {
+        "SESSION_NAME_INPUT_LABEL": "Name",
+        "SESSION_NAME_INPUT_EXPLANATION": "Geben Sie der Session bitte einen Namen.",
+        "SESSION_DESCRIPTION_INPUT_LABEL": "Beschreibung",
+        "SESSION_DESCRIPTION_INPUT_EXPLANATION": "Fügen Sie der Session ggf. eine Beschreibung oder eine Aufgabenstellung hinzu.",
+        "SAVE_BTN": "Speichern",
+        "CANCEL_BTN": "Abbrechen"
+      }
     }
   }
 }
