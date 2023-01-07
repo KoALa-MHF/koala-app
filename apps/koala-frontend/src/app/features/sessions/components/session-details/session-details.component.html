@@ -1,9 +1,7 @@
-<h4 class="section-heading">Freigaben</h4>
+<h4 class="section-heading">{{ 'SESSION.MAINTAIN.SECTION_HEADINGS.DETAILS' | translate }}</h4>
 
 <p>
-  Hier legen Sie vorab fest, welche Funktionen für die Benutzer verfügbar /
-  sichtbar sein werden. Diese Einstellungen lassen sich später innerhalb der
-  Session flexibel ändern.
+  {{ 'SESSION.MAINTAIN.SESSION_SETTINGS.SESSION_DETAILS_EXPLANATION' | translate }}
 </p>
 
 <form [formGroup]="sessionDetailsForm" class="form">
@@ -11,27 +9,27 @@
     class="form-single-cell"
     formControlName="editable"
     [binary]="true"
-    label="Bearbeitung"
+    label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.EDIT_ENABLED_LABEL' | translate }}"
   ></p-checkbox>
 
   <p-checkbox
     class="form-single-cell"
     formControlName="enablePlayer"
     [binary]="true"
-    label="Player"
+    label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.PLAYER_ENABLED_LABEL' | translate }}"
   ></p-checkbox>
 
   <p-checkbox
     class="form-single-cell"
     formControlName="displaySampleSolution"
     [binary]="true"
-    label="Musterlösung"
+    label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.SAMPLE_SOLUTION_ENABLED_LABEL' | translate }}"
   ></p-checkbox>
 
   <p-checkbox
     class="form-single-cell"
     formControlName="enableLiveAnalysis"
     [binary]="true"
-    label="Analyse"
+    label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.ANALYSIS_ENABLED_LABEL' | translate }}"
   ></p-checkbox>
 </form>
