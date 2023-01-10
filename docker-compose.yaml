@@ -14,6 +14,7 @@ services:
     ports:
       - "4200:3333"
     container_name: api
+    user: "1000:1024"
     volumes:
        - ./api:/usr/src/app/api
        - media_data:${MEDIA_DATA_PATH}
