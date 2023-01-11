@@ -23,7 +23,7 @@
         <input
           pAutoFocus
           [autofocus]="true"
-          id="session-name-input"
+          data-cy="create-session-name-input"
           type="text"
           pInputText
           aria-describedby="session-name-help"
@@ -44,6 +44,7 @@
       label="{{ 'SESSION.CREATE_DIALOG.CREATE_BTN' | translate }}"
       class="p-button-raised p-button-primary"
       [disabled]="!createSessionForm.valid"
+      data-cy="session-create-dialog-create-btn"
     ></button>
 
     <button

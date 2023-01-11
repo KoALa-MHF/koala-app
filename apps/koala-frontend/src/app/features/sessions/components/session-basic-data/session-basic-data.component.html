@@ -3,33 +3,25 @@
 <form [formGroup]="basicDataForm" class="form">
   <div>
     <span class="p-float-label">
-      <input
-        id="session-name-input"
-        formControlName="name"
-        type="text"
-        pInputText
-      />
+      <input formControlName="name" type="text" pInputText data-cy="session-maintain-name-input" />
       <label for="session-name-input">Name</label>
     </span>
-    <small id="session-name-help" class="field-explanation">
-      Geben Sie der Session bitte einen Namen.
-    </small>
+    <small id="session-name-help" class="field-explanation"> Geben Sie der Session bitte einen Namen. </small>
   </div>
 
   <div>
     <span class="p-float-label">
       <textarea
-        id="session-description-textarea"
         rows="5"
         cols="30"
         pInputTextarea
         formControlName="description"
+        data-cy="session-maintain-description-input"
       ></textarea>
       <label for="session-description-textarea">Beschreibung</label>
     </span>
     <small id="session-name-help" class="field-explanation">
-      Fügen Sie der Session ggf. eine Beschreibung oder eine Aufgabenstellung
-      hinzu.
+      Fügen Sie der Session ggf. eine Beschreibung oder eine Aufgabenstellung hinzu.
     </small>
   </div>
 </form>
