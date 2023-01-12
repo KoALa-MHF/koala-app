@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Controller,
   Get,
   InternalServerErrorException,
@@ -13,7 +12,6 @@ import { MediaService } from './media.service';
 import type { Response } from 'express';
 import { getFilePath, getFileSize } from './media.util';
 import { EntityNotFoundError } from 'typeorm';
-import { NotFoundError } from 'rxjs';
 
 @Controller('media')
 export class MediaController {
