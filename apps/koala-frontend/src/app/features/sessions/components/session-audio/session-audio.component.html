@@ -1,15 +1,17 @@
-<h4 class="section-heading">Audio</h4>
+<h4 class="section-heading">{{ 'SESSION.MAINTAIN.SECTION_HEADINGS.AUDIO' | translate }}</h4>
 
 <p>
-  Hier können Sie eine Audio-Datei wählen und hochladen. Wenn Sie keine Datei hochladen, können Sie eine Live-Annotation
-  innerhalb der Session starten.
+  {{ 'SESSION.MAINTAIN.AUDIO.AUDIO_UPLOAD_EXPLANATION' | translate }}
 </p>
-<p>Maximale Upload-Größe: 100 MB</p>
-<p>Erlaubter Dateityp: .mp3, .wav</p>
+<p>{{ 'SESSION.MAINTAIN.AUDIO.MAX_UPLOAD_SIZE_EXPLANATION' | translate }}</p>
+<p>{{ 'SESSION.MAINTAIN.AUDIO.ALLOWED_FILE_TYPES_EXPLANATION' | translate }}</p>
 
 <p-fileUpload
   [customUpload]="true"
   (uploadHandler)="onFileUpload($event)"
   accept="audio/mpeg"
   [maxFileSize]="250000000"
+  chooseLabel="{{ 'SESSION.MAINTAIN.AUDIO.CHOOSE_BTN' | translate }}"
+  cancelLabel="{{ 'SESSION.MAINTAIN.AUDIO.CANCEL_BTN' | translate }}"
+  uploadLabel="{{ 'SESSION.MAINTAIN.AUDIO.UPLOAD_BTN' | translate }}"
 ></p-fileUpload>
