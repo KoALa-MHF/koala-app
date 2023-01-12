@@ -1,6 +1,6 @@
 <div class="session-container">
   <p-tabView>
-    <p-tabPanel header="Session Einstellungen">
+    <p-tabPanel header="{{ 'SESSION.MAINTAIN.TABS.SETTINGS' | translate }}">
       <koala-session-data
         [basicDataForm]="basicDataFormGroup"
         [sessionDatesForm]="datesFormGroup"
@@ -9,10 +9,10 @@
         (sessionDataCancel)="onCancel()"
       ></koala-session-data>
     </p-tabPanel>
-    <p-tabPanel header="Audio">
+    <p-tabPanel header="{{ 'SESSION.MAINTAIN.TABS.AUDIO' | translate }}">
       <koala-session-audio [media]="session?.media" (fileUpload)="onFileUpload($event)"></koala-session-audio>
     </p-tabPanel>
-    <p-tabPanel header="Marker">
+    <p-tabPanel header="{{ 'SESSION.MAINTAIN.TABS.MARKER' | translate }}">
       <koala-session-marker-data
         [markerDataForm]="maintainMarkerForm"
         [previewMarker]="markerData"
@@ -21,7 +21,7 @@
         (markerAdd)="onAddMarker()"
       ></koala-session-marker-data>
     </p-tabPanel>
-    <p-tabPanel header="Mitglieder">
+    <p-tabPanel header="{{ 'SESSION.MAINTAIN.TABS.PARTICIPANTS' | translate }}">
       <koala-session-participants
         [participants]="participants"
         (participantRemove)="onParticipantRemove($event)"

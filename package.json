@@ -10,7 +10,7 @@
     "start:api": "NODE_ENV=development nx serve api",
     "start:all": "NODE_ENV=development nx run-many --parallel --target=serve --all",
     "build": "nx build",
-    "test": "nx test",
+    "test": "nx test && nx e2e koala-frontend-e2e",
     "e2e": "nx e2e koala-frontend-e2e",
     "e2e:watch": "nx e2e koala-frontend-e2e --watch",
     "codegen": "graphql-codegen --config codegen.ts",

@@ -1,12 +1,14 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Session } from 'apps/koala-frontend/src/app/graphql/generated/graphql';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Session } from '../../../../graphql/generated/graphql';
 
 @Component({
   selector: 'koala-sessions-overview-table',
   templateUrl: './sessions-overview-table.component.html',
-  styleUrls: ['./sessions-overview-table.component.scss'],
+  styleUrls: [
+    './sessions-overview-table.component.scss',
+  ],
 })
-export class SessionsOverviewTableComponent implements OnInit {
+export class SessionsOverviewTableComponent {
   @Input()
   sessions: Session[] = [];
 
@@ -30,17 +32,12 @@ export class SessionsOverviewTableComponent implements OnInit {
     'delete',
   ];
 
-  constructor() {}
-
-  ngOnInit(): void {}
-
   public onSessionDelete(session: Session) {
     this.sessionDelete.emit(session);
   }
 
   public onSessionCreate() {
     this.sessionCreate.emit();
-    
   }
 
   public onCodePressed(session: Session) {}
@@ -51,5 +48,9 @@ export class SessionsOverviewTableComponent implements OnInit {
 
   public onSettings(session: Session) {
     this.sessionUpdate.emit(session);
+  }
+
+  public onRowSelect(event: any) {
+    this.sessionUpdate.emit(event.data);
   }
 }
