@@ -14,7 +14,7 @@
   ></button>
 </div>
 
-<p-table [value]="sessions" class="mat-elevation-z8" data-cy="session-overview-table">
+<p-table selectionMode="single" (onRowSelect)="onRowSelect($event)" [value]="sessions" class="mat-elevation-z8" data-cy="session-overview-table">
   <ng-template pTemplate="header">
     <tr>
       <th id="SessionOverviewTableHeaderNameColumn">
@@ -45,7 +45,7 @@
   </ng-template>
 
   <ng-template pTemplate="body" let-session>
-    <tr>
+    <tr [pSelectableRow]="session">
       <td data-column="sessionName" data-cy="session-overview-name-col">{{ session.name }}</td>
       <td data-column="createdAt" data-cy="session-overview-created-at-col">
         {{ session.createdAt | date: 'medium' }}
