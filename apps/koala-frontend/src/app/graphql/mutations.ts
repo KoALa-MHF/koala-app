@@ -15,9 +15,8 @@ const CREATE_SESSION = gql`
       enableLiveAnalysis
       media {
         id
-        type
-        title
-        composer
+        name
+        mimeType
         createdAt
         updatedAt
       }
@@ -41,9 +40,8 @@ const UPDATE_SESSION = gql`
       enableLiveAnalysis
       media {
         id
-        type
-        title
-        composer
+        name
+        mimeType
         createdAt
         updatedAt
       }
@@ -64,20 +62,8 @@ const DELETE_SESSION = gql`
 const CREATE_MEDIA = gql`
   mutation createMedia($media: CreateMediaInput!) {
     createMedia(createMediaInput: $media) {
-      title
-      composer
-      type
-      id
-    }
-  }
-`;
-
-const UPDATE_MEDIA = gql`
-  mutation updateMedia($id: Int!, $updateMedia: UpdateMediaInput!) {
-    updateMedia(id: $id, updateMediaInput: $updateMedia) {
-      title
-      composer
-      type
+      name
+      mimeType
       id
     }
   }

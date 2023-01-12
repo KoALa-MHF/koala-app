@@ -1,11 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
@@ -19,7 +13,9 @@ describe('SessionAudioComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SessionAudioComponent],
+      declarations: [
+        SessionAudioComponent,
+      ],
       imports: [
         MatFormFieldModule,
         MatInputModule,
@@ -36,8 +32,7 @@ describe('SessionAudioComponent', () => {
     component = fixture.componentInstance;
 
     component.audioForm = new FormGroup({
-        title: new FormControl<string>(''),
-        composer: new FormControl<string>(''),
+      name: new FormControl<string>(''),
     });
 
     fixture.detectChanges();
