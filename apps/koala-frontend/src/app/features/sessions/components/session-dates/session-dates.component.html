@@ -9,6 +9,7 @@
     formControlName="online"
     [binary]="true"
     label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.SESSION_ONLINE_LABEL' | translate }}"
+    data-cy="session-maintain-online-check"
   ></p-checkbox>
 
   <div *ngIf="!online">
@@ -18,6 +19,7 @@
         dateFormat="dd.mm.yy"
         id="session-start-input"
         formControlName="start"
+        data-cy="session-maintain-start-date-input"
       ></p-calendar>
       <label for="session-start-input">{{
         'SESSION.MAINTAIN.SESSION_SETTINGS.SESSION_START_DATE_INPUT_LABEL' | translate
@@ -32,6 +34,7 @@
         dateFormat="dd.mm.yy"
         id="session-end-input"
         formControlName="end"
+        data-cy="session-maintain-end-date-input"
       ></p-calendar>
       <label for="session-end-input">{{
         'SESSION.MAINTAIN.SESSION_SETTINGS.SESSION_END_DATE_INPUT_LABEL' | translate

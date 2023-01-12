@@ -3,7 +3,7 @@
 <form [formGroup]="basicDataForm" class="form">
   <div>
     <span class="p-float-label">
-      <input id="session-name-input" formControlName="name" type="text" pInputText />
+      <input id="session-name-input" formControlName="name" type="text" pInputText data-cy="session-maintain-name-input" />
       <label for="session-name-input">{{
         'SESSION.MAINTAIN.SESSION_SETTINGS.SESSION_NAME_INPUT_LABEL' | translate
       }}</label>
@@ -16,11 +16,11 @@
   <div>
     <span class="p-float-label">
       <textarea
-        id="session-description-textarea"
         rows="5"
         cols="30"
         pInputTextarea
         formControlName="description"
+        data-cy="session-maintain-description-input"
       ></textarea>
       <label for="session-description-textarea">{{
         'SESSION.MAINTAIN.SESSION_SETTINGS.SESSION_DESCRIPTION_INPUT_LABEL' | translate

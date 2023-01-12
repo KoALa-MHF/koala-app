@@ -10,6 +10,7 @@
     formControlName="editable"
     [binary]="true"
     label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.EDIT_ENABLED_LABEL' | translate }}"
+    data-cy="session-maintain-editable-check"
   ></p-checkbox>
 
   <p-checkbox
@@ -17,6 +18,7 @@
     formControlName="enablePlayer"
     [binary]="true"
     label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.PLAYER_ENABLED_LABEL' | translate }}"
+    data-cy="session-maintain-player-check"
   ></p-checkbox>
 
   <p-checkbox
@@ -24,6 +26,7 @@
     formControlName="displaySampleSolution"
     [binary]="true"
     label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.SAMPLE_SOLUTION_ENABLED_LABEL' | translate }}"
+    data-cy="session-maintain-sample-solution-check"
   ></p-checkbox>
 
   <p-checkbox
@@ -31,5 +34,6 @@
     formControlName="enableLiveAnalysis"
     [binary]="true"
     label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.ANALYSIS_ENABLED_LABEL' | translate }}"
+    data-cy="session-maintain-analysis-check"
   ></p-checkbox>
 </form>

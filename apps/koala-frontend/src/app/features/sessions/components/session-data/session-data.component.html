@@ -17,7 +17,6 @@
     <button
       pButton
       pRipple
-      id="save-btn"
       class="p-button-raised p-button-primary"
       type="submit"
       [disabled]="
@@ -28,6 +27,7 @@
       "
       (click)="onSave()"
       label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.SAVE_BTN' | translate }}"
+      data-cy="session-data-save-btn"
     ></button>
 
     <button
