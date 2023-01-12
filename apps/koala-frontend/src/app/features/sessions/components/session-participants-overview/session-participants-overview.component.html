@@ -1,15 +1,20 @@
 <p-table [value]="participants" [tableStyle]="{ 'min-width': '50rem' }">
   <ng-template pTemplate="caption">
     <div style="display: flex; justify-content: space-between; align-items: center">
-      <h4>Mitglieder der Session</h4>
+      <h4>{{ 'SESSION.MAINTAIN.SECTION_HEADINGS.INVITED_PARTICIPANTS' | translate }}</h4>
 
-      <button pButton pRipple label="+" (click)="onAddParticipantRequested()"></button>
+      <button
+        pButton
+        pRipple
+        label="{{ 'SESSION.MAINTAIN.PARTICIPANTS.ADD_BTN' | translate }}"
+        (click)="onAddParticipantRequested()"
+      ></button>
     </div>
   </ng-template>
   <ng-template pTemplate="header">
     <tr>
-      <th>Email-Adresse</th>
-      <th>Entfernen</th>
+      <th>{{ 'SESSION.MAINTAIN.PARTICIPANTS.EMAIL_COL' | translate }}</th>
+      <th>{{ 'SESSION.MAINTAIN.PARTICIPANTS.DELETE_COL' | translate }}</th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-participant>
@@ -22,7 +27,7 @@
           data-column="delete"
           icon="pi pi-trash"
           class="p-button-text"
-          aria-label="Delete"
+          attr.aria-label="{{ 'SESSION.MAINTAIN.PARTICIPANTS.ACC.DELETE_BTN_ACC' | translate }}"
           (click)="onDelete(participant)"
         ></button>
       </td>
@@ -31,7 +36,7 @@
 </p-table>
 
 <p-dialog
-  header="Teilnehmer Hinzufügen"
+  header="{{ 'SESSION.MAINTAIN.PARTICIPANTS.ADD_DIALOG.TITLE' | translate }}"
   [(visible)]="addParticipantModal"
   [modal]="true"
   [style]="{ width: '30vw' }"
@@ -51,9 +56,13 @@
           formControlName="email"
           email="true"
         />
-        <label for="session-participants-dialog-email-address">Email-Adresse</label>
+        <label for="session-participants-dialog-email-address">
+          {{ 'SESSION.MAINTAIN.PARTICIPANTS.ADD_DIALOG.EMAIL_INPUT_LABEL' | translate }}
+        </label>
       </span>
-      <small id="session-name-help" class="field-explanation"> Fügen Sie eine Email-Adresse pro Zeile hinzu. </small>
+      <small id="session-name-help" class="field-explanation">
+        {{ 'SESSION.MAINTAIN.PARTICIPANTS.ADD_DIALOG.EMAIL_INPUT_EXPLANATION' | translate }}
+      </small>
     </div>
   </form>
 

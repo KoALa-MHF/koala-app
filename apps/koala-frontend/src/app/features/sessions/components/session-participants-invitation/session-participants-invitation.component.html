@@ -1,14 +1,15 @@
-<h4 class="section-heading">Einladung</h4>
+<h4 class="section-heading">{{ 'SESSION.MAINTAIN.SECTION_HEADINGS.PARTICIPANT_INVITATION' | translate }}</h4>
 
 <div class="form">
   <div>
     <span class="p-float-label">
       <textarea id="session-participants-email-message" rows="5" cols="30" pInputTextarea></textarea>
-      <label for="session-participants-email-message">Nachricht</label>
+      <label for="session-participants-email-message">
+        {{ 'SESSION.MAINTAIN.PARTICIPANTS.INVITATION_TEXT_LABEL' | translate }}
+      </label>
     </span>
     <small id="session-name-help" class="field-explanation">
-      Hier können Sie ggf. eine Nachricht an die eingeladenen Personen einfügen, die mit dem Einladungslink versendet
-      wird.
+      {{ 'SESSION.MAINTAIN.PARTICIPANTS.INVITATION_TEXT_EXPLANATION' | translate }}
     </small>
   </div>
 </div>
@@ -21,6 +22,6 @@
     class="p-button-raised p-button-primary"
     type="submit"
     (click)="onInviteParticipants()"
-    label="Einladen"
+    label="{{ 'SESSION.MAINTAIN.PARTICIPANTS.INVITE_BTN' | translate }}"
   ></button>
 </div>
