@@ -18,7 +18,7 @@ export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
 
   @Get(':id')
-  async getMedia(@Param() params, @Res({ passthrough: true }) res: Response): Promise<StreamableFile> {
+  async getMedia(@Param() params, @Res() res: Response): Promise<void> {
     try {
       const media = await this.mediaService.findOne(params.id);
       if (media) {
@@ -31,7 +31,8 @@ export class MediaController {
           'Content-length': size,
           'Cache-Control': 'no-cache',
         });
-        return new StreamableFile(file);
+
+        file.pipe(res);
       }
     } catch (error) {
       if (error instanceof EntityNotFoundError) {

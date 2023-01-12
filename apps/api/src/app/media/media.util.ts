@@ -4,8 +4,9 @@ import { ensureDir } from 'fs-extra';
 
 const UPLOAD_MEDIA_FOLDER = join(process.cwd(), './uploads/media');
 
-export function getFilePath(id: number, fileName: string) {
-  return `${UPLOAD_MEDIA_FOLDER}/${id}/${fileName}`;
+export function getFilePath(id: number, fileName: string): string {
+  const mediaFolderPath = getMediaFolderPath(id);
+  return `${mediaFolderPath}/${fileName}`;
 }
 
 export async function getFileSize(filePath: string): Promise<number> {
@@ -13,6 +14,10 @@ export async function getFileSize(filePath: string): Promise<number> {
   return size;
 }
 
+export function getMediaFolderPath(id: number): string {
+  return `${UPLOAD_MEDIA_FOLDER}/${id}`;
+}
+
 export async function ensureMediaFolder(id: number): Promise<void> {
-  await ensureDir(`${UPLOAD_MEDIA_FOLDER}/${id}`);
+  await ensureDir(getMediaFolderPath(id));
 }
