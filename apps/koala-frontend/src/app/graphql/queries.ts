@@ -15,7 +15,8 @@ const GET_SESSIONS = gql`
       enableLiveAnalysis
       media {
         id
-        type
+        name
+        mimeType
         createdAt
         updatedAt
       }
@@ -40,7 +41,8 @@ const GET_ONE_SESSION = gql`
       enableLiveAnalysis
       media {
         id
-        type
+        name
+        mimeType
         createdAt
         updatedAt
       }

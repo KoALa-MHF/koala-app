@@ -3,7 +3,13 @@
 <form [formGroup]="basicDataForm" class="form">
   <div>
     <span class="p-float-label">
-      <input id="session-name-input" formControlName="name" type="text" pInputText data-cy="session-maintain-name-input" />
+      <input
+        id="session-name-input"
+        formControlName="name"
+        type="text"
+        pInputText
+        data-cy="session-maintain-name-input"
+      />
       <label for="session-name-input">{{
         'SESSION.MAINTAIN.SESSION_SETTINGS.SESSION_NAME_INPUT_LABEL' | translate
       }}</label>

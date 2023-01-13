@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { MutationResult } from 'apollo-angular';
 import { MessageService } from 'primeng/api';
-import { MarkerType, MediaType, Session, UpdateSessionMutation } from '../../../../graphql/generated/graphql';
+import { MarkerType, Session, UpdateSessionMutation } from '../../../../graphql/generated/graphql';
 import { MarkerService } from '../../services/marker.service';
 import { MediaService } from '../../services/media.service';
 import { SessionsService } from '../../services/sessions.service';
@@ -55,8 +55,7 @@ export class SessionMaintainPage implements OnInit {
         enableLiveAnalysis: new FormControl<boolean>(false),
       }),
       audio: this.formBuilder.group({
-        title: new FormControl<string>(''),
-        composer: new FormControl<string>(''),
+        name: new FormControl<string>(''),
       }),
     });
 
@@ -106,9 +105,7 @@ export class SessionMaintainPage implements OnInit {
         this.maintainSessionForm.get('dates')?.get('end')?.setValue(new Date(this.session.end));
       }
 
-      this.maintainSessionForm.get('audio')?.get('title')?.setValue(this.session.media?.title);
-
-      this.maintainSessionForm.get('audio')?.get('composer')?.setValue(this.session.media?.composer);
+      this.maintainSessionForm.get('audio')?.get('title')?.setValue(this.session.media?.name);
     });
   }
 
@@ -291,7 +288,6 @@ export class SessionMaintainPage implements OnInit {
   public onFileUpload(file: File) {
     this.mediaService
       .create({
-        type: MediaType.Audio,
         file,
       })
       .subscribe({

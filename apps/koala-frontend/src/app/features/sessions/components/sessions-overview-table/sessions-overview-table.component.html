@@ -14,7 +14,13 @@
   ></button>
 </div>
 
-<p-table selectionMode="single" (onRowSelect)="onRowSelect($event)" [value]="sessions" class="mat-elevation-z8" data-cy="session-overview-table">
+<p-table
+  selectionMode="single"
+  (onRowSelect)="onRowSelect($event)"
+  [value]="sessions"
+  class="mat-elevation-z8"
+  data-cy="session-overview-table"
+>
   <ng-template pTemplate="header">
     <tr>
       <th id="SessionOverviewTableHeaderNameColumn">
