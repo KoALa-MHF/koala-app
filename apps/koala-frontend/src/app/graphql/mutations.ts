@@ -62,8 +62,6 @@ const DELETE_SESSION = gql`
 const CREATE_MEDIA = gql`
   mutation createMedia($media: CreateMediaInput!) {
     createMedia(createMediaInput: $media) {
-      name
-      mimeType
       id
     }
   }

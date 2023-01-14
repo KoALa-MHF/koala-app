@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CreateMediaInput } from '../../../graphql/generated/graphql';
+import { CreateMediaInput, CreateMediaMutation } from '../../../graphql/generated/graphql';
 import { environment } from '../../../../environments/environment';
+import { Observable } from 'rxjs';
+import { MutationResult } from 'apollo-angular';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +11,7 @@ import { environment } from '../../../../environments/environment';
 export class MediaService {
   constructor(private readonly http: HttpClient) {}
 
-  create(media: CreateMediaInput) {
+  create(media: CreateMediaInput): Observable<MutationResult<CreateMediaMutation>> {
     const _map = {
       file: [
         'variables.createMediaInput.file',
@@ -35,6 +37,6 @@ export class MediaService {
 
     const graphQLEndpoint = environment.production ? 'https://koala-app.de/graphql' : 'http://localhost:4200/graphql';
 
-    return this.http.post(graphQLEndpoint, formData);
+    return this.http.post<MutationResult<CreateMediaMutation>>(graphQLEndpoint, formData);
   }
 }

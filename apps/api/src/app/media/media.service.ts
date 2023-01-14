@@ -40,9 +40,6 @@ export class MediaService {
         .on('finish', () => {
           resolve();
         })
-        .on('drain', () => {
-          reject(new BadRequestException('File too large'));
-        })
         .on('error', () => {
           reject(new BadRequestException('Could not save file'));
         })
