@@ -41,6 +41,7 @@ import { SessionParticipantsOverviewComponent } from './components/session-parti
 import { SessionParticipantsInvitationComponent } from './components/session-participants-invitation/session-participants-invitation.component';
 import { MarkerService } from './services/marker.service';
 import { MarkerButtonComponent } from './components/marker-button/marker-button.component';
+import { DeleteConfirmDialogComponent } from './components/delete-confirm-dialog/delete-confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { MarkerButtonComponent } from './components/marker-button/marker-button.
     SessionParticipantsOverviewComponent,
     SessionParticipantsInvitationComponent,
     MarkerButtonComponent,
+    DeleteConfirmDialogComponent,
   ],
   imports: [
     SharedModule,

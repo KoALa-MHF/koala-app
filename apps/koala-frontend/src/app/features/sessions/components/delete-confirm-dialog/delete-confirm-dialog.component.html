@@ -1,0 +1,34 @@
+<p-dialog
+  header="{{ 'SESSION.DELETE_CONFIRM_DIALOG.TITLE' | translate }}"
+  [(visible)]="showDialog"
+  [modal]="true"
+  [style]="{ width: '30vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="onCancel()"
+>
+  <div *ngIf="name">{{ 'SESSION.DELETE_CONFIRM_DIALOG.EXPLANATION' | translate: { sessionName: name } }}</div>
+  <div *ngIf="!name">
+    {{ 'SESSION.DELETE_CONFIRM_DIALOG.EXPLANATION_WITHOUT_REF' | translate: { sessionName: name } }}
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipple
+      (click)="onDeleteConfirm()"
+      label="{{ 'SESSION.DELETE_CONFIRM_DIALOG.CONFIRM_BTN' | translate }}"
+      class="p-button-raised p-button-primary"
+      data-cy="session-delete-confirm-dialog-confirm-btn"
+    ></button>
+
+    <button
+      pButton
+      pRipple
+      (click)="onCancel()"
+      label="{{ 'SESSION.DELETE_CONFIRM_DIALOG.CANCEL_BTN' | translate }}"
+      class="p-button-raised p-button-plain p-button-text"
+      data-cy="session-delete-confirm-dialog-cancel-btn"
+    ></button>
+  </ng-template>
+</p-dialog>
