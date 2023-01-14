@@ -292,11 +292,31 @@ export class SessionMaintainPage implements OnInit {
       })
       .subscribe({
         next: (value) => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Dateiupload erfolgreich',
-            detail: 'Die Datei wurde erfolgreich hochgeladen und der Session zugewiesen',
-          });
+          this.sessionService
+            .update(parseInt(this.session?.id || '0'), {
+              description: this.session?.description,
+              displaySampleSolution: this.session?.displaySampleSolution,
+              editable: this.session?.editable,
+              enableLiveAnalysis: this.session?.enableLiveAnalysis,
+              enablePlayer: this.session?.enablePlayer,
+              end: this.session?.end,
+              name: this.session?.name,
+              start: this.session?.start,
+              status: this.session?.status,
+              mediaId: parseInt(value.data?.createMedia.id || '0'),
+            })
+            .subscribe({
+              next: () => {
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'Dateiupload erfolgreich',
+                  detail: 'Die Datei wurde erfolgreich hochgeladen und der Session zugewiesen',
+                });
+              },
+              error: (err) => {
+                console.log(err);
+              },
+            });
         },
         error: (err) => {
           this.messageService.add({

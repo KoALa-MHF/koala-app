@@ -398,10 +398,7 @@ export type CreateMediaMutationVariables = Exact<{
   media: CreateMediaInput;
 }>;
 
-export type CreateMediaMutation = {
-  __typename?: 'Mutation';
-  createMedia: { __typename?: 'Media'; name: string; mimeType: string; id: string };
-};
+export type CreateMediaMutation = { __typename?: 'Mutation'; createMedia: { __typename?: 'Media'; id: string } };
 
 export type CreateMarkerMutationVariables = Exact<{
   createMarker: CreateMarkerInput;
@@ -574,8 +571,6 @@ export class DeleteSessionGQL extends Apollo.Mutation<DeleteSessionMutation, Del
 export const CreateMediaDocument = gql`
   mutation createMedia($media: CreateMediaInput!) {
     createMedia(createMediaInput: $media) {
-      name
-      mimeType
       id
     }
   }
