@@ -60,7 +60,8 @@
 <koala-delete-confirm-dialog
   *ngIf="showDeleteConfirm"
   [objectIdentifier]="selectedSession?.id"
-  [name]="selectedSession?.name"
+  title="{{ 'SESSION.DELETE_CONFIRM_DIALOG.TITLE' | translate }}"
+  confirmText="{{ 'SESSION.DELETE_CONFIRM_DIALOG.EXPLANATION' | translate: { sessionName: selectedSession?.name } }}"
   (cancel)="onSessionDeleteCancel()"
   (confirm)="onSessionDeleteConfirmed($event)"
 ></koala-delete-confirm-dialog>

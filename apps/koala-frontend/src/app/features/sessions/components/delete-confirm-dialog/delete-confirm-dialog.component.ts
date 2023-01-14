@@ -8,7 +8,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   ],
 })
 export class DeleteConfirmDialogComponent {
-  @Input() name?: string;
+  @Input() title!: string;
+  @Input() confirmText!: string;
   @Input() objectIdentifier?: any;
   @Output() confirm = new EventEmitter<any>();
   @Output() cancel = new EventEmitter<void>();

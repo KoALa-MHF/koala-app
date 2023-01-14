@@ -10,22 +10,23 @@ export const getSessionOverviewTableRow = (row: number) => getSessionOverviewTab
 
 export const pressAllDeleteSessionButtons = () => {
   getSessionOverviewTableRows().then((rows) => {
-    if (rows.length > 1) {
-      cy.get('[data-cy="session-overview-delete-btn"]', {}).each((button) => {
-        cy.wrap(button).click();
-      });
+    for (let i = 1; i < rows.length; i++) {
+      pressDeleteOneSession(i - 1);
+      confirmDeleteSession();
     }
   });
 };
 
 export const pressDeleteOneSession = (row: number) => {
-  let counter = 0;
-  cy.get('[data-cy="session-overview-delete-btn"]', {}).each((button) => {
-    if (counter === row) {
-      cy.wrap(button).click();
-    }
-    counter++;
-  });
+  cy.get('[data-cy="session-overview-delete-btn"]').eq(row).click();
+};
+
+export const confirmDeleteSession = () => {
+  cy.get('[data-cy="delete-confirm-dialog-confirm-btn"]').click();
+};
+
+export const cancelDeleteConfirm = () => {
+  cy.get('[data-cy="delete-confirm-dialog-cancel-btn"]').click();
 };
 
 export const pressEditOnSession = (row: number) => {

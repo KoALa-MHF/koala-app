@@ -113,8 +113,7 @@
     },
     "DELETE_CONFIRM_DIALOG": {
       "TITLE": "Löschen",
-      "EXPLANATION": "Wollen Sie wirklich '{{sessionName}}' löschen?",
-      "EXPLANATION_WITHOUT_REF": "Wollen Sie wirklich das Objekt löschen?",
+      "EXPLANATION": "Wollen Sie wirklich die Session '{{sessionName}}' löschen?",
       "CONFIRM_BTN": "Löschen",
       "CANCEL_BTN": "Abbrechen"
     }

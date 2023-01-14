@@ -22,6 +22,8 @@ import {
   getDialogCreateSessionButton,
   getCreateSessionNameField,
   getSessionOverviewTableRow,
+  confirmDeleteSession,
+  cancelDeleteConfirm,
 } from '../support/session-overview.po';
 
 describe('koala-frontend', () => {
@@ -139,18 +141,28 @@ describe('koala-frontend', () => {
     pressSaveButton();
 
     cy.contains('New Session - Update');
-  });
+  });*/
 
   it('Delete session', () => {
     pressCreateSessionButton();
 
-    getCreateSessionNameField().type('New Session');
-    pressSaveButton();
+    getCreateSessionNameField().type('New To Be Deleted Session');
+    pressDialogCreateSessionButton();
 
-    pressDeleteOnSession(0);
+    pressHomeButton();
+
+    cy.contains('New To Be Deleted Session').should('exist');
+
+    pressDeleteOneSession(0);
+    cancelDeleteConfirm();
+
+    getSessionOverviewTableRows().should((t) => expect(t.length).equal(2));
+
+    pressDeleteOneSession(0);
+    confirmDeleteSession();
 
     getSessionOverviewTableRows().should((t) => expect(t.length).equal(1));
 
-    cy.contains('New Session').should('not.exist');
-  });*/
+    cy.contains('New To Be Deleted Session').should('not.exist');
+  });
 });
