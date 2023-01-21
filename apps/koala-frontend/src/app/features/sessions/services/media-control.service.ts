@@ -1,0 +1,195 @@
+import { Injectable } from '@angular/core';
+import WaveSurfer from 'wavesurfer.js';
+import TimelinePlugin from 'wavesurfer.js/src/plugin/timeline';
+import MediaSessionPlugin from 'wavesurfer.js/src/plugin/mediasession';
+import { WaveSurferParams } from 'wavesurfer.js/types/params';
+import { EventHandler } from 'wavesurfer.js/types/util';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import MP3Tag from 'mp3tag.js';
+
+export enum MediaActions {
+  Play = 1,
+  Stop,
+  SkipForward,
+  SkipBackward,
+  VolumeChange,
+}
+
+export interface MediaEvent {
+  actions: MediaActions;
+  value?: number;
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class MediaControlService {
+  uuid!: string | HTMLElement;
+  defaultOptions: WaveSurferParams = {
+    container: `#${this.uuid}`,
+    backgroundColor: 'transparent',
+    cursorColor: 'rgba(73,157,255,.95)',
+    cursorWidth: 2,
+    progressColor: 'rgba(0,0,0,.9)',
+    waveColor: 'rgba(73,157,158,1)',
+    autoCenter: true,
+    normalize: true,
+    scrollParent: false,
+    backend: 'MediaElementWebAudio',
+    responsive: true,
+    maxCanvasWidth: 100,
+    hideScrollbar: false,
+    height: 200,
+    closeAudioContext: true,
+  };
+  waves = new Map<string | HTMLElement, WaveSurfer>();
+
+  async load(trackurl: string, uuid: string) {
+    this.uuid = uuid;
+
+    let plugin: any = undefined;
+    let audioBlob: Blob = new Blob();
+    try {
+      audioBlob = await this.fetchAudioBlob(trackurl);
+      plugin = await this.createMediaSessionPlugin(audioBlob);
+    } catch (e) {
+      throw new Error('error fetching audio file');
+    }
+    this.defaultOptions.container = `#${this.uuid}`;
+    this.waves.set(
+      this.uuid,
+      WaveSurfer.create({
+        ...this.defaultOptions,
+        plugins: [
+          TimelinePlugin.create({
+            container: `#${this.uuid}-timeline`,
+          }),
+          plugin,
+        ],
+      })
+    );
+    const w = this.waves.get(this.uuid);
+    if (w !== undefined) {
+      const audio = new Audio();
+      audio.src = URL.createObjectURL(audioBlob);
+      w.load(audio);
+    }
+  }
+
+  private async createMediaSessionPlugin(blob: Blob): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = function () {
+        const buff = this.result as ArrayBufferLike;
+        const mp3tag = new MP3Tag(buff);
+        mp3tag.read();
+        if (mp3tag.error !== '') {
+          reject('');
+        }
+        resolve(
+          MediaSessionPlugin.create({
+            metadata: {
+              album: mp3tag.tags.album,
+              artist: mp3tag.tags.artist,
+              title: mp3tag.tags.title,
+              artwork: [],
+            },
+          })
+        );
+      };
+      reader.readAsArrayBuffer(blob);
+    });
+  }
+
+  private async fetchAudioBlob(url: string) {
+    const resp = await fetch(url);
+    return resp.blob();
+  }
+
+  private getWave(): WaveSurfer {
+    const w = this.waves.get(this.uuid);
+    if (w == undefined) {
+      throw Error('no wavesurfer instance');
+    }
+    return w;
+  }
+
+  public getMetadata() {
+    const w = this.getWave();
+    return w.mediasession.metadata;
+  }
+
+  public play() {
+    try {
+      const w = this.getWave();
+      if (!w.isPlaying()) {
+        w.play();
+      } else {
+        w?.pause();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  public stop() {
+    try {
+      const w = this.getWave();
+      w.stop();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  public skipBackward() {
+    try {
+      const w = this.getWave();
+      if (w.isPlaying()) {
+        w.skipBackward(1);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  public skipForward() {
+    try {
+      const w = this.getWave();
+      if (w.isPlaying()) {
+        w.skipForward(1);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  public addEventHandler(eventName: string, handler: EventHandler) {
+    try {
+      const w = this.getWave();
+      return w.on(eventName, handler);
+    } catch (error) {
+      console.error(error);
+    }
+    return;
+  }
+
+  public destroy() {
+    try {
+      const w = this.getWave();
+      w.unAll();
+      w.destroy();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  public onVolumeChange(volume: number) {
+    try {
+      const w = this.getWave();
+      w.setVolume(volume * 0.01);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+}

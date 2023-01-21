@@ -2,5 +2,9 @@
   "/graphql": {
     "target": "http://localhost:3333/graphql",
     "secure": false
+  },
+  "/api/media": {
+    "target": "http://localhost:3333",
+    "secure": false
   }
 }
