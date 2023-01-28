@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { MarkerEntity } from '../../types/marker-entity';
+import { MarkerType } from '../../../../graphql/generated/graphql';
 
 @Component({
   selector: 'koala-marker-button',
@@ -10,4 +11,5 @@ import { MarkerEntity } from '../../types/marker-entity';
 })
 export class MarkerButtonComponent {
   @Input() marker!: MarkerEntity;
+  MarkerType = MarkerType;
 }

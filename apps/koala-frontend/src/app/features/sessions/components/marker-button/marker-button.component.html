@@ -3,5 +3,8 @@
   pRipple
   [label]="marker.abbreviation"
   [style.background-color]="marker.color"
+  class="p-button-raised marker-button"
+  [class.marker-button-event]="marker.type === MarkerType.Event"
+  [class.marker-button-range]="marker.type === MarkerType.Range"
   icon="pi pi-{{ marker.icon }}"
 ></button>

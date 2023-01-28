@@ -1,0 +1,7 @@
+<div class="drag-drop-group" cdkDropListGroup mixedCdkDragDrop orientation="horizontal" (dropped)="dropped($event)">
+  <span *ngFor="let item of markers" cdkDropList mixedCdkDropList>
+    <div cdkDrag>
+      <koala-marker-button class="example-handle" cdkDragHandle *ngIf="item" [marker]="item"></koala-marker-button>
+    </div>
+  </span>
+</div>
