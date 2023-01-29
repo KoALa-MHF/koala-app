@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MutationResult } from 'apollo-angular';
+import { datesStartEndValidator } from '../../../../shared/dates.validator';
 import { MessageService } from 'primeng/api';
 import { MarkerType, Session, UpdateSessionMutation } from '../../../../graphql/generated/graphql';
 import { MarkerService } from '../../services/marker.service';
@@ -43,11 +44,16 @@ export class SessionMaintainPage implements OnInit {
         ]),
         description: new FormControl<string>(''),
       }),
-      dates: this.formBuilder.group({
-        online: new FormControl<boolean>(false),
-        start: new FormControl<Date | null>(null),
-        end: new FormControl<Date | null>(null),
-      }),
+      dates: this.formBuilder.group(
+        {
+          online: new FormControl<boolean>(false),
+          start: new FormControl<Date | null>(null),
+          end: new FormControl<Date | null>(null),
+        },
+        {
+          validators: datesStartEndValidator,
+        }
+      ),
       details: this.formBuilder.group({
         editable: new FormControl<boolean>(false),
         enablePlayer: new FormControl<boolean>(false),
