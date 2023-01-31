@@ -39,7 +39,7 @@ describe('koala-frontend', () => {
     pressAllDeleteSessionButtons();
   });
 
-  it('Create session with basic session data', () => {
+  it('Create/update session with basic session data', () => {
     getSessionOverviewTableRows().should((t) => expect(t.length).equal(1));
     pressCreateSessionButton();
 
@@ -96,6 +96,39 @@ describe('koala-frontend', () => {
     getPlayerCheckbox().should('have.class', 'p-checkbox-checked');
     getSampleSolutionCheckbox().should('have.class', 'p-checkbox-checked');
     getAnalysisCheckbox().should('have.class', 'p-checkbox-checked');
+
+    getStartDateInput().should('not.be.empty');
+    getEndDateInput().should('not.be.empty');
+
+    //update session
+    getSessionNameField().clear().type('Second Updated Session');
+    getSessionDescriptionField().clear().type('Updated Description');
+    //deselect checkboxes
+    getEditableCheckbox().click();
+    getPlayerCheckbox().click();
+    getSampleSolutionCheckbox().click();
+    getAnalysisCheckbox().click();
+
+    pressGeneralDataSaveButton();
+    pressHomeButton();
+
+    getSessionOverviewTableRows().should((t) => expect(t.length).equal(2));
+
+    getSessionOverviewTableRow(1)
+      .find('[data-cy="session-overview-name-col"]')
+      .should('have.text', 'Second Updated Session');
+    getSessionOverviewTableRow(1).find('[data-cy="session-overview-created-at-col"]').should('not.be.empty');
+    getSessionOverviewTableRow(1).find('[data-cy="session-overview-changed-at-col"]').should('not.be.empty');
+
+    //check if all data was stored correctly
+    pressEditOnSession(0);
+
+    getSessionNameField().should('have.value', 'Second Updated Session');
+    getSessionDescriptionField().should('have.value', 'Updated Description');
+    getEditableCheckbox().should('not.have.class', 'p-checkbox-checked');
+    getPlayerCheckbox().should('not.have.class', 'p-checkbox-checked');
+    getSampleSolutionCheckbox().should('not.have.class', 'p-checkbox-checked');
+    getAnalysisCheckbox().should('not.have.class', 'p-checkbox-checked');
 
     getStartDateInput().should('not.be.empty');
     getEndDateInput().should('not.be.empty');
