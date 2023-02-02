@@ -1,6 +1,5 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { IsNotEmpty } from 'class-validator';
-import { defaultThrottleConfig } from 'rxjs/internal/operators/throttle';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '../../core/base.entity';
 import { Session } from '../../sessions/entities/session.entity';

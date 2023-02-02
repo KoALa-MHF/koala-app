@@ -1,30 +1,28 @@
-import { Injectable } from '@nestjs/common';
-import { CreateToolbarInput } from './dto/create-toolbar.input';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { UpdateToolbarInput } from './dto/update-toolbar.input';
+import { Toolbar } from './entities/toolbar.entity';
 
 @Injectable()
 export class ToolbarsService {
-  create(createToolbarInput: CreateToolbarInput) {
-    return 'This action adds a new toolbar';
+  constructor(
+    @InjectRepository(Toolbar)
+    private toolbarsRepository: Repository<Toolbar>
+  ) {}
+
+  findOne(id: number): Promise<Toolbar> {
+    return this.toolbarsRepository.findOneByOrFail({ id });
   }
 
-  findAll() {
-    return `This action returns all toolbars`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} toolbar`;
-  }
-
-  update(id: number, updateToolbarInput: UpdateToolbarInput) {
-    return `This action updates a #${id} toolbar`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} toolbar`;
-  }
-
-  addMarkerToToolbar(toolbarId: number, markerId) {
-    return `This action removes a #${id} toolbar`;
+  async update(id: number, updateToolbarInput: UpdateToolbarInput) {
+    try {
+      await this.toolbarsRepository.update(id, {
+        markers: updateToolbarInput.markers,
+      });
+      return this.findOne(id);
+    } catch (error) {
+      throw new BadRequestException(error.detail);
+    }
   }
 }

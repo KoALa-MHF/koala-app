@@ -1,8 +1,12 @@
-import { CreateToolbarInput } from './create-toolbar.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { InputType, Field } from '@nestjs/graphql';
 
 @InputType()
-export class UpdateToolbarInput extends PartialType(CreateToolbarInput) {
-  @Field(() => Int)
-  id: number;
+export class UpdateToolbarInput {
+  @Field(
+    (type) => [
+      String,
+    ],
+    { defaultValue: [] }
+  )
+  markers: string[];
 }
