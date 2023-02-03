@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateMarkerInput } from './dto/create-marker.input';
 import { UpdateMarkerInput } from './dto/update-marker.input';
 import { Marker } from './entities/marker.entity';
+import { In } from 'typeorm';
 
 @Injectable()
 export class MarkersService {
@@ -24,8 +25,15 @@ export class MarkersService {
     return this.markersRepository.save(newMarker);
   }
 
-  findAll() {
-    return this.markersRepository.find();
+  findAll(ids: Array<number>) {
+    const query = ids
+      ? {
+          where: {
+            id: In(ids),
+          },
+        }
+      : undefined;
+    return this.markersRepository.find(query);
   }
 
   findOne(id: number) {

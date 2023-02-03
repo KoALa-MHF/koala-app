@@ -94,15 +94,11 @@ const CREATE_MARKER = gql`
   }
 `;
 
-const ADD_MARKER_TO_SESSION = gql`
-  mutation addMarker($addMarkerToSession: AddMarkerToSessionInput!) {
-    addMarkerToSession(addMarkerToSessionInput: $addMarkerToSession) {
+const UPDATE_TOOLBAR = gql`
+  mutation updateToolbar($id: Int!, $updateToolbarInput: UpdateToolbarInput!) {
+    updateToolbar(id: $id, updateToolbarInput: $updateToolbarInput) {
       id
-      markers {
-        id
-        name
-        type
-      }
+      markers
     }
   }
 `;

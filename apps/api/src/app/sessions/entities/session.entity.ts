@@ -106,19 +106,6 @@ export class Session extends BaseEntity {
   @IsOptional()
   media?: Media;
 
-  @JoinTable()
-  @ManyToMany(() => Marker, { nullable: true })
-  @Field(
-    (type) => [
-      Marker,
-    ],
-    {
-      nullable: true,
-      description: 'Associated Markers',
-    }
-  )
-  markers?: Marker[];
-
   @Column()
   @Index({ unique: true })
   @IsNotEmpty()

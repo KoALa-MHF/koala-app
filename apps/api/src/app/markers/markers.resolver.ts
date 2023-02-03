@@ -9,15 +9,26 @@ export class MarkersResolver {
   constructor(private readonly markersService: MarkersService) {}
 
   @Mutation(() => Marker)
-  createMarker(
-    @Args('createMarkerInput') createMarkerInput: CreateMarkerInput
-  ) {
+  createMarker(@Args('createMarkerInput') createMarkerInput: CreateMarkerInput) {
     return this.markersService.create(createMarkerInput);
   }
 
-  @Query(() => [Marker], { name: 'markers' })
-  findAll() {
-    return this.markersService.findAll();
+  @Query(
+    () => [
+      Marker,
+    ],
+    { name: 'markers' }
+  )
+  findAll(
+    @Args('ids', {
+      type: () => [
+        Int,
+      ],
+      nullable: true,
+    })
+    ids?: Array<number>
+  ) {
+    return this.markersService.findAll(ids);
   }
 
   @Query(() => Marker, { name: 'marker' })

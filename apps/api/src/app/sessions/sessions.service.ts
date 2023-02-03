@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Marker } from '../markers/entities/marker.entity';
 import { Toolbar } from '../toolbars/entities/toolbar.entity';
 
 import { CreateSessionInput } from './dto/create-session.input';
@@ -10,7 +9,6 @@ import { Session } from './entities/session.entity';
 
 const RELATIONS = [
   'media',
-  'markers',
   'toolbars',
 ];
 
@@ -71,18 +69,6 @@ export class SessionsService {
     if (deleteResult.affected === 1) {
       return this.findOne(id, true);
     } else {
-      throw new NotFoundException();
-    }
-  }
-
-  async addMarker(id: number, markerId: number) {
-    try {
-      const session = await this.findOne(id);
-      session.markers.push({ id: markerId } as Marker);
-      await this.sessionsRepository.save(session);
-      // load the current data, as save returns also the local manipulated data when relation already exists
-      return this.findOne(id);
-    } catch (error) {
       throw new NotFoundException();
     }
   }

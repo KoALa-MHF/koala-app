@@ -1,10 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Session } from 'apps/koala-frontend/src/app/graphql/generated/graphql';
+import { Session } from '../../types/session-entity';
 
 @Component({
   selector: 'koala-sessions-overview-table',
   templateUrl: './sessions-overview-table.component.html',
-  styleUrls: ['./sessions-overview-table.component.scss'],
+  styleUrls: [
+    './sessions-overview-table.component.scss',
+  ],
 })
 export class SessionsOverviewTableComponent implements OnInit {
   @Input()
@@ -40,7 +42,6 @@ export class SessionsOverviewTableComponent implements OnInit {
 
   public onSessionCreate() {
     this.sessionCreate.emit();
-    
   }
 
   public onCodePressed(session: Session) {}

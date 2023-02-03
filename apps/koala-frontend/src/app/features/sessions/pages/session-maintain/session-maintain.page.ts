@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MarkerType, MediaType, Session } from '../../../../graphql/generated/graphql';
+import { Marker, MarkerType, MediaType } from '../../../../graphql/generated/graphql';
 import { MarkerService } from '../../services/marker.service';
 import { MediaService } from '../../services/media.service';
 import { SessionsService } from '../../services/sessions.service';
+import { ToolbarsService } from '../../services/toolbars.service';
 import { MarkerEntity } from '../../types/marker-entity';
+import { Media } from '../../types/media-entity';
+import { Session } from '../../types/session-entity';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -24,9 +27,11 @@ export class SessionMaintainPage implements OnInit {
   sessionId!: number;
   session: Session | null = null;
   participants: any = [];
+  markers: Array<Marker> = [];
 
   constructor(
     private readonly sessionService: SessionsService,
+    private readonly toolbarService: ToolbarsService,
     private readonly mediaService: MediaService,
     private readonly markerService: MarkerService,
     private readonly router: Router,
@@ -77,8 +82,17 @@ export class SessionMaintainPage implements OnInit {
     this.sessionService.getOne(this.sessionId).subscribe((result) => {
       this.session = {
         ...result.data?.session,
-        media: result.data?.session.media || null,
+        media: result.data?.session.media,
       };
+
+      const markers = this.session?.toolbars[0]?.markers || [];
+      const intArray: Array<number> = markers.map(function (item) {
+        return parseInt(item, 10);
+      });
+
+      this.markerService.getAll(intArray).subscribe((result) => {
+        this.markers = result.data?.markers;
+      });
 
       this.maintainSessionForm.get('basicData')?.get('name')?.setValue(this.session.name);
 
@@ -95,11 +109,11 @@ export class SessionMaintainPage implements OnInit {
 
       this.maintainSessionForm.get('details')?.get('enableLiveAnalysis')?.setValue(this.session.enableLiveAnalysis);
 
-      if (this.maintainSessionForm.get('dates')?.get('start')?.value) {
+      if (this.maintainSessionForm.get('dates')?.get('start')?.value && this.session.start) {
         this.maintainSessionForm.get('dates')?.get('start')?.setValue(new Date(this.session.start));
       }
 
-      if (this.maintainSessionForm.get('dates')?.get('end')?.value) {
+      if (this.maintainSessionForm.get('dates')?.get('end')?.value && this.session.end) {
         this.maintainSessionForm.get('dates')?.get('end')?.setValue(new Date(this.session.end));
       }
 
@@ -163,22 +177,6 @@ export class SessionMaintainPage implements OnInit {
       color: this.getMarkerColorValue(),
       icon: this.getMarkerIconValue(),
     };
-  }
-
-  get markers(): MarkerEntity[] {
-    return (
-      this.session?.markers?.map((marker) => {
-        return {
-          id: marker.id,
-          name: marker.name,
-          abbreviation: marker.abbreviation,
-          description: marker.description,
-          type: marker.type,
-          color: '',
-          icon: '',
-        };
-      }) || []
-    );
   }
 
   private getMarkerIconValue(): string {
@@ -258,14 +256,26 @@ export class SessionMaintainPage implements OnInit {
           const markerId = result.data?.createMarker.id;
 
           if (markerId) {
-            this.sessionService.addMarker(markerId, this.sessionId).subscribe({
-              next: () => {
-                this.maintainMarkerForm.reset();
-              },
-              error: () => {
-                console.error('Add Marker to Session Error');
-              },
-            });
+            const toolbar = this.session?.toolbars[0];
+            if (toolbar) {
+              const markers = [
+                ...toolbar.markers,
+              ];
+              markers.push(markerId + '');
+
+              this.toolbarService
+                .update(parseInt(toolbar.id), {
+                  markers: markers,
+                })
+                .subscribe({
+                  next: () => {
+                    this.maintainMarkerForm.reset();
+                  },
+                  error: () => {
+                    console.error('Add Marker to Session Error');
+                  },
+                });
+            }
           }
         },
         error: () => {

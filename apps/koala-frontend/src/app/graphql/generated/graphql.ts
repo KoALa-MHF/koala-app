@@ -19,13 +19,6 @@ export type Scalars = {
   Upload: any;
 };
 
-export type AddMarkerToSessionInput = {
-  /** Associated Marker */
-  markerId: Scalars['Int'];
-  /** Session ID */
-  sessionId: Scalars['Int'];
-};
-
 export type Annotation = {
   __typename?: 'Annotation';
   /** Creation Date */
@@ -59,9 +52,9 @@ export type CreateMarkerInput = {
   /** Marker Name Abbreviation (e.g. for small screen sizes */
   abbreviation: Scalars['String'];
   /** Marker Color */
-  color?: InputMaybe<Scalars['String']>;
+  color?: Scalars['String'];
   /** Marker Descritpion */
-  description?: InputMaybe<Scalars['String']>;
+  description?: Scalars['String'];
   /** Marker Name */
   name: Scalars['String'];
   /** Marker Type */
@@ -85,12 +78,12 @@ export type CreateSessionInput = {
   mediaId?: InputMaybe<Scalars['Int']>;
   name: Scalars['String'];
   start?: InputMaybe<Scalars['DateTime']>;
-  status?: InputMaybe<SessionStatus>;
+  status?: SessionStatus;
 };
 
 export type CreateUserSessionInput = {
   /** User Session Note */
-  note?: InputMaybe<Scalars['String']>;
+  note?: Scalars['String'];
   /** Associated Session */
   sessionId: Scalars['Int'];
 };
@@ -144,7 +137,6 @@ export enum MediaType {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addMarkerToSession: Session;
   createAnnotation: Annotation;
   createMarker: Marker;
   createMedia: Media;
@@ -159,11 +151,8 @@ export type Mutation = {
   updateMarker: Marker;
   updateMedia: Media;
   updateSession: Session;
+  updateToolbar: Toolbar;
   updateUserSession: UserSession;
-};
-
-export type MutationAddMarkerToSessionArgs = {
-  addMarkerToSessionInput: AddMarkerToSessionInput;
 };
 
 export type MutationCreateAnnotationArgs = {
@@ -226,6 +215,11 @@ export type MutationUpdateSessionArgs = {
   updateSessionInput: UpdateSessionInput;
 };
 
+export type MutationUpdateToolbarArgs = {
+  id: Scalars['Int'];
+  updateToolbarInput: UpdateToolbarInput;
+};
+
 export type MutationUpdateUserSessionArgs = {
   id: Scalars['Int'];
   updateUserSessionInput: UpdateUserSessionInput;
@@ -251,6 +245,10 @@ export type QueryAnnotationArgs = {
 
 export type QueryMarkerArgs = {
   id: Scalars['Int'];
+};
+
+export type QueryMarkersArgs = {
+  ids?: InputMaybe<Array<Scalars['Int']>>;
 };
 
 export type QueryMediaArgs = {
@@ -283,8 +281,6 @@ export type Session = {
   end?: Maybe<Scalars['DateTime']>;
   /** ID for Session */
   id: Scalars['ID'];
-  /** Associated Markers */
-  markers?: Maybe<Array<Marker>>;
   /** Associated Media File */
   media?: Maybe<Media>;
   /** Session Name */
@@ -293,6 +289,8 @@ export type Session = {
   start?: Maybe<Scalars['DateTime']>;
   /** Session Status */
   status?: Maybe<SessionStatus>;
+  /** Associated Session */
+  toolbars: Array<Toolbar>;
   /** Date of Last Update */
   updatedAt: Scalars['DateTime'];
 };
@@ -301,6 +299,19 @@ export enum SessionStatus {
   Closed = 'CLOSED',
   Open = 'OPEN',
 }
+
+export type Toolbar = {
+  __typename?: 'Toolbar';
+  /** Creation Date */
+  createdAt: Scalars['DateTime'];
+  /** ID for Media */
+  id: Scalars['ID'];
+  markers: Array<Scalars['String']>;
+  /** Associated Session */
+  session: Session;
+  /** Date of Last Update */
+  updatedAt: Scalars['DateTime'];
+};
 
 export type UpdateAnnotationInput = {
   /** Annotation End Seconds */
@@ -340,6 +351,10 @@ export type UpdateSessionInput = {
   name?: InputMaybe<Scalars['String']>;
   start?: InputMaybe<Scalars['DateTime']>;
   status?: InputMaybe<SessionStatus>;
+};
+
+export type UpdateToolbarInput = {
+  markers?: Array<Scalars['String']>;
 };
 
 export type UpdateUserSessionInput = {
@@ -467,17 +482,14 @@ export type CreateMarkerMutation = {
   createMarker: { __typename?: 'Marker'; id: number; type: MarkerType; name: string; color: string };
 };
 
-export type AddMarkerMutationVariables = Exact<{
-  addMarkerToSession: AddMarkerToSessionInput;
+export type UpdateToolbarMutationVariables = Exact<{
+  id: Scalars['Int'];
+  updateToolbarInput: UpdateToolbarInput;
 }>;
 
-export type AddMarkerMutation = {
+export type UpdateToolbarMutation = {
   __typename?: 'Mutation';
-  addMarkerToSession: {
-    __typename?: 'Session';
-    id: string;
-    markers?: Array<{ __typename?: 'Marker'; id: number; name: string; type: MarkerType }> | null;
-  };
+  updateToolbar: { __typename?: 'Toolbar'; id: string; markers: Array<string> };
 };
 
 export type GetSessionsQueryVariables = Exact<{ [key: string]: never }>;
@@ -507,6 +519,7 @@ export type GetSessionsQuery = {
       createdAt: any;
       updatedAt: any;
     } | null;
+    toolbars: Array<{ __typename?: 'Toolbar'; id: string; markers: Array<string>; createdAt: any; updatedAt: any }>;
   }>;
 };
 
@@ -539,18 +552,28 @@ export type GetOneSessionQuery = {
       createdAt: any;
       updatedAt: any;
     } | null;
-    markers?: Array<{
-      __typename?: 'Marker';
-      id: number;
-      name: string;
-      type: MarkerType;
-      abbreviation: string;
-      description: string;
-      color: string;
-      createdAt: any;
-      updatedAt: any;
-    }> | null;
+    toolbars: Array<{ __typename?: 'Toolbar'; id: string; markers: Array<string>; createdAt: any; updatedAt: any }>;
   };
+};
+
+export type GetMarkersQueryVariables = Exact<{
+  ids?: InputMaybe<Array<Scalars['Int']> | Scalars['Int']>;
+}>;
+
+export type GetMarkersQuery = {
+  __typename?: 'Query';
+  markers: Array<{
+    __typename?: 'Marker';
+    id: number;
+    name: string;
+    abbreviation: string;
+    description: string;
+    color: string;
+    icon?: string | null;
+    createdAt: any;
+    updatedAt: any;
+    type: MarkerType;
+  }>;
 };
 
 export const CreateNewSessionDocument = gql`
@@ -707,15 +730,11 @@ export class CreateMarkerGQL extends Apollo.Mutation<CreateMarkerMutation, Creat
     super(apollo);
   }
 }
-export const AddMarkerDocument = gql`
-  mutation addMarker($addMarkerToSession: AddMarkerToSessionInput!) {
-    addMarkerToSession(addMarkerToSessionInput: $addMarkerToSession) {
+export const UpdateToolbarDocument = gql`
+  mutation updateToolbar($id: Int!, $updateToolbarInput: UpdateToolbarInput!) {
+    updateToolbar(id: $id, updateToolbarInput: $updateToolbarInput) {
       id
-      markers {
-        id
-        name
-        type
-      }
+      markers
     }
   }
 `;
@@ -723,8 +742,8 @@ export const AddMarkerDocument = gql`
 @Injectable({
   providedIn: 'root',
 })
-export class AddMarkerGQL extends Apollo.Mutation<AddMarkerMutation, AddMarkerMutationVariables> {
-  override document = AddMarkerDocument;
+export class UpdateToolbarGQL extends Apollo.Mutation<UpdateToolbarMutation, UpdateToolbarMutationVariables> {
+  override document = UpdateToolbarDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
@@ -748,6 +767,12 @@ export const GetSessionsDocument = gql`
         type
         title
         composer
+        createdAt
+        updatedAt
+      }
+      toolbars {
+        id
+        markers
         createdAt
         updatedAt
       }
@@ -788,13 +813,9 @@ export const GetOneSessionDocument = gql`
         createdAt
         updatedAt
       }
-      markers {
+      toolbars {
         id
-        name
-        type
-        abbreviation
-        description
-        color
+        markers
         createdAt
         updatedAt
       }
@@ -809,6 +830,32 @@ export const GetOneSessionDocument = gql`
 })
 export class GetOneSessionGQL extends Apollo.Query<GetOneSessionQuery, GetOneSessionQueryVariables> {
   override document = GetOneSessionDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const GetMarkersDocument = gql`
+  query GetMarkers($ids: [Int!]) {
+    markers(ids: $ids) {
+      id
+      name
+      abbreviation
+      description
+      color
+      icon
+      createdAt
+      updatedAt
+      type
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class GetMarkersGQL extends Apollo.Query<GetMarkersQuery, GetMarkersQueryVariables> {
+  override document = GetMarkersDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
