@@ -3,7 +3,6 @@ import { SessionsService } from './sessions.service';
 import { Session } from './entities/session.entity';
 import { CreateSessionInput } from './dto/create-session.input';
 import { UpdateSessionInput } from './dto/update-session.input';
-import { AddMarkerToSessionInput } from './dto/add-marker-to-session.input';
 
 @Resolver(() => Session)
 export class SessionsResolver {
@@ -40,10 +39,5 @@ export class SessionsResolver {
   @Mutation(() => Session)
   removeSession(@Args('id', { type: () => Int }) id: number) {
     return this.sessionsService.remove(id);
-  }
-
-  @Mutation(() => Session)
-  addMarkerToSession(@Args('addMarkerToSessionInput') addMarkerInput: AddMarkerToSessionInput) {
-    return this.sessionsService.addMarker(addMarkerInput.sessionId, addMarkerInput.markerId);
   }
 }

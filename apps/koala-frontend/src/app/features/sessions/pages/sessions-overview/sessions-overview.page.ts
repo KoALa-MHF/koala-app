@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Session } from '../../../../graphql/generated/graphql';
+import { Session } from '../../types/session-entity';
 import { SessionsService } from '../../services/sessions.service';
 
 @Component({

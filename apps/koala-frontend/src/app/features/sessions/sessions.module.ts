@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { SessionsRoutingModule } from './sessions-routing.module';
 import { SessionsOverviewPage } from './pages/sessions-overview/sessions-overview.page';
 import { SessionsService } from './services/sessions.service';
+import { ToolbarsService } from './services/toolbars.service';
 
 //primeng modules
 import { ButtonModule } from 'primeng/button';
@@ -91,6 +92,7 @@ import { DeleteConfirmDialogComponent } from './components/delete-confirm-dialog
     SessionsService,
     MediaService,
     MarkerService,
+    ToolbarsService,
   ],
 })
 export class SessionsModule {}

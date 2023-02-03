@@ -20,6 +20,12 @@ const GET_SESSIONS = gql`
         createdAt
         updatedAt
       }
+      toolbars {
+        id
+        markers
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -46,18 +52,30 @@ const GET_ONE_SESSION = gql`
         createdAt
         updatedAt
       }
-      markers {
+      toolbars {
         id
-        name
-        type
-        abbreviation
-        description
-        color
+        markers
         createdAt
         updatedAt
       }
       createdAt
       updatedAt
+    }
+  }
+`;
+
+const GET_MARKERS = gql`
+  query GetMarkers($ids: [Int!]) {
+    markers(ids: $ids) {
+      id
+      name
+      abbreviation
+      description
+      color
+      icon
+      createdAt
+      updatedAt
+      type
     }
   }
 `;
