@@ -72,10 +72,16 @@ describe('koala-frontend', () => {
     getStartDateInput().should('exist');
     getEndDateInput().should('exist');
 
-    getStartDateInput().click().find('table').find('tr').eq(1).click();
+    getStartDateInput().click().find('table').find('tr').eq(3).click();
     //online checkbox should be disabled
     getOnlineCheckbox().should('have.class', 'p-checkbox-disabled');
+    getEndDateInput().click().find('table').find('tr').eq(1).click();
+
+    getGeneralDataSaveButton().should('be.disabled');
+
+    getStartDateInput().click().find('table').find('tr').eq(1).click();
     getEndDateInput().click().find('table').find('tr').eq(3).click();
+    getGeneralDataSaveButton().should('be.enabled');
 
     pressGeneralDataSaveButton();
 
