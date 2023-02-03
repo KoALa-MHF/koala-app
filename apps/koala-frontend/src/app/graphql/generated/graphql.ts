@@ -63,8 +63,6 @@ export type CreateMarkerInput = {
 
 export type CreateMediaInput = {
   file: Scalars['Upload'];
-  /** Media Type */
-  type: MediaType;
 };
 
 export type CreateSessionInput = {
@@ -117,23 +115,17 @@ export enum MarkerType {
 
 export type Media = {
   __typename?: 'Media';
-  /** Media Composer */
-  composer?: Maybe<Scalars['String']>;
   /** Creation Date */
   createdAt: Scalars['DateTime'];
   /** ID for Media */
   id: Scalars['ID'];
-  /** Media Title */
-  title?: Maybe<Scalars['String']>;
-  /** Media Type */
-  type: MediaType;
+  /** Media Mime Type */
+  mimeType: Scalars['String'];
+  /** Media Name */
+  name: Scalars['String'];
   /** Date of Last Update */
   updatedAt: Scalars['DateTime'];
 };
-
-export enum MediaType {
-  Audio = 'AUDIO',
-}
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -144,12 +136,10 @@ export type Mutation = {
   createUserSession: UserSession;
   removeAnnotation: Annotation;
   removeMarker: Marker;
-  removeMedia: Media;
   removeSession: Session;
   removeUserSession: UserSession;
   updateAnnotation: Annotation;
   updateMarker: Marker;
-  updateMedia: Media;
   updateSession: Session;
   updateToolbar: Toolbar;
   updateUserSession: UserSession;
@@ -183,10 +173,6 @@ export type MutationRemoveMarkerArgs = {
   id: Scalars['Int'];
 };
 
-export type MutationRemoveMediaArgs = {
-  id: Scalars['Int'];
-};
-
 export type MutationRemoveSessionArgs = {
   id: Scalars['Int'];
 };
@@ -203,11 +189,6 @@ export type MutationUpdateAnnotationArgs = {
 export type MutationUpdateMarkerArgs = {
   id: Scalars['Int'];
   updateMarkerInput: UpdateMarkerInput;
-};
-
-export type MutationUpdateMediaArgs = {
-  id: Scalars['Int'];
-  updateMediaInput: UpdateMediaInput;
 };
 
 export type MutationUpdateSessionArgs = {
@@ -227,12 +208,10 @@ export type MutationUpdateUserSessionArgs = {
 
 export type Query = {
   __typename?: 'Query';
-  allMedia: Array<Media>;
   annotation: Annotation;
   annotations: Array<Annotation>;
   marker: Marker;
   markers: Array<Marker>;
-  media: Media;
   session: Session;
   sessions: Array<Session>;
   userSession: UserSession;
@@ -249,10 +228,6 @@ export type QueryMarkerArgs = {
 
 export type QueryMarkersArgs = {
   ids?: InputMaybe<Array<Scalars['Int']>>;
-};
-
-export type QueryMediaArgs = {
-  id: Scalars['Int'];
 };
 
 export type QuerySessionArgs = {
@@ -335,10 +310,6 @@ export type UpdateMarkerInput = {
   type?: InputMaybe<MarkerType>;
 };
 
-export type UpdateMediaInput = {
-  file?: InputMaybe<Scalars['Upload']>;
-};
-
 export type UpdateSessionInput = {
   description?: InputMaybe<Scalars['String']>;
   displaySampleSolution?: InputMaybe<Scalars['Boolean']>;
@@ -404,15 +375,7 @@ export type CreateNewSessionMutation = {
     enableLiveAnalysis?: boolean | null;
     createdAt: any;
     updatedAt: any;
-    media?: {
-      __typename?: 'Media';
-      id: string;
-      type: MediaType;
-      title?: string | null;
-      composer?: string | null;
-      createdAt: any;
-      updatedAt: any;
-    } | null;
+    media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
   };
 };
 
@@ -436,15 +399,7 @@ export type UpdateSessionMutation = {
     enableLiveAnalysis?: boolean | null;
     createdAt: any;
     updatedAt: any;
-    media?: {
-      __typename?: 'Media';
-      id: string;
-      type: MediaType;
-      title?: string | null;
-      composer?: string | null;
-      createdAt: any;
-      updatedAt: any;
-    } | null;
+    media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
   };
 };
 
@@ -458,20 +413,7 @@ export type CreateMediaMutationVariables = Exact<{
   media: CreateMediaInput;
 }>;
 
-export type CreateMediaMutation = {
-  __typename?: 'Mutation';
-  createMedia: { __typename?: 'Media'; title?: string | null; composer?: string | null; type: MediaType; id: string };
-};
-
-export type UpdateMediaMutationVariables = Exact<{
-  id: Scalars['Int'];
-  updateMedia: UpdateMediaInput;
-}>;
-
-export type UpdateMediaMutation = {
-  __typename?: 'Mutation';
-  updateMedia: { __typename?: 'Media'; title?: string | null; composer?: string | null; type: MediaType; id: string };
-};
+export type CreateMediaMutation = { __typename?: 'Mutation'; createMedia: { __typename?: 'Media'; id: string } };
 
 export type CreateMarkerMutationVariables = Exact<{
   createMarker: CreateMarkerInput;
@@ -510,15 +452,7 @@ export type GetSessionsQuery = {
     enableLiveAnalysis?: boolean | null;
     createdAt: any;
     updatedAt: any;
-    media?: {
-      __typename?: 'Media';
-      id: string;
-      type: MediaType;
-      title?: string | null;
-      composer?: string | null;
-      createdAt: any;
-      updatedAt: any;
-    } | null;
+    media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
     toolbars: Array<{ __typename?: 'Toolbar'; id: string; markers: Array<string>; createdAt: any; updatedAt: any }>;
   }>;
 };
@@ -543,15 +477,7 @@ export type GetOneSessionQuery = {
     enableLiveAnalysis?: boolean | null;
     createdAt: any;
     updatedAt: any;
-    media?: {
-      __typename?: 'Media';
-      id: string;
-      type: MediaType;
-      title?: string | null;
-      composer?: string | null;
-      createdAt: any;
-      updatedAt: any;
-    } | null;
+    media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
     toolbars: Array<{ __typename?: 'Toolbar'; id: string; markers: Array<string>; createdAt: any; updatedAt: any }>;
   };
 };
@@ -591,9 +517,8 @@ export const CreateNewSessionDocument = gql`
       enableLiveAnalysis
       media {
         id
-        type
-        title
-        composer
+        name
+        mimeType
         createdAt
         updatedAt
       }
@@ -627,9 +552,8 @@ export const UpdateSessionDocument = gql`
       enableLiveAnalysis
       media {
         id
-        type
-        title
-        composer
+        name
+        mimeType
         createdAt
         updatedAt
       }
@@ -670,9 +594,6 @@ export class DeleteSessionGQL extends Apollo.Mutation<DeleteSessionMutation, Del
 export const CreateMediaDocument = gql`
   mutation createMedia($media: CreateMediaInput!) {
     createMedia(createMediaInput: $media) {
-      title
-      composer
-      type
       id
     }
   }
@@ -683,27 +604,6 @@ export const CreateMediaDocument = gql`
 })
 export class CreateMediaGQL extends Apollo.Mutation<CreateMediaMutation, CreateMediaMutationVariables> {
   override document = CreateMediaDocument;
-
-  constructor(apollo: Apollo.Apollo) {
-    super(apollo);
-  }
-}
-export const UpdateMediaDocument = gql`
-  mutation updateMedia($id: Int!, $updateMedia: UpdateMediaInput!) {
-    updateMedia(id: $id, updateMediaInput: $updateMedia) {
-      title
-      composer
-      type
-      id
-    }
-  }
-`;
-
-@Injectable({
-  providedIn: 'root',
-})
-export class UpdateMediaGQL extends Apollo.Mutation<UpdateMediaMutation, UpdateMediaMutationVariables> {
-  override document = UpdateMediaDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
@@ -764,9 +664,8 @@ export const GetSessionsDocument = gql`
       enableLiveAnalysis
       media {
         id
-        type
-        title
-        composer
+        name
+        mimeType
         createdAt
         updatedAt
       }
@@ -807,9 +706,8 @@ export const GetOneSessionDocument = gql`
       enableLiveAnalysis
       media {
         id
-        type
-        title
-        composer
+        name
+        mimeType
         createdAt
         updatedAt
       }

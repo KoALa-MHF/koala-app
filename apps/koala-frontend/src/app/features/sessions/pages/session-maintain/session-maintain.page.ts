@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Marker, MarkerType, MediaType } from '../../../../graphql/generated/graphql';
+
+import { MutationResult } from 'apollo-angular';
+import { datesStartEndValidator } from '../../../../shared/dates.validator';
+import { MessageService } from 'primeng/api';
+import { Marker, MarkerType, UpdateSessionMutation } from '../../../../graphql/generated/graphql';
 import { MarkerService } from '../../services/marker.service';
 import { MediaService } from '../../services/media.service';
 import { SessionsService } from '../../services/sessions.service';
 import { ToolbarsService } from '../../services/toolbars.service';
 import { MarkerEntity } from '../../types/marker-entity';
-import { Media } from '../../types/media-entity';
 import { Session } from '../../types/session-entity';
 
 @Component({
@@ -36,7 +39,8 @@ export class SessionMaintainPage implements OnInit {
     private readonly markerService: MarkerService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly formBuilder: FormBuilder
+    private readonly formBuilder: FormBuilder,
+    private readonly messageService: MessageService
   ) {
     this.maintainSessionForm = this.formBuilder.group({
       basicData: this.formBuilder.group({
@@ -45,11 +49,16 @@ export class SessionMaintainPage implements OnInit {
         ]),
         description: new FormControl<string>(''),
       }),
-      dates: this.formBuilder.group({
-        online: new FormControl<boolean>(false),
-        start: new FormControl<Date | null>(null),
-        end: new FormControl<Date | null>(null),
-      }),
+      dates: this.formBuilder.group(
+        {
+          online: new FormControl<boolean>(false),
+          start: new FormControl<Date | null>(null),
+          end: new FormControl<Date | null>(null),
+        },
+        {
+          validators: datesStartEndValidator,
+        }
+      ),
       details: this.formBuilder.group({
         editable: new FormControl<boolean>(false),
         enablePlayer: new FormControl<boolean>(false),
@@ -57,8 +66,7 @@ export class SessionMaintainPage implements OnInit {
         enableLiveAnalysis: new FormControl<boolean>(false),
       }),
       audio: this.formBuilder.group({
-        title: new FormControl<string>(''),
-        composer: new FormControl<string>(''),
+        name: new FormControl<string>(''),
       }),
     });
 
@@ -109,17 +117,15 @@ export class SessionMaintainPage implements OnInit {
 
       this.maintainSessionForm.get('details')?.get('enableLiveAnalysis')?.setValue(this.session.enableLiveAnalysis);
 
-      if (this.maintainSessionForm.get('dates')?.get('start')?.value && this.session.start) {
+      if (this.session.start) {
         this.maintainSessionForm.get('dates')?.get('start')?.setValue(new Date(this.session.start));
       }
 
-      if (this.maintainSessionForm.get('dates')?.get('end')?.value && this.session.end) {
+      if (this.session.end) {
         this.maintainSessionForm.get('dates')?.get('end')?.setValue(new Date(this.session.end));
       }
 
-      this.maintainSessionForm.get('audio')?.get('title')?.setValue(this.session.media?.title);
-
-      this.maintainSessionForm.get('audio')?.get('composer')?.setValue(this.session.media?.composer);
+      this.maintainSessionForm.get('audio')?.get('title')?.setValue(this.session.media?.name);
     });
   }
 
@@ -134,8 +140,6 @@ export class SessionMaintainPage implements OnInit {
   }
 
   public onParticipantRemove(participant: any) {
-    console.log('=== Participant Deleted ===');
-    console.log(participant);
     const index = this.participants.findIndex((p: any) => {
       return p.email === participant.email ? true : false;
     });
@@ -226,11 +230,17 @@ export class SessionMaintainPage implements OnInit {
         enableLiveAnalysis,
       })
       .subscribe({
-        next: () => {
-          console.log('Save successful');
+        next: (session: MutationResult<UpdateSessionMutation>) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: "Änderungen an Session '" + session.data?.updateSession.name + "' wurden gespeichert",
+          });
         },
-        error: () => {
-          console.log('Save Error');
+        error: (session: MutationResult<UpdateSessionMutation>) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Änderungen an Session konnten nicht gespeichert werden',
+          });
         },
       });
   }
@@ -269,10 +279,17 @@ export class SessionMaintainPage implements OnInit {
                 })
                 .subscribe({
                   next: () => {
+                    this.messageService.add({
+                      severity: 'success',
+                      summary: 'Marker erfolgreich erstellt und der Session hinzugefügt',
+                    });
                     this.maintainMarkerForm.reset();
                   },
                   error: () => {
-                    console.error('Add Marker to Session Error');
+                    this.messageService.add({
+                      severity: 'error',
+                      summary: 'Markererstellung fehlgeschlagen',
+                    });
                   },
                 });
             }
@@ -287,15 +304,42 @@ export class SessionMaintainPage implements OnInit {
   public onFileUpload(file: File) {
     this.mediaService
       .create({
-        type: MediaType.Audio,
         file,
       })
       .subscribe({
-        next(value) {
-          console.log(value);
+        next: (value) => {
+          this.sessionService
+            .update(parseInt(this.session?.id || '0'), {
+              description: this.session?.description,
+              displaySampleSolution: this.session?.displaySampleSolution,
+              editable: this.session?.editable,
+              enableLiveAnalysis: this.session?.enableLiveAnalysis,
+              enablePlayer: this.session?.enablePlayer,
+              end: this.session?.end,
+              name: this.session?.name,
+              start: this.session?.start,
+              status: this.session?.status,
+              mediaId: parseInt(value.data?.createMedia.id || '0'),
+            })
+            .subscribe({
+              next: () => {
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'Dateiupload erfolgreich',
+                  detail: 'Die Datei wurde erfolgreich hochgeladen und der Session zugewiesen',
+                });
+              },
+              error: (err) => {
+                console.log(err);
+              },
+            });
         },
-        error(err) {
-          console.log(err);
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Dateiupload fehlerhaft',
+            detail: 'Die Datei konnte nicht hochgeladen werden. Bitte versuche es erneut',
+          });
         },
       });
   }

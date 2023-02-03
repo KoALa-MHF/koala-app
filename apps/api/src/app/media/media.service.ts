@@ -3,9 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { createWriteStream } from 'fs';
 import { Repository } from 'typeorm';
 import { CreateMediaInput } from './dto/create-media.input';
-import { UpdateMediaInput } from './dto/update-media.input';
 import { Media } from './entities/media.entity';
-import { ensureDir } from 'fs-extra';
+import { FileUpload } from 'graphql-upload';
+import { ensureMediaFolder, getFilePath } from './media.util';
 
 @Injectable()
 export class MediaService {
@@ -15,24 +15,30 @@ export class MediaService {
   ) {}
 
   async create(createMediaInput: CreateMediaInput): Promise<Media> {
+    const file: FileUpload = await createMediaInput.file;
+
     const newMedia = this.mediaRepository.create();
+    newMedia.name = file.filename;
+    newMedia.mimeType = file.mimetype;
 
-    newMedia.type = createMediaInput.type;
+    const media = await this.mediaRepository.save(newMedia);
 
-    const { createReadStream, filename } = await createMediaInput.file;
+    await this.writeMediaFile(media.id, file);
 
-    const savedMedia = await this.mediaRepository.save(newMedia);
+    return media;
+  }
 
-    await ensureDir(`./uploads/media/${savedMedia.id}`);
+  private async writeMediaFile(id: number, file: FileUpload): Promise<void> {
+    await ensureMediaFolder(id);
+
+    const filePath = getFilePath(id, file.filename);
 
     return new Promise((resolve, reject) =>
-      createReadStream()
-        .pipe(createWriteStream(`./uploads/media/${savedMedia.id}/${filename}`))
+      file
+        .createReadStream()
+        .pipe(createWriteStream(filePath))
         .on('finish', () => {
-          resolve(savedMedia);
-        })
-        .on('drain', () => {
-          reject(new BadRequestException('File too large'));
+          resolve();
         })
         .on('error', () => {
           reject(new BadRequestException('Could not save file'));
@@ -46,16 +52,6 @@ export class MediaService {
 
   findOne(id: number): Promise<Media> {
     return this.mediaRepository.findOneByOrFail({ id });
-  }
-
-  async update(id: number, updateMediaInput: UpdateMediaInput): Promise<Media> {
-    try {
-      await this.mediaRepository.update(id, {});
-
-      return this.findOne(id);
-    } catch (error) {
-      throw new BadRequestException(error.detail);
-    }
   }
 
   remove(id: number) {

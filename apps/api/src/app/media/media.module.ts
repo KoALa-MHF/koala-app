@@ -3,6 +3,7 @@ import { MediaService } from './media.service';
 import { MediaResolver } from './media.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Media } from './entities/media.entity';
+import { MediaController } from './media.controller';
 
 @Module({
   imports: [
@@ -13,6 +14,9 @@ import { Media } from './entities/media.entity';
   providers: [
     MediaResolver,
     MediaService,
+  ],
+  controllers: [
+    MediaController,
   ],
 })
 export class MediaModule {}

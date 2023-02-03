@@ -1,37 +1,52 @@
-<h4 class="section-heading">Verfügbarkeit</h4>
+<h4 class="section-heading">{{ 'SESSION.MAINTAIN.SECTION_HEADINGS.AVAILABILITY' | translate }}</h4>
 <p>
-  Nur wenn die Session online geschaltet ist, können Benutzer diese zugreifen.
-  Wenn nicht, ist die Session nur für Sie als Administrator verfügbar.
+  {{ 'SESSION.MAINTAIN.SESSION_SETTINGS.SESSION_AVAILABILITY_EXPLANATION' | translate }}
 </p>
 <form [formGroup]="sessionDatesForm" class="form">
   <p-checkbox
+    [disabled]="start || end"
     class="form-single-cell"
     formControlName="online"
     [binary]="true"
-    label="Online"
+    label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.SESSION_ONLINE_LABEL' | translate }}"
+    data-cy="session-maintain-online-check"
   ></p-checkbox>
 
-  <div>
+  <div *ngIf="!online">
     <span class="p-float-label">
       <p-calendar
         [style]="{ minWidth: '100%' }"
         dateFormat="dd.mm.yy"
+        [showTime]="true"
+        hourFormat="24"
         id="session-start-input"
         formControlName="start"
+        [class.ng-dirty]="sessionDatesForm.errors?.['datesWrong'] && (sessionDatesForm.touched || sessionDatesForm.dirty)"
+        [class.ng-invalid]="sessionDatesForm.errors?.['datesWrong'] && (sessionDatesForm.touched || sessionDatesForm.dirty)"
+        data-cy="session-maintain-start-date-input"
       ></p-calendar>
-      <label for="session-start-input">Start</label>
+      <label for="session-start-input">{{
+        'SESSION.MAINTAIN.SESSION_SETTINGS.SESSION_START_DATE_INPUT_LABEL' | translate
+      }}</label>
     </span>
   </div>
 
-  <div>
+  <div *ngIf="!online">
     <span class="p-float-label">
       <p-calendar
         [style]="{ minWidth: '100%' }"
         dateFormat="dd.mm.yy"
+        [showTime]="true"
+        hourFormat="24"
         id="session-end-input"
         formControlName="end"
+        [class.ng-dirty]="sessionDatesForm.errors?.['datesWrong'] && (sessionDatesForm.touched || sessionDatesForm.dirty)"
+        [class.ng-invalid]="sessionDatesForm.errors?.['datesWrong'] && (sessionDatesForm.touched || sessionDatesForm.dirty)"
+        data-cy="session-maintain-end-date-input"
       ></p-calendar>
-      <label for="session-end-input">Ende</label>
+      <label for="session-end-input">{{
+        'SESSION.MAINTAIN.SESSION_SETTINGS.SESSION_END_DATE_INPUT_LABEL' | translate
+      }}</label>
     </span>
   </div>
 </form>

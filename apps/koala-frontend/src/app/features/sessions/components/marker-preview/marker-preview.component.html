@@ -1,6 +1,6 @@
-<h4 class="section-heading">Vorschau</h4>
+<h4 class="section-heading">{{ 'SESSION.MAINTAIN.SECTION_HEADINGS.MARKER_PREVIEW' | translate }}</h4>
 
-<p>Hier sehen Sie eine Vorschau Ihres Markers.</p>
+<p>{{ 'SESSION.MAINTAIN.MARKER.MARKER_PREVIEW_EXPLANATION' | translate }}</p>
 
 <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px">
   <div
@@ -22,10 +22,14 @@
 </div>
 
 <div style="display: flex; gap: 10px; justify-content: flex-end; margin-right: 30px">
-  <button pButton pRipple [disabled]="!createEnabled" (click)="onAddMarker()">Marker Hinzufügen</button>
-  <button pButton pRipple class="p-button-raised p-button-plain p-button-text" (click)="onReset()">Zurücksetzen</button>
+  <button pButton pRipple [disabled]="!createEnabled" (click)="onAddMarker()">
+    {{ 'SESSION.MAINTAIN.MARKER.MARKER_ADD_BTN' | translate }}
+  </button>
+  <button pButton pRipple class="p-button-raised p-button-plain p-button-text" (click)="onReset()">
+    {{ 'SESSION.MAINTAIN.MARKER.MARKER_RESET_BTN' | translate }}
+  </button>
 </div>
 
-<h4 class="section-heading">Aus Bibliothek Laden</h4>
+<h4 class="section-heading">{{ 'SESSION.MAINTAIN.SECTION_HEADINGS.MARKER_LIBRARY' | translate }}</h4>
 
-<p>Hier können Sie gespeicherte Toolbars oder einzelne Marker laden.</p>
+<p>{{ 'SESSION.MAINTAIN.MARKER.MARKER_LIBRARY_EXPLANATION' | translate }}</p>

@@ -51,7 +51,15 @@ export class SessionsService {
   async update(id: number, updateSessionInput: UpdateSessionInput): Promise<Session> {
     try {
       await this.sessionsRepository.update(id, {
-        ...updateSessionInput,
+        name: updateSessionInput.name,
+        description: updateSessionInput.description,
+        status: updateSessionInput.status,
+        start: updateSessionInput.start,
+        end: updateSessionInput.end,
+        editable: updateSessionInput.editable,
+        enablePlayer: updateSessionInput.enablePlayer,
+        displaySampleSolution: updateSessionInput.displaySampleSolution,
+        enableLiveAnalysis: updateSessionInput.enableLiveAnalysis,
         media: {
           id: updateSessionInput.mediaId,
         },

@@ -1,78 +1,112 @@
 <div class="table-toolbar">
-  <span style="font: 500 20px / 32px Roboto, 'Helvetica Neue', sans-serif"
-    >Meine Sessions</span
-  >
+  <span style="font: 500 20px / 32px Roboto, 'Helvetica Neue', sans-serif">{{
+    'SESSION.OVERVIEW.TABLE_TITLE' | translate
+  }}</span>
   <button
-    pButton pRipple
+    pButton
+    pRipple
     type="button"
     icon="pi pi-plus-circle"
     class="p-button-rounded p-button-text"
-    id="session-create-btn"
+    data-cy="session-create-btn"
     (click)="onSessionCreate()"
-    aria-label="Session Anlegen"
+    attr.aria-label="{{ 'SESSION.OVERVIEW.ACC.CREATE' | translate }}"
   ></button>
 </div>
 
-<p-table [value]="sessions" class="mat-elevation-z8">
+<p-table
+  selectionMode="single"
+  (onRowSelect)="onRowSelect($event)"
+  [value]="sessions"
+  class="mat-elevation-z8"
+  data-cy="session-overview-table"
+>
   <ng-template pTemplate="header">
     <tr>
-      <th>Name</th>
-      <th>Erstellungsdatum</th>
-      <th>Mitgliederanzahl</th>
-      <th>Letzter Zugriff</th>
-      <th>Einstellung</th>
-      <th>Link/QRCode</th>
-      <th>Export</th>
-      <th>Delete</th>
+      <th id="SessionOverviewTableHeaderNameColumn">
+        {{ 'SESSION.OVERVIEW.TABLE_HEADER.NAME_COL_LABEL' | translate }}
+      </th>
+      <th id="SessionOverviewTableHeaderCreationDateColumn">
+        {{ 'SESSION.OVERVIEW.TABLE_HEADER.CREATION_DATE_COL_LABEL' | translate }}
+      </th>
+      <th id="SessionOverviewTableHeaderParticipantsColumn">
+        {{ 'SESSION.OVERVIEW.TABLE_HEADER.PARTICIPANTS_COL_LABEL' | translate }}
+      </th>
+      <th id="SessionOverviewTableHeaderLastChangedDateColumn">
+        {{ 'SESSION.OVERVIEW.TABLE_HEADER.CHANGED_DATE_COL_LABEL' | translate }}
+      </th>
+      <th id="SessionOverviewTableHeaderSettingsColumn">
+        {{ 'SESSION.OVERVIEW.TABLE_HEADER.SETTINGS_COL_LABEL' | translate }}
+      </th>
+      <th id="SessionOverviewTableHeaderLinkColumn">
+        {{ 'SESSION.OVERVIEW.TABLE_HEADER.LINK_COL_LABEL' | translate }}
+      </th>
+      <th id="SessionOverviewTableHeaderExportColumn">
+        {{ 'SESSION.OVERVIEW.TABLE_HEADER.EXPORT_COL_LABEL' | translate }}
+      </th>
+      <th id="SessionOverviewTableHeaderDeleteColumn">
+        {{ 'SESSION.OVERVIEW.TABLE_HEADER.DELETE_COL_LABEL' | translate }}
+      </th>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-session>
-    <tr>
-      <td data-column="sessionName">{{ session.name }}</td>
-      <td data-column="createdAt">{{ session.createdAt | date: 'medium' }}</td>
-      <td data-column="participants">0</td>
-      <td data-column="updatedAt">{{ session.updatedAt | date: 'medium' }}</td>
+    <tr [pSelectableRow]="session">
+      <td data-column="sessionName" data-cy="session-overview-name-col">{{ session.name }}</td>
+      <td data-column="createdAt" data-cy="session-overview-created-at-col">
+        {{ session.createdAt | date: 'medium' }}
+      </td>
+      <td data-column="participants" data-cy="session-overview-participants-col">0</td>
+      <td data-column="updatedAt" data-cy="session-overview-updated-at-col">
+        {{ session.updatedAt | date: 'medium' }}
+      </td>
       <td>
         <button
-          pButton pRipple
+          pButton
+          pRipple
           data-column="settings"
-          name="settingsButton"
-          aria-label="Settings"
+          aria-labelledby="SessionOverviewTableHeaderSettingsColumn"
           (click)="onSettings(session)"
           class="p-button-text"
           icon="pi pi-cog"
+          data-cy="session-overview-settings-btn"
         ></button>
       </td>
       <td>
         <button
-          pButton pRipple
+          pButton
+          pRipple
           data-column="qrCode"
           icon="pi pi-qrcode"
           class="p-button-text"
-          aria-label="QRCode"
+          aria-labelledby="SessionOverviewTableHeaderLinkColumn"
           (click)="onCodePressed(session)"
+          data-cy="session-overview-qrcode-btn"
         ></button>
       </td>
       <td>
         <button
-          pButton pRipple
+          pButton
+          pRipple
           data-column="export"
           icon="pi pi-file-export"
           class="p-button-text"
-          aria-label="Export"
+          aria-labelledby="SessionOverviewTableHeaderExportColumn"
           (click)="onExport(session)"
+          data-cy="session-overview-export-btn"
         ></button>
       </td>
       <td>
         <button
-          pButton pRipple
+          pButton
+          pRipple
           data-column="delete"
           name="deleteButton"
           icon="pi pi-trash"
           class="p-button-text"
-          aria-label="Delete Session"
+          aria-labelledby="SessionOverviewTableHeaderDeleteColumn"
           (click)="onSessionDelete(session)"
+          data-cy="session-overview-delete-btn"
         ></button>
       </td>
     </tr>

@@ -1,24 +1,28 @@
-<h4 class="section-heading">Marker Erstellen</h4>
+<h4 class="section-heading">{{ 'SESSION.MAINTAIN.SECTION_HEADINGS.CREATE_MARKER' | translate }}</h4>
 
 <form [formGroup]="markerDataForm" class="form">
   <div>
     <p-dropdown
-      placeholder="Markertyp*"
+      placeholder="{{ 'SESSION.MAINTAIN.MARKER.MARKER_TYPE_LABEL' | translate }}"
       [options]="markerTypes"
       optionLabel="name"
       optionValue="type"
       [style]="{ minWidth: '100%' }"
       formControlName="type"
     ></p-dropdown>
-    <small id="marker-name-help" class="field-explanation"> Wählen Sie den gewünschten Markertyp. </small>
+    <small id="marker-name-help" class="field-explanation"
+      >{{ 'SESSION.MAINTAIN.MARKER.MARKER_TYPE_EXPLANATION' | translate }}
+    </small>
   </div>
 
   <div>
     <span class="p-float-label">
       <input id="marker-name-input" type="text" pInputText aria-describedby="marker-name-help" formControlName="name" />
-      <label for="marker-name-input">Name des Markers*</label>
+      <label for="marker-name-input">{{ 'SESSION.MAINTAIN.MARKER.MARKER_NAME_INPUT_LABEL' | translate }}</label>
     </span>
-    <small id="marker-name-help" class="field-explanation"> Geben Sie dem Marker einen Namen. </small>
+    <small id="marker-name-help" class="field-explanation">
+      {{ 'SESSION.MAINTAIN.MARKER.MARKER_NAME_INPUT_EXPLANATION' | translate }}
+    </small>
   </div>
 
   <div>
@@ -30,9 +34,13 @@
         pInputTextarea
         formControlName="description"
       ></textarea>
-      <label for="marker-description-textarea">Beschreibung</label>
+      <label for="marker-description-textarea">
+        {{ 'SESSION.MAINTAIN.MARKER.MARKER_DESCRIPTION_INPUT_LABEL' | translate }}
+      </label>
     </span>
-    <small id="marker-name-help" class="field-explanation"> Fügen Sie dem Marker ggf. eine Beschreibung hinzu. </small>
+    <small id="marker-name-help" class="field-explanation">
+      {{ 'SESSION.MAINTAIN.MARKER.MARKER_DESCRIPTION_INPUT_EXPLANATION' | translate }}
+    </small>
   </div>
 
   <div>
@@ -44,30 +52,38 @@
         formControlName="abbreviation"
         pInputText
       />
-      <label for="marker-abbreviation-input">Abkürzung</label>
+      <label for="marker-abbreviation-input">
+        {{ 'SESSION.MAINTAIN.MARKER.MARKER_ABBREVIATION_INPUT_LABEL' | translate }}
+      </label>
     </span>
-    <small id="marker-name-help" class="field-explanation"> Wählen Sie ggf. eine Abkürzung für den Marker. </small>
+    <small id="marker-name-help" class="field-explanation">
+      {{ 'SESSION.MAINTAIN.MARKER.MARKER_ABBREVIATION_INPUT_EXPLANATION' | translate }}
+    </small>
   </div>
 
   <div>
-    <h5 style="display: inline; margin-right: 15px; opacity: 100%">Farbe</h5>
+    <h5 style="display: inline; margin-right: 15px; opacity: 100%">
+      {{ 'SESSION.MAINTAIN.MARKER.MARKER_COLOR_INPUT_LABEL' | translate }}
+    </h5>
     <div style="display: inline; margin-right: 15px">
       <p-colorPicker formControlName="color"></p-colorPicker>
     </div>
     <small style="display: inline" id="marker-name-help" class="field-explanation">
-      Wählen Sie eine Farbe für Ihren Marker.
+      {{ 'SESSION.MAINTAIN.MARKER.MARKER_COLOR_INPUT_EXPLANATION' | translate }}
     </small>
   </div>
 
   <div>
     <p-dropdown
-      placeholder="Icon"
+      placeholder="{{ 'SESSION.MAINTAIN.MARKER.MARKER_ICON_INPUT_LABEL' | translate }}"
       [options]="icons"
       optionLabel="name"
       optionValue="code"
       [style]="{ minWidth: '100%' }"
       formControlName="icon"
     ></p-dropdown>
-    <small id="marker-name-help" class="field-explanation"> Wählen Sie ggf. ein Icon für Ihren Marker. </small>
+    <small id="marker-name-help" class="field-explanation">
+      {{ 'SESSION.MAINTAIN.MARKER.MARKER_ICON_INPUT_EXPLANATION' | translate }}
+    </small>
   </div>
 </form>

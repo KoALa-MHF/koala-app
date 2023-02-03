@@ -13,7 +13,7 @@ import { graphqlUploadExpress } from 'graphql-upload';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new GraphQLValidationPipe());
-  app.use(graphqlUploadExpress({ maxFileSize: 30000000, maxFiles: 10 }));
+  app.use(graphqlUploadExpress({ maxFileSize: 100000000, maxFiles: 10 }));
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
   const port = process.env.PORT || 3333;

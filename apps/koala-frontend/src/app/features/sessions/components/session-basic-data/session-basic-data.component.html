@@ -1,4 +1,4 @@
-<h4 class="section-heading">Allgemeine Informationen</h4>
+<h4 class="section-heading">{{ 'SESSION.MAINTAIN.SECTION_HEADINGS.GENERAL_DATA' | translate }}</h4>
 
 <form [formGroup]="basicDataForm" class="form">
   <div>
@@ -8,28 +8,32 @@
         formControlName="name"
         type="text"
         pInputText
+        data-cy="session-maintain-name-input"
       />
-      <label for="session-name-input">Name</label>
+      <label for="session-name-input">{{
+        'SESSION.MAINTAIN.SESSION_SETTINGS.SESSION_NAME_INPUT_LABEL' | translate
+      }}</label>
     </span>
     <small id="session-name-help" class="field-explanation">
-      Geben Sie der Session bitte einen Namen.
+      {{ 'SESSION.MAINTAIN.SESSION_SETTINGS.SESSION_NAME_INPUT_EXPLANATION' | translate }}
     </small>
   </div>
 
   <div>
     <span class="p-float-label">
       <textarea
-        id="session-description-textarea"
         rows="5"
         cols="30"
         pInputTextarea
         formControlName="description"
+        data-cy="session-maintain-description-input"
       ></textarea>
-      <label for="session-description-textarea">Beschreibung</label>
+      <label for="session-description-textarea">{{
+        'SESSION.MAINTAIN.SESSION_SETTINGS.SESSION_DESCRIPTION_INPUT_LABEL' | translate
+      }}</label>
     </span>
     <small id="session-name-help" class="field-explanation">
-      Fügen Sie der Session ggf. eine Beschreibung oder eine Aufgabenstellung
-      hinzu.
+      {{ 'SESSION.MAINTAIN.SESSION_SETTINGS.SESSION_DESCRIPTION_INPUT_EXPLANATION' | translate }}
     </small>
   </div>
 </form>

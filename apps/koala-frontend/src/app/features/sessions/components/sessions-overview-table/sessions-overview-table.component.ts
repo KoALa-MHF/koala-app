@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Session } from '../../types/session-entity';
 
 @Component({
@@ -8,7 +8,7 @@ import { Session } from '../../types/session-entity';
     './sessions-overview-table.component.scss',
   ],
 })
-export class SessionsOverviewTableComponent implements OnInit {
+export class SessionsOverviewTableComponent {
   @Input()
   sessions: Session[] = [];
 
@@ -32,10 +32,6 @@ export class SessionsOverviewTableComponent implements OnInit {
     'delete',
   ];
 
-  constructor() {}
-
-  ngOnInit(): void {}
-
   public onSessionDelete(session: Session) {
     this.sessionDelete.emit(session);
   }
@@ -52,5 +48,9 @@ export class SessionsOverviewTableComponent implements OnInit {
 
   public onSettings(session: Session) {
     this.sessionUpdate.emit(session);
+  }
+
+  public onRowSelect(event: any) {
+    this.sessionUpdate.emit(event.data);
   }
 }
