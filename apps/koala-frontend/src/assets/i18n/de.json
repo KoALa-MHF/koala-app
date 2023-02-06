@@ -9,6 +9,16 @@
       "CREATE_BTN": "Anlegen",
       "CANCEL_BTN": "Abbrechen"
     },
+    "TABS": {
+      "EVALUATION": "Auswertung"
+    },
+    "ERROR_DIALOG": {
+      "SUMMARY": "Bitte versuchen sie es später noch einmal",
+      "MEDIA_CONTROLS": "Fehler beim abspielen der Audio Datei",
+      "NO_AUDIO_FILE": "Kein Audio File gefunden",
+      "NO_AUDIO_FILE_SUM": "Bitte speichern sie erst ein Audio File",
+      "BROKEN_AUDIO_FILE": "Audio Datei konnte nicht geladen werden"
+    },
     "OVERVIEW": {
       "TABLE_TITLE": "Meine Sessions",
       "TABLE_HEADER": {

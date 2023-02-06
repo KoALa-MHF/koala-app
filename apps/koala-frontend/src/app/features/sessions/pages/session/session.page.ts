@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Session } from '../../../../graphql/generated/graphql';
 import { MarkerService } from '../../services/marker.service';
 import { MessageService } from 'primeng/api';
-import { MediaControlService, MediaEvent } from '../../services/media-control.service';
+import { MediaControlService, MediaEvent, MediaActions } from '../../services/media-control.service';
 import { SessionsService } from '../../services/sessions.service';
 import { environment } from '../../../../../environments/environment';
 
@@ -29,7 +30,8 @@ export class SessionPage implements OnInit {
     private readonly markerService: MarkerService,
     private readonly route: ActivatedRoute,
     private mediaControlService: MediaControlService,
-    private readonly messageService: MessageService
+    private readonly messageService: MessageService,
+    private readonly translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -40,11 +42,7 @@ export class SessionPage implements OnInit {
         media: result.data?.session.media,
       };
       if (this.session.media == undefined) {
-        this.messageService.add({
-          severity: 'info',
-          summary: 'Kein Audio File gefunden',
-          detail: 'Bitte speichern sie erst ein Audio File',
-        });
+        this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.NO_AUDIO_FILE', 'SESSION.ERROR_DIALOG.NO_AUDIO_FILE_SUM');
         return;
       }
       this.mediaControlService.uuid = this.session.id;
@@ -52,11 +50,7 @@ export class SessionPage implements OnInit {
       try {
         this.mediaControlService.load(`${this.mediaUri}/${this.session.id}`, this.waveContainer);
       } catch (e) {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Audio Datei konnte nicht geladeb werden',
-          detail: 'Bitte versuchen sie es spaeter noch einmal',
-        });
+        this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.BROKEN_AUDIO_FILE', 'SESSION.ERROR_DIALOG.SUMMARY');
         console.log(e);
       }
     });
@@ -73,23 +67,62 @@ export class SessionPage implements OnInit {
 
   onMediaEvent(evt: MediaEvent) {
     switch (evt.actions) {
-      case 1:
-        this.mediaControlService.play();
+      case MediaActions.Play:
+        try {
+          this.mediaControlService.togglePlay();
+        } catch (error) {
+          this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
+        }
         break;
-      case 2:
-        this.mediaControlService.stop();
+      case MediaActions.Stop:
+        try {
+          this.mediaControlService.stop();
+        } catch (error) {
+          this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
+        }
         break;
-      case 3:
-        this.mediaControlService.skipForward();
+      case MediaActions.SkipForward:
+        try {
+          this.mediaControlService.skipForward();
+        } catch (error) {
+          this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
+        }
         break;
-      case 4:
-        this.mediaControlService.skipBackward();
+      case MediaActions.SkipBackward:
+        try {
+          this.mediaControlService.skipBackward();
+        } catch (error) {
+          this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
+        }
         break;
-      case 5:
+      case MediaActions.VolumeChange:
         if (evt.value != undefined) {
-          this.mediaControlService.onVolumeChange(evt.value);
+          try {
+            this.mediaControlService.onVolumeChange(evt.value);
+          } catch (error) {
+            this.showErrorMessage(
+              'error',
+              'SESSION.ERROR_DIALOG.MEDIA_CONTROLS',
+              'SESSION.ERROR_DIALOG.ERRORS.SUMMARY'
+            );
+          }
         }
         break;
     }
+  }
+
+  private showErrorMessage(severity: string, detail: string, sum: string) {
+    this.translateService
+      .get([
+        detail,
+        sum,
+      ])
+      .subscribe((results: Record<string, string>) => {
+        this.messageService.add({
+          severity: severity,
+          summary: results[sum],
+          detail: results[detail],
+        });
+      });
   }
 }

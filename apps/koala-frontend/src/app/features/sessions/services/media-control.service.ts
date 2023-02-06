@@ -47,9 +47,9 @@ export class MediaControlService {
 
   async load(trackurl: string, uuid: string) {
     this.uuid = uuid;
-
     let plugin: any = undefined;
     let audioBlob: Blob = new Blob();
+
     try {
       audioBlob = await this.fetchAudioBlob(trackurl);
       plugin = await this.createMediaSessionPlugin(audioBlob);
@@ -69,11 +69,13 @@ export class MediaControlService {
         ],
       })
     );
-    const w = this.waves.get(this.uuid);
-    if (w !== undefined) {
+    try {
+      const w = this.getWave();
       const audio = new Audio();
       audio.src = URL.createObjectURL(audioBlob);
       w.load(audio);
+    } catch (e) {
+      throw new Error('cannot load audio wave');
     }
   }
 
@@ -120,7 +122,7 @@ export class MediaControlService {
     return w.mediasession.metadata;
   }
 
-  public play() {
+  public togglePlay() {
     try {
       const w = this.getWave();
       if (!w.isPlaying()) {
@@ -130,6 +132,7 @@ export class MediaControlService {
       }
     } catch (error) {
       console.error(error);
+      throw new Error(`cannot play/pause audio file: ${error}`);
     }
   }
 
@@ -139,6 +142,7 @@ export class MediaControlService {
       w.stop();
     } catch (error) {
       console.error(error);
+      throw new Error(`cannot stop audio file: ${error}`);
     }
   }
 
@@ -150,6 +154,7 @@ export class MediaControlService {
       }
     } catch (error) {
       console.error(error);
+      throw new Error(`cannot skip backward audio file: ${error}`);
     }
   }
 
@@ -161,6 +166,17 @@ export class MediaControlService {
       }
     } catch (error) {
       console.error(error);
+      throw new Error(`cannot skip forward audio file: ${error}`);
+    }
+  }
+
+  public onVolumeChange(volume: number) {
+    try {
+      const w = this.getWave();
+      w.setVolume(volume * 0.01);
+    } catch (error) {
+      console.error(error);
+      throw new Error(`cannot change volume for audio file: ${error}`);
     }
   }
 
@@ -179,15 +195,6 @@ export class MediaControlService {
       const w = this.getWave();
       w.unAll();
       w.destroy();
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  public onVolumeChange(volume: number) {
-    try {
-      const w = this.getWave();
-      w.setVolume(volume * 0.01);
     } catch (error) {
       console.error(error);
     }
