@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MutationResult } from 'apollo-angular';
 import { datesStartEndValidator } from '../../../../shared/dates.validator';
 import { MessageService } from 'primeng/api';
-import { Marker, MarkerType, UpdateSessionMutation } from '../../../../graphql/generated/graphql';
+import { Marker, UpdateSessionMutation } from '../../../../graphql/generated/graphql';
 import { MarkerService } from '../../services/marker.service';
 import { MediaService } from '../../services/media.service';
 import { SessionsService } from '../../services/sessions.service';
@@ -14,7 +14,6 @@ import { MarkerEntity } from '../../types/marker-entity';
 import { Session } from '../../types/session-entity';
 
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'koala-session-maintain',
   templateUrl: './session-maintain.page.html',
   styleUrls: [
@@ -22,7 +21,6 @@ import { Session } from '../../types/session-entity';
     '../../session-common.scss',
   ],
 })
-// eslint-disable-next-line @angular-eslint/component-class-suffix
 export class SessionMaintainPage implements OnInit {
   maintainSessionForm: FormGroup;
   maintainMarkerForm: FormGroup;
@@ -85,52 +83,72 @@ export class SessionMaintainPage implements OnInit {
   }
 
   ngOnInit(): void {
-    this.sessionId = parseInt(this.route.snapshot.paramMap.get('sessionId') || '0');
+    //TODO: error handling when session does not exist in backend, but this page is being loaded
+    const routeSessionId = parseInt(this.route.snapshot.paramMap.get('sessionId') || '0');
 
-    this.sessionService.getOne(this.sessionId).subscribe((result) => {
-      this.session = {
-        ...result.data?.session,
-        media: result.data?.session.media,
-      };
-
-      const markers = this.session?.toolbars[0]?.markers || [];
-      const intArray: Array<number> = markers.map(function (item) {
-        return parseInt(item, 10);
-      });
-
-      this.markerService.getAll(intArray).subscribe((result) => {
-        this.markers = result.data?.markers;
-      });
-
-      this.maintainSessionForm.get('basicData')?.get('name')?.setValue(this.session.name);
-
-      this.maintainSessionForm.get('basicData')?.get('description')?.setValue(this.session.description);
-
-      this.maintainSessionForm.get('details')?.get('editable')?.setValue(this.session.editable);
-
-      this.maintainSessionForm.get('details')?.get('enablePlayer')?.setValue(this.session.enablePlayer);
-
-      this.maintainSessionForm
-        .get('details')
-        ?.get('displaySampleSolution')
-        ?.setValue(this.session.displaySampleSolution);
-
-      this.maintainSessionForm.get('details')?.get('enableLiveAnalysis')?.setValue(this.session.enableLiveAnalysis);
-
-      if (this.session.start) {
-        this.maintainSessionForm.get('dates')?.get('start')?.setValue(new Date(this.session.start));
-      }
-
-      if (this.session.end) {
-        this.maintainSessionForm.get('dates')?.get('end')?.setValue(new Date(this.session.end));
-      }
-
-      this.maintainSessionForm.get('audio')?.get('title')?.setValue(this.session.media?.name);
-    });
+    this.loadSessionData(routeSessionId);
   }
 
+  /*--------------------------
+  Session Basic Data Handling
+  ----------------------------*/
   public onSave() {
-    this.saveSession();
+    this.sessionService
+      .update(parseInt(this.session?.id || '0'), {
+        name: this.maintainSessionForm.value.basicData.name,
+        description: this.maintainSessionForm.value.basicData.description,
+        start: this.maintainSessionForm.value.dates.start,
+        end: this.maintainSessionForm.value.dates.end,
+        editable: this.maintainSessionForm.value.details.editable,
+        enablePlayer: this.maintainSessionForm.value.details.enablePlayer,
+        displaySampleSolution: this.maintainSessionForm.value.details.displaySampleSolution,
+        enableLiveAnalysis: this.maintainSessionForm.value.details.enableLiveAnalysis,
+      })
+      .subscribe({
+        next: (session: MutationResult<UpdateSessionMutation>) => {
+          //TODO: #82 make success message for session update translatable
+          this.messageService.add({
+            severity: 'success',
+            summary: "Änderungen an Session '" + session.data?.updateSession.name + "' wurden gespeichert",
+          });
+        },
+        error: () => {
+          //TODO: #83 make error message for session update translatable
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Änderungen an der Session konnten nicht gespeichert werden',
+          });
+        },
+      });
+  }
+
+  private setSessionGeneralDataForm(session: Session) {
+    this.maintainSessionForm.get('basicData')?.get('name')?.setValue(session.name);
+    this.maintainSessionForm.get('basicData')?.get('description')?.setValue(session.description);
+    this.maintainSessionForm.get('details')?.get('editable')?.setValue(session.editable);
+    this.maintainSessionForm.get('details')?.get('enablePlayer')?.setValue(session.enablePlayer);
+    this.maintainSessionForm.get('details')?.get('displaySampleSolution')?.setValue(session.displaySampleSolution);
+    this.maintainSessionForm.get('details')?.get('enableLiveAnalysis')?.setValue(session.enableLiveAnalysis);
+
+    if (session.start) {
+      this.maintainSessionForm.get('dates')?.get('start')?.setValue(new Date(session.start));
+    }
+
+    if (session.end) {
+      this.maintainSessionForm.get('dates')?.get('end')?.setValue(new Date(session.end));
+    }
+  }
+
+  private loadSessionData(sessionId: number) {
+    this.sessionService.getOne(sessionId).subscribe((result) => {
+      this.session = { ...result.data?.session };
+
+      this.setSessionGeneralDataForm(this.session);
+
+      const markers = this.session?.toolbars[0]?.markers || [];
+      const markerIds: Array<number> = markers.map((marker) => parseInt(marker));
+      this.refreshSessionMarkers(markerIds);
+    });
   }
 
   public onCancel() {
@@ -139,127 +157,76 @@ export class SessionMaintainPage implements OnInit {
     ]);
   }
 
-  public onParticipantRemove(participant: any) {
-    const index = this.participants.findIndex((p: any) => {
-      return p.email === participant.email ? true : false;
+  /*--------------------------
+  Session Marker Handling
+  ----------------------------*/
+  private refreshSessionMarkers(markerIds: number[]) {
+    this.markerService.getAll(markerIds).subscribe((result) => {
+      //take read markers and put them in sorting order from toolbar
+      const markers = result.data?.markers;
+
+      if (markers) {
+        //clear existing markers, because the complete set has been loaded newly
+        this.markers = [];
+
+        markerIds.forEach((markerId) => {
+          for (let i = 0; i < markers.length; i++) {
+            if (markers[i].id === markerId) {
+              this.markers.push(markers[i]);
+            }
+          }
+        });
+      }
     });
-
-    if (index >= 0) {
-      this.participants.splice(index, 1);
-    }
   }
 
-  public onParticipantAdd(participant: any) {
-    this.participants.push({
-      email: participant,
-    });
+  private updateToolbarMarker(toolbarId: number, markerIds: string[]) {
+    this.toolbarService
+      .update(toolbarId, {
+        markers: markerIds,
+      })
+      .subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Marker erfolgreich erstellt und der Session hinzugefügt',
+          });
+          this.maintainMarkerForm.reset();
+        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Markererstellung fehlgeschlagen',
+          });
+        },
+      });
   }
 
-  get basicDataFormGroup(): FormGroup {
-    return this.maintainSessionForm.get('basicData') as FormGroup;
-  }
-
-  get datesFormGroup(): FormGroup {
-    return this.maintainSessionForm.get('dates') as FormGroup;
-  }
-
-  get detailsFormGroup(): FormGroup {
-    return this.maintainSessionForm.get('details') as FormGroup;
-  }
-
-  get audioFormGroup(): FormGroup {
-    return this.maintainSessionForm.get('audio') as FormGroup;
-  }
-
-  get markerData(): MarkerEntity {
+  get markerPreviewData(): MarkerEntity {
     return {
       id: 0,
-      description: '',
-      name: '',
-      type: this.getMarkerTypeValue(),
-      abbreviation: this.getMarkerAbbreviationValue(),
-      color: this.getMarkerColorValue(),
-      icon: this.getMarkerIconValue(),
+      description: this.maintainMarkerForm.value.description,
+      name: this.maintainMarkerForm.value.name,
+      type: this.maintainMarkerForm.value.type,
+      abbreviation: this.maintainMarkerForm.value.abbreviation,
+      color: this.maintainMarkerForm.value.color,
+      icon: this.maintainMarkerForm.value.icon,
     };
-  }
-
-  private getMarkerIconValue(): string {
-    return this.maintainMarkerForm.get('icon')?.value || '';
-  }
-
-  private getMarkerTypeValue(): MarkerType {
-    return this.maintainMarkerForm.get('type')?.value || '';
-  }
-
-  private getMarkerAbbreviationValue(): string {
-    return this.maintainMarkerForm.get('abbreviation')?.value;
-  }
-
-  private getMarkerColorValue(): string {
-    return this.maintainMarkerForm.get('color')?.value;
   }
 
   public onResetMarkerData() {
     this.maintainMarkerForm.reset();
   }
 
-  private saveSession() {
-    const name = this.maintainSessionForm.get('basicData')?.get('name')?.value || '';
-    const description = this.maintainSessionForm.get('basicData')?.get('description')?.value || '';
-
-    const start = this.maintainSessionForm.get('dates')?.get('start')?.value;
-    const end = this.maintainSessionForm.get('dates')?.get('end')?.value;
-
-    const editable = this.maintainSessionForm.get('details')?.get('editable')?.value || false;
-
-    const enablePlayer = this.maintainSessionForm.get('details')?.get('enablePlayer')?.value || false;
-
-    const displaySampleSolution = this.maintainSessionForm.get('details')?.get('displaySampleSolution')?.value || false;
-
-    const enableLiveAnalysis = this.maintainSessionForm.get('details')?.get('enableLiveAnalysis')?.value || false;
-
-    this.sessionService
-      .update(parseInt(this.session?.id || '0'), {
-        name,
-        description,
-        start,
-        end,
-        editable,
-        enablePlayer,
-        displaySampleSolution,
-        enableLiveAnalysis,
-      })
-      .subscribe({
-        next: (session: MutationResult<UpdateSessionMutation>) => {
-          this.messageService.add({
-            severity: 'success',
-            summary: "Änderungen an Session '" + session.data?.updateSession.name + "' wurden gespeichert",
-          });
-        },
-        error: (session: MutationResult<UpdateSessionMutation>) => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Änderungen an Session konnten nicht gespeichert werden',
-          });
-        },
-      });
-  }
-
   public onAddMarker() {
-    const type = this.maintainMarkerForm.get('type')?.value || '';
-    const name = this.maintainMarkerForm.get('name')?.value || '';
-    const description = this.maintainMarkerForm.get('description')?.value || '';
-    const abbreviation = this.maintainMarkerForm.get('abbreviation')?.value || '';
-    const color = this.maintainMarkerForm.get('color')?.value || '';
-    const icon = this.maintainMarkerForm.get('icon')?.value || '';
-
     this.markerService
       .create({
-        name,
-        type,
-        color,
-        abbreviation,
-        description,
+        description: this.maintainMarkerForm.value.description,
+        name: this.maintainMarkerForm.value.name,
+        type: this.maintainMarkerForm.value.type,
+        abbreviation: this.maintainMarkerForm.value.abbreviation,
+        color: this.maintainMarkerForm.value.color,
+        //icon: this.maintainMarkerForm.value.icon,
       })
       .subscribe({
         next: (result) => {
@@ -273,25 +240,7 @@ export class SessionMaintainPage implements OnInit {
               ];
               markers.push(markerId + '');
 
-              this.toolbarService
-                .update(parseInt(toolbar.id), {
-                  markers: markers,
-                })
-                .subscribe({
-                  next: () => {
-                    this.messageService.add({
-                      severity: 'success',
-                      summary: 'Marker erfolgreich erstellt und der Session hinzugefügt',
-                    });
-                    this.maintainMarkerForm.reset();
-                  },
-                  error: () => {
-                    this.messageService.add({
-                      severity: 'error',
-                      summary: 'Markererstellung fehlgeschlagen',
-                    });
-                  },
-                });
+              this.updateToolbarMarker(parseInt(toolbar.id), markers);
             }
           }
         },
@@ -301,6 +250,19 @@ export class SessionMaintainPage implements OnInit {
       });
   }
 
+  public onMarkerSortChange(markers: MarkerEntity[]) {
+    const toolbar = this.session?.toolbars[0];
+    if (toolbar) {
+      this.updateToolbarMarker(
+        parseInt(toolbar.id),
+        markers.map((marker) => marker.id.toString())
+      );
+    }
+  }
+
+  /*----------------------------
+  Audio/Media Handling
+  ------------------------------*/
   public onFileUpload(file: File) {
     this.mediaService
       .create({
@@ -323,6 +285,7 @@ export class SessionMaintainPage implements OnInit {
             })
             .subscribe({
               next: () => {
+                //TODO: make file upload success message translatable
                 this.messageService.add({
                   severity: 'success',
                   summary: 'Dateiupload erfolgreich',
@@ -335,6 +298,7 @@ export class SessionMaintainPage implements OnInit {
             });
         },
         error: (err) => {
+          //TODO: make file upload error message translatable
           this.messageService.add({
             severity: 'error',
             summary: 'Dateiupload fehlerhaft',
@@ -342,5 +306,43 @@ export class SessionMaintainPage implements OnInit {
           });
         },
       });
+  }
+
+  /*---------------------------
+  Session Participants Handling
+  -----------------------------*/
+  public onParticipantAdd(participant: any) {
+    this.participants.push({
+      email: participant,
+    });
+  }
+
+  public onParticipantRemove(participant: any) {
+    const index = this.participants.findIndex((p: any) => {
+      return p.email === participant.email ? true : false;
+    });
+
+    if (index >= 0) {
+      this.participants.splice(index, 1);
+    }
+  }
+
+  /*-------------------------------------------------
+  Getter for sub components to handle forms directly
+  ---------------------------------------------------*/
+  get basicDataFormGroup(): FormGroup {
+    return this.maintainSessionForm.get('basicData') as FormGroup;
+  }
+
+  get datesFormGroup(): FormGroup {
+    return this.maintainSessionForm.get('dates') as FormGroup;
+  }
+
+  get detailsFormGroup(): FormGroup {
+    return this.maintainSessionForm.get('details') as FormGroup;
+  }
+
+  get audioFormGroup(): FormGroup {
+    return this.maintainSessionForm.get('audio') as FormGroup;
   }
 }

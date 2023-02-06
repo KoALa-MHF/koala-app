@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MarkerEntity } from '../../types/marker-entity';
 
 @Component({
@@ -11,4 +11,9 @@ import { MarkerEntity } from '../../types/marker-entity';
 })
 export class MarkerPlacementComponent {
   @Input() markers!: MarkerEntity[];
+  @Output() sortChange = new EventEmitter<MarkerEntity[]>();
+
+  onSortChange(markers: MarkerEntity[]) {
+    this.sortChange.emit(markers);
+  }
 }

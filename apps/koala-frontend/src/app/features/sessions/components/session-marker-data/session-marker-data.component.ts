@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MarkerEntity } from '../../types/marker-entity';
 
@@ -10,7 +10,7 @@ import { MarkerEntity } from '../../types/marker-entity';
     '../../session-common.scss',
   ],
 })
-export class SessionMarkerDataComponent implements OnInit {
+export class SessionMarkerDataComponent {
   @Input() markerDataForm!: FormGroup;
   @Input() markerData!: any;
   @Input() markers!: MarkerEntity[];
@@ -18,10 +18,7 @@ export class SessionMarkerDataComponent implements OnInit {
 
   @Output() resetMarkerData = new EventEmitter();
   @Output() markerAdd = new EventEmitter();
-
-  constructor() {}
-
-  ngOnInit(): void {}
+  @Output() markerSortChange = new EventEmitter<MarkerEntity[]>();
 
   public onReset() {
     this.resetMarkerData.emit();
@@ -29,5 +26,9 @@ export class SessionMarkerDataComponent implements OnInit {
 
   public onAddMarker() {
     this.markerAdd.emit();
+  }
+
+  public onSortChange(markers: MarkerEntity[]) {
+    this.markerSortChange.emit(markers);
   }
 }

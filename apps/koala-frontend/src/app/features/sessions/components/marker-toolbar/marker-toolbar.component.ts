@@ -1,5 +1,5 @@
 import { moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MarkerEntity } from '../../types/marker-entity';
 
 @Component({
@@ -11,6 +11,7 @@ import { MarkerEntity } from '../../types/marker-entity';
 })
 export class MarkerToolbarComponent {
   @Input() markers!: MarkerEntity[];
+  @Output() sortChange = new EventEmitter<MarkerEntity[]>();
 
   dropped(event: { previousIndex: number; currentIndex: number }) {
     const tempMarker = [
@@ -18,5 +19,7 @@ export class MarkerToolbarComponent {
     ];
     moveItemInArray(tempMarker, event.previousIndex, event.currentIndex);
     this.markers = tempMarker;
+
+    this.sortChange.emit(this.markers);
   }
 }

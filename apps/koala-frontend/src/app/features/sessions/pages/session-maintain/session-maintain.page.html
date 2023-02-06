@@ -15,10 +15,11 @@
     <p-tabPanel header="{{ 'SESSION.MAINTAIN.TABS.MARKER' | translate }}">
       <koala-session-marker-data
         [markerDataForm]="maintainMarkerForm"
-        [previewMarker]="markerData"
+        [previewMarker]="markerPreviewData"
         [markers]="markers"
         (resetMarkerData)="onResetMarkerData()"
         (markerAdd)="onAddMarker()"
+        (markerSortChange)="onMarkerSortChange($event)"
       ></koala-session-marker-data>
     </p-tabPanel>
     <p-tabPanel header="{{ 'SESSION.MAINTAIN.TABS.PARTICIPANTS' | translate }}">
