@@ -1,0 +1,48 @@
+<p-card *ngIf="metadata">
+  <ng-template pTemplate="header"> {{ metadata.title }} | {{ metadata.artist }} </ng-template>
+  <ng-template pTemplate="content">
+    <div class="audio-controls">
+      <button
+        pButton
+        pRipple
+        data-column="settings"
+        name="settingsButton"
+        aria-label="Settings"
+        (click)="onSkipBackward()"
+        class="p-button-text"
+        icon="pi pi-backward"
+      ></button>
+      <button
+        pButton
+        pRipple
+        data-column="settings"
+        name="settingsButton"
+        aria-label="Settings"
+        (click)="onPlay()"
+        class="p-button-text"
+        icon="pi pi-play"
+      ></button>
+      <button
+        pButton
+        pRipple
+        data-column="settings"
+        name="settingsButton"
+        aria-label="Settings"
+        (click)="onStop()"
+        class="p-button-text"
+        icon="pi pi-stop"
+      ></button>
+      <button
+        pButton
+        pRipple
+        data-column="settings"
+        name="settingsButton"
+        aria-label="Settings"
+        (click)="onSkipForward()"
+        class="p-button-text"
+        icon="pi pi-forward"
+      ></button>
+      <p-slider [(ngModel)]="volume" (ngModelChange)="onVolumeChange($event)"></p-slider>
+    </div>
+  </ng-template>
+</p-card>

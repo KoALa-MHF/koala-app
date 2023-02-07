@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { SessionsRoutingModule } from './sessions-routing.module';
 import { SessionsOverviewPage } from './pages/sessions-overview/sessions-overview.page';
 import { SessionsService } from './services/sessions.service';
+import { MediaControlService } from './services/media-control.service';
 import { ToolbarsService } from './services/toolbars.service';
 
 //primeng modules
@@ -20,17 +21,21 @@ import { RippleModule } from 'primeng/ripple';
 import { FileUploadModule } from 'primeng/fileupload';
 import { TabViewModule } from 'primeng/tabview';
 import { DialogModule } from 'primeng/dialog';
+import { SliderModule } from 'primeng/slider';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MixedCdkDragDropModule } from 'angular-mixed-cdk-drag-drop';
 
 import { SessionsOverviewTableComponent } from './components/sessions-overview-table/sessions-overview-table.component';
 import { SessionMaintainPage } from './pages/session-maintain/session-maintain.page';
+import { SessionPage } from './pages/session/session.page';
 import { SessionBasicDataComponent } from './components/session-basic-data/session-basic-data.component';
 import { SharedModule } from '../../shared/shared.module';
 import { SessionDetailsComponent } from './components/session-details/session-details.component';
 import { SessionDatesComponent } from './components/session-dates/session-dates.component';
 import { SessionAudioComponent } from './components/session-audio/session-audio.component';
+import { AudioWaveComponent } from './components/audio-wave/audio-wave.component';
+import { AudioPlayerComponent } from './components/audio-player/audio-player.component';
 import { MediaService } from './services/media.service';
 import { SessionDataComponent } from './components/session-data/session-data.component';
 import { SessionMarkerDataComponent } from './components/session-marker-data/session-marker-data.component';
@@ -51,6 +56,7 @@ import { DeleteConfirmDialogComponent } from './components/delete-confirm-dialog
     SessionsOverviewPage,
     SessionsOverviewTableComponent,
     SessionMaintainPage,
+    SessionPage,
     SessionBasicDataComponent,
     SessionDetailsComponent,
     SessionDatesComponent,
@@ -60,6 +66,8 @@ import { DeleteConfirmDialogComponent } from './components/delete-confirm-dialog
     MarkerMaintainComponent,
     MarkerPreviewComponent,
     MarkerPlacementComponent,
+    AudioWaveComponent,
+    AudioPlayerComponent,
     SessionParticipantsComponent,
     SessionParticipantsOverviewComponent,
     SessionParticipantsInvitationComponent,
@@ -86,12 +94,14 @@ import { DeleteConfirmDialogComponent } from './components/delete-confirm-dialog
     DragDropModule,
     TabViewModule,
     DialogModule,
+    SliderModule,
     MixedCdkDragDropModule,
   ],
   providers: [
     SessionsService,
     MediaService,
     MarkerService,
+    MediaControlService,
     ToolbarsService,
   ],
 })
