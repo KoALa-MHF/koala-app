@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Session } from '../../../../graphql/generated/graphql';
+import { Session } from '../../types/session-entity';
 
 @Component({
   selector: 'koala-sessions-overview-table',

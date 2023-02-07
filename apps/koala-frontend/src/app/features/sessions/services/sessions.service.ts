@@ -15,8 +15,6 @@ import {
   CreateSessionInput,
   Exact,
   CreateMediaInput,
-  AddMarkerToSessionInput,
-  AddMarkerGQL,
 } from '../../../graphql/generated/graphql';
 
 @Injectable({
@@ -30,8 +28,7 @@ export class SessionsService {
     private readonly getOneSessionGQL: GetOneSessionGQL,
     private readonly createSessionGQL: CreateNewSessionGQL,
     private readonly updateSessionGQL: UpdateSessionGQL,
-    private readonly deleteSessionGQL: DeleteSessionGQL,
-    private readonly addMarkerGQL: AddMarkerGQL
+    private readonly deleteSessionGQL: DeleteSessionGQL
   ) {
     this.allSessionsQuery = this.getSessionGQL.watch({});
   }
@@ -59,14 +56,5 @@ export class SessionsService {
 
   delete(id: number) {
     return this.deleteSessionGQL.mutate({ id });
-  }
-
-  addMarker(markerId: number, sessionId: number) {
-    return this.addMarkerGQL.mutate({
-      addMarkerToSession: {
-        markerId,
-        sessionId,
-      },
-    });
   }
 }

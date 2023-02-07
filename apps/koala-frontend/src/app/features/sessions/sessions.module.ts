@@ -4,6 +4,7 @@ import { SessionsRoutingModule } from './sessions-routing.module';
 import { SessionsOverviewPage } from './pages/sessions-overview/sessions-overview.page';
 import { SessionsService } from './services/sessions.service';
 import { MediaControlService } from './services/media-control.service';
+import { ToolbarsService } from './services/toolbars.service';
 
 //primeng modules
 import { ButtonModule } from 'primeng/button';
@@ -23,6 +24,7 @@ import { DialogModule } from 'primeng/dialog';
 import { SliderModule } from 'primeng/slider';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MixedCdkDragDropModule } from 'angular-mixed-cdk-drag-drop';
 
 import { SessionsOverviewTableComponent } from './components/sessions-overview-table/sessions-overview-table.component';
 import { SessionMaintainPage } from './pages/session-maintain/session-maintain.page';
@@ -46,6 +48,8 @@ import { SessionParticipantsOverviewComponent } from './components/session-parti
 import { SessionParticipantsInvitationComponent } from './components/session-participants-invitation/session-participants-invitation.component';
 import { MarkerService } from './services/marker.service';
 import { MarkerButtonComponent } from './components/marker-button/marker-button.component';
+import { MarkerToolbarComponent } from './components/marker-toolbar/marker-toolbar.component';
+import { DeleteConfirmDialogComponent } from './components/delete-confirm-dialog/delete-confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +72,8 @@ import { MarkerButtonComponent } from './components/marker-button/marker-button.
     SessionParticipantsOverviewComponent,
     SessionParticipantsInvitationComponent,
     MarkerButtonComponent,
+    MarkerToolbarComponent,
+    DeleteConfirmDialogComponent,
   ],
   imports: [
     SharedModule,
@@ -89,12 +95,14 @@ import { MarkerButtonComponent } from './components/marker-button/marker-button.
     TabViewModule,
     DialogModule,
     SliderModule,
+    MixedCdkDragDropModule,
   ],
   providers: [
     SessionsService,
     MediaService,
     MarkerService,
     MediaControlService,
+    ToolbarsService,
   ],
 })
 export class SessionsModule {}

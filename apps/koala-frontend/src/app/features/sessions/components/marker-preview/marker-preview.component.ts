@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MarkerEntity } from '../../types/marker-entity';
 
 @Component({
@@ -9,16 +9,12 @@ import { MarkerEntity } from '../../types/marker-entity';
     '../../session-common.scss',
   ],
 })
-export class MarkerPreviewComponent implements OnInit {
+export class MarkerPreviewComponent {
   @Input() marker!: MarkerEntity;
-  @Input() createEnabled: boolean = false;
+  @Input() createEnabled = false;
 
   @Output() resetMarkerData = new EventEmitter();
   @Output() markerAdd = new EventEmitter();
-
-  constructor() {}
-
-  ngOnInit(): void {}
 
   public onReset() {
     this.resetMarkerData.emit();

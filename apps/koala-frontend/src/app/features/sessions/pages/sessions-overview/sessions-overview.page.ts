@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Session } from 'apps/koala-frontend/src/app/graphql/generated/graphql';
+import { Session } from '../../types/session-entity';
 import { SessionsService } from '../../services/sessions.service';
 
 @Component({
@@ -15,8 +15,10 @@ import { SessionsService } from '../../services/sessions.service';
 export class SessionsOverviewPage implements OnInit {
   sessions: Session[] = [];
   routeSubscription: any;
-  createSessionModal: boolean = false;
+  createSessionModal = false;
   createSessionForm!: FormGroup;
+  showDeleteConfirm = false;
+  selectedSession?: Session;
 
   constructor(
     private readonly sessionService: SessionsService,
@@ -75,8 +77,20 @@ export class SessionsOverviewPage implements OnInit {
   }
 
   public onSessionDelete(session: Session) {
-    this.sessionService.delete(parseInt(session.id)).subscribe({
+    //confirm deletion first
+    this.selectedSession = session;
+    this.showDeleteConfirm = true;
+  }
+
+  public onSessionDeleteCancel() {
+    this.selectedSession = undefined;
+    this.showDeleteConfirm = false;
+  }
+
+  public onSessionDeleteConfirmed(sessionId: string) {
+    this.sessionService.delete(parseInt(sessionId)).subscribe({
       next: (value) => {
+        this.showDeleteConfirm = false;
         this.loadSessions();
       },
       error: (err) => {},

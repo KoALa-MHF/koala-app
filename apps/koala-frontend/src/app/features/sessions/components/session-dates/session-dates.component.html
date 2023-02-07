@@ -17,8 +17,12 @@
       <p-calendar
         [style]="{ minWidth: '100%' }"
         dateFormat="dd.mm.yy"
+        [showTime]="true"
+        hourFormat="24"
         id="session-start-input"
         formControlName="start"
+        [class.ng-dirty]="sessionDatesForm.errors?.['datesWrong'] && (sessionDatesForm.touched || sessionDatesForm.dirty)"
+        [class.ng-invalid]="sessionDatesForm.errors?.['datesWrong'] && (sessionDatesForm.touched || sessionDatesForm.dirty)"
         data-cy="session-maintain-start-date-input"
       ></p-calendar>
       <label for="session-start-input">{{
@@ -32,8 +36,12 @@
       <p-calendar
         [style]="{ minWidth: '100%' }"
         dateFormat="dd.mm.yy"
+        [showTime]="true"
+        hourFormat="24"
         id="session-end-input"
         formControlName="end"
+        [class.ng-dirty]="sessionDatesForm.errors?.['datesWrong'] && (sessionDatesForm.touched || sessionDatesForm.dirty)"
+        [class.ng-invalid]="sessionDatesForm.errors?.['datesWrong'] && (sessionDatesForm.touched || sessionDatesForm.dirty)"
         data-cy="session-maintain-end-date-input"
       ></p-calendar>
       <label for="session-end-input">{{

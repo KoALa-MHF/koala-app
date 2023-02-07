@@ -19,6 +19,8 @@ import { AnnotationsModule } from './annotations/annotations.module';
 import { Annotation } from './annotations/entities/annotation.entity';
 import { formatError } from './core/graphql/grapqhl-error';
 import { ConfigModule, databaseConfig } from './config/config.module';
+import { ToolbarsModule } from './toolbars/toolbars.module';
+import { Toolbar } from './toolbars/entities/toolbar.entity';
 
 @Module({
   imports: [
@@ -32,6 +34,7 @@ import { ConfigModule, databaseConfig } from './config/config.module';
         Marker,
         Annotation,
         UserSession,
+        Toolbar,
       ],
       synchronize: true,
     }),
@@ -48,6 +51,7 @@ import { ConfigModule, databaseConfig } from './config/config.module';
     MarkersModule,
     UserSessionsModule,
     AnnotationsModule,
+    ToolbarsModule,
   ],
   controllers: [
     AppController,

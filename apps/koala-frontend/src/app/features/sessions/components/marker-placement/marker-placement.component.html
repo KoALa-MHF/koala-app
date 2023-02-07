@@ -17,17 +17,7 @@
 </div>
 
 <!--switch to real buttons as soon as one marker is assigned-->
-<div
-  cdkDropList
-  cdkDropListOrientation="horizontal"
-  (cdkDropListDropped)="drop($event)"
-  *ngIf="markers.length !== 0"
-  style="display: flex; justify-content: flex-start; flex-wrap: wrap; gap: 10px"
->
-  <div cdkDrag *ngFor="let marker of markers" style="flex: 1 0 10%">
-    <koala-marker-button *ngIf="marker" [marker]="marker"></koala-marker-button>
-  </div>
-</div>
+<koala-marker-toolbar [markers]="markers"></koala-marker-toolbar>
 
 <h5>{{ 'SESSION.MAINTAIN.SECTION_HEADINGS.MARKER_PLACEMENT_VERTICAL' | translate }}</h5>
 
@@ -48,14 +38,4 @@
 </div>
 
 <!--switch to real buttons as soon as one marker is assigned-->
-<div
-  cdkDropList
-  (cdkDropListDropped)="drop($event)"
-  *ngIf="markers.length !== 0"
-  style="display: grid; gap: 10px"
-  [style.grid-template-columns]="markers.length < 5 ? 'fit-content(98%)' : 'fit-content(46%) fit-content(46%)'"
->
-  <div cdkDrag *ngFor="let marker of markers">
-    <koala-marker-button *ngIf="marker" [marker]="marker"></koala-marker-button>
-  </div>
-</div>
+<koala-marker-toolbar [markers]="markers"></koala-marker-toolbar>
