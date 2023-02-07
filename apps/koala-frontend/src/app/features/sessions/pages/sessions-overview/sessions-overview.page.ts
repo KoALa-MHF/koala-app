@@ -93,7 +93,6 @@ export class SessionsOverviewPage implements OnInit {
         this.showDeleteConfirm = false;
         this.loadSessions();
       },
-      error: (err) => {},
     });
   }
 

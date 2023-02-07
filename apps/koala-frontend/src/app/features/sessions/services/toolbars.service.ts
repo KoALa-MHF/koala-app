@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-
 import { UpdateToolbarGQL, UpdateToolbarInput } from '../../../graphql/generated/graphql';
 
 @Injectable({

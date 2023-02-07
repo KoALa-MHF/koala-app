@@ -17,7 +17,7 @@
 </div>
 
 <!--switch to real buttons as soon as one marker is assigned-->
-<koala-marker-toolbar [markers]="markers"></koala-marker-toolbar>
+<koala-marker-toolbar [markers]="markers" (sortChange)="onSortChange($event)"></koala-marker-toolbar>
 
 <h5>{{ 'SESSION.MAINTAIN.SECTION_HEADINGS.MARKER_PLACEMENT_VERTICAL' | translate }}</h5>
 
