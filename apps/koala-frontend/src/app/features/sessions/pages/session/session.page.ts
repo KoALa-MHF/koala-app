@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Session } from '../../../../graphql/generated/graphql';
 import { MarkerService } from '../../services/marker.service';
 import { MessageService } from 'primeng/api';
 import { MediaControlService, MediaEvent, MediaActions } from '../../services/media-control.service';
 import { SessionsService } from '../../services/sessions.service';
 import { environment } from '../../../../../environments/environment';
+import { Session } from '../../types/session-entity';
 
 @Component({
   selector: 'koala-app-session',
