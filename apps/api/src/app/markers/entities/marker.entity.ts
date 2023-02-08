@@ -41,7 +41,7 @@ export class Marker extends BaseEntity {
   abbreviation: string;
 
   @Column({ nullable: true, default: '' })
-  @Field({ defaultValue: '', description: 'Marker Description' })
+  @Field({ nullable: true, defaultValue: '', description: 'Marker Description' })
   @IsOptional()
   description?: string;
 
