@@ -46,7 +46,7 @@
   <div>
     <span class="p-float-label">
       <input
-        [maxlength]="markerType === MarkerType.Range ? 3 : 2"
+        [maxlength]="markerType === MarkerType.Range ? 6 : 2"
         id="marker-abbreviation-input"
         type="text"
         formControlName="abbreviation"
@@ -77,11 +77,20 @@
     <p-dropdown
       placeholder="{{ 'SESSION.MAINTAIN.MARKER.MARKER_ICON_INPUT_LABEL' | translate }}"
       [options]="icons"
-      optionLabel="name"
-      optionValue="code"
       [style]="{ minWidth: '100%' }"
       formControlName="icon"
-    ></p-dropdown>
+    >
+      <ng-template let-item pTemplate="selectedItem">
+        <span class="pi pi-{{ item.code }}"
+          ><span style="margin-left: 10px">{{ 'ICONS.' + item.name | translate }}</span></span
+        >
+      </ng-template>
+      <ng-template let-object pTemplate="item">
+        <span class="pi pi-{{ object.code }}"
+          ><span style="margin-left: 10px">{{ 'ICONS.' + object.name | translate }}</span></span
+        >
+      </ng-template>
+    </p-dropdown>
     <small id="marker-name-help" class="field-explanation">
       {{ 'SESSION.MAINTAIN.MARKER.MARKER_ICON_INPUT_EXPLANATION' | translate }}
     </small>

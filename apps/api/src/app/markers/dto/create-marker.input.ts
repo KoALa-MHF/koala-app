@@ -22,4 +22,7 @@ export class CreateMarkerInput {
 
   @Field({ defaultValue: DEFAULT_COLOR, description: 'Marker Color' })
   color?: string;
+
+  @Field({ nullable: true, description: 'Marker Icon' })
+  icon?: string;
 }

@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MutationResult } from 'apollo-angular';
 import { datesStartEndValidator } from '../../../../shared/dates.validator';
 import { MessageService } from 'primeng/api';
-import { Marker, UpdateSessionMutation } from '../../../../graphql/generated/graphql';
+import { UpdateSessionMutation } from '../../../../graphql/generated/graphql';
 import { MarkerService } from '../../services/marker.service';
 import { MediaService } from '../../services/media.service';
 import { SessionsService } from '../../services/sessions.service';
@@ -28,7 +28,7 @@ export class SessionMaintainPage implements OnInit {
   sessionId!: number;
   session: Session | null = null;
   participants: any = [];
-  markers: Array<Marker> = [];
+  markers: Array<MarkerEntity> = [];
 
   constructor(
     private readonly sessionService: SessionsService,
@@ -226,7 +226,7 @@ export class SessionMaintainPage implements OnInit {
         type: this.maintainMarkerForm.value.type,
         abbreviation: this.maintainMarkerForm.value.abbreviation,
         color: this.maintainMarkerForm.value.color,
-        //icon: this.maintainMarkerForm.value.icon,
+        icon: this.maintainMarkerForm.value.icon,
       })
       .subscribe({
         next: (result) => {
