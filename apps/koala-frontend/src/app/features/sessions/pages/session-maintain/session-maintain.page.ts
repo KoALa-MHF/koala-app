@@ -10,8 +10,8 @@ import { MarkerService } from '../../services/marker.service';
 import { MediaService } from '../../services/media.service';
 import { SessionsService } from '../../services/sessions.service';
 import { ToolbarsService } from '../../services/toolbars.service';
-import { MarkerEntity } from '../../types/marker-entity';
-import { Session } from '../../types/session-entity';
+import { Marker } from '../../types/marker.entity';
+import { Session } from '../../types/session.entity';
 
 @Component({
   selector: 'koala-session-maintain',
@@ -28,7 +28,7 @@ export class SessionMaintainPage implements OnInit {
   sessionId!: number;
   session: Session | null = null;
   participants: any = [];
-  markers: Array<MarkerEntity> = [];
+  markers: Array<Marker> = [];
 
   constructor(
     private readonly sessionService: SessionsService,
@@ -202,7 +202,7 @@ export class SessionMaintainPage implements OnInit {
       });
   }
 
-  get markerPreviewData(): MarkerEntity {
+  get markerPreviewData(): Marker {
     return {
       id: 0,
       description: this.maintainMarkerForm.value.description,
@@ -250,7 +250,7 @@ export class SessionMaintainPage implements OnInit {
       });
   }
 
-  public onMarkerSortChange(markers: MarkerEntity[]) {
+  public onMarkerSortChange(markers: Marker[]) {
     const toolbar = this.session?.toolbars[0];
     if (toolbar) {
       this.updateToolbarMarker(

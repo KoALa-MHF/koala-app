@@ -7,7 +7,7 @@ import { MessageService } from 'primeng/api';
 import { MediaControlService, MediaEvent, MediaActions } from '../../services/media-control.service';
 import { SessionsService } from '../../services/sessions.service';
 import { environment } from '../../../../../environments/environment';
-import { Session } from '../../types/session-entity';
+import { Session } from '../../types/session.entity';
 
 @Component({
   selector: 'koala-app-session',
