@@ -12,6 +12,7 @@ import { SessionsService } from '../../services/sessions.service';
 import { ToolbarsService } from '../../services/toolbars.service';
 import { Marker } from '../../types/marker.entity';
 import { Session } from '../../types/session.entity';
+import { iconAbbreviationValidator } from '../../../../shared/icon-abbreviation.validator';
 
 @Component({
   selector: 'koala-session-maintain',
@@ -68,18 +69,23 @@ export class SessionMaintainPage implements OnInit {
       }),
     });
 
-    this.maintainMarkerForm = this.formBuilder.group({
-      type: new FormControl<string>('', [
-        Validators.required,
-      ]),
-      name: new FormControl<string>('', [
-        Validators.required,
-      ]),
-      description: new FormControl<string>(''),
-      abbreviation: new FormControl<string>(''),
-      color: new FormControl<string>('#555bcf', { nonNullable: true }),
-      icon: new FormControl<string>(''),
-    });
+    this.maintainMarkerForm = this.formBuilder.group(
+      {
+        type: new FormControl<string>('', [
+          Validators.required,
+        ]),
+        name: new FormControl<string>('', [
+          Validators.required,
+        ]),
+        description: new FormControl<string>(''),
+        abbreviation: new FormControl<string>(''),
+        color: new FormControl<string>('#555bcf', { nonNullable: true }),
+        icon: new FormControl<string>(''),
+      },
+      {
+        validators: iconAbbreviationValidator,
+      }
+    );
   }
 
   ngOnInit(): void {

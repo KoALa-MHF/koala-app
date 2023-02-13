@@ -1,5 +1,5 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
-import { IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, ValidateIf } from 'class-validator';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '../../core/base.entity';
 
@@ -35,8 +35,9 @@ export class Marker extends BaseEntity {
   @IsNotEmpty()
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field({ description: 'Marker Name Abbreviation (e.g. for small screen sizes' })
+  @ValidateIf((o) => !o.icon || o.abbreviation)
   @IsNotEmpty()
   abbreviation: string;
 
@@ -51,5 +52,7 @@ export class Marker extends BaseEntity {
 
   @Column({ nullable: true })
   @Field({ nullable: true, description: 'Marker Icon' })
+  @ValidateIf((o) => !o.abbreviation || o.icon)
+  @IsNotEmpty()
   icon: string;
 }
