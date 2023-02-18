@@ -3,5 +3,8 @@ import { InputType, PartialType, OmitType } from '@nestjs/graphql';
 
 @InputType()
 export class UpdateUserSessionInput extends PartialType(
-  OmitType(CreateUserSessionInput, ['sessionId'] as const)
+  OmitType(CreateUserSessionInput, [
+    'sessionId',
+    'email',
+  ] as const)
 ) {}

@@ -18,9 +18,12 @@ import { UserSession } from './user-sessions/entities/user-session.entity';
 import { AnnotationsModule } from './annotations/annotations.module';
 import { Annotation } from './annotations/entities/annotation.entity';
 import { formatError } from './core/graphql/grapqhl-error';
-import { ConfigModule, databaseConfig } from './config/config.module';
+import { ConfigModule, databaseConfig, mailConfig } from './config/config.module';
 import { ToolbarsModule } from './toolbars/toolbars.module';
 import { Toolbar } from './toolbars/entities/toolbar.entity';
+
+import { MailerModule } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
 @Module({
   imports: [
@@ -45,6 +48,28 @@ import { Toolbar } from './toolbars/entities/toolbar.entity';
       autoSchemaFile: true,
       formatError: formatError,
       introspection: true,
+    }),
+    MailerModule.forRoot({
+      transport: {
+        host: mailConfig.host,
+        port: mailConfig.port,
+        auth: {
+          user: mailConfig.user, // generated ethereal user
+          pass: mailConfig.password, // generated ethereal password
+        },
+        // ignoreTLS: true,
+        // secure: false,
+      },
+      defaults: {
+        from: mailConfig.from,
+      },
+      template: {
+        dir: __dirname + '/assets/templates',
+        adapter: new HandlebarsAdapter(),
+        options: {
+          strict: true,
+        },
+      },
     }),
     SessionsModule,
     MediaModule,

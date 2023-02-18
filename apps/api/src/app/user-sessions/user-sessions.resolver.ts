@@ -3,6 +3,7 @@ import { UserSessionsService } from './user-sessions.service';
 import { UserSession } from './entities/user-session.entity';
 import { CreateUserSessionInput } from './dto/create-user-session.input';
 import { UpdateUserSessionInput } from './dto/update-user-session.input';
+import { InviteUserSessionInput } from './dto/invite-user-session.input';
 
 @Resolver(() => UserSession)
 export class UserSessionsResolver {
@@ -16,7 +17,22 @@ export class UserSessionsResolver {
     return this.userSessionsService.create(createUserSessionInput);
   }
 
-  @Query(() => [UserSession], { name: 'userSessions' })
+  @Mutation(() => [
+    UserSession,
+  ])
+  inviteUserSession(
+    @Args('inviteUserSessionInput')
+    inviteUserSessionInput: InviteUserSessionInput
+  ) {
+    return this.userSessionsService.invite(inviteUserSessionInput.userSessionIds, inviteUserSessionInput.message);
+  }
+
+  @Query(
+    () => [
+      UserSession,
+    ],
+    { name: 'userSessions' }
+  )
   findAll() {
     return this.userSessionsService.findAll();
   }
@@ -32,10 +48,7 @@ export class UserSessionsResolver {
     @Args('updateUserSessionInput')
     updateUserSessionInput: UpdateUserSessionInput
   ) {
-    return this.userSessionsService.update(
-      id,
-      updateUserSessionInput
-    );
+    return this.userSessionsService.update(id, updateUserSessionInput);
   }
 
   @Mutation(() => UserSession)
