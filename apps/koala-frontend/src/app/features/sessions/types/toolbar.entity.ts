@@ -1,4 +1,4 @@
-import { MarkerEntity } from './marker-entity';
+import { Marker } from './marker.entity';
 
 export interface Toolbar {
   id: string;

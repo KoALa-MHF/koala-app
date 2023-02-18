@@ -5,13 +5,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MutationResult } from 'apollo-angular';
 import { datesStartEndValidator } from '../../../../shared/dates.validator';
 import { MessageService } from 'primeng/api';
-import { Marker, UpdateSessionMutation } from '../../../../graphql/generated/graphql';
+import { UpdateSessionMutation } from '../../../../graphql/generated/graphql';
 import { MarkerService } from '../../services/marker.service';
 import { MediaService } from '../../services/media.service';
 import { SessionsService } from '../../services/sessions.service';
 import { ToolbarsService } from '../../services/toolbars.service';
-import { MarkerEntity } from '../../types/marker-entity';
-import { Session } from '../../types/session-entity';
+import { Marker } from '../../types/marker.entity';
+import { Session } from '../../types/session.entity';
+import { iconAbbreviationValidator } from '../../../../shared/icon-abbreviation.validator';
 
 @Component({
   selector: 'koala-session-maintain',
@@ -68,18 +69,23 @@ export class SessionMaintainPage implements OnInit {
       }),
     });
 
-    this.maintainMarkerForm = this.formBuilder.group({
-      type: new FormControl<string>('', [
-        Validators.required,
-      ]),
-      name: new FormControl<string>('', [
-        Validators.required,
-      ]),
-      description: new FormControl<string>(''),
-      abbreviation: new FormControl<string>(''),
-      color: new FormControl<string>('#555bcf', { nonNullable: true }),
-      icon: new FormControl<string>(''),
-    });
+    this.maintainMarkerForm = this.formBuilder.group(
+      {
+        type: new FormControl<string>('', [
+          Validators.required,
+        ]),
+        name: new FormControl<string>('', [
+          Validators.required,
+        ]),
+        description: new FormControl<string>(''),
+        abbreviation: new FormControl<string>(''),
+        color: new FormControl<string>('#555bcf', { nonNullable: true }),
+        icon: new FormControl<string>(''),
+      },
+      {
+        validators: iconAbbreviationValidator,
+      }
+    );
   }
 
   ngOnInit(): void {
@@ -202,7 +208,7 @@ export class SessionMaintainPage implements OnInit {
       });
   }
 
-  get markerPreviewData(): MarkerEntity {
+  get markerPreviewData(): Marker {
     return {
       id: 0,
       description: this.maintainMarkerForm.value.description,
@@ -226,7 +232,7 @@ export class SessionMaintainPage implements OnInit {
         type: this.maintainMarkerForm.value.type,
         abbreviation: this.maintainMarkerForm.value.abbreviation,
         color: this.maintainMarkerForm.value.color,
-        //icon: this.maintainMarkerForm.value.icon,
+        icon: this.maintainMarkerForm.value.icon,
       })
       .subscribe({
         next: (result) => {
@@ -250,7 +256,7 @@ export class SessionMaintainPage implements OnInit {
       });
   }
 
-  public onMarkerSortChange(markers: MarkerEntity[]) {
+  public onMarkerSortChange(markers: Marker[]) {
     const toolbar = this.session?.toolbars[0];
     if (toolbar) {
       this.updateToolbarMarker(

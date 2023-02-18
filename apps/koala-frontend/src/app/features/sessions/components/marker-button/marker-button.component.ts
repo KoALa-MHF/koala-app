@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { MarkerEntity } from '../../types/marker-entity';
+import { Marker } from '../../types/marker.entity';
 import { MarkerType } from '../../../../graphql/generated/graphql';
 
 @Component({
@@ -10,6 +10,6 @@ import { MarkerType } from '../../../../graphql/generated/graphql';
   ],
 })
 export class MarkerButtonComponent {
-  @Input() marker!: MarkerEntity;
+  @Input() marker!: Marker;
   MarkerType = MarkerType;
 }

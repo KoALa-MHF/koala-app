@@ -1,8 +1,8 @@
 import { MarkerType } from '../../../graphql/generated/graphql';
 
-export interface MarkerEntity {
+export interface Marker {
   id: number;
-  description: string;
+  description?: string | null;
   name: string;
   type: MarkerType;
   abbreviation: string;

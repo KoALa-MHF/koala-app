@@ -1,6 +1,6 @@
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MarkerEntity } from '../../types/marker-entity';
+import { Marker } from '../../types/marker.entity';
 
 @Component({
   selector: 'koala-marker-toolbar',
@@ -10,8 +10,8 @@ import { MarkerEntity } from '../../types/marker-entity';
   ],
 })
 export class MarkerToolbarComponent {
-  @Input() markers!: MarkerEntity[];
-  @Output() sortChange = new EventEmitter<MarkerEntity[]>();
+  @Input() markers!: Marker[];
+  @Output() sortChange = new EventEmitter<Marker[]>();
 
   dropped(event: { previousIndex: number; currentIndex: number }) {
     const tempMarker = [
