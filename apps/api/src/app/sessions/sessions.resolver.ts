@@ -59,6 +59,6 @@ export class SessionsResolver {
 
   @ResolveField()
   async toolbars(@Parent() session: Session) {
-    return this.toolbarsService.findAll({ sessionId: session.id });
+    return this.toolbarsService.findAll(session.id);
   }
 }

@@ -15,8 +15,14 @@ export class ToolbarsService {
     return this.toolbarsRepository.findOneByOrFail({ id });
   }
 
-  findAll(where?: FindOptionsWhere<Toolbar>): Promise<Toolbar[]> {
-    return this.toolbarsRepository.findBy(where);
+  findAll(sessionId?: number): Promise<Toolbar[]> {
+    return this.toolbarsRepository.findBy(
+      sessionId
+        ? {
+            sessionId: sessionId,
+          }
+        : null
+    );
   }
 
   async update(id: number, updateToolbarInput: UpdateToolbarInput): Promise<Toolbar> {
