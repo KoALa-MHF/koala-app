@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Session } from '../../types/session-entity';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'koala-sessions-overview-table',
@@ -32,6 +33,8 @@ export class SessionsOverviewTableComponent {
     'delete',
   ];
 
+  constructor(private readonly router: Router) {}
+
   public onSessionDelete(session: Session) {
     this.sessionDelete.emit(session);
   }
@@ -50,7 +53,9 @@ export class SessionsOverviewTableComponent {
     this.sessionUpdate.emit(session);
   }
 
-  public onRowSelect(event: any) {
-    this.sessionUpdate.emit(event.data);
+  public onRowSelect(session: Session) {
+    this.router.navigate([
+      `sessions/${session.id}`,
+    ]);
   }
 }
