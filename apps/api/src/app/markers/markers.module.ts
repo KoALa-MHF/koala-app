@@ -5,7 +5,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Marker } from './entities/marker.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Marker])],
-  providers: [MarkersResolver, MarkersService],
+  imports: [
+    TypeOrmModule.forFeature([
+      Marker,
+    ]),
+  ],
+  providers: [
+    MarkersResolver,
+    MarkersService,
+  ],
+  exports: [
+    MarkersService,
+  ],
 })
 export class MarkersModule {}

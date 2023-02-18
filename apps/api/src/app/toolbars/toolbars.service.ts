@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { UpdateToolbarInput } from './dto/update-toolbar.input';
 import { Toolbar } from './entities/toolbar.entity';
 
@@ -15,7 +15,11 @@ export class ToolbarsService {
     return this.toolbarsRepository.findOneByOrFail({ id });
   }
 
-  async update(id: number, updateToolbarInput: UpdateToolbarInput) {
+  findAll(where?: FindOptionsWhere<Toolbar>): Promise<Toolbar[]> {
+    return this.toolbarsRepository.findBy(where);
+  }
+
+  async update(id: number, updateToolbarInput: UpdateToolbarInput): Promise<Toolbar> {
     try {
       await this.toolbarsRepository.update(id, {
         markers: updateToolbarInput.markers,
