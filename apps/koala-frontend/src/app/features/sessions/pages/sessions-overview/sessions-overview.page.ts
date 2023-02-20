@@ -72,6 +72,12 @@ export class SessionsOverviewPage implements OnInit {
     ]);
   }
 
+  public onSessionEnter(session: Session) {
+    this.router.navigate([
+      `sessions/${session.id}`,
+    ]);
+  }
+
   public onSessionExport(session: Session) {
     console.log('Session Export Pressed for Session: ' + session.id + ', ' + session.name);
   }
