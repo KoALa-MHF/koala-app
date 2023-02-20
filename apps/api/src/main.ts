@@ -10,7 +10,18 @@ import { AppModule } from './app/app.module';
 import { GraphQLValidationPipe } from './app/core/graphql/graphql-validation.pipe';
 import { graphqlUploadExpress } from 'graphql-upload';
 
+import * as MailDev from 'maildev';
+
+function setupMailDevelopmentServer() {
+  const maildev = new MailDev({});
+  maildev.listen();
+}
+
 async function bootstrap() {
+  if (process.env.NODE_ENV === 'development') {
+    setupMailDevelopmentServer();
+  }
+
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new GraphQLValidationPipe());
   app.use(graphqlUploadExpress({ maxFileSize: 100000000, maxFiles: 10 }));

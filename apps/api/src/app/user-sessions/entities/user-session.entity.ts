@@ -1,6 +1,6 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
-import { IsEnum, IsNotEmpty, MaxLength, maxLength } from 'class-validator';
-import { Column, Entity, JoinColumn, ManyToOne, MaxKey, PrimaryGeneratedColumn } from 'typeorm';
+import { IsEmail, IsEnum, IsNotEmpty, MaxLength, maxLength } from 'class-validator';
+import { Column, Entity, Index, JoinColumn, ManyToOne, MaxKey, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '../../core/base.entity';
 import { Session } from '../../sessions/entities/session.entity';
 
@@ -20,6 +20,13 @@ registerEnumType(UserSessionStatus, {
 
 @ObjectType()
 @Entity()
+@Index(
+  [
+    'email',
+    'session',
+  ],
+  { unique: true }
+)
 export class UserSession extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field(() => Int, { description: 'ID for User Session' })
@@ -38,7 +45,7 @@ export class UserSession extends BaseEntity {
   @Column({ nullable: true })
   @Field({ nullable: true, description: 'User Session Note' })
   @MaxLength(USER_SESSION_NOTE_MAX_LENGTH)
-  note: string;
+  note?: string;
 
   @JoinColumn({ name: 'sessionId' })
   @ManyToOne(() => Session)
@@ -48,4 +55,13 @@ export class UserSession extends BaseEntity {
 
   @Column({ nullable: false })
   sessionId: number;
+
+  @Column()
+  @Field({ description: 'User Session Email' })
+  @IsEmail()
+  email: string;
+
+  @Column({ nullable: true })
+  @Field({ description: 'Invitation Date' })
+  invitedAt: Date;
 }

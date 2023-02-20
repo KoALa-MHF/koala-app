@@ -3,6 +3,7 @@ import { UserSessionsService } from './user-sessions.service';
 import { UserSession } from './entities/user-session.entity';
 import { CreateUserSessionInput } from './dto/create-user-session.input';
 import { UpdateUserSessionInput } from './dto/update-user-session.input';
+import { InviteUserSessionInput } from './dto/invite-user-session.input';
 import { SessionsService } from '../sessions/sessions.service';
 
 @Resolver(() => UserSession)
@@ -18,6 +19,16 @@ export class UserSessionsResolver {
     createUserSessionInput: CreateUserSessionInput
   ) {
     return this.userSessionsService.create(createUserSessionInput);
+  }
+
+  @Mutation(() => [
+    UserSession,
+  ])
+  inviteUserSession(
+    @Args('inviteUserSessionInput')
+    inviteUserSessionInput: InviteUserSessionInput
+  ) {
+    return this.userSessionsService.invite(inviteUserSessionInput.userSessionIds, inviteUserSessionInput.message);
   }
 
   @Query(
