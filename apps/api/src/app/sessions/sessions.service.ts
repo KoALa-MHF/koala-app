@@ -7,11 +7,6 @@ import { CreateSessionInput } from './dto/create-session.input';
 import { UpdateSessionInput } from './dto/update-session.input';
 import { Session } from './entities/session.entity';
 
-const RELATIONS = [
-  'media',
-  'toolbars',
-];
-
 @Injectable()
 export class SessionsService {
   constructor(
@@ -35,15 +30,12 @@ export class SessionsService {
   }
 
   findAll() {
-    return this.sessionsRepository.find({
-      relations: RELATIONS,
-    });
+    return this.sessionsRepository.find();
   }
 
   findOne(id: number, withDeleted = false) {
     return this.sessionsRepository.findOneOrFail({
       where: { id },
-      relations: RELATIONS,
       withDeleted,
     });
   }

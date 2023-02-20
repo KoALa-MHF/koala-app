@@ -8,6 +8,7 @@ import {
   JoinColumn,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -97,14 +98,17 @@ export class Session extends BaseEntity {
   @IsOptional()
   enableLiveAnalysis?: boolean;
 
-  @JoinColumn()
-  @OneToOne(() => Media, { nullable: true })
+  @JoinColumn({ name: 'mediaId' })
+  @ManyToOne(() => Media, { nullable: true })
   @Field((type) => Media, {
     nullable: true,
     description: 'Associated Media File',
   })
   @IsOptional()
   media?: Media;
+
+  @Column({ nullable: true })
+  mediaId?: number;
 
   @Column()
   @Index({ unique: true })

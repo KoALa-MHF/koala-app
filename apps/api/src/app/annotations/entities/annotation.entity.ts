@@ -1,12 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { IsNotEmpty } from 'class-validator';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '../../core/base.entity';
 import { Marker } from '../../markers/entities/marker.entity';
 import { UserSession } from '../../user-sessions/entities/user-session.entity';
@@ -27,19 +21,21 @@ export class Annotation extends BaseEntity {
   @Field(() => Int, { nullable: true, description: 'Annotation End Seconds' })
   end?: number;
 
-  @JoinColumn()
-  @ManyToOne(() => Marker, {
-    eager: true,
-  })
+  @JoinColumn({ name: 'markerId' })
+  @ManyToOne(() => Marker)
   @Field((type) => Marker, { description: 'Associated Marker' })
   @IsNotEmpty()
   marker: Marker;
 
-  @JoinColumn()
-  @ManyToOne(() => UserSession, {
-    eager: true,
-  })
+  @Column({ nullable: false })
+  markerId: number;
+
+  @JoinColumn({ name: 'userSessionId' })
+  @ManyToOne(() => UserSession)
   @Field((type) => UserSession, { description: 'Associated UserSession' })
   @IsNotEmpty()
   userSession: UserSession;
+
+  @Column({ nullable: false })
+  userSessionId: number;
 }

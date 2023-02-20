@@ -47,11 +47,11 @@ import { Toolbar } from './toolbars/entities/toolbar.entity';
       introspection: true,
     }),
     SessionsModule,
+    ToolbarsModule,
     MediaModule,
     MarkersModule,
     UserSessionsModule,
     AnnotationsModule,
-    ToolbarsModule,
   ],
   controllers: [
     AppController,
