@@ -72,6 +72,5 @@ export class UserSession extends BaseEntity {
     ],
     { description: 'Associated Annotations' }
   )
-  @IsNotEmpty()
   annotations: Annotation[];
 }
