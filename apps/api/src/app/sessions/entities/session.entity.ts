@@ -1,11 +1,10 @@
-import { ObjectType, Field, Int, registerEnumType, ID } from '@nestjs/graphql';
+import { ObjectType, Field, registerEnumType, ID } from '@nestjs/graphql';
 import { IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
-import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '../../core/base.entity';
 import { Media } from '../../media/entities/media.entity';
 import { customAlphabet } from 'nanoid';
 import { nolookalikes } from 'nanoid-dictionary';
-import { Marker } from '../../markers/entities/marker.entity';
 import { Toolbar } from '../../toolbars/entities/toolbar.entity';
 import { UserSession } from '../../user-sessions/entities/user-session.entity';
 
@@ -87,7 +86,6 @@ export class Session extends BaseEntity {
   @IsOptional()
   enableLiveAnalysis?: boolean;
 
-  @JoinColumn({ name: 'mediaId' })
   @ManyToOne(() => Media, { nullable: true })
   @Field((type) => Media, {
     nullable: true,
