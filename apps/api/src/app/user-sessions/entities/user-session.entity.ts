@@ -66,7 +66,6 @@ export class UserSession extends BaseEntity {
   @Field({ description: 'Invitation Date' })
   invitedAt: Date;
 
-  @JoinColumn()
   @OneToMany(() => Annotation, (annotation) => annotation.userSession)
   @Field(
     (type) => [

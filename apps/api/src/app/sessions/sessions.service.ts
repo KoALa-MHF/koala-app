@@ -14,7 +14,7 @@ export class SessionsService {
     private sessionsRepository: Repository<Session>
   ) {}
 
-  async create(createSessionInput: CreateSessionInput) {
+  async create(createSessionInput: CreateSessionInput): Promise<Session> {
     const newSession = this.sessionsRepository.create({
       ...createSessionInput,
       media: {
@@ -29,11 +29,11 @@ export class SessionsService {
     return this.findOne(savedSession.id);
   }
 
-  findAll() {
+  findAll(): Promise<Session[]> {
     return this.sessionsRepository.find();
   }
 
-  findOne(id: number, withDeleted = false) {
+  findOne(id: number, withDeleted = false): Promise<Session> {
     return this.sessionsRepository.findOneOrFail({
       where: { id },
       withDeleted,

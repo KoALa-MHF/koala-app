@@ -50,13 +50,13 @@ export class AnnotationsResolver {
   }
 
   @ResolveField()
-  async userSession(@Parent() annotation: Annotation) {
+  userSession(@Parent() annotation: Annotation) {
     const { userSessionId } = annotation;
     return this.userSessionsService.findOne(userSessionId);
   }
 
   @ResolveField()
-  async marker(@Parent() annotation: Annotation) {
+  marker(@Parent() annotation: Annotation) {
     const { markerId } = annotation;
     return this.markersService.findOne(markerId);
   }
