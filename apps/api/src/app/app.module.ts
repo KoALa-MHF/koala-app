@@ -72,11 +72,11 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
       },
     }),
     SessionsModule,
+    ToolbarsModule,
     MediaModule,
     MarkersModule,
     UserSessionsModule,
     AnnotationsModule,
-    ToolbarsModule,
   ],
   controllers: [
     AppController,

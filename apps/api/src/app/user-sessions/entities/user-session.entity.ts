@@ -47,13 +47,14 @@ export class UserSession extends BaseEntity {
   @MaxLength(USER_SESSION_NOTE_MAX_LENGTH)
   note?: string;
 
-  @JoinColumn()
-  @ManyToOne(() => Session, {
-    eager: true,
-  })
+  @JoinColumn({ name: 'sessionId' })
+  @ManyToOne(() => Session)
   @Field((type) => Session, { description: 'Associated Session' })
   @IsNotEmpty()
   session: Session;
+
+  @Column({ nullable: false })
+  sessionId: number;
 
   @Column()
   @Field({ description: 'User Session Email' })

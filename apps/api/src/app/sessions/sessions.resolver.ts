@@ -1,12 +1,20 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent } from '@nestjs/graphql';
 import { SessionsService } from './sessions.service';
 import { Session } from './entities/session.entity';
 import { CreateSessionInput } from './dto/create-session.input';
 import { UpdateSessionInput } from './dto/update-session.input';
+import { MediaService } from '../media/media.service';
+import { ToolbarsService } from '../toolbars/toolbars.service';
+import { forwardRef, Inject } from '@nestjs/common';
 
 @Resolver(() => Session)
 export class SessionsResolver {
-  constructor(private readonly sessionsService: SessionsService) {}
+  constructor(
+    private readonly sessionsService: SessionsService,
+    private readonly mediaService: MediaService,
+    @Inject(forwardRef(() => ToolbarsService))
+    private readonly toolbarsService: ToolbarsService
+  ) {}
 
   @Mutation(() => Session)
   createSession(@Args('createSessionInput') createSessionInput: CreateSessionInput) {
@@ -39,5 +47,18 @@ export class SessionsResolver {
   @Mutation(() => Session)
   removeSession(@Args('id', { type: () => Int }) id: number) {
     return this.sessionsService.remove(id);
+  }
+
+  @ResolveField()
+  async media(@Parent() session: Session) {
+    const { mediaId } = session;
+    if (mediaId) {
+      return this.mediaService.findOne(mediaId);
+    }
+  }
+
+  @ResolveField()
+  async toolbars(@Parent() session: Session) {
+    return this.toolbarsService.findAll(session.id);
   }
 }

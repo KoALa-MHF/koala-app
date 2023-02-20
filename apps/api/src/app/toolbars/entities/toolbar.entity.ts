@@ -11,11 +11,14 @@ export class Toolbar extends BaseEntity {
   @Field(() => ID, { description: 'ID for Media' })
   id: number;
 
-  @JoinColumn()
-  @ManyToOne(() => Session, (session) => session.toolbars, { eager: true })
+  @JoinColumn({ name: 'sessionId' })
+  @ManyToOne(() => Session, (session) => session.toolbars)
   @Field((type) => Session, { description: 'Associated Session' })
   @IsNotEmpty()
   session: Session;
+
+  @Column({ nullable: false })
+  sessionId: number;
 
   @Column('simple-array', { default: () => "('')" })
   @Field(
