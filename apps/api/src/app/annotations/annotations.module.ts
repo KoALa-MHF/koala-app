@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { AnnotationsService } from './annotations.service';
 import { AnnotationsResolver } from './annotations.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -12,10 +12,13 @@ import { UserSessionsModule } from '../user-sessions/user-sessions.module';
       Annotation,
     ]),
     MarkersModule,
-    UserSessionsModule,
+    forwardRef(() => UserSessionsModule),
   ],
   providers: [
     AnnotationsResolver,
+    AnnotationsService,
+  ],
+  exports: [
     AnnotationsService,
   ],
 })

@@ -7,7 +7,6 @@ import { Annotation } from './entities/annotation.entity';
 
 @Injectable()
 export class AnnotationsService {
-
   constructor(
     @InjectRepository(Annotation)
     private annotationsRepository: Repository<Annotation>
@@ -15,21 +14,25 @@ export class AnnotationsService {
 
   create(createMarkerInput: CreateAnnotationInput) {
     const newAnnotation = this.annotationsRepository.create({
-      start : createMarkerInput.start,
-      end : createMarkerInput.end,
-      marker : {
-        id : createMarkerInput.markerId
+      start: createMarkerInput.start,
+      end: createMarkerInput.end,
+      marker: {
+        id: createMarkerInput.markerId,
       },
-      userSession : {
-        id : createMarkerInput.userSessionId
-      }
+      userSession: {
+        id: createMarkerInput.userSessionId,
+      },
     });
 
     return this.annotationsRepository.save(newAnnotation);
   }
 
-  findAll() {
-    return this.annotationsRepository.find();
+  findAll(userSessionId?: number) {
+    return this.annotationsRepository.find({
+      where: {
+        userSessionId,
+      },
+    });
   }
 
   findOne(id: number) {
@@ -41,9 +44,9 @@ export class AnnotationsService {
       await this.annotationsRepository.update(id, {
         start: updateAnnotationInput.start,
         end: updateAnnotationInput.end,
-        marker: { 
-          id : updateAnnotationInput.markerId
-        }
+        marker: {
+          id: updateAnnotationInput.markerId,
+        },
       });
 
       return this.findOne(id);
@@ -55,7 +58,4 @@ export class AnnotationsService {
   remove(id: number) {
     return this.annotationsRepository.delete(id);
   }
-
 }
-
-

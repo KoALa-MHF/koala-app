@@ -5,12 +5,16 @@ import { CreateUserSessionInput } from './dto/create-user-session.input';
 import { UpdateUserSessionInput } from './dto/update-user-session.input';
 import { InviteUserSessionInput } from './dto/invite-user-session.input';
 import { SessionsService } from '../sessions/sessions.service';
+import { forwardRef, Inject } from '@nestjs/common';
+import { AnnotationsService } from '../annotations/annotations.service';
 
 @Resolver(() => UserSession)
 export class UserSessionsResolver {
   constructor(
     private readonly userSessionsService: UserSessionsService,
-    private readonly sessionService: SessionsService
+    private readonly sessionsService: SessionsService,
+    @Inject(forwardRef(() => AnnotationsService))
+    private readonly annotationsService: AnnotationsService
   ) {}
 
   @Mutation(() => UserSession)
@@ -63,6 +67,12 @@ export class UserSessionsResolver {
   @ResolveField()
   async session(@Parent() userSession: UserSession) {
     const { sessionId } = userSession;
-    return this.sessionService.findOne(sessionId, true);
+    return this.sessionsService.findOne(sessionId, true);
+  }
+
+  @ResolveField()
+  async annotations(@Parent() userSession: UserSession) {
+    const { id } = userSession;
+    return this.annotationsService.findAll(id);
   }
 }
