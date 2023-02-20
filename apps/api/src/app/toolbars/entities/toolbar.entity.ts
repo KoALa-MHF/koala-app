@@ -16,7 +16,7 @@ export class Toolbar extends BaseEntity {
   @IsNotEmpty()
   session: Session;
 
-  @Column({ nullable: false })
+  @Column()
   sessionId: number;
 
   @Column('simple-array', { default: () => "('')" })
