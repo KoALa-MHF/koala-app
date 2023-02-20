@@ -1,6 +1,7 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
-import { IsEmail, IsEnum, IsNotEmpty, MaxLength, maxLength } from 'class-validator';
-import { Column, Entity, Index, JoinColumn, ManyToOne, MaxKey, PrimaryGeneratedColumn } from 'typeorm';
+import { IsEmail, IsEnum, IsNotEmpty, MaxLength } from 'class-validator';
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Annotation } from '../../annotations/entities/annotation.entity';
 import { BaseEntity } from '../../core/base.entity';
 import { Session } from '../../sessions/entities/session.entity';
 
@@ -42,7 +43,7 @@ export class UserSession extends BaseEntity {
   @IsNotEmpty()
   status: UserSessionStatus;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, length: USER_SESSION_NOTE_MAX_LENGTH })
   @Field({ nullable: true, description: 'User Session Note' })
   @MaxLength(USER_SESSION_NOTE_MAX_LENGTH)
   note?: string;
@@ -64,4 +65,15 @@ export class UserSession extends BaseEntity {
   @Column({ nullable: true })
   @Field({ description: 'Invitation Date' })
   invitedAt: Date;
+
+  @JoinColumn()
+  @OneToMany(() => Annotation, (annotation) => annotation.userSession)
+  @Field(
+    (type) => [
+      Annotation,
+    ],
+    { description: 'Associated Annotations' }
+  )
+  @IsNotEmpty()
+  annotations: Annotation[];
 }

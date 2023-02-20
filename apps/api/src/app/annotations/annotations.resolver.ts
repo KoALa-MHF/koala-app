@@ -5,12 +5,14 @@ import { CreateAnnotationInput } from './dto/create-annotation.input';
 import { UpdateAnnotationInput } from './dto/update-annotation.input';
 import { MarkersService } from '../markers/markers.service';
 import { UserSessionsService } from '../user-sessions/user-sessions.service';
+import { forwardRef, Inject } from '@nestjs/common';
 
 @Resolver(() => Annotation)
 export class AnnotationsResolver {
   constructor(
     private readonly annotationsService: AnnotationsService,
     private readonly markersService: MarkersService,
+    @Inject(forwardRef(() => UserSessionsService))
     private readonly userSessionsService: UserSessionsService
   ) {}
 
