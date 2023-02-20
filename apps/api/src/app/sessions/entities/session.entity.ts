@@ -111,7 +111,6 @@ export class Session extends BaseEntity {
     ],
     { description: 'Associated Session' }
   )
-  @IsNotEmpty()
   toolbars: Toolbar[];
 
   @OneToMany(() => UserSession, (userSession) => userSession.session)
@@ -121,7 +120,6 @@ export class Session extends BaseEntity {
     ],
     { description: 'Associated User Sessions' }
   )
-  @IsNotEmpty()
   userSessions: UserSession[];
 
   @BeforeInsert()
