@@ -21,6 +21,7 @@ export class MarkersService {
     newMarker.description = createMarkerInput.description;
     newMarker.type = createMarkerInput.type;
     newMarker.color = createMarkerInput.color;
+    newMarker.icon = createMarkerInput.icon;
 
     return this.markersRepository.save(newMarker);
   }

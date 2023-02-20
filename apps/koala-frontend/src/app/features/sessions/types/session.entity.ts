@@ -1,6 +1,6 @@
 import { SessionStatus } from '../../../graphql/generated/graphql';
-import { Media } from './media-entity';
-import { Toolbar } from './toolbar-entity';
+import { Media } from './media.entity';
+import { Toolbar } from './toolbar.entity';
 
 export interface Session {
   id: string;

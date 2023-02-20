@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MarkerEntity } from '../../types/marker-entity';
+import { Marker } from '../../types/marker.entity';
 
 @Component({
   selector: 'koala-marker-preview',
@@ -10,7 +10,7 @@ import { MarkerEntity } from '../../types/marker-entity';
   ],
 })
 export class MarkerPreviewComponent {
-  @Input() marker!: MarkerEntity;
+  @Input() marker!: Marker;
   @Input() createEnabled = false;
 
   @Output() resetMarkerData = new EventEmitter();

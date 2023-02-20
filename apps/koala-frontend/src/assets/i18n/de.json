@@ -127,5 +127,9 @@
       "CONFIRM_BTN": "Löschen",
       "CANCEL_BTN": "Abbrechen"
     }
+  },
+  "ICONS": {
+    "eraser": "Radiergummi",
+    "stopwatch": "Stoppuhr"
   }
 }

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MarkerEntity } from '../../types/marker-entity';
+import { Marker } from '../../types/marker.entity';
 
 @Component({
   selector: 'koala-marker-placement',
@@ -10,10 +10,10 @@ import { MarkerEntity } from '../../types/marker-entity';
   ],
 })
 export class MarkerPlacementComponent {
-  @Input() markers!: MarkerEntity[];
-  @Output() sortChange = new EventEmitter<MarkerEntity[]>();
+  @Input() markers!: Marker[];
+  @Output() sortChange = new EventEmitter<Marker[]>();
 
-  onSortChange(markers: MarkerEntity[]) {
+  onSortChange(markers: Marker[]) {
     this.sortChange.emit(markers);
   }
 }

@@ -52,9 +52,11 @@ export type CreateMarkerInput = {
   /** Marker Name Abbreviation (e.g. for small screen sizes */
   abbreviation: Scalars['String'];
   /** Marker Color */
-  color?: Scalars['String'];
+  color?: InputMaybe<Scalars['String']>;
   /** Marker Descritpion */
-  description?: Scalars['String'];
+  description?: InputMaybe<Scalars['String']>;
+  /** Marker Icon */
+  icon?: InputMaybe<Scalars['String']>;
   /** Marker Name */
   name: Scalars['String'];
   /** Marker Type */
@@ -76,12 +78,12 @@ export type CreateSessionInput = {
   mediaId?: InputMaybe<Scalars['Int']>;
   name: Scalars['String'];
   start?: InputMaybe<Scalars['DateTime']>;
-  status?: SessionStatus;
+  status?: InputMaybe<SessionStatus>;
 };
 
 export type CreateUserSessionInput = {
   /** User Session Note */
-  note?: Scalars['String'];
+  note?: InputMaybe<Scalars['String']>;
   /** Associated Session */
   sessionId: Scalars['Int'];
 };
@@ -95,7 +97,7 @@ export type Marker = {
   /** Creation Date */
   createdAt: Scalars['DateTime'];
   /** Marker Description */
-  description: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
   /** Marker Icon */
   icon?: Maybe<Scalars['String']>;
   /** ID for Marker */
@@ -304,6 +306,8 @@ export type UpdateMarkerInput = {
   color?: InputMaybe<Scalars['String']>;
   /** Marker Descritpion */
   description?: InputMaybe<Scalars['String']>;
+  /** Marker Icon */
+  icon?: InputMaybe<Scalars['String']>;
   /** Marker Name */
   name?: InputMaybe<Scalars['String']>;
   /** Marker Type */
@@ -325,7 +329,7 @@ export type UpdateSessionInput = {
 };
 
 export type UpdateToolbarInput = {
-  markers?: Array<Scalars['String']>;
+  markers?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type UpdateUserSessionInput = {
@@ -493,7 +497,7 @@ export type GetMarkersQuery = {
     id: number;
     name: string;
     abbreviation: string;
-    description: string;
+    description?: string | null;
     color: string;
     icon?: string | null;
     createdAt: any;
