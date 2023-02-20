@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Session } from '../../types/session-entity';
+import { Session } from '../../types/session.entity';
 import { Router } from '@angular/router';
 
 @Component({
@@ -19,6 +19,8 @@ export class SessionsOverviewTableComponent {
   sessionCreate: EventEmitter<void> = new EventEmitter<void>();
   @Output()
   sessionUpdate: EventEmitter<Session> = new EventEmitter<Session>();
+  @Output()
+  sessionEnter: EventEmitter<Session> = new EventEmitter<Session>();
   @Output()
   sessionExport: EventEmitter<Session> = new EventEmitter<Session>();
 
@@ -54,8 +56,6 @@ export class SessionsOverviewTableComponent {
   }
 
   public onRowSelect(session: Session) {
-    this.router.navigate([
-      `sessions/${session.id}`,
-    ]);
+    this.sessionEnter.emit(session);
   }
 }
