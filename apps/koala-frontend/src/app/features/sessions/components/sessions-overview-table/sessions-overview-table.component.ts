@@ -13,16 +13,12 @@ export class SessionsOverviewTableComponent {
   @Input()
   sessions: Session[] = [];
 
-  @Output()
-  sessionDelete: EventEmitter<Session> = new EventEmitter<Session>();
-  @Output()
-  sessionCreate: EventEmitter<void> = new EventEmitter<void>();
-  @Output()
-  sessionUpdate: EventEmitter<Session> = new EventEmitter<Session>();
-  @Output()
-  sessionEnter: EventEmitter<Session> = new EventEmitter<Session>();
-  @Output()
-  sessionExport: EventEmitter<Session> = new EventEmitter<Session>();
+  @Output() sessionDelete = new EventEmitter<Session>();
+  @Output() sessionCreate = new EventEmitter<void>();
+  @Output() sessionUpdate = new EventEmitter<Session>();
+  @Output() sessionEnter = new EventEmitter<Session>();
+  @Output() sessionExport = new EventEmitter<Session>();
+  @Output() sessionSelectedChange = new EventEmitter<Session>();
 
   displayedColumns: string[] = [
     'name',
@@ -45,7 +41,9 @@ export class SessionsOverviewTableComponent {
     this.sessionCreate.emit();
   }
 
-  public onCodePressed(session: Session) {}
+  public onCodePressed(session: Session) {
+    console.log('Code Pressed for session: ' + JSON.stringify(session));
+  }
 
   public onExport(session: Session) {
     this.sessionExport.emit(session);
@@ -57,5 +55,9 @@ export class SessionsOverviewTableComponent {
 
   public onRowSelect(session: Session) {
     this.sessionEnter.emit(session);
+  }
+
+  public onSessionRowSelect(event: any) {
+    this.sessionSelectedChange.emit(event.data);
   }
 }

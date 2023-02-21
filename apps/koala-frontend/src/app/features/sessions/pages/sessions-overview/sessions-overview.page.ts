@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Session } from '../../types/session.entity';
 import { SessionsService } from '../../services/sessions.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'koala-sessions-overview',
@@ -12,13 +13,34 @@ import { SessionsService } from '../../services/sessions.service';
     '../../session-common.scss',
   ],
 })
-export class SessionsOverviewPage implements OnInit {
+export class SessionsOverviewPage implements OnInit, OnDestroy {
   sessions: Session[] = [];
   routeSubscription: any;
   createSessionModal = false;
   createSessionForm!: FormGroup;
   showDeleteConfirm = false;
   selectedSession?: Session;
+  createSessionRequestedSubscription: Subscription = this.sessionService.createSessionRequested$.subscribe({
+    next: () => {
+      this.onSessionCreateRequested();
+    },
+  });
+
+  duplicateSessionRequestedSubscription: Subscription = this.sessionService.duplicateSessionRequested$.subscribe({
+    next: () => {
+      if (this.selectedSession) {
+        this.onSessionDuplicateRequested(this.selectedSession);
+      }
+    },
+  });
+
+  enterSessionRequestedSubscription: Subscription = this.sessionService.enterSessionRequested$.subscribe({
+    next: () => {
+      if (this.selectedSession) {
+        this.onSessionEnter(this.selectedSession);
+      }
+    },
+  });
 
   constructor(
     private readonly sessionService: SessionsService,
@@ -36,6 +58,10 @@ export class SessionsOverviewPage implements OnInit {
         Validators.required,
       ]),
     });
+  }
+
+  ngOnDestroy(): void {
+    this.createSessionRequestedSubscription?.unsubscribe();
   }
 
   private loadSessions() {
@@ -105,5 +131,16 @@ export class SessionsOverviewPage implements OnInit {
   public onCancel() {
     this.createSessionForm.reset();
     this.createSessionModal = false;
+  }
+
+  public onSessionSelectionChange(selectedSession: Session) {
+    this.selectedSession = selectedSession;
+    this.sessionService.updateSelectedSession(selectedSession);
+  }
+
+  public onSessionDuplicateRequested(selectedSession: Session) {
+    this.sessionService.copySession(parseInt(selectedSession.id)).then(() => {
+      this.loadSessions();
+    });
   }
 }

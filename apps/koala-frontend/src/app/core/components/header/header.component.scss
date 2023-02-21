@@ -1,7 +1,16 @@
 .toolbar-spacer {
-    flex: 1 1 auto;
+  flex: 1 1 auto;
 }
 
 .clickable {
-    cursor: pointer;
+  cursor: pointer;
+}
+
+.header-toolbar {
+  background-color: #ffffff;
+  opacity: 70%;
+}
+
+.menu-button {
+  margin-left: 10px;
 }

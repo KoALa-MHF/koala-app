@@ -1,4 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  background: url('assets/bg_koala.png') no-repeat center fixed;
+  background-size: cover;
+}
+
+@font-face {
+  font-family: 'Noto Music', sans-serif;
+  src: url(assets/font/NotoMusic-Regular.ttf) format('opentype');
+}
+
+@font-face {
+  font-family: 'Noto Emoji', sans-serif;
+  src: url(assets/font/NotoEmoji-Regular.ttf) format('opentype');
+}

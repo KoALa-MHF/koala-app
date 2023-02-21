@@ -1,7 +1,9 @@
 {
   "KOALA_PROJECT_TITLE": "KoALa Projekt",
   "SESSION": {
-    "SESSIONS_OVERVIEW_MENU_LABEL": "Sessions",
+    "CREATE_SESSION_MENU_LABEL": "Neue Session",
+    "DUPLICATE_SESSION_MENU_LABEL": "Session Duplizieren",
+    "ENTER_SESSION_MENU_LABEL": "Session Beitreten",
     "CREATE_DIALOG": {
       "TITLE": "Neue Session Anlegen",
       "NAME_INPUT_LABEL": "Session Name*",
