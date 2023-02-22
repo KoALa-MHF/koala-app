@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
-import { SessionsService } from '../../../features/sessions/services/sessions.service';
 
 export enum LANGUAGE_CODE {
   GERMAN = 'de',
@@ -18,13 +17,6 @@ export enum LANGUAGE_CODE {
 })
 export class HeaderComponent {
   @Output() languageChange: EventEmitter<LANGUAGE_CODE> = new EventEmitter<LANGUAGE_CODE>();
-  sessionSelected = false;
-
-  selectedSessionChangeSubscription = this.sessionService.selectedSessionChanged$.subscribe({
-    next: () => {
-      this.sessionSelected = true;
-    },
-  });
 
   languages: MenuItem[] = [
     {
@@ -50,23 +42,11 @@ export class HeaderComponent {
     },
   ];
 
-  constructor(private readonly router: Router, private readonly sessionService: SessionsService) {}
+  constructor(private readonly router: Router) {}
 
   public onToolbarHomePressed() {
     this.router.navigate([
       '',
     ]);
-  }
-
-  public onSessionCreate() {
-    this.sessionService.requestCreateSession();
-  }
-
-  public onSessionDuplicate() {
-    this.sessionService.requestDuplicateSession();
-  }
-
-  public onSessionEnter() {
-    this.sessionService.requestEnterSession();
   }
 }

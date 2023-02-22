@@ -18,7 +18,9 @@ export class SessionsOverviewTableComponent {
   @Output() sessionUpdate = new EventEmitter<Session>();
   @Output() sessionEnter = new EventEmitter<Session>();
   @Output() sessionExport = new EventEmitter<Session>();
-  @Output() sessionSelectedChange = new EventEmitter<Session>();
+  @Output() sessionCopy = new EventEmitter<Session>();
+
+  selectedSession: Session | null = null;
 
   displayedColumns: string[] = [
     'name',
@@ -34,6 +36,10 @@ export class SessionsOverviewTableComponent {
   constructor(private readonly router: Router) {}
 
   public onSessionDelete(session: Session) {
+    if (this.selectedSession?.id === session.id) {
+      //cleanup selected session
+      this.selectedSession = null;
+    }
     this.sessionDelete.emit(session);
   }
 
@@ -53,11 +59,15 @@ export class SessionsOverviewTableComponent {
     this.sessionUpdate.emit(session);
   }
 
-  public onRowSelect(session: Session) {
-    this.sessionEnter.emit(session);
+  public onSessionEnter() {
+    if (this.selectedSession) {
+      this.sessionEnter.emit(this.selectedSession);
+    }
   }
 
-  public onSessionRowSelect(event: any) {
-    this.sessionSelectedChange.emit(event.data);
+  public onSessionCopy() {
+    if (this.selectedSession) {
+      this.sessionCopy.emit(this.selectedSession);
+    }
   }
 }

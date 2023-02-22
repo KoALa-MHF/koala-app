@@ -15,32 +15,11 @@ import { Subscription } from 'rxjs';
 })
 export class SessionsOverviewPage implements OnInit, OnDestroy {
   sessions: Session[] = [];
-  routeSubscription: any;
+  routeSubscription: Subscription | undefined;
   createSessionModal = false;
   createSessionForm!: FormGroup;
   showDeleteConfirm = false;
   selectedSession?: Session;
-  createSessionRequestedSubscription: Subscription = this.sessionService.createSessionRequested$.subscribe({
-    next: () => {
-      this.onSessionCreateRequested();
-    },
-  });
-
-  duplicateSessionRequestedSubscription: Subscription = this.sessionService.duplicateSessionRequested$.subscribe({
-    next: () => {
-      if (this.selectedSession) {
-        this.onSessionDuplicateRequested(this.selectedSession);
-      }
-    },
-  });
-
-  enterSessionRequestedSubscription: Subscription = this.sessionService.enterSessionRequested$.subscribe({
-    next: () => {
-      if (this.selectedSession) {
-        this.onSessionEnter(this.selectedSession);
-      }
-    },
-  });
 
   constructor(
     private readonly sessionService: SessionsService,
@@ -61,7 +40,7 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.createSessionRequestedSubscription?.unsubscribe();
+    this.routeSubscription?.unsubscribe();
   }
 
   private loadSessions() {
@@ -121,7 +100,7 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
 
   public onSessionDeleteConfirmed(sessionId: string) {
     this.sessionService.delete(parseInt(sessionId)).subscribe({
-      next: (value) => {
+      next: () => {
         this.showDeleteConfirm = false;
         this.loadSessions();
       },
@@ -133,12 +112,7 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
     this.createSessionModal = false;
   }
 
-  public onSessionSelectionChange(selectedSession: Session) {
-    this.selectedSession = selectedSession;
-    this.sessionService.updateSelectedSession(selectedSession);
-  }
-
-  public onSessionDuplicateRequested(selectedSession: Session) {
+  public onSessionCopy(selectedSession: Session) {
     this.sessionService.copySession(parseInt(selectedSession.id)).then(() => {
       this.loadSessions();
     });

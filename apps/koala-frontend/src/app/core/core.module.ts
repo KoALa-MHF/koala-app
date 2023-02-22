@@ -9,7 +9,6 @@ import { DividerModule } from 'primeng/divider';
 import { MenuModule } from 'primeng/menu';
 import { SharedModule } from '../shared/shared.module';
 import { ImageModule } from 'primeng/image';
-import { SessionsModule } from '../features/sessions/sessions.module';
 
 @NgModule({
   declarations: [
@@ -24,7 +23,6 @@ import { SessionsModule } from '../features/sessions/sessions.module';
     MenuModule,
     SharedModule,
     ImageModule,
-    SessionsModule,
   ],
   exports: [
     HeaderComponent,

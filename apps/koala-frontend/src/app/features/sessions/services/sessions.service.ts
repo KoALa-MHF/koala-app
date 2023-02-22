@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApolloQueryResult } from '@apollo/client/core';
 import { MutationResult, QueryRef } from 'apollo-angular';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import {
   CreateNewSessionGQL,
   DeleteSessionGQL,
@@ -22,17 +22,6 @@ import { Session } from '../types/session.entity';
 })
 export class SessionsService {
   allSessionsQuery: QueryRef<GetSessionsQuery, Exact<{ [key: string]: never }>>;
-  private createSessionRequestedSource = new Subject<void>();
-  createSessionRequested$ = this.createSessionRequestedSource.asObservable();
-
-  private selectedSessionSource = new Subject<Session>();
-  selectedSessionChanged$ = this.selectedSessionSource.asObservable();
-
-  private duplicateSessionSource = new Subject<void>();
-  duplicateSessionRequested$ = this.duplicateSessionSource.asObservable();
-
-  private enterSessionSource = new Subject<void>();
-  enterSessionRequested$ = this.enterSessionSource.asObservable();
 
   constructor(
     private readonly getSessionGQL: GetSessionsGQL,
@@ -67,22 +56,6 @@ export class SessionsService {
 
   delete(id: number) {
     return this.deleteSessionGQL.mutate({ id });
-  }
-
-  requestCreateSession() {
-    this.createSessionRequestedSource.next();
-  }
-
-  updateSelectedSession(session: Session) {
-    this.selectedSessionSource.next(session);
-  }
-
-  requestDuplicateSession() {
-    this.duplicateSessionSource.next();
-  }
-
-  requestEnterSession() {
-    this.enterSessionSource.next();
   }
 
   copySession(sessionId: number): Promise<Session | null> {

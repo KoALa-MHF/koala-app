@@ -1,39 +1,8 @@
 <p-toolbar class="header-toolbar">
-  <span class="clickable" (click)="onToolbarHomePressed()" data-cy="header-home">
+  <span style="margin-left: 10px" class="clickable" (click)="onToolbarHomePressed()" data-cy="header-home">
     <p-image src="../../../../assets/koala-logo-schriftzug_petrol.png" alt="KoALa Logo" height="30"></p-image>
   </span>
   <!--{{'KOALA_PROJECT_TITLE' | translate}}-->
-  <button
-    pButton
-    pRipple
-    style="margin-left: 30px"
-    label="{{ 'SESSION.CREATE_SESSION_MENU_LABEL' | translate }}"
-    icon="pi pi-plus-circle"
-    data-cy="session-create-btn"
-    (click)="onSessionCreate()"
-    class="p-button-text menu-button"
-    attr.aria-label="{{ 'SESSION.OVERVIEW.ACC.CREATE' | translate }}"
-  ></button>
-
-  <button
-    label="{{ 'SESSION.DUPLICATE_SESSION_MENU_LABEL' | translate }}"
-    icon="pi pi-clone"
-    pButton
-    pRipple
-    (click)="onSessionDuplicate()"
-    class="p-button-text menu-button"
-    [disabled]="!sessionSelected"
-  ></button>
-
-  <button
-    label="{{ 'SESSION.ENTER_SESSION_MENU_LABEL' | translate }}"
-    icon="pi pi-arrow-circle-right"
-    pButton
-    pRipple
-    (click)="onSessionEnter()"
-    class="p-button-text menu-button"
-    [disabled]="!sessionSelected"
-  ></button>
 
   <span class="toolbar-spacer"></span>
 
