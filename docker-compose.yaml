@@ -1,4 +1,11 @@
 version: "3.9"
+volumes:
+  media_data:
+    driver: local
+    driver_opts:
+      o: bind
+      device: /koala/volumes/media_data
+      type: none
 services:
   api:
     build:
@@ -7,8 +14,10 @@ services:
     ports:
       - "4200:3333"
     container_name: api
+    user: "1000:1024"
     volumes:
        - ./api:/usr/src/app/api
+       - media_data:${MEDIA_DATA_PATH}
   frontend:
     build:
       context: ./
