@@ -50,7 +50,7 @@ export type CreateAnnotationInput = {
 
 export type CreateMarkerInput = {
   /** Marker Name Abbreviation (e.g. for small screen sizes */
-  abbreviation: Scalars['String'];
+  abbreviation?: InputMaybe<Scalars['String']>;
   /** Marker Color */
   color?: InputMaybe<Scalars['String']>;
   /** Marker Descritpion */
@@ -380,6 +380,7 @@ export type CreateNewSessionMutation = {
     createdAt: any;
     updatedAt: any;
     media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
+    toolbars: Array<{ __typename?: 'Toolbar'; id: string; markers: Array<string>; createdAt: any; updatedAt: any }>;
   };
 };
 
@@ -523,6 +524,12 @@ export const CreateNewSessionDocument = gql`
         id
         name
         mimeType
+        createdAt
+        updatedAt
+      }
+      toolbars {
+        id
+        markers
         createdAt
         updatedAt
       }

@@ -1,13 +1,10 @@
-<p-toolbar color="primary">
-  <span class="clickable" (click)="onToolbarHomePressed()" data-cy="header-home">{{
-    'KOALA_PROJECT_TITLE' | translate
-  }}</span>
+<p-toolbar class="header-toolbar">
+  <span style="margin-left: 10px" class="clickable" (click)="onToolbarHomePressed()" data-cy="header-home">
+    <p-image src="../../../../assets/koala-logo-schriftzug_petrol.png" alt="KoALa Logo" height="30"></p-image>
+  </span>
+  <!--{{'KOALA_PROJECT_TITLE' | translate}}-->
 
   <span class="toolbar-spacer"></span>
-
-  <button pButton pRipple (click)="onToolbarSessionsPressed()" class="p-button-text">
-    {{ 'SESSION.SESSIONS_OVERVIEW_MENU_LABEL' | translate }}
-  </button>
 
   <button
     type="button"

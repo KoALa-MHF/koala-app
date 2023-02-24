@@ -13,16 +13,14 @@ export class SessionsOverviewTableComponent {
   @Input()
   sessions: Session[] = [];
 
-  @Output()
-  sessionDelete: EventEmitter<Session> = new EventEmitter<Session>();
-  @Output()
-  sessionCreate: EventEmitter<void> = new EventEmitter<void>();
-  @Output()
-  sessionUpdate: EventEmitter<Session> = new EventEmitter<Session>();
-  @Output()
-  sessionEnter: EventEmitter<Session> = new EventEmitter<Session>();
-  @Output()
-  sessionExport: EventEmitter<Session> = new EventEmitter<Session>();
+  @Output() sessionDelete = new EventEmitter<Session>();
+  @Output() sessionCreate = new EventEmitter<void>();
+  @Output() sessionUpdate = new EventEmitter<Session>();
+  @Output() sessionEnter = new EventEmitter<Session>();
+  @Output() sessionExport = new EventEmitter<Session>();
+  @Output() sessionCopy = new EventEmitter<Session>();
+
+  selectedSession: Session | null = null;
 
   displayedColumns: string[] = [
     'name',
@@ -38,6 +36,10 @@ export class SessionsOverviewTableComponent {
   constructor(private readonly router: Router) {}
 
   public onSessionDelete(session: Session) {
+    if (this.selectedSession?.id === session.id) {
+      //cleanup selected session
+      this.selectedSession = null;
+    }
     this.sessionDelete.emit(session);
   }
 
@@ -45,7 +47,9 @@ export class SessionsOverviewTableComponent {
     this.sessionCreate.emit();
   }
 
-  public onCodePressed(session: Session) {}
+  public onCodePressed(session: Session) {
+    console.log('Code Pressed for session: ' + JSON.stringify(session));
+  }
 
   public onExport(session: Session) {
     this.sessionExport.emit(session);
@@ -55,7 +59,15 @@ export class SessionsOverviewTableComponent {
     this.sessionUpdate.emit(session);
   }
 
-  public onRowSelect(session: Session) {
-    this.sessionEnter.emit(session);
+  public onSessionEnter() {
+    if (this.selectedSession) {
+      this.sessionEnter.emit(this.selectedSession);
+    }
+  }
+
+  public onSessionCopy() {
+    if (this.selectedSession) {
+      this.sessionCopy.emit(this.selectedSession);
+    }
   }
 }

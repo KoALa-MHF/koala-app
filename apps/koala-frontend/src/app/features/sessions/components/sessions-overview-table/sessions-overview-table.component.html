@@ -2,19 +2,47 @@
   <span style="font: 500 20px / 32px Roboto, 'Helvetica Neue', sans-serif">{{
     'SESSION.OVERVIEW.TABLE_TITLE' | translate
   }}</span>
+
   <button
     pButton
     pRipple
-    type="button"
+    style="margin-left: 30px"
+    label="{{ 'SESSION.CREATE_SESSION_MENU_LABEL' | translate }}"
     icon="pi pi-plus-circle"
-    class="p-button-rounded p-button-text"
     data-cy="session-create-btn"
     (click)="onSessionCreate()"
+    class="p-button-text menu-button"
     attr.aria-label="{{ 'SESSION.OVERVIEW.ACC.CREATE' | translate }}"
+  ></button>
+
+  <button
+    label="{{ 'SESSION.DUPLICATE_SESSION_MENU_LABEL' | translate }}"
+    icon="pi pi-clone"
+    pButton
+    pRipple
+    (click)="onSessionCopy()"
+    class="p-button-text menu-button"
+    [disabled]="!this.selectedSession"
+  ></button>
+
+  <button
+    label="{{ 'SESSION.ENTER_SESSION_MENU_LABEL' | translate }}"
+    icon="pi pi-arrow-circle-right"
+    pButton
+    pRipple
+    (click)="onSessionEnter()"
+    class="p-button-text menu-button"
+    [disabled]="!this.selectedSession"
   ></button>
 </div>
 
-<p-table selectionMode="single" [value]="sessions" class="mat-elevation-z8" data-cy="session-overview-table">
+<p-table
+  selectionMode="single"
+  [value]="sessions"
+  class="mat-elevation-z8"
+  data-cy="session-overview-table"
+  [(selection)]="selectedSession"
+>
   <ng-template pTemplate="header">
     <tr>
       <th id="SessionOverviewTableHeaderNameColumn">
@@ -45,7 +73,7 @@
   </ng-template>
 
   <ng-template pTemplate="body" let-session>
-    <tr [pSelectableRow]="session" (click)="onRowSelect(session)">
+    <tr [pSelectableRow]="session">
       <td data-column="sessionName" data-cy="session-overview-name-col">{{ session.name }}</td>
       <td data-column="createdAt" data-cy="session-overview-created-at-col">
         {{ session.createdAt | date: 'medium' }}

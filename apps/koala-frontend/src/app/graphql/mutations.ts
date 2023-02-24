@@ -20,6 +20,12 @@ const CREATE_SESSION = gql`
         createdAt
         updatedAt
       }
+      toolbars {
+        id
+        markers
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }

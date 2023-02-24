@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { CardModule } from 'primeng/card';
 
 @NgModule({
   declarations: [],
@@ -12,6 +13,7 @@ import { MessageService } from 'primeng/api';
     FormsModule,
     ReactiveFormsModule,
     ToastModule,
+    CardModule,
   ],
   exports: [
     CommonModule,
@@ -19,6 +21,7 @@ import { MessageService } from 'primeng/api';
     ReactiveFormsModule,
     TranslateModule,
     ToastModule,
+    CardModule,
   ],
   providers: [
     MessageService,

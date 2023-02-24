@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApolloQueryResult } from '@apollo/client/core';
-import { QueryRef } from 'apollo-angular';
+import { MutationResult, QueryRef } from 'apollo-angular';
 import { Observable } from 'rxjs';
-
 import {
   CreateNewSessionGQL,
   DeleteSessionGQL,
@@ -14,8 +13,9 @@ import {
   UpdateSessionInput,
   CreateSessionInput,
   Exact,
-  CreateMediaInput,
+  CreateNewSessionMutation,
 } from '../../../graphql/generated/graphql';
+import { Session } from '../types/session.entity';
 
 @Injectable({
   providedIn: 'root',
@@ -38,9 +38,9 @@ export class SessionsService {
   }
 
   getOne(id: number): Observable<ApolloQueryResult<GetOneSessionQuery>> {
-    return this.getOneSessionGQL.watch({
+    return this.getOneSessionGQL.fetch({
       sessionId: id,
-    }).valueChanges;
+    });
   }
 
   create(session: CreateSessionInput) {
@@ -56,5 +56,35 @@ export class SessionsService {
 
   delete(id: number) {
     return this.deleteSessionGQL.mutate({ id });
+  }
+
+  copySession(sessionId: number): Promise<Session | null> {
+    return new Promise<Session | null>((resolve, reject) => {
+      this.getOne(sessionId).subscribe({
+        next: (result: ApolloQueryResult<GetOneSessionQuery>) => {
+          this.createSessionGQL
+            .mutate({
+              session: {
+                name: result.data.session.name + ' Copy',
+                description: result.data.session.description,
+                displaySampleSolution: result.data.session.displaySampleSolution,
+                editable: result.data.session.editable,
+                enableLiveAnalysis: result.data.session.enableLiveAnalysis,
+                enablePlayer: result.data.session.enablePlayer,
+                end: result.data.session.end,
+                start: result.data.session.start,
+              },
+            })
+            .subscribe({
+              next: (newSessionResult: MutationResult<CreateNewSessionMutation>) => {
+                resolve(newSessionResult.data?.createSession || null);
+              },
+              error: () => {
+                reject();
+              },
+            });
+        },
+      });
+    });
   }
 }

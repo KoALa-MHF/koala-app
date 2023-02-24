@@ -8,6 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { MenuModule } from 'primeng/menu';
 import { SharedModule } from '../shared/shared.module';
+import { ImageModule } from 'primeng/image';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { SharedModule } from '../shared/shared.module';
     DividerModule,
     MenuModule,
     SharedModule,
+    ImageModule,
   ],
   exports: [
     HeaderComponent,

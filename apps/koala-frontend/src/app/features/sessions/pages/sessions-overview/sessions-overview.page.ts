@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Session } from '../../types/session.entity';
 import { SessionsService } from '../../services/sessions.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'koala-sessions-overview',
@@ -12,9 +13,9 @@ import { SessionsService } from '../../services/sessions.service';
     '../../session-common.scss',
   ],
 })
-export class SessionsOverviewPage implements OnInit {
+export class SessionsOverviewPage implements OnInit, OnDestroy {
   sessions: Session[] = [];
-  routeSubscription: any;
+  routeSubscription: Subscription | undefined;
   createSessionModal = false;
   createSessionForm!: FormGroup;
   showDeleteConfirm = false;
@@ -36,6 +37,10 @@ export class SessionsOverviewPage implements OnInit {
         Validators.required,
       ]),
     });
+  }
+
+  ngOnDestroy(): void {
+    this.routeSubscription?.unsubscribe();
   }
 
   private loadSessions() {
@@ -95,7 +100,7 @@ export class SessionsOverviewPage implements OnInit {
 
   public onSessionDeleteConfirmed(sessionId: string) {
     this.sessionService.delete(parseInt(sessionId)).subscribe({
-      next: (value) => {
+      next: () => {
         this.showDeleteConfirm = false;
         this.loadSessions();
       },
@@ -105,5 +110,11 @@ export class SessionsOverviewPage implements OnInit {
   public onCancel() {
     this.createSessionForm.reset();
     this.createSessionModal = false;
+  }
+
+  public onSessionCopy(selectedSession: Session) {
+    this.sessionService.copySession(parseInt(selectedSession.id)).then(() => {
+      this.loadSessions();
+    });
   }
 }

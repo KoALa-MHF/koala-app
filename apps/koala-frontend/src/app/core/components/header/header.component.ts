@@ -44,12 +44,6 @@ export class HeaderComponent {
 
   constructor(private readonly router: Router) {}
 
-  public onToolbarSessionsPressed() {
-    this.router.navigate([
-      'sessions',
-    ]);
-  }
-
   public onToolbarHomePressed() {
     this.router.navigate([
       '',

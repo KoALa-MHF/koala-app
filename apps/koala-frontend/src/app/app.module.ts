@@ -17,6 +17,7 @@ import { environment } from '../environments/environment';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { LANGUAGE_CODE } from './core/components/header/header.component';
+import { SharedModule } from './shared/shared.module';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -31,6 +32,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule,
     ApolloModule,
     CoreModule,
+    SharedModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     TranslateModule.forRoot({
