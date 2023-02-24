@@ -12,6 +12,7 @@ import { AnnotationsService } from '../annotations/annotations.service';
 export class UserSessionsResolver {
   constructor(
     private readonly userSessionsService: UserSessionsService,
+    @Inject(forwardRef(() => SessionsService))
     private readonly sessionsService: SessionsService,
     @Inject(forwardRef(() => AnnotationsService))
     private readonly annotationsService: AnnotationsService
@@ -65,13 +66,13 @@ export class UserSessionsResolver {
   }
 
   @ResolveField()
-  async session(@Parent() userSession: UserSession) {
+  session(@Parent() userSession: UserSession) {
     const { sessionId } = userSession;
     return this.sessionsService.findOne(sessionId, true);
   }
 
   @ResolveField()
-  async annotations(@Parent() userSession: UserSession) {
+  annotations(@Parent() userSession: UserSession) {
     const { id } = userSession;
     return this.annotationsService.findAll(id);
   }

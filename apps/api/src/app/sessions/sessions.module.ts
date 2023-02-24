@@ -5,6 +5,7 @@ import { SessionsResolver } from './sessions.resolver';
 import { Session } from './entities/session.entity';
 import { MediaModule } from '../media/media.module';
 import { ToolbarsModule } from '../toolbars/toolbars.module';
+import { UserSessionsModule } from '../user-sessions/user-sessions.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { ToolbarsModule } from '../toolbars/toolbars.module';
     ]),
     MediaModule,
     forwardRef(() => ToolbarsModule),
+    forwardRef(() => UserSessionsModule),
   ],
   providers: [
     SessionsResolver,

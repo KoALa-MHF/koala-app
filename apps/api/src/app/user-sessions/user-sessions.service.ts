@@ -67,8 +67,12 @@ export class UserSessionsService {
     }
   }
 
-  findAll(): Promise<UserSession[]> {
-    return this.userSessionsRepository.find();
+  findAll(sessionId?: number): Promise<UserSession[]> {
+    return this.userSessionsRepository.find({
+      where: {
+        sessionId,
+      },
+    });
   }
 
   findOne(id: number): Promise<UserSession> {

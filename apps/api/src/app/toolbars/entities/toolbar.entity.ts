@@ -1,6 +1,6 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { IsNotEmpty } from 'class-validator';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '../../core/base.entity';
 import { Session } from '../../sessions/entities/session.entity';
 
@@ -11,13 +11,12 @@ export class Toolbar extends BaseEntity {
   @Field(() => ID, { description: 'ID for Media' })
   id: number;
 
-  @JoinColumn({ name: 'sessionId' })
   @ManyToOne(() => Session, (session) => session.toolbars)
   @Field((type) => Session, { description: 'Associated Session' })
   @IsNotEmpty()
   session: Session;
 
-  @Column({ nullable: false })
+  @Column()
   sessionId: number;
 
   @Column('simple-array', { default: () => "('')" })

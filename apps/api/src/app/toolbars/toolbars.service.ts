@@ -16,13 +16,11 @@ export class ToolbarsService {
   }
 
   findAll(sessionId?: number): Promise<Toolbar[]> {
-    return this.toolbarsRepository.findBy(
-      sessionId
-        ? {
-            sessionId: sessionId,
-          }
-        : null
-    );
+    return this.toolbarsRepository.find({
+      where: {
+        sessionId,
+      },
+    });
   }
 
   async update(id: number, updateToolbarInput: UpdateToolbarInput): Promise<Toolbar> {

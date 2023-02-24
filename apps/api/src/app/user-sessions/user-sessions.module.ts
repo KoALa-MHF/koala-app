@@ -11,7 +11,7 @@ import { AnnotationsModule } from '../annotations/annotations.module';
     TypeOrmModule.forFeature([
       UserSession,
     ]),
-    SessionsModule,
+    forwardRef(() => SessionsModule),
     forwardRef(() => AnnotationsModule),
   ],
   providers: [

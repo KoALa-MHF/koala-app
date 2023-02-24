@@ -6,6 +6,7 @@ import { UpdateSessionInput } from './dto/update-session.input';
 import { MediaService } from '../media/media.service';
 import { ToolbarsService } from '../toolbars/toolbars.service';
 import { forwardRef, Inject } from '@nestjs/common';
+import { UserSessionsService } from '../user-sessions/user-sessions.service';
 
 @Resolver(() => Session)
 export class SessionsResolver {
@@ -13,7 +14,9 @@ export class SessionsResolver {
     private readonly sessionsService: SessionsService,
     private readonly mediaService: MediaService,
     @Inject(forwardRef(() => ToolbarsService))
-    private readonly toolbarsService: ToolbarsService
+    private readonly toolbarsService: ToolbarsService,
+    @Inject(forwardRef(() => UserSessionsService))
+    private readonly userSessionsService: UserSessionsService
   ) {}
 
   @Mutation(() => Session)
@@ -50,7 +53,7 @@ export class SessionsResolver {
   }
 
   @ResolveField()
-  async media(@Parent() session: Session) {
+  media(@Parent() session: Session) {
     const { mediaId } = session;
     if (mediaId) {
       return this.mediaService.findOne(mediaId);
@@ -58,7 +61,12 @@ export class SessionsResolver {
   }
 
   @ResolveField()
-  async toolbars(@Parent() session: Session) {
+  toolbars(@Parent() session: Session) {
     return this.toolbarsService.findAll(session.id);
+  }
+
+  @ResolveField()
+  userSessions(@Parent() session: Session) {
+    return this.userSessionsService.findAll(session.id);
   }
 }
