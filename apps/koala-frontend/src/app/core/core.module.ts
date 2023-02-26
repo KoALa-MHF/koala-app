@@ -9,6 +9,7 @@ import { DividerModule } from 'primeng/divider';
 import { MenuModule } from 'primeng/menu';
 import { SharedModule } from '../shared/shared.module';
 import { ImageModule } from 'primeng/image';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { ImageModule } from 'primeng/image';
     MenuModule,
     SharedModule,
     ImageModule,
+    OverlayPanelModule,
   ],
   exports: [
     HeaderComponent,

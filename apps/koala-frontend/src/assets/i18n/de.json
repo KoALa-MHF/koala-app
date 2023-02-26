@@ -1,5 +1,10 @@
 {
   "KOALA_PROJECT_TITLE": "KoALa Projekt",
+  "LANGUAGE_SELECTION": {
+    "LANG_GERMAN_LABEL": "Deutsch",
+    "LANG_ENGLISH_LABEL": "English",
+    "LANG_FRENCH_LABEL": "Français"
+  },
   "SESSION": {
     "CREATE_SESSION_MENU_LABEL": "Neue Session",
     "DUPLICATE_SESSION_MENU_LABEL": "Session Duplizieren",
@@ -133,5 +138,13 @@
   "ICONS": {
     "eraser": "Radiergummi",
     "stopwatch": "Stoppuhr"
+  },
+  "AUTH": {
+    "MENU_ACTION": {
+      "LOGOUT": "Ausloggen"
+    },
+    "LOGIN": {
+      "SESSION_CODE_PLACEHOLDER": "Session Code"
+    }
   }
 }

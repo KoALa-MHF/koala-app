@@ -1,6 +1,9 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { MenuItem } from 'primeng/api';
+import { TranslateService } from '@ngx-translate/core';
+import { OverlayPanel } from 'primeng/overlaypanel';
+import { map, merge } from 'rxjs';
+import { AuthService } from '../../../features/auth/services/auth.service';
 
 export enum LANGUAGE_CODE {
   GERMAN = 'de',
@@ -17,36 +20,36 @@ export enum LANGUAGE_CODE {
 })
 export class HeaderComponent {
   @Output() languageChange: EventEmitter<LANGUAGE_CODE> = new EventEmitter<LANGUAGE_CODE>();
+  LANGUAGE_CODE = LANGUAGE_CODE;
 
-  languages: MenuItem[] = [
-    {
-      label: 'Deutsch',
-      id: LANGUAGE_CODE.GERMAN,
-      command: (event) => {
-        this.languageChange.emit(event.item.id);
-      },
-    },
-    {
-      label: 'English',
-      id: LANGUAGE_CODE.ENGLISH,
-      command: (event) => {
-        this.languageChange.emit(event.item.id);
-      },
-    },
-    {
-      label: 'Français',
-      id: LANGUAGE_CODE.FRENCH,
-      command: (event) => {
-        this.languageChange.emit(event.item.id);
-      },
-    },
-  ];
+  @ViewChild('languageSelector', { static: true }) languageSelector!: OverlayPanel;
 
-  constructor(private readonly router: Router) {}
+  isAuthenticated$ = this.authService.isAuthenticated$;
+  language$ = merge(this.translateService.onDefaultLangChange, this.translateService.onLangChange).pipe(
+    map((event) => event.lang),
+    map((lang: string) => {
+      return lang !== LANGUAGE_CODE.ENGLISH ? lang : 'gb';
+    })
+  );
+
+  constructor(
+    private readonly router: Router,
+    private readonly translateService: TranslateService,
+    private readonly authService: AuthService
+  ) {}
 
   public onToolbarHomePressed() {
     this.router.navigate([
       '',
     ]);
+  }
+
+  public onLanguageSelected(languageCode: LANGUAGE_CODE) {
+    this.languageSelector.hide();
+    this.languageChange.emit(languageCode);
+  }
+
+  public onLogout() {
+    this.authService.logout();
   }
 }
