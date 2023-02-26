@@ -11,6 +11,10 @@ const routes: Routes = [
     path: 'sessions',
     loadChildren: () => import('./features/sessions/sessions.module').then((m) => m.SessionsModule),
   },
+  {
+    path: '**',
+    redirectTo: 'sessions',
+  },
 ];
 
 @NgModule({

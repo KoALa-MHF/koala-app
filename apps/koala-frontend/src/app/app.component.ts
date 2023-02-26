@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { PrimeNGConfig } from 'primeng/api';
 import { LANGUAGE_CODE } from './core/components/header/header.component';
+import { AuthService } from './features/auth/services/auth.service';
 
 @Component({
   selector: 'koala-root',
@@ -11,7 +12,13 @@ import { LANGUAGE_CODE } from './core/components/header/header.component';
   ],
 })
 export class AppComponent implements OnInit {
-  constructor(private primengConfig: PrimeNGConfig, private readonly translateService: TranslateService) {}
+  isAuthenticated$ = this.authService.isAuthenticated$;
+
+  constructor(
+    private primengConfig: PrimeNGConfig,
+    private readonly translateService: TranslateService,
+    private readonly authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.primengConfig.ripple = true;

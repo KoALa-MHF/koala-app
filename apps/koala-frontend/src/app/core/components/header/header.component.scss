@@ -1,3 +1,5 @@
+@import '../../../../../../../node_modules/flag-icons/css/flag-icons.min.css';
+
 .toolbar-spacer {
   flex: 1 1 auto;
 }
@@ -11,6 +13,10 @@
   opacity: 70%;
 }
 
-.menu-button {
+.language-menu-item {
+  margin-bottom: 15px;
+}
+
+.language-label {
   margin-left: 10px;
 }
