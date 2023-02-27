@@ -6,10 +6,7 @@
           <koala-app-audio-wave [waveContainer]="waveContainer"> </koala-app-audio-wave>
         </div>
         <div class="sideBar" *ngIf="getAudioMetadata()">
-          <koala-app-audio-player
-            [metadata]="getAudioMetadata()"
-            (mediaEvent)="onMediaEvent($event)"
-          ></koala-app-audio-player>
+          <koala-app-audio-player (mediaEvent)="onMediaEvent($event)"></koala-app-audio-player>
         </div>
       </div>
     </p-tabPanel>
