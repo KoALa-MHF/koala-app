@@ -1,10 +1,9 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ValidationError } from 'class-validator';
-import { EntityNotFoundError, In, Repository } from 'typeorm';
-import { AuthService } from '../auth/auth.service';
-import { ValidationErrorException } from '../core/exceptions/validation-error.exception';
+import { In, Repository } from 'typeorm';
+import { ValidationErrorException } from '../core/exceptions/ValidationErrorException';
 import { CreateUserSessionInput } from './dto/create-user-session.input';
 import { UpdateUserSessionInput } from './dto/update-user-session.input';
 import { UserSession } from './entities/user-session.entity';
@@ -14,8 +13,7 @@ export class UserSessionsService {
   constructor(
     @InjectRepository(UserSession)
     private userSessionsRepository: Repository<UserSession>,
-    private readonly mailerService: MailerService,
-    private readonly authService: AuthService
+    private readonly mailerService: MailerService
   ) {}
 
   async invite(ids: number[], message?: string): Promise<UserSession[]> {
@@ -96,22 +94,5 @@ export class UserSessionsService {
 
   remove(id: number) {
     return this.userSessionsRepository.delete(id);
-  }
-
-  async authenticate(code: string) {
-    try {
-      const userSession = await this.userSessionsRepository.findOneByOrFail({
-        code,
-      });
-
-      return this.authService.getAccessToken({
-        sub: userSession.id,
-      });
-    } catch (error) {
-      if (error instanceof EntityNotFoundError) {
-        throw new UnauthorizedException();
-      }
-      throw error;
-    }
   }
 }

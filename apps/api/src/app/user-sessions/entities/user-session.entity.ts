@@ -1,13 +1,9 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
 import { IsEmail, IsEnum, IsNotEmpty, MaxLength } from 'class-validator';
-import { customAlphabet } from 'nanoid';
-import { nolookalikes } from 'nanoid-dictionary';
-import { BeforeInsert, Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Annotation } from '../../annotations/entities/annotation.entity';
 import { BaseEntity } from '../../core/base.entity';
 import { Session } from '../../sessions/entities/session.entity';
-
-const nanoid = customAlphabet(nolookalikes, 7);
 
 export enum UserSessionStatus {
   INITIAL = 'initial',
@@ -47,11 +43,6 @@ export class UserSession extends BaseEntity {
   @IsNotEmpty()
   status: UserSessionStatus;
 
-  @Column()
-  @Index({ unique: true })
-  @IsNotEmpty()
-  code: string;
-
   @Column({ nullable: true, length: USER_SESSION_NOTE_MAX_LENGTH })
   @Field({ nullable: true, description: 'User Session Note' })
   @MaxLength(USER_SESSION_NOTE_MAX_LENGTH)
@@ -82,9 +73,4 @@ export class UserSession extends BaseEntity {
     { description: 'Associated Annotations' }
   )
   annotations: Annotation[];
-
-  @BeforeInsert()
-  async generateCode() {
-    this.code = await nanoid();
-  }
 }

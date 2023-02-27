@@ -17,19 +17,17 @@ import { UserSessionsModule } from './user-sessions/user-sessions.module';
 import { UserSession } from './user-sessions/entities/user-session.entity';
 import { AnnotationsModule } from './annotations/annotations.module';
 import { Annotation } from './annotations/entities/annotation.entity';
-import { formatError } from './core/formatters/grapqhl-error.formatter';
+import { formatError } from './core/graphql/grapqhl-error';
 import { ConfigModule, databaseConfig, mailConfig } from './config/config.module';
 import { ToolbarsModule } from './toolbars/toolbars.module';
 import { Toolbar } from './toolbars/entities/toolbar.entity';
 
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
-import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule,
-    AuthModule,
     TypeOrmModule.forRoot({
       type: 'better-sqlite3',
       database: databaseConfig.name,

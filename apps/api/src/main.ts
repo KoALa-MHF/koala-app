@@ -7,7 +7,7 @@ import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
-import { GraphQLValidationPipe } from './app/core/pipes/graphql-validation.pipe';
+import { GraphQLValidationPipe } from './app/core/graphql/graphql-validation.pipe';
 import { graphqlUploadExpress } from 'graphql-upload';
 
 import * as MailDev from 'maildev';

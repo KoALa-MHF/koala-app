@@ -5,14 +5,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserSession } from './entities/user-session.entity';
 import { SessionsModule } from '../sessions/sessions.module';
 import { AnnotationsModule } from '../annotations/annotations.module';
-import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       UserSession,
     ]),
-    AuthModule,
     forwardRef(() => SessionsModule),
     forwardRef(() => AnnotationsModule),
   ],

@@ -1,5 +1,5 @@
 import { ValidationPipe, ValidationError } from '@nestjs/common';
-import { ValidationErrorException } from '../exceptions/validation-error.exception';
+import { ValidationErrorException } from '../exceptions/ValidationErrorException';
 
 export class GraphQLValidationPipe extends ValidationPipe {
   constructor() {
