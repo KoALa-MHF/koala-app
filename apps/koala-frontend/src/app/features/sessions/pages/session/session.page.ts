@@ -108,19 +108,6 @@ export class SessionPage implements OnInit {
           }
         }
         break;
-      case MediaActions.Mute:
-        if (evt.value != undefined) {
-          try {
-            this.mediaControlService.onMute(evt.value);
-          } catch (error) {
-            this.showErrorMessage(
-              'error',
-              'SESSION.ERROR_DIALOG.MEDIA_CONTROLS',
-              'SESSION.ERROR_DIALOG.ERRORS.SUMMARY'
-            );
-          }
-        }
-        break;
     }
   }
 

@@ -14,7 +14,6 @@ export enum MediaActions {
   SkipForward,
   SkipBackward,
   VolumeChange,
-  Mute,
 }
 
 export interface MediaEvent {
@@ -75,8 +74,6 @@ export class MediaControlService {
       const audio = new Audio();
       audio.src = URL.createObjectURL(audioBlob);
       w.load(audio);
-      // make sure we have some audio on first play.
-      w.setVolume(10);
     } catch (e) {
       throw new Error('cannot load audio wave');
     }
@@ -180,16 +177,6 @@ export class MediaControlService {
     } catch (error) {
       console.error(error);
       throw new Error(`cannot change volume for audio file: ${error}`);
-    }
-  }
-
-  public onMute(mute: number) {
-    try {
-      const w = this.getWave();
-      w.setMute(!!mute);
-    } catch (error) {
-      console.error(error);
-      throw new Error(`cannot mute/unmute audio file: ${error}`);
     }
   }
 
