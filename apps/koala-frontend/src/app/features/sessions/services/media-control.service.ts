@@ -75,8 +75,6 @@ export class MediaControlService {
       const audio = new Audio();
       audio.src = URL.createObjectURL(audioBlob);
       w.load(audio);
-      // make sure we have some audio on first play.
-      w.setVolume(10);
     } catch (e) {
       throw new Error('cannot load audio wave');
     }
@@ -123,6 +121,16 @@ export class MediaControlService {
   public getMetadata() {
     const w = this.getWave();
     return w.mediasession.metadata;
+  }
+
+  public getDuration() {
+    const w = this.getWave();
+    return w.getDuration();
+  }
+
+  public getCurrentTime() {
+    const w = this.getWave();
+    return w.getCurrentTime();
   }
 
   public togglePlay() {

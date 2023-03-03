@@ -8,6 +8,7 @@ import { MediaControlService, MediaEvent, MediaActions } from '../../services/me
 import { SessionsService } from '../../services/sessions.service';
 import { environment } from '../../../../../environments/environment';
 import { Session } from '../../types/session.entity';
+import { DataPoint, Display } from '../../components/annotation/annotation.component';
 
 @Component({
   selector: 'koala-app-session',
@@ -23,7 +24,14 @@ export class SessionPage implements OnInit {
   mediaUri: string = environment.production ? 'https://koala-app.de/api/media' : 'http://localhost:4200/api/media';
   sessionId = 0;
   session!: Session;
-  participants: any = [];
+  AnnotationData: Map<number, Array<DataPoint>> = new Map<number, Array<DataPoint>>();
+  AnnotationDislay = Display;
+  sliderValueGreen = 0;
+  sliderValueLila = 0;
+
+  currentAudioTime = 0;
+  totalAudioTime = 0;
+  audioPaused = true;
 
   constructor(
     private readonly sessionService: SessionsService,
@@ -48,7 +56,20 @@ export class SessionPage implements OnInit {
       this.mediaControlService.uuid = this.session.id;
       this.waveContainer = `waveContainer-${this.session.id}`;
       try {
-        this.mediaControlService.load(`${this.mediaUri}/${this.session.id}`, this.waveContainer);
+        this.mediaControlService.load(`${this.mediaUri}/${this.session.id}`, this.waveContainer).then(() => {
+          this.mediaControlService.addEventHandler('audioprocess', (time) => {
+            this.currentAudioTime = time;
+          });
+          this.mediaControlService.addEventHandler('ready', () => {
+            this.totalAudioTime = this.mediaControlService.getDuration();
+          });
+          this.mediaControlService.addEventHandler('pause', () => {
+            this.audioPaused = true;
+          });
+          this.mediaControlService.addEventHandler('play', () => {
+            this.audioPaused = false;
+          });
+        });
       } catch (e) {
         this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.BROKEN_AUDIO_FILE', 'SESSION.ERROR_DIALOG.SUMMARY');
         console.log(e);
@@ -58,10 +79,57 @@ export class SessionPage implements OnInit {
 
   getAudioMetadata() {
     try {
-      const m = this.mediaControlService.getMetadata();
-      return m;
+      return this.mediaControlService.getMetadata();
     } catch (error) {
       return undefined;
+    }
+  }
+
+  annotationClick(row: number, color: string, display: Display) {
+    if (this.audioPaused) {
+      return;
+    }
+    const t = this.mediaControlService.getCurrentTime();
+    if (this.AnnotationData.get(row) == undefined) {
+      this.AnnotationData.set(row, new Array<DataPoint>());
+    }
+    this.AnnotationData.get(row)?.push({ startTime: t, endTime: t, strength: 3, id: 1, color: color, disply: display });
+  }
+
+  annotationSliderChange(event: any, row: number, color: string, display: Display) {
+    if (this.audioPaused) {
+      return;
+    }
+    const t = this.mediaControlService.getCurrentTime();
+    const annotation = this.AnnotationData.get(row);
+    if (annotation == undefined) {
+      this.AnnotationData.set(row, new Array<DataPoint>());
+      this.AnnotationData.get(row)?.push({
+        startTime: t,
+        endTime: 0,
+        strength: event.value,
+        id: 1,
+        color: color,
+        disply: display,
+      });
+      return;
+    }
+    const latest = annotation.at(-1);
+    if (latest && latest.strength != event.value) {
+      if (latest.endTime == 0) {
+        latest.endTime = t;
+      }
+      if (event.value != 0) {
+        annotation.push({
+          startTime: t,
+          endTime: 0,
+          strength: event.value,
+          id: annotation.length,
+          color: color,
+          disply: display,
+        });
+      }
+      this.AnnotationData.set(row, annotation);
     }
   }
 

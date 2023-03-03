@@ -4,9 +4,54 @@
       <div class="container">
         <div class="content">
           <koala-app-audio-wave [waveContainer]="waveContainer"> </koala-app-audio-wave>
+          <koala-app-annotation
+            [annotationData]="AnnotationData"
+            [numberOfRows]="4"
+            [totalTime]="totalAudioTime"
+            [currentTime]="currentAudioTime"
+          ></koala-app-annotation>
         </div>
         <div class="sideBar" *ngIf="getAudioMetadata()">
           <koala-app-audio-player (mediaEvent)="onMediaEvent($event)"></koala-app-audio-player>
+          <div style="margin-top: 50px"></div>
+          <p-slider
+            [range]="false"
+            [max]="10"
+            [min]="-10"
+            [step]="2"
+            (onChange)="annotationSliderChange($event, 2, 'green', AnnotationDislay.Rect)"
+            [(ngModel)]="sliderValueGreen"
+          ></p-slider>
+          <div style="margin-top: 50px"></div>
+          <p-slider
+            [range]="false"
+            [max]="10"
+            [min]="-10"
+            [step]="2"
+            (onChange)="annotationSliderChange($event, 3, '#554aa6', AnnotationDislay.Rect)"
+            [(ngModel)]="sliderValueLila"
+          ></p-slider>
+          <div style="margin-top: 50px"></div>
+          <button
+            type="button"
+            pButton
+            pRipple
+            text="red circle"
+            (click)="annotationClick(1, 'red', AnnotationDislay.Circle)"
+            class="p-button-text"
+          >
+            red circle
+          </button>
+          <button
+            type="button"
+            pButton
+            pRipple
+            text="red circle"
+            (click)="annotationClick(4, '#113665', AnnotationDislay.Circle)"
+            class="p-button-text"
+          >
+            lila circle
+          </button>
         </div>
       </div>
     </p-tabPanel>
