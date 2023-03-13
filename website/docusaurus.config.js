@@ -23,8 +23,8 @@ const config = {
   // metadata like html lang. For example, if your site is Chinese, you may want
   // to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en'],
+    defaultLocale: 'de',
+    locales: ['en', 'de'],
   },
 
   presets: [
@@ -45,6 +45,9 @@ const config = {
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/KoALa-MHF/koala-app/tree/main/website/',
+          blogSidebarTitle: 'All posts',
+          blogSidebarCount: 'ALL',
+          postsPerPage: 2,
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -107,15 +110,19 @@ const config = {
           },
           {to: '/blog', label: 'Blog', position: 'left'},
           {
+            type: 'doc',
+            docId: 'community/intro',
+            position: 'left',
+            label: 'Community',
+          },
+          {
             href: 'https://github.com/KoALa-MHF/koala-app',
             label: 'GitHub',
             position: 'right',
           },
           {
-            type: 'doc',
-            docId: 'community/intro',
-            position: 'left',
-            label: 'Community',
+            type: 'localeDropdown',
+            position: 'right',
           },
         ],
       },
