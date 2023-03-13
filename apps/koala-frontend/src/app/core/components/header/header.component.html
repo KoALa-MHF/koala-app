@@ -5,7 +5,14 @@
 
   <span class="toolbar-spacer"></span>
 
-  <button pButton pRipple icon="pi pi-sign-in" label="Login" class="p-button-text"></button>
+  <button
+    pButton
+    pRipple
+    *ngIf="(isAuthenticated$ | async) === false"
+    icon="pi pi-sign-in"
+    label="Login"
+    class="p-button-text"
+  ></button>
 
   <button *ngIf="isAuthenticated$ | async" pButton pRipple (click)="onLogout()" class="p-button-text">
     {{ 'AUTH.MENU_ACTION.LOGOUT' | translate }}

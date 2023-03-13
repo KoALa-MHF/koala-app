@@ -5,6 +5,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { ImageModule } from 'primeng/image';
+import { AuthRoutingModule } from './auth-routing.module';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { ImageModule } from 'primeng/image';
     ButtonModule,
     InputTextModule,
     ImageModule,
+    AuthRoutingModule,
   ],
   exports: [
     LoginPage,

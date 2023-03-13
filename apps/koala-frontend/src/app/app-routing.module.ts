@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './features/auth/guards/auth.guard';
+import { LayoutComponent } from './layout.component';
 
 const routes: Routes = [
   {
@@ -9,7 +11,15 @@ const routes: Routes = [
   },
   {
     path: 'sessions',
+    component: LayoutComponent,
     loadChildren: () => import('./features/sessions/sessions.module').then((m) => m.SessionsModule),
+    canActivate: [
+      AuthGuard,
+    ],
+  },
+  {
+    path: 'auth',
+    loadChildren: () => import('./features/auth/auth.module').then((m) => m.AuthModule),
   },
   {
     path: '**',

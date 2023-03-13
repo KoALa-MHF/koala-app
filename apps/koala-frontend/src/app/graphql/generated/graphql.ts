@@ -37,6 +37,17 @@ export type Annotation = {
   userSession: UserSession;
 };
 
+export type AuthenticateUserSessionInput = {
+  /** User Session Email */
+  code?: InputMaybe<Scalars['String']>;
+};
+
+export type Authentication = {
+  __typename?: 'Authentication';
+  /** JWT Bearer Token */
+  accessToken: Scalars['String'];
+};
+
 export type CreateAnnotationInput = {
   /** Annotation End Seconds */
   end?: InputMaybe<Scalars['Int']>;
@@ -82,10 +93,19 @@ export type CreateSessionInput = {
 };
 
 export type CreateUserSessionInput = {
+  /** User Session Email */
+  email: Scalars['String'];
   /** User Session Note */
   note?: InputMaybe<Scalars['String']>;
   /** Associated Session */
   sessionId: Scalars['Int'];
+};
+
+export type InviteUserSessionInput = {
+  /** User Session Email */
+  message?: InputMaybe<Scalars['String']>;
+  /** Associated Session */
+  userSessionIds: Array<Scalars['ID']>;
 };
 
 export type Marker = {
@@ -131,11 +151,13 @@ export type Media = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  authenticateUserSession: Authentication;
   createAnnotation: Annotation;
   createMarker: Marker;
   createMedia: Media;
   createSession: Session;
   createUserSession: UserSession;
+  inviteUserSession: Array<UserSession>;
   removeAnnotation: Annotation;
   removeMarker: Marker;
   removeSession: Session;
@@ -145,6 +167,10 @@ export type Mutation = {
   updateSession: Session;
   updateToolbar: Toolbar;
   updateUserSession: UserSession;
+};
+
+export type MutationAuthenticateUserSessionArgs = {
+  authenticateUserSessionInput: AuthenticateUserSessionInput;
 };
 
 export type MutationCreateAnnotationArgs = {
@@ -165,6 +191,10 @@ export type MutationCreateSessionArgs = {
 
 export type MutationCreateUserSessionArgs = {
   createUserSessionInput: CreateUserSessionInput;
+};
+
+export type MutationInviteUserSessionArgs = {
+  inviteUserSessionInput: InviteUserSessionInput;
 };
 
 export type MutationRemoveAnnotationArgs = {
@@ -270,6 +300,8 @@ export type Session = {
   toolbars: Array<Toolbar>;
   /** Date of Last Update */
   updatedAt: Scalars['DateTime'];
+  /** Associated User Sessions */
+  userSessions: Array<UserSession>;
 };
 
 export enum SessionStatus {
@@ -339,10 +371,16 @@ export type UpdateUserSessionInput = {
 
 export type UserSession = {
   __typename?: 'UserSession';
+  /** Associated Annotations */
+  annotations: Array<Annotation>;
   /** Creation Date */
   createdAt: Scalars['DateTime'];
+  /** User Session Email */
+  email: Scalars['String'];
   /** ID for User Session */
   id: Scalars['Int'];
+  /** Invitation Date */
+  invitedAt: Scalars['DateTime'];
   /** User Session Note */
   note?: Maybe<Scalars['String']>;
   /** Associated Session */
@@ -437,6 +475,15 @@ export type UpdateToolbarMutationVariables = Exact<{
 export type UpdateToolbarMutation = {
   __typename?: 'Mutation';
   updateToolbar: { __typename?: 'Toolbar'; id: string; markers: Array<string> };
+};
+
+export type AuthenticateSessionCodeMutationVariables = Exact<{
+  sessionCode: Scalars['String'];
+}>;
+
+export type AuthenticateSessionCodeMutation = {
+  __typename?: 'Mutation';
+  authenticateUserSession: { __typename?: 'Authentication'; accessToken: string };
 };
 
 export type GetSessionsQueryVariables = Exact<{ [key: string]: never }>;
@@ -655,6 +702,27 @@ export const UpdateToolbarDocument = gql`
 })
 export class UpdateToolbarGQL extends Apollo.Mutation<UpdateToolbarMutation, UpdateToolbarMutationVariables> {
   override document = UpdateToolbarDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AuthenticateSessionCodeDocument = gql`
+  mutation authenticateSessionCode($sessionCode: String!) {
+    authenticateUserSession(authenticateUserSessionInput: { code: $sessionCode }) {
+      accessToken
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AuthenticateSessionCodeGQL extends Apollo.Mutation<
+  AuthenticateSessionCodeMutation,
+  AuthenticateSessionCodeMutationVariables
+> {
+  override document = AuthenticateSessionCodeDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

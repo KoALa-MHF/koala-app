@@ -1,10 +1,11 @@
 <div class="app-container">
   <koala-header class="header" (languageChange)="onLanguageChange($event)"></koala-header>
-  <p-card *ngIf="isAuthenticated$ | async" class="content content-card">
-    <router-outlet></router-outlet>
-  </p-card>
 
-  <koala-login-page *ngIf="(isAuthenticated$ | async) === false" class="content"></koala-login-page>
+  <div class="content content-card">
+    <router-outlet></router-outlet>
+  </div>
 
   <koala-footer class="footer"></koala-footer>
 </div>
+
+<p-toast></p-toast>

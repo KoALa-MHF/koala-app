@@ -3,6 +3,7 @@
   flex-direction: column;
   height: 100%;
   align-items: center;
+  gap: 20px;
 }
 
 .header {
@@ -15,11 +16,5 @@
 
 .content {
   flex: 1;
-}
-
-.content-card {
-  background-color: rgba(255, 255, 255, 0.7);
-  margin-top: 20px;
-  margin-bottom: 20px;
   width: 95%;
 }

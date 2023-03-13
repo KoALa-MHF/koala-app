@@ -19,6 +19,9 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { LANGUAGE_CODE } from './core/components/header/header.component';
 import { SharedModule } from './shared/shared.module';
 import { AuthModule } from './features/auth/auth.module';
+import { LayoutComponent } from './layout.component';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -27,6 +30,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
   declarations: [
     AppComponent,
+    LayoutComponent,
   ],
   imports: [
     BrowserModule,
@@ -37,7 +41,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     AuthModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-
     TranslateModule.forRoot({
       defaultLanguage: LANGUAGE_CODE.GERMAN,
       loader: {
@@ -48,6 +51,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         ],
       },
     }),
+    ToastModule,
   ],
   providers: [
     {
@@ -65,6 +69,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         HttpLink,
       ],
     },
+    MessageService,
   ],
   bootstrap: [
     AppComponent,

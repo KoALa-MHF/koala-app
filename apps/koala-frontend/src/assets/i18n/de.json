@@ -27,7 +27,8 @@
       "BROKEN_AUDIO_FILE": "Audio Datei konnte nicht geladen werden"
     },
     "OVERVIEW": {
-      "TABLE_TITLE": "Meine Sessions",
+      "OWN_SESSIONS_TITLE": "Meine Sessions",
+      "OTHER_SESSIONS_TITLE": "Andere Sessions",
       "TABLE_HEADER": {
         "NAME_COL_LABEL": "Name",
         "CREATION_DATE_COL_LABEL": "Erstellungsdatum",
@@ -144,7 +145,8 @@
       "LOGOUT": "Ausloggen"
     },
     "LOGIN": {
-      "SESSION_CODE_PLACEHOLDER": "Session Code"
+      "SESSION_CODE_PLACEHOLDER": "Session Code",
+      "SESSION_CODE_LOGIN_ERROR_MESSAGE": "Anmeldung mit Session Code nicht erfolgreich"
     }
   }
 }
