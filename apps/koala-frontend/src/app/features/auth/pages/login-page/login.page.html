@@ -1,0 +1,52 @@
+<div class="center" style="height: 100%">
+  <img
+    src="../../../../../assets/koala-logo-rund_petrol.png"
+    alt="KoALa Logo"
+    style="max-width: 250px; height: auto; margin-bottom: 40px"
+  />
+
+  <div [formGroup]="loginForm">
+    <!--<div>
+      <span class="p-float-label">
+        <input id="login-username-input" type="text" pInputText formControlName="username" />
+        <label for="login-username-input">Username</label>
+      </span>
+    </div>
+
+    <div style="width: 100%;">
+      <span class="p-float-label">
+        <input styleClass="w-full" id="login-password-input" type="text" pInputText formControlName="password" />
+        <label for="login-password-input">Password</label>
+      </span>
+    </div>
+
+    <button
+      pButton
+      pRipple
+      type="submmit"
+      (click)="onLogin()"
+      label="Anmelden"
+      class="p-button-raised"
+      [disabled]="!loginForm.valid"
+    ></button>
+
+    <div>ODER</div>-->
+
+    <div style="display: flex; flex-direction: row">
+      <span class="p-float-label">
+        <input id="login-session-code-input" type="text" pInputText formControlName="sessionCode" />
+        <label for="login-session-code-input">{{ 'AUTH.LOGIN.SESSION_CODE_PLACEHOLDER' | translate }}</label>
+      </span>
+      <button
+        pButton
+        pRipple
+        type="submmit"
+        (click)="onLogin()"
+        icon="pi pi-angle-right"
+        style="border-radius: 15px"
+        class="p-button-raised"
+        [disabled]="!loginForm.valid"
+      ></button>
+    </div>
+  </div>
+</div>

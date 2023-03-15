@@ -1,8 +1,11 @@
 <div class="app-container">
   <koala-header class="header" (languageChange)="onLanguageChange($event)"></koala-header>
-  <p-card class="content">
+
+  <div class="content content-card">
     <router-outlet></router-outlet>
-  </p-card>
+  </div>
 
   <koala-footer class="footer"></koala-footer>
 </div>
+
+<p-toast></p-toast>

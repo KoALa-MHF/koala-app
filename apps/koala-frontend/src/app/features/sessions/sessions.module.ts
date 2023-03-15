@@ -10,7 +10,6 @@ import { ToolbarsService } from './services/toolbars.service';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { CardModule } from 'primeng/card';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -22,6 +21,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { TabViewModule } from 'primeng/tabview';
 import { DialogModule } from 'primeng/dialog';
 import { SliderModule } from 'primeng/slider';
+import { AccordionModule } from 'primeng/accordion';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MixedCdkDragDropModule } from 'angular-mixed-cdk-drag-drop';
@@ -80,7 +80,6 @@ import { DeleteConfirmDialogComponent } from './components/delete-confirm-dialog
     SessionsRoutingModule,
     ButtonModule,
     InputTextModule,
-    CardModule,
     RadioButtonModule,
     CalendarModule,
     CheckboxModule,
@@ -96,6 +95,7 @@ import { DeleteConfirmDialogComponent } from './components/delete-confirm-dialog
     DialogModule,
     SliderModule,
     MixedCdkDragDropModule,
+    AccordionModule,
   ],
   providers: [
     SessionsService,

@@ -92,3 +92,11 @@ const UPDATE_TOOLBAR = gql`
     }
   }
 `;
+
+const AUTHENTICATE_W_SESSIONCODE = gql`
+  mutation authenticateSessionCode($sessionCode: String!) {
+    authenticateUserSession(authenticateUserSessionInput: { code: $sessionCode }) {
+      accessToken
+    }
+  }
+`;
