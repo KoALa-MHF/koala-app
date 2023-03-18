@@ -13,6 +13,7 @@ import { ToolbarsService } from '../../services/toolbars.service';
 import { Marker } from '../../types/marker.entity';
 import { Session } from '../../types/session.entity';
 import { iconAbbreviationValidator } from '../../../../shared/icon-abbreviation.validator';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'koala-session-maintain',
@@ -39,7 +40,8 @@ export class SessionMaintainPage implements OnInit {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly formBuilder: FormBuilder,
-    private readonly messageService: MessageService
+    private readonly messageService: MessageService,
+    private readonly translateService: TranslateService
   ) {
     this.maintainSessionForm = this.formBuilder.group({
       basicData: this.formBuilder.group({
@@ -291,11 +293,10 @@ export class SessionMaintainPage implements OnInit {
             })
             .subscribe({
               next: () => {
-                //TODO: make file upload success message translatable
                 this.messageService.add({
                   severity: 'success',
-                  summary: 'Dateiupload erfolgreich',
-                  detail: 'Die Datei wurde erfolgreich hochgeladen und der Session zugewiesen',
+                  summary: this.translateService.instant('SESSION.MAINTAIN.AUDIO.UPLOAD_SUCCESS_MESSAGE_TITLE'),
+                  detail: this.translateService.instant('SESSION.MAINTAIN.AUDIO.UPLOAD_SUCCESS_MESSAGE'),
                 });
               },
               error: (err) => {
@@ -303,12 +304,11 @@ export class SessionMaintainPage implements OnInit {
               },
             });
         },
-        error: (err) => {
-          //TODO: make file upload error message translatable
+        error: () => {
           this.messageService.add({
             severity: 'error',
-            summary: 'Dateiupload fehlerhaft',
-            detail: 'Die Datei konnte nicht hochgeladen werden. Bitte versuche es erneut',
+            summary: this.translateService.instant('SESSION.MAINTAIN.AUDIO.UPLOAD_ERROR_MESSAGE_TITLE'),
+            detail: this.translateService.instant('SESSION.MAINTAIN.AUDIO.UPLOAD_ERROR_MESSAGE'),
           });
         },
       });
