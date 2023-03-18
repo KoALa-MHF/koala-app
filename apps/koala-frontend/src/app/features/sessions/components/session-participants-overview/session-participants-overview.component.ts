@@ -17,6 +17,9 @@ export class SessionParticipantsOverviewComponent implements OnInit {
   @Output() participantAdd = new EventEmitter<UserSession>();
 
   addParticipantModal = false;
+  showDeleteConfirm = false;
+  selectedParticipant?: UserSession;
+
   participantForm!: FormGroup;
 
   constructor(private readonly formBuilder: FormBuilder) {}
@@ -29,8 +32,15 @@ export class SessionParticipantsOverviewComponent implements OnInit {
     });
   }
 
+  onDeleteRequested(particpant: UserSession) {
+    this.selectedParticipant = particpant;
+    this.showDeleteConfirm = true;
+  }
+
   onDelete(particpant: UserSession) {
     this.participantRemove.emit(particpant);
+    delete this.selectedParticipant;
+    this.showDeleteConfirm = false;
   }
 
   onAddParticipantRequested() {
@@ -50,5 +60,10 @@ export class SessionParticipantsOverviewComponent implements OnInit {
   onCancel() {
     this.participantForm.reset();
     this.addParticipantModal = false;
+  }
+
+  onDeleteCancel() {
+    delete this.selectedParticipant;
+    this.showDeleteConfirm = false;
   }
 }

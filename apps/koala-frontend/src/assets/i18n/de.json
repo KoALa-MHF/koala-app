@@ -130,7 +130,13 @@
         "INVITATION_SUCCESS_MESSAGE_TITLE": "Einladung Verschickt",
         "INVITATION_SUCCESS_MESSAGE": "Die Einladungen wurden an die Email Adressen versandt",
         "INVITATION_ERROR_MESSAGE_TITLE": "Einladungsfehler",
-        "INVITATION_ERROR_MESSAGE": "Die Einladungen konnten nicht verschickt werden"
+        "INVITATION_ERROR_MESSAGE": "Die Einladungen konnten nicht verschickt werden",
+        "DELETE_CONFIRM_DIALOG": {
+          "TITLE": "Teilnehmer Entfernen",
+          "EXPLANATION": "Wollen Sie wirklich den Teilnehmer mit der Email-Adresse '{{email}}' aus der Session entfernen?",
+          "CONFIRM_BTN": "Entfernen",
+          "CANCEL_BTN": "Abbrechen"
+        }
       }
     },
     "DELETE_CONFIRM_DIALOG": {
