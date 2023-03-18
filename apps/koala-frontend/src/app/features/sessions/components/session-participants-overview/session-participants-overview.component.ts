@@ -42,6 +42,8 @@ export class SessionParticipantsOverviewComponent implements OnInit {
       id: 0,
       email: this.participantForm.get('email')?.value,
     });
+
+    this.participantForm.reset();
     this.addParticipantModal = false;
   }
 

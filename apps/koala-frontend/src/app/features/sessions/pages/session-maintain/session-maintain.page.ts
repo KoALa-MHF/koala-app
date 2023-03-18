@@ -15,6 +15,7 @@ import { Marker } from '../../types/marker.entity';
 import { Session } from '../../types/session.entity';
 import { iconAbbreviationValidator } from '../../../../shared/icon-abbreviation.validator';
 import { UserSessionService } from '../../services/user-session.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'koala-session-maintain',
@@ -42,7 +43,8 @@ export class SessionMaintainPage implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly formBuilder: FormBuilder,
     private readonly messageService: MessageService,
-    private readonly userSessionService: UserSessionService
+    private readonly userSessionService: UserSessionService,
+    private readonly translateService: TranslateService
   ) {
     this.maintainSessionForm = this.formBuilder.group({
       basicData: this.formBuilder.group({
@@ -360,10 +362,18 @@ export class SessionMaintainPage implements OnInit {
       )
       .subscribe({
         next: () => {
-          console.log('Success');
+          this.messageService.add({
+            severity: 'success',
+            summary: this.translateService.instant('SESSION.MAINTAIN.PARTICIPANTS.INVITATION_SUCCESS_MESSAGE_TITLE'),
+            detail: this.translateService.instant('SESSION.MAINTAIN.PARTICIPANTS.INVITATION_SUCCESS_MESSAGE'),
+          });
         },
         error: () => {
-          console.error('Error');
+          this.messageService.add({
+            severity: 'error',
+            summary: this.translateService.instant('SESSION.MAINTAIN.PARTICIPANTS.INVITATION_ERROR_MESSAGE_TITLE'),
+            detail: this.translateService.instant('SESSION.MAINTAIN.PARTICIPANTS.INVITATION_ERROR_MESSAGE'),
+          });
         },
       });
   }
