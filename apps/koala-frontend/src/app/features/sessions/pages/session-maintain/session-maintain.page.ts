@@ -198,6 +198,7 @@ export class SessionMaintainPage implements OnInit {
             summary: 'Marker erfolgreich erstellt und der Session hinzugefügt',
           });
           this.maintainMarkerForm.reset();
+          this.loadSessionData(parseInt(this.session?.id || '0'));
         },
         error: () => {
           this.messageService.add({
