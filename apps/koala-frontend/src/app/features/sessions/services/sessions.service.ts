@@ -38,9 +38,12 @@ export class SessionsService {
   }
 
   getOne(id: number): Observable<ApolloQueryResult<GetOneSessionQuery>> {
-    return this.getOneSessionGQL.fetch({
-      sessionId: id,
-    });
+    return this.getOneSessionGQL.fetch(
+      {
+        sessionId: id,
+      },
+      { fetchPolicy: 'no-cache' }
+    );
   }
 
   create(session: CreateSessionInput) {

@@ -94,8 +94,11 @@ export class UserSessionsService {
     }
   }
 
-  remove(id: number) {
-    return this.userSessionsRepository.delete(id);
+  async remove(id: number) {
+    const userSession = await this.findOne(id);
+    await this.userSessionsRepository.delete(id);
+
+    return userSession;
   }
 
   async authenticate(code: string) {

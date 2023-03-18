@@ -50,6 +50,7 @@ import { MarkerService } from './services/marker.service';
 import { MarkerButtonComponent } from './components/marker-button/marker-button.component';
 import { MarkerToolbarComponent } from './components/marker-toolbar/marker-toolbar.component';
 import { DeleteConfirmDialogComponent } from './components/delete-confirm-dialog/delete-confirm-dialog.component';
+import { UserSessionService } from './services/user-session.service';
 
 @NgModule({
   declarations: [
@@ -103,6 +104,7 @@ import { DeleteConfirmDialogComponent } from './components/delete-confirm-dialog
     MarkerService,
     MediaControlService,
     ToolbarsService,
+    UserSessionService,
   ],
 })
 export class SessionsModule {}

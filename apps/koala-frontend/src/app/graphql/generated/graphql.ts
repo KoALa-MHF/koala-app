@@ -486,6 +486,35 @@ export type AuthenticateSessionCodeMutation = {
   authenticateUserSession: { __typename?: 'Authentication'; accessToken: string };
 };
 
+export type CreateUserSessionMutationVariables = Exact<{
+  sessionId: Scalars['Int'];
+  email: Scalars['String'];
+}>;
+
+export type CreateUserSessionMutation = {
+  __typename?: 'Mutation';
+  createUserSession: { __typename?: 'UserSession'; id: number };
+};
+
+export type InviteParticipantsMutationVariables = Exact<{
+  userSessionIds: Array<Scalars['ID']> | Scalars['ID'];
+  message: Scalars['String'];
+}>;
+
+export type InviteParticipantsMutation = {
+  __typename?: 'Mutation';
+  inviteUserSession: Array<{ __typename?: 'UserSession'; status: UserSessionStatus; invitedAt: any }>;
+};
+
+export type RemoveUserSessionMutationVariables = Exact<{
+  userSessionId: Scalars['Int'];
+}>;
+
+export type RemoveUserSessionMutation = {
+  __typename?: 'Mutation';
+  removeUserSession: { __typename?: 'UserSession'; id: number };
+};
+
 export type GetSessionsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetSessionsQuery = {
@@ -531,6 +560,7 @@ export type GetOneSessionQuery = {
     updatedAt: any;
     media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
     toolbars: Array<{ __typename?: 'Toolbar'; id: string; markers: Array<string>; createdAt: any; updatedAt: any }>;
+    userSessions: Array<{ __typename?: 'UserSession'; id: number; email: string }>;
   };
 };
 
@@ -728,6 +758,70 @@ export class AuthenticateSessionCodeGQL extends Apollo.Mutation<
     super(apollo);
   }
 }
+export const CreateUserSessionDocument = gql`
+  mutation createUserSession($sessionId: Int!, $email: String!) {
+    createUserSession(createUserSessionInput: { sessionId: $sessionId, email: $email }) {
+      id
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateUserSessionGQL extends Apollo.Mutation<
+  CreateUserSessionMutation,
+  CreateUserSessionMutationVariables
+> {
+  override document = CreateUserSessionDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const InviteParticipantsDocument = gql`
+  mutation inviteParticipants($userSessionIds: [ID!]!, $message: String!) {
+    inviteUserSession(inviteUserSessionInput: { userSessionIds: $userSessionIds, message: $message }) {
+      status
+      invitedAt
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class InviteParticipantsGQL extends Apollo.Mutation<
+  InviteParticipantsMutation,
+  InviteParticipantsMutationVariables
+> {
+  override document = InviteParticipantsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const RemoveUserSessionDocument = gql`
+  mutation removeUserSession($userSessionId: Int!) {
+    removeUserSession(id: $userSessionId) {
+      id
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class RemoveUserSessionGQL extends Apollo.Mutation<
+  RemoveUserSessionMutation,
+  RemoveUserSessionMutationVariables
+> {
+  override document = RemoveUserSessionDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const GetSessionsDocument = gql`
   query GetSessions {
     sessions {
@@ -795,6 +889,10 @@ export const GetOneSessionDocument = gql`
         markers
         createdAt
         updatedAt
+      }
+      userSessions {
+        id
+        email
       }
       createdAt
       updatedAt

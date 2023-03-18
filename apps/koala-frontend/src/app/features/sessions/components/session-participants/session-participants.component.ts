@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { UserSession } from '../../types/user-session.entity';
 
 @Component({
   selector: 'koala-session-participants',
@@ -9,16 +10,21 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   ],
 })
 export class SessionParticipantsComponent {
-  @Input() participants = [];
+  @Input() participants: UserSession[] = [];
 
-  @Output() participantRemove: EventEmitter<any> = new EventEmitter<any>();
-  @Output() participantAdd: EventEmitter<any> = new EventEmitter<any>();
+  @Output() participantRemove = new EventEmitter<UserSession>();
+  @Output() participantAdd = new EventEmitter<UserSession>();
+  @Output() invite = new EventEmitter<string>();
 
-  public onParticipantRemove(participant: any) {
+  public onParticipantRemove(participant: UserSession) {
     this.participantRemove.emit(participant);
   }
 
-  public onParticipantAdd(participant: any) {
+  public onParticipantAdd(participant: UserSession) {
     this.participantAdd.emit(participant);
+  }
+
+  public onInvite(message: string) {
+    this.invite.emit(message);
   }
 }
