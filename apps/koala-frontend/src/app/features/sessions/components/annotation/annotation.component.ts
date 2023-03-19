@@ -30,19 +30,21 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   @Input() currentTime = 0;
   @Input() numberOfRows = 0;
 
-  private annotationStrength = 3;
+  private annotationStrength = 5;
   private previousTime = 0;
   private containerID = 'd3-container';
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes) {
       if (changes['currentTime']) {
-        if (changes['currentTime'].currentValue > this.previousTime + 0.1) {
-          this.previousTime = changes['currentTime'].currentValue;
-          this.annotationData.forEach((d, key) => {
-            this.drawAnnotations(key);
-          });
-        }
+        let row = 1;
+        this.annotationData.forEach((_, id) => {
+          this.drawAnnotations(id, row);
+          row++;
+        });
+      }
+      if (changes['numberOfRows']) {
+        this.drawLines();
       }
     }
   }
@@ -58,8 +60,9 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
 
   private drawLines() {
     const svg = d3.select('svg#d3-container');
-    for (let i = 1; i <= this.numberOfRows; i++) {
-      svg.append('g').attr('id', 'row_' + i);
+    let i = 1;
+    this.annotationData.forEach((_, key) => {
+      svg.append('g').attr('id', 'row_' + key);
 
       const height = this.getPositionY(i);
       svg
@@ -69,19 +72,20 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
         .attr('x2', this.getContainerWidth())
         .attr('y1', height)
         .attr('y2', height);
-    }
+      i++;
+    });
   }
 
-  private drawAnnotations(row: number) {
+  private drawAnnotations(id: number, row: number) {
     console.log('drawing annotations');
     const svg = d3.select(`svg#${this.containerID}`);
-    const trans = svg.transition().duration(500);
+    const trans = svg.transition().duration(50);
     const posY = this.getPositionY(row);
-    const rowElem = svg.select('g#row_' + row);
+    const rowElem = svg.select('g#row_' + id);
     rowElem
       .selectAll<SVGRectElement, DataPoint>('*')
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      .data<DataPoint>(this.annotationData.get(row)!)
+      .data<DataPoint>(this.annotationData.get(id)!)
       .join(
         (enter) =>
           enter
@@ -94,17 +98,14 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
             .attr('cy', posY)
             .attr('r', 5)
             .attr('width', (d: DataPoint) => this.getRectWidth(d.startTime, d.endTime))
-            .attr('height', (d: DataPoint) => Math.abs(d.strength) * this.annotationStrength)
+            .attr('height', (d: DataPoint) => this.getRectHeight(d))
             .attr('id', (d: DataPoint) => `row_${row}_${d.id}`)
             .attr('fill', (d: DataPoint) => d.color)
             .on('mouseover', (ev, d) => d3.select(ev.srcElement).transition().duration(10).attr('fill', 'black'))
             .on('mouseout', (ev, d) => d3.select(ev.srcElement).transition().duration(10).attr('fill', d.color)),
         (update) =>
           update.call((update) =>
-            update
-              .transition()
-              .attr('width', (d: DataPoint) => this.getRectWidth(d.startTime, d.endTime))
-              .attr('height', (d: DataPoint) => Math.abs(d.strength) * this.annotationStrength)
+            update.transition(trans).attr('width', (d: DataPoint) => this.getRectWidth(d.startTime, d.endTime))
           ),
         (exit) => exit.call((update) => update.transition(trans).attr('width', 0).attr('height', 0).remove())
       );
@@ -121,16 +122,27 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
     return (r / 2) * id;
   }
 
+  private getRectHeight(d: DataPoint) {
+    if (d.strength == 0) {
+      return this.annotationStrength;
+    }
+    return Math.abs(d.strength) * this.annotationStrength;
+  }
+
   private getRectPositionY(d: DataPoint, posY: number) {
-    if (d.strength > 0) {
+    if (d.strength < 0) {
+      return posY;
+    }
+    if (d.strength != 0) {
       return posY + d.strength * this.annotationStrength * -1;
     }
-    return posY;
+    return posY - 2.5;
   }
 
   private getRectWidth(start: number, end: number) {
     if (end == 0) {
-      return Math.abs(this.currentTime - start) * this.getPositionXRatio();
+      const w = Math.abs(this.currentTime - start) * this.getPositionXRatio();
+      return w.toFixed(1);
     }
     return Math.abs(end - start) * this.getPositionXRatio();
   }
@@ -140,9 +152,11 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
     container.selectAll('rect').remove();
     container.selectAll('circle').remove();
     container.selectAll('line').remove();
-    this.annotationData.forEach((_, key) => {
+    let row = 1;
+    this.annotationData.forEach((_, id) => {
       this.drawLines();
-      this.drawAnnotations(key);
+      this.drawAnnotations(id, row);
+      row++;
     });
   }
 

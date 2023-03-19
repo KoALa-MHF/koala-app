@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MarkerService } from '../../services/marker.service';
 import { MessageService } from 'primeng/api';
@@ -9,6 +8,8 @@ import { SessionsService } from '../../services/sessions.service';
 import { environment } from '../../../../../environments/environment';
 import { Session } from '../../types/session.entity';
 import { DataPoint, Display } from '../../components/annotation/annotation.component';
+import { Marker } from '../../types/marker.entity';
+import { MarkerType } from '../../../../graphql/generated/graphql';
 
 @Component({
   selector: 'koala-app-session',
@@ -18,17 +19,13 @@ import { DataPoint, Display } from '../../components/annotation/annotation.compo
   ],
 })
 export class SessionPage implements OnInit {
-  maintainSessionForm!: FormGroup;
-  maintainMarkerForm!: FormGroup;
   waveContainer!: string;
   mediaUri: string = environment.production ? 'https://koala-app.de/api/media' : 'http://localhost:4200/api/media';
   sessionId = 0;
   session!: Session;
   AnnotationData: Map<number, Array<DataPoint>> = new Map<number, Array<DataPoint>>();
   AnnotationDislay = Display;
-  sliderValueGreen = 0;
-  sliderValueLila = 0;
-
+  markers: Marker[] = [];
   currentAudioTime = 0;
   totalAudioTime = 0;
   audioPaused = true;
@@ -58,7 +55,8 @@ export class SessionPage implements OnInit {
       try {
         this.mediaControlService.load(`${this.mediaUri}/${this.session.id}`, this.waveContainer).then(() => {
           this.mediaControlService.addEventHandler('audioprocess', (time) => {
-            this.currentAudioTime = time;
+            // to reduce update frequency
+            this.currentAudioTime = time.toFixed(2);
           });
           this.mediaControlService.addEventHandler('ready', () => {
             this.totalAudioTime = this.mediaControlService.getDuration();
@@ -74,6 +72,15 @@ export class SessionPage implements OnInit {
         this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.BROKEN_AUDIO_FILE', 'SESSION.ERROR_DIALOG.SUMMARY');
         console.log(e);
       }
+      const markers = this.session?.toolbars[0]?.markers || [];
+      const markerIds: Array<number> = markers.map((marker) => parseInt(marker));
+      this.markerService.getAll(markerIds).subscribe((result) => {
+        const markers = result.data?.markers;
+        this.markers = markers;
+        for (const marker of markers) {
+          this.AnnotationData.set(marker.id, new Array<DataPoint>());
+        }
+      });
     });
   }
 
@@ -85,51 +92,88 @@ export class SessionPage implements OnInit {
     }
   }
 
-  annotationClick(row: number, color: string, display: Display) {
+  onMarkerButtonEvent(m: Marker) {
     if (this.audioPaused) {
       return;
     }
-    const t = this.mediaControlService.getCurrentTime();
-    if (this.AnnotationData.get(row) == undefined) {
-      this.AnnotationData.set(row, new Array<DataPoint>());
+    let aData = this.AnnotationData.get(m.id);
+    if (aData == undefined) {
+      // wtf typescript, how is this still undefined...
+      aData = this.AnnotationData.set(m.id, new Array<DataPoint>()).get(m.id);
+    } else {
+      if (m.type == MarkerType.Event) {
+        this.onMarkerEvent(m, aData);
+      }
+      if (m.type == MarkerType.Range) {
+        this.onMarkerRange(m, aData);
+      }
     }
-    this.AnnotationData.get(row)?.push({ startTime: t, endTime: t, strength: 3, id: 1, color: color, disply: display });
   }
 
-  annotationSliderChange(event: any, row: number, color: string, display: Display) {
+  onMarkerEvent(m: Marker, aData: DataPoint[]) {
+    const t = this.mediaControlService.getCurrentTime();
+    this.AnnotationData.get(m.id)?.push({
+      startTime: t,
+      endTime: 0,
+      strength: 0,
+      id: aData.length,
+      color: m.color,
+      disply: Display.Circle,
+    });
+  }
+
+  onMarkerRange(m: Marker, aData: DataPoint[]) {
+    const t = this.mediaControlService.getCurrentTime();
+    if (aData.length > 0) {
+      const latest = aData.at(-1);
+      if (latest?.endTime == 0) {
+        latest.endTime = this.mediaControlService.getCurrentTime();
+        return;
+      }
+    }
+    this.AnnotationData.get(m.id)?.push({
+      startTime: t,
+      endTime: 0,
+      strength: 0,
+      id: aData.length,
+      color: m.color,
+      disply: Display.Rect,
+    });
+  }
+
+  onMarkerSliderRange(m: Marker, aData: DataPoint[]) {
+    const strength = m.id; // todo: until we have a field in the Marker interface
     if (this.audioPaused) {
       return;
     }
     const t = this.mediaControlService.getCurrentTime();
-    const annotation = this.AnnotationData.get(row);
-    if (annotation == undefined) {
-      this.AnnotationData.set(row, new Array<DataPoint>());
-      this.AnnotationData.get(row)?.push({
+    if (aData.length == 0) {
+      aData.push({
         startTime: t,
         endTime: 0,
-        strength: event.value,
+        strength: strength,
         id: 1,
-        color: color,
-        disply: display,
+        color: m.color,
+        disply: Display.Rect,
       });
       return;
     }
-    const latest = annotation.at(-1);
-    if (latest && latest.strength != event.value) {
+    const latest = aData.at(-1);
+    if (latest && latest.strength != strength) {
       if (latest.endTime == 0) {
         latest.endTime = t;
       }
-      if (event.value != 0) {
-        annotation.push({
+      if (strength != 0) {
+        aData.push({
           startTime: t,
           endTime: 0,
-          strength: event.value,
-          id: annotation.length,
-          color: color,
-          disply: display,
+          strength: strength,
+          id: aData.length,
+          color: m.color,
+          disply: Display.Rect,
         });
       }
-      this.AnnotationData.set(row, annotation);
+      this.AnnotationData.set(m.id, aData);
     }
   }
 
