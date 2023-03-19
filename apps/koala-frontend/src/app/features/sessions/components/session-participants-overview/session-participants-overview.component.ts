@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UserSession } from '../../types/user-session.entity';
 
 @Component({
   selector: 'koala-session-participants-overview',
@@ -10,12 +11,15 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
   ],
 })
 export class SessionParticipantsOverviewComponent implements OnInit {
-  @Input() participants = [];
+  @Input() participants: UserSession[] = [];
 
-  @Output() participantRemove: EventEmitter<any> = new EventEmitter<any>();
-  @Output() participantAdd: EventEmitter<any> = new EventEmitter<any>();
+  @Output() participantRemove = new EventEmitter<UserSession>();
+  @Output() participantAdd = new EventEmitter<UserSession>();
 
   addParticipantModal = false;
+  showDeleteConfirm = false;
+  selectedParticipant?: UserSession;
+
   participantForm!: FormGroup;
 
   constructor(private readonly formBuilder: FormBuilder) {}
@@ -28,8 +32,15 @@ export class SessionParticipantsOverviewComponent implements OnInit {
     });
   }
 
-  onDelete(particpant: any) {
+  onDeleteRequested(particpant: UserSession) {
+    this.selectedParticipant = particpant;
+    this.showDeleteConfirm = true;
+  }
+
+  onDelete(particpant: UserSession) {
     this.participantRemove.emit(particpant);
+    delete this.selectedParticipant;
+    this.showDeleteConfirm = false;
   }
 
   onAddParticipantRequested() {
@@ -37,12 +48,22 @@ export class SessionParticipantsOverviewComponent implements OnInit {
   }
 
   onAddParticipant() {
-    //API call to add participant to invitation list
-    this.participantAdd.emit(this.participantForm.get('email')?.value);
+    this.participantAdd.emit({
+      id: 0,
+      email: this.participantForm.get('email')?.value,
+    });
+
+    this.participantForm.reset();
+    this.addParticipantModal = false;
   }
 
   onCancel() {
     this.participantForm.reset();
     this.addParticipantModal = false;
+  }
+
+  onDeleteCancel() {
+    delete this.selectedParticipant;
+    this.showDeleteConfirm = false;
   }
 }

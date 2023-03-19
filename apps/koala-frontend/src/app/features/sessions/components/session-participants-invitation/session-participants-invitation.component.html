@@ -3,7 +3,13 @@
 <div class="form">
   <div>
     <span class="p-float-label">
-      <textarea id="session-participants-email-message" rows="5" cols="30" pInputTextarea></textarea>
+      <textarea
+        id="session-participants-email-message"
+        [(ngModel)]="invitationMessage"
+        rows="5"
+        cols="30"
+        pInputTextarea
+      ></textarea>
       <label for="session-participants-email-message">
         {{ 'SESSION.MAINTAIN.PARTICIPANTS.INVITATION_TEXT_LABEL' | translate }}
       </label>

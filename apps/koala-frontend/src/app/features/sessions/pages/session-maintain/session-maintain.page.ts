@@ -6,6 +6,7 @@ import { MutationResult } from 'apollo-angular';
 import { datesStartEndValidator } from '../../../../shared/dates.validator';
 import { MessageService } from 'primeng/api';
 import { UpdateSessionMutation } from '../../../../graphql/generated/graphql';
+import { UserSession } from '../../types/user-session.entity';
 import { MarkerService } from '../../services/marker.service';
 import { MediaService } from '../../services/media.service';
 import { SessionsService } from '../../services/sessions.service';
@@ -13,6 +14,7 @@ import { ToolbarsService } from '../../services/toolbars.service';
 import { Marker } from '../../types/marker.entity';
 import { Session } from '../../types/session.entity';
 import { iconAbbreviationValidator } from '../../../../shared/icon-abbreviation.validator';
+import { UserSessionService } from '../../services/user-session.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -29,7 +31,7 @@ export class SessionMaintainPage implements OnInit {
 
   sessionId!: number;
   session: Session | null = null;
-  participants: any = [];
+  participants: UserSession[] = [];
   markers: Array<Marker> = [];
 
   constructor(
@@ -41,6 +43,7 @@ export class SessionMaintainPage implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly formBuilder: FormBuilder,
     private readonly messageService: MessageService,
+    private readonly userSessionService: UserSessionService,
     private readonly translateService: TranslateService
   ) {
     this.maintainSessionForm = this.formBuilder.group({
@@ -150,6 +153,11 @@ export class SessionMaintainPage implements OnInit {
   private loadSessionData(sessionId: number) {
     this.sessionService.getOne(sessionId).subscribe((result) => {
       this.session = { ...result.data?.session };
+      result.data
+        ? (this.participants = [
+            ...result.data.session.userSessions,
+          ])
+        : (this.participants = []);
 
       this.setSessionGeneralDataForm(this.session);
 
@@ -200,6 +208,7 @@ export class SessionMaintainPage implements OnInit {
             summary: 'Marker erfolgreich erstellt und der Session hinzugefügt',
           });
           this.maintainMarkerForm.reset();
+          this.loadSessionData(parseInt(this.session?.id || '0'));
         },
         error: () => {
           this.messageService.add({
@@ -317,20 +326,55 @@ export class SessionMaintainPage implements OnInit {
   /*---------------------------
   Session Participants Handling
   -----------------------------*/
-  public onParticipantAdd(participant: any) {
-    this.participants.push({
-      email: participant,
+  public onParticipantAdd(participant: UserSession) {
+    const sessionId = parseInt(this.session?.id || '0');
+    if (this.session) {
+      this.userSessionService.addParticipantToSession(sessionId, participant.email).subscribe({
+        next: () => {
+          console.log('Successfully Added Email');
+          this.loadSessionData(sessionId);
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+    }
+  }
+
+  public onParticipantRemove(participant: UserSession) {
+    this.userSessionService.removeParticipantFromSession(participant.id).subscribe({
+      next: () => {
+        console.log('Successfully removed');
+        this.loadSessionData(parseInt(this.session?.id || '0'));
+      },
+      error: () => {
+        console.log('Error');
+      },
     });
   }
 
-  public onParticipantRemove(participant: any) {
-    const index = this.participants.findIndex((p: any) => {
-      return p.email === participant.email ? true : false;
-    });
-
-    if (index >= 0) {
-      this.participants.splice(index, 1);
-    }
+  public onParticipantsInvite(message: string) {
+    this.userSessionService
+      .inviteParticpants(
+        this.participants.map((participant) => participant.id.toString()),
+        message
+      )
+      .subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: this.translateService.instant('SESSION.MAINTAIN.PARTICIPANTS.INVITATION_SUCCESS_MESSAGE_TITLE'),
+            detail: this.translateService.instant('SESSION.MAINTAIN.PARTICIPANTS.INVITATION_SUCCESS_MESSAGE'),
+          });
+        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: this.translateService.instant('SESSION.MAINTAIN.PARTICIPANTS.INVITATION_ERROR_MESSAGE_TITLE'),
+            detail: this.translateService.instant('SESSION.MAINTAIN.PARTICIPANTS.INVITATION_ERROR_MESSAGE'),
+          });
+        },
+      });
   }
 
   /*-------------------------------------------------

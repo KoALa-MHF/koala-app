@@ -58,6 +58,10 @@ const GET_ONE_SESSION = gql`
         createdAt
         updatedAt
       }
+      userSessions {
+        id
+        email
+      }
       createdAt
       updatedAt
     }
