@@ -94,7 +94,7 @@ export class SessionMaintainPage implements OnInit {
   }
 
   ngOnInit(): void {
-    //TODO: error handling when session does not exist in backend, but this page is being loaded
+    //TODO: #102 error handling when session does not exist in backend, but this page is being loaded
     const routeSessionId = parseInt(this.route.snapshot.paramMap.get('sessionId') || '0');
 
     this.loadSessionData(routeSessionId);
@@ -117,17 +117,17 @@ export class SessionMaintainPage implements OnInit {
       })
       .subscribe({
         next: (session: MutationResult<UpdateSessionMutation>) => {
-          //TODO: #82 make success message for session update translatable
           this.messageService.add({
             severity: 'success',
-            summary: "Änderungen an Session '" + session.data?.updateSession.name + "' wurden gespeichert",
+            summary: this.translateService.instant('SESSION.MAINTAIN.SESSION_SETTINGS.SAVE_SUCCESS_MESSAGE_TITLE', {
+              sessionName: session.data?.updateSession.name,
+            }),
           });
         },
         error: () => {
-          //TODO: #83 make error message for session update translatable
           this.messageService.add({
             severity: 'error',
-            summary: 'Änderungen an der Session konnten nicht gespeichert werden',
+            summary: this.translateService.instant('SESSION.MAINTAIN.SESSION_SETTINGS.SAVE_ERROR_MESSAGE_TITLE'),
           });
         },
       });
@@ -205,7 +205,7 @@ export class SessionMaintainPage implements OnInit {
         next: () => {
           this.messageService.add({
             severity: 'success',
-            summary: 'Marker erfolgreich erstellt und der Session hinzugefügt',
+            summary: this.translateService.instant('SESSION.MAINTAIN.MARKER.MARKER_CREATION_SUCCESS_MESSAGE_TITLE'),
           });
           this.maintainMarkerForm.reset();
           this.loadSessionData(parseInt(this.session?.id || '0'));
@@ -213,7 +213,7 @@ export class SessionMaintainPage implements OnInit {
         error: () => {
           this.messageService.add({
             severity: 'error',
-            summary: 'Markererstellung fehlgeschlagen',
+            summary: this.translateService.instant('SESSION.MAINTAIN.MARKER.MARKER_CREATION_ERROR_MESSAGE_TITLE'),
           });
         },
       });
@@ -331,10 +331,10 @@ export class SessionMaintainPage implements OnInit {
     if (this.session) {
       this.userSessionService.addParticipantToSession(sessionId, participant.email).subscribe({
         next: () => {
-          console.log('Successfully Added Email');
           this.loadSessionData(sessionId);
         },
         error: (error) => {
+          //TODO: #103 Error Message for Participant Assignment
           console.log(error);
         },
       });
@@ -344,10 +344,10 @@ export class SessionMaintainPage implements OnInit {
   public onParticipantRemove(participant: UserSession) {
     this.userSessionService.removeParticipantFromSession(participant.id).subscribe({
       next: () => {
-        console.log('Successfully removed');
         this.loadSessionData(parseInt(this.session?.id || '0'));
       },
       error: () => {
+        //TODO: #104 Error Message for Participant Unassignment
         console.log('Error');
       },
     });
