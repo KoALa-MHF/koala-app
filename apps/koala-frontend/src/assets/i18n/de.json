@@ -88,7 +88,11 @@
         "ALLOWED_FILE_TYPES_EXPLANATION": "Erlaubter Dateityp: .mp3, .wav",
         "CHOOSE_BTN": "Datei wählen",
         "CANCEL_BTN": "Abbrechen",
-        "UPLOAD_BTN": "Hochladen"
+        "UPLOAD_BTN": "Hochladen",
+        "UPLOAD_SUCCESS_MESSAGE_TITLE": "Dateiupload Erfolgreich",
+        "UPLOAD_SUCCESS_MESSAGE": "Die Datei wurde erfolgreich hochgeladen und der Session zugewiesen",
+        "UPLOAD_ERROR_MESSAGE_TITLE": "Dateiupload Fehlerhaft",
+        "UPLOAD_ERROR_MESSAGE": "Die Datei konnte nicht hochgeladen werden. Bitte versuche es erneut"
       },
       "MARKER": {
         "MARKER_TYPE_LABEL": "Markertyp*",
