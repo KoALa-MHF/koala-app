@@ -52,9 +52,7 @@ export class SessionsService {
         enablePlayer: updateSessionInput.enablePlayer,
         displaySampleSolution: updateSessionInput.displaySampleSolution,
         enableLiveAnalysis: updateSessionInput.enableLiveAnalysis,
-        media: {
-          id: updateSessionInput.mediaId,
-        },
+        ...(updateSessionInput.mediaId && { media: { id: updateSessionInput.mediaId } }),
       });
 
       return this.findOne(id);
