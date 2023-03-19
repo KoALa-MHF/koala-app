@@ -9,7 +9,10 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
   ],
 })
 export class SessionParticipantsInvitationComponent {
-  @Output() invite: EventEmitter<any[]> = new EventEmitter<any[]>();
+  invitationMessage = '';
+  @Output() invite = new EventEmitter<string>();
 
-  public onInviteParticipants() {}
+  public onInviteParticipants() {
+    this.invite.emit(this.invitationMessage);
+  }
 }
