@@ -82,14 +82,14 @@
       formControlName="icon"
     >
       <ng-template let-item pTemplate="selectedItem">
-        <span class="pi pi-{{ item.code }}">
-          <span *ngIf="item.source === 'noto' || item.source === 'noto_emoji'">{{ item.code }}</span>
+        <span>
+          <koala-marker-icon [iconCode]="item.code"></koala-marker-icon>
           <span style="margin-left: 10px">{{ 'ICONS.' + item.name | translate }}</span>
         </span>
       </ng-template>
       <ng-template let-object pTemplate="item">
-        <span class="pi pi-{{ object.code }}">
-          <span *ngIf="object.source === 'noto' || object.source === 'noto_emoji'" [innerHTML]="object.code"></span>
+        <span>
+          <koala-marker-icon [iconCode]="object.code"></koala-marker-icon>
           <span style="margin-left: 10px">{{ 'ICONS.' + object.name | translate }}</span>
         </span>
       </ng-template>

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MarkerType } from '../../../../graphql/generated/graphql';
-import MarkerIcons from './marker-icons.json';
+import { MarkerService } from '../../services/marker.service';
 
 @Component({
   selector: 'koala-marker-maintain',
@@ -25,7 +25,7 @@ export class MarkerMaintainComponent {
     },
   ];
 
-  icons = MarkerIcons;
+  icons = this.markerService.getAllIcons();
   selectedIcon = 0;
   selectedMarkerType = 0;
   color = '';
@@ -36,4 +36,6 @@ export class MarkerMaintainComponent {
   get markerType() {
     return this.markerDataForm.get('type')?.value;
   }
+
+  constructor(private readonly markerService: MarkerService) {}
 }

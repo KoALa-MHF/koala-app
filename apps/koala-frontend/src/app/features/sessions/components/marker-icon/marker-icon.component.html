@@ -1,0 +1,6 @@
+<span *ngIf="marker?.source === 'primeng'" class="pi pi-{{ marker?.code }}"></span>
+<span
+  style="font-size: x-large"
+  *ngIf="marker?.source === 'noto' || marker?.source === 'noto_emoji'"
+  [innerHTML]="marker?.code"
+></span>

@@ -1,10 +1,13 @@
 <button
-  pButton
   pRipple
-  [label]="marker.abbreviation"
+  pButton
+  label=""
   [style.background-color]="marker.color"
   class="p-button-raised marker-button"
   [class.marker-button-event]="marker.type === MarkerType.Event"
   [class.marker-button-range]="marker.type === MarkerType.Range"
-  icon="pi pi-{{ marker.icon }}"
-></button>
+  style="justify-content: center"
+>
+  <koala-marker-icon [iconCode]="marker.icon"></koala-marker-icon>
+  <span [style.margin-left]="marker.icon && marker.abbreviation ? '10px' : '0px'">{{ marker.abbreviation }}</span>
+</button>
