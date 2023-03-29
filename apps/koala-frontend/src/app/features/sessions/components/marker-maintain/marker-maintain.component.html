@@ -82,14 +82,16 @@
       formControlName="icon"
     >
       <ng-template let-item pTemplate="selectedItem">
-        <span class="pi pi-{{ item.code }}"
-          ><span style="margin-left: 10px">{{ 'ICONS.' + item.name | translate }}</span></span
-        >
+        <span>
+          <koala-marker-icon [iconCode]="item.code"></koala-marker-icon>
+          <span style="margin-left: 10px">{{ 'ICONS.' + item.name | translate }}</span>
+        </span>
       </ng-template>
       <ng-template let-object pTemplate="item">
-        <span class="pi pi-{{ object.code }}"
-          ><span style="margin-left: 10px">{{ 'ICONS.' + object.name | translate }}</span></span
-        >
+        <span>
+          <koala-marker-icon [iconCode]="object.code"></koala-marker-icon>
+          <span style="margin-left: 10px">{{ 'ICONS.' + object.name | translate }}</span>
+        </span>
       </ng-template>
     </p-dropdown>
     <small id="marker-name-help" class="field-explanation">
