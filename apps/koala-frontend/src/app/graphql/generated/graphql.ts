@@ -111,7 +111,7 @@ export type InviteUserSessionInput = {
 export type Marker = {
   __typename?: 'Marker';
   /** Marker Name Abbreviation (e.g. for small screen sizes */
-  abbreviation: Scalars['String'];
+  abbreviation?: Maybe<Scalars['String']>;
   /** Marker Color */
   color: Scalars['String'];
   /** Creation Date */
@@ -574,7 +574,7 @@ export type GetMarkersQuery = {
     __typename?: 'Marker';
     id: number;
     name: string;
-    abbreviation: string;
+    abbreviation?: string | null;
     description?: string | null;
     color: string;
     icon?: string | null;
