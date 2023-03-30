@@ -12,6 +12,7 @@ import { Marker } from '../../types/marker.entity';
 export class MarkerToolbarComponent {
   @Input() markers!: Marker[];
   @Output() sortChange = new EventEmitter<Marker[]>();
+  @Output() event = new EventEmitter<Marker>();
 
   dropped(event: { previousIndex: number; currentIndex: number }) {
     const tempMarker = [
@@ -21,5 +22,9 @@ export class MarkerToolbarComponent {
     this.markers = tempMarker;
 
     this.sortChange.emit(this.markers);
+  }
+
+  onMarkerButtonEvent(m: Marker) {
+    this.event.emit(m);
   }
 }

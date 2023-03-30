@@ -1,0 +1,26 @@
+name: deploy docker image
+
+on:
+  workflow_run:
+    workflows: ["Create and publish frontend Docker image", "Create and publish api Docker image"]
+    branches: [main]
+    types: 
+      - completed
+
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote docker-compose pull new image & deploy
+      uses: fifsky/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        port: ${{ secrets.SERVER_PORT }}
+        user: ${{ secrets.SERVER_USERNAME }}
+        key: ${{ secrets.SERVER_KEY }}
+        command: |
+          cd /koala
+          export IMAGE_TAG=${{  github.ref_name }}
+          docker compose up -d --remove-orphans

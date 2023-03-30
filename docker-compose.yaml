@@ -4,26 +4,29 @@ volumes:
     driver: local
     driver_opts:
       o: bind
-      device: /koala/volumes/media_data
+      device: /koala/data/media_volume
+      type: none
+  database:
+    driver: local
+    driver_opts:
+      o: bind
+      device: /koala/data/database
       type: none
 services:
   api:
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    image: ghcr.io/koala-mhf/koala-app-api:${IMAGE_TAG}
+    user: "1000:1024"
     ports:
       - "4200:3333"
     container_name: api
-    user: "1000:1024"
     volumes:
-       - ./api:/usr/src/app/api
-       - media_data:${MEDIA_DATA_PATH}
+      #- ./api:/usr/src/app/api
+      - media_data:${MEDIA_DATA_PATH}
+      - database:/usr/src/app
   frontend:
-    build:
-      context: ./
-      dockerfile: frontend.Dockerfile
+    image: ghcr.io/koala-mhf/koala-app-frontend:${IMAGE_TAG}
     ports:
       - "8888:80"
     container_name: koala-frontend
     volumes:
-       - ./app-ui:/usr/src/app/app-ui
+      - ./app-ui:/usr/src/app/app-ui
