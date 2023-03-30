@@ -2,8 +2,8 @@ import { InputType, Field } from '@nestjs/graphql';
 import { IsNotEmpty, MaxLength } from 'class-validator';
 
 @InputType()
-export class AuthenticateUserSessionInput {
-  @Field({ nullable: true, description: 'User Session Email' })
+export class AuthenticateSessionInput {
+  @Field({ nullable: false, description: 'Session Code' })
   @MaxLength(7)
   @IsNotEmpty()
   code: string;

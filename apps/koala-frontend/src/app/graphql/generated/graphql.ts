@@ -37,9 +37,14 @@ export type Annotation = {
   userSession: UserSession;
 };
 
+export type AuthenticateSessionInput = {
+  /** Session Code */
+  code: Scalars['String'];
+};
+
 export type AuthenticateUserSessionInput = {
-  /** User Session Email */
-  code?: InputMaybe<Scalars['String']>;
+  /** User Session Code */
+  code: Scalars['String'];
 };
 
 export type Authentication = {
@@ -151,6 +156,7 @@ export type Media = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  authenticateSession: Authentication;
   authenticateUserSession: Authentication;
   createAnnotation: Annotation;
   createMarker: Marker;
@@ -167,6 +173,10 @@ export type Mutation = {
   updateSession: Session;
   updateToolbar: Toolbar;
   updateUserSession: UserSession;
+};
+
+export type MutationAuthenticateSessionArgs = {
+  authenticateSessionInput: AuthenticateSessionInput;
 };
 
 export type MutationAuthenticateUserSessionArgs = {

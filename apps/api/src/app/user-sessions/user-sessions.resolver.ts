@@ -7,13 +7,6 @@ import { InviteUserSessionInput } from './dto/invite-user-session.input';
 import { SessionsService } from '../sessions/sessions.service';
 import { forwardRef, Inject } from '@nestjs/common';
 import { AnnotationsService } from '../annotations/annotations.service';
-import { AuthenticateUserSessionInput } from './dto/authenticate-user-session.input';
-
-@ObjectType()
-export class Authentication {
-  @Field({ description: 'JWT Bearer Token' })
-  accessToken: string;
-}
 
 @Resolver(() => UserSession)
 export class UserSessionsResolver {
@@ -65,14 +58,6 @@ export class UserSessionsResolver {
     updateUserSessionInput: UpdateUserSessionInput
   ) {
     return this.userSessionsService.update(id, updateUserSessionInput);
-  }
-
-  @Mutation(() => Authentication)
-  authenticateUserSession(
-    @Args('authenticateUserSessionInput')
-    authenticateUserSessionInput: AuthenticateUserSessionInput
-  ) {
-    return this.userSessionsService.authenticate(authenticateUserSessionInput.code);
   }
 
   @Mutation(() => UserSession)
