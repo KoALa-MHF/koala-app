@@ -20,4 +20,4 @@ jobs:
         command: |
           cd /koala
           docker compose pull
-          docker compose restart
+          docker compose up -d --remove-orphans
