@@ -7,6 +7,7 @@
   [class.marker-button-event]="marker.type === MarkerType.Event"
   [class.marker-button-range]="marker.type === MarkerType.Range"
   style="justify-content: center"
+  (click)="onClick($event)"
 >
   <koala-marker-icon [iconCode]="marker.icon"></koala-marker-icon>
   <span [style.margin-left]="marker.icon && marker.abbreviation ? '10px' : '0px'">{{ marker.abbreviation }}</span>

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Marker } from '../../types/marker.entity';
 import { MarkerType } from '../../../../graphql/generated/graphql';
 
@@ -10,6 +10,29 @@ import { MarkerType } from '../../../../graphql/generated/graphql';
   ],
 })
 export class MarkerButtonComponent {
-  @Input() marker!: Marker;
   MarkerType = MarkerType;
+  @Input() marker!: Marker;
+  @Output() event = new EventEmitter<Marker>();
+  isActive = false;
+  range = 0;
+
+  onClick(ev: any) {
+    console.log(ev);
+    if (this.marker.type == MarkerType.Event) {
+      this.eventButton();
+    }
+    if (this.marker.type == MarkerType.Range) {
+      this.rangeButton();
+    }
+    //todo: slider range button
+  }
+
+  private rangeButton() {
+    this.event.emit(this.marker);
+  }
+
+  private eventButton() {
+    this.event.emit(this.marker);
+    this.isActive = !this.isActive;
+  }
 }

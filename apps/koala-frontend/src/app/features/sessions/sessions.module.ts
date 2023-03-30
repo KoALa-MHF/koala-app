@@ -52,6 +52,7 @@ import { MarkerToolbarComponent } from './components/marker-toolbar/marker-toolb
 import { DeleteConfirmDialogComponent } from './components/delete-confirm-dialog/delete-confirm-dialog.component';
 import { UserSessionService } from './services/user-session.service';
 import { MarkerIconComponent } from './components/marker-icon/marker-icon.component';
+import { AnnotationComponent } from './components/annotation/annotation.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { MarkerIconComponent } from './components/marker-icon/marker-icon.compon
     MarkerToolbarComponent,
     DeleteConfirmDialogComponent,
     MarkerIconComponent,
+    AnnotationComponent,
   ],
   imports: [
     SharedModule,

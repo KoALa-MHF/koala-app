@@ -4,10 +4,15 @@
       <div class="container">
         <div class="content">
           <koala-app-audio-wave [waveContainer]="waveContainer"> </koala-app-audio-wave>
+          <koala-app-annotation
+            [annotationData]="AnnotationData"
+            [numberOfRows]="markers.length || 1"
+            [totalTime]="totalAudioTime"
+            [currentTime]="currentAudioTime"
+          ></koala-app-annotation>
+          <koala-marker-toolbar [markers]="markers" (event)="onMarkerButtonEvent($event)"></koala-marker-toolbar>
         </div>
-        <div class="sideBar" *ngIf="getAudioMetadata()">
-          <koala-app-audio-player (mediaEvent)="onMediaEvent($event)"></koala-app-audio-player>
-        </div>
+        <koala-app-audio-player (mediaEvent)="onMediaEvent($event)"></koala-app-audio-player>
       </div>
     </p-tabPanel>
     <p-tabPanel header="{{ 'SESSION.TABS.EVALUATION' | translate }}"> </p-tabPanel>
