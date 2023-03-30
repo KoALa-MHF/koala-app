@@ -11,10 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: executing remote docker-compose pull new image & deploy
-      uses: appleboy/ssh-action@v0.1.4
+      uses: fifsky/ssh-action@master
       with:
         host: ${{ secrets.SERVER_HOST }}
         port: ${{ secrets.SERVER_PORT }}
-        username: ${{ secrets.SERVER_USERNAME }}
-        password: ${{ secrets.SERVER_KEY }}
-        script: whoami
+        user: ${{ secrets.SERVER_USERNAME }}
+        key: ${{ secrets.SERVER_KEY }}
+        command: |
+          ls -a
