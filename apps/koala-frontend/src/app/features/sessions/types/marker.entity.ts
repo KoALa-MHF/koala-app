@@ -5,7 +5,7 @@ export interface Marker {
   description?: string | null;
   name: string;
   type: MarkerType;
-  abbreviation: string;
+  abbreviation?: string;
   color: string;
   icon?: string | null;
 }
