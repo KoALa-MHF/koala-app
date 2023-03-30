@@ -40,6 +40,12 @@ export class SessionsService {
     });
   }
 
+  findOneByCode(code: string): Promise<Session> {
+    return this.sessionsRepository.findOneByOrFail({
+      code,
+    });
+  }
+
   async update(id: number, updateSessionInput: UpdateSessionInput): Promise<Session> {
     try {
       await this.sessionsRepository.update(id, {
