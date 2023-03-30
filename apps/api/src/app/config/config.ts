@@ -22,7 +22,7 @@ export class MailConfig {
 
 export class DatabaseConfig {
   @IsString()
-  public readonly name: string = 'koala';
+  public readonly name: string = 'database/koala';
 }
 
 export class Config {

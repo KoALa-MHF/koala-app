@@ -1,6 +1,6 @@
 <div class="drag-drop-group" cdkDropListGroup mixedCdkDragDrop orientation="horizontal" (dropped)="dropped($event)">
-  <span *ngFor="let marker of markers" cdkDropList mixedCdkDropList>
-    <div cdkDrag>
+  <span style="min-width: 64px; min-height: 64px" *ngFor="let marker of markers" cdkDropList mixedCdkDropList>
+    <div cdkDrag (mousedown)="onDragStarted(marker)" (cdkDragEnded)="onDragStopped()" (mouseup)="onDragStopped()">
       <koala-marker-button
         cdkDragHandle
         *ngIf="marker"
@@ -9,4 +9,13 @@
       ></koala-marker-button>
     </div>
   </span>
+
+  <div
+    class="delete-zone"
+    [class]="dragActive ? 'delete-zone-visible' : 'delete-zone-hidden'"
+    cdkDropList
+    (cdkDropListDropped)="onDelete($event)"
+  >
+    <span class="pi pi-trash delete-zone__icon"></span>
+  </div>
 </div>

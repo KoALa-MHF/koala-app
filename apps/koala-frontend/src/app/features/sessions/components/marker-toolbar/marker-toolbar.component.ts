@@ -14,6 +14,9 @@ export class MarkerToolbarComponent {
   @Output() sortChange = new EventEmitter<Marker[]>();
   @Output() event = new EventEmitter<Marker>();
 
+  dragActive = false;
+  draggedMarker: Marker | null = null;
+
   dropped(event: { previousIndex: number; currentIndex: number }) {
     const tempMarker = [
       ...this.markers,
@@ -26,5 +29,23 @@ export class MarkerToolbarComponent {
 
   onMarkerButtonEvent(m: Marker) {
     this.event.emit(m);
+  }
+
+  onDelete(event: any) {
+    if (event.isPointerOverContainer) {
+      this.markers = this.markers.filter((marker) => marker.id !== this.draggedMarker?.id);
+      this.sortChange.emit(this.markers);
+
+      this.dragActive = false;
+    }
+  }
+
+  onDragStarted(marker: Marker) {
+    this.dragActive = true;
+    this.draggedMarker = marker;
+  }
+
+  onDragStopped() {
+    this.dragActive = false;
   }
 }
