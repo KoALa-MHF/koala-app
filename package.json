@@ -52,6 +52,7 @@
     "graphql": "^16.6.0",
     "graphql-upload": "13.0.0",
     "handlebars": "^4.7.7",
+    "jwt-decode": "^3.1.2",
     "maildev": "^2.0.5",
     "mp3tag.js": "^3.3.2",
     "music-metadata": "^8.1.3",
