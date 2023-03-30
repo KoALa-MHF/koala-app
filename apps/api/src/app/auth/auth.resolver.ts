@@ -19,8 +19,8 @@ export class AuthResolver {
   @Mutation(() => Authentication)
   authenticateSession(
     @Args('authenticateSessionInput')
-    authenticateUserSessionInput: AuthenticateSessionInput
+    authenticateSessionInput: AuthenticateSessionInput
   ) {
-    return this.authService.authenticateUserSession(authenticateUserSessionInput.code);
+    return this.authService.authenticateSession(authenticateSessionInput.code);
   }
 }
