@@ -53,7 +53,7 @@ export class SessionPage implements OnInit {
       this.mediaControlService.uuid = this.session.id;
       this.waveContainer = `waveContainer-${this.session.id}`;
       try {
-        this.mediaControlService.load(`${this.mediaUri}/${this.session.id}`, this.waveContainer).then(() => {
+        this.mediaControlService.load(`${this.mediaUri}/${this.session.media.id}`, this.waveContainer).then(() => {
           this.mediaControlService.addEventHandler('audioprocess', (time) => {
             // to reduce update frequency
             this.currentAudioTime = time.toFixed(2);
