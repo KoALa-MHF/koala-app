@@ -2,8 +2,7 @@ name: deploy docker image
 
 on:
   push:
-    branches:
-      - TS-Stefan-patch-1-1
+    branches: ['TS-Stefan-patch-1-1']
 
 jobs:
 
