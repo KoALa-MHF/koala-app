@@ -18,4 +18,6 @@ jobs:
         user: ${{ secrets.SERVER_USERNAME }}
         key: ${{ secrets.SERVER_KEY }}
         command: |
-          ls -a
+          cd /koala
+          docker compose pull
+          docker compose restart
