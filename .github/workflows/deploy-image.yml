@@ -10,7 +10,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    - name: executing remote docker-compose pull new image & deploy
+    - name: executing remote docker-compose pull new image and deploy
       uses: appleboy/ssh-action@v0.1.4
       with:
         host: ${{ secrets.SERVER_HOST }}
