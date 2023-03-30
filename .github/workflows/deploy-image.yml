@@ -1,8 +1,11 @@
 name: deploy docker image
 
 on:
-  push:
-    branches: ['TS-Stefan-patch-1-1']
+  workflow_run:
+    workflows: ["Create and publish frontend Docker image", "Create and publish api Docker image"]
+    branches: [main]
+    types: 
+      - completed
 
 jobs:
 
@@ -19,5 +22,5 @@ jobs:
         key: ${{ secrets.SERVER_KEY }}
         command: |
           cd /koala
-          docker compose pull
+          export IMAGE_TAG=${{  github.ref_name }}
           docker compose up -d --remove-orphans
