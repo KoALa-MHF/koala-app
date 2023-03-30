@@ -10,6 +10,7 @@ import { Session } from '../../types/session.entity';
 import { DataPoint, Display } from '../../components/annotation/annotation.component';
 import { Marker } from '../../types/marker.entity';
 import { MarkerType } from '../../../../graphql/generated/graphql';
+import { ToolbarMode } from '../../components/marker-toolbar/marker-toolbar.component';
 
 @Component({
   selector: 'koala-app-session',
@@ -29,6 +30,8 @@ export class SessionPage implements OnInit {
   currentAudioTime = 0;
   totalAudioTime = 0;
   audioPaused = true;
+
+  ToolbarMode = ToolbarMode;
 
   constructor(
     private readonly sessionService: SessionsService,
