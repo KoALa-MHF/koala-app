@@ -10,7 +10,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    - name: executing remote docker deploy
+    - name: executing remote docker pull and deploy
       uses: appleboy/ssh-action@v0.1.8
       with:
         host: ${{ secrets.HOST }}
