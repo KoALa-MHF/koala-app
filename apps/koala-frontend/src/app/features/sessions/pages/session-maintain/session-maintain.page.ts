@@ -267,6 +267,23 @@ export class SessionMaintainPage implements OnInit {
       });
   }
 
+  public onAddExistingMarkers(markers: Marker[]) {
+    const toolbar = this.session?.toolbars[0];
+
+    if (toolbar) {
+      const updatedMarkers = [
+        ...toolbar.markers,
+      ];
+      markers.forEach((marker) => {
+        const found = updatedMarkers.findIndex((markerTemp) => marker.id.toString() === markerTemp);
+        if (found === -1) {
+          updatedMarkers.push(marker.id + '');
+        }
+      });
+      this.updateToolbarMarker(parseInt(toolbar?.id || '0'), updatedMarkers);
+    }
+  }
+
   public onMarkerSortChange(markers: Marker[]) {
     const toolbar = this.session?.toolbars[0];
     if (toolbar) {

@@ -1,0 +1,24 @@
+<p-table [value]="markers" [(selection)]="selectedMarkers" dataKey="id" [tableStyle]="{ 'min-width': '50rem' }">
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 4rem">
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
+      <th>Name</th>
+      <th>Abbreviation/Icon</th>
+      <th>Description</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-marker>
+    <tr>
+      <td>
+        <p-tableCheckbox [value]="marker"></p-tableCheckbox>
+      </td>
+      <td>{{ marker.name }}</td>
+      <td>{{ marker.abbreviation }}</td>
+      <td>{{ marker.description }}</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-button (click)="addMarker()" label="Marker Hinzufügen"></p-button>

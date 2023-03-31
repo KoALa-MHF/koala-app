@@ -15,7 +15,7 @@ export class MarkerService {
     return this.createMarkerGQL.mutate({ createMarker: marker });
   }
 
-  getAll(ids: Array<number>) {
+  getAll(ids?: Array<number>) {
     return this.getMarkersGQL.fetch({ ids });
   }
 
