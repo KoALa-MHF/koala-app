@@ -15,7 +15,7 @@ import { SamlStrategy } from './strategies/saml.strategy';
     PassportModule,
     JwtModule.register({
       secret: 'jWTSecret',
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '24h' },
     }),
     UserSessionsModule,
     UsersModule,

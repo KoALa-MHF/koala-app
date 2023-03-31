@@ -19,6 +19,7 @@ export class SessionsOverviewTableComponent {
   @Output() sessionEnter = new EventEmitter<Session>();
   @Output() sessionExport = new EventEmitter<Session>();
   @Output() sessionCopy = new EventEmitter<Session>();
+  @Output() sessionCodeDisplay = new EventEmitter<Session>();
 
   selectedSession: Session | null = null;
 
@@ -48,7 +49,7 @@ export class SessionsOverviewTableComponent {
   }
 
   public onCodePressed(session: Session) {
-    console.log('Code Pressed for session: ' + JSON.stringify(session));
+    this.sessionCodeDisplay.emit(session);
   }
 
   public onExport(session: Session) {

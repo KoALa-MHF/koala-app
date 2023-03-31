@@ -57,7 +57,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     {
       provide: APOLLO_OPTIONS,
       useFactory(httpLink: HttpLink) {
-        const uri: string = environment.production ? 'https://koala-app.de/graphql' : 'http://localhost:4200/graphql';
+        const uri: string = environment.baseUrl + '/graphql';
         return {
           cache: new InMemoryCache(),
           link: httpLink.create({

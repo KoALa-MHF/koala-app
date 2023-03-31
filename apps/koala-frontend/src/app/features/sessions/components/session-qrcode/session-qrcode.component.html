@@ -1,0 +1,28 @@
+<p-dialog
+  header="{{ 'SESSION.OVERVIEW.QRCODE.DIALOG_TITLE' | translate }}"
+  [visible]="visible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  (visibleChange)="onClose($event)"
+  [style]="{ width: '35vw', minWidth: '300px' }"
+>
+  <h2 class="session-code">{{ session?.code }}</h2>
+
+  <div class="qr-code">
+    <qrcode
+      imageSrc="../../../../assets/koala-logo-rund_petrol_w_background.png"
+      [imageWidth]="50"
+      [imageHeight]="52"
+      qrdata="{{ url }}"
+      [width]="300"
+      [errorCorrectionLevel]="'M'"
+      [margin]="2"
+    ></qrcode>
+  </div>
+
+  <div class="session-code-url">
+    <h5>{{ url }}</h5>
+    <p-button icon="pi pi-copy" styleClass="p-button-text" (click)="onCopy()"></p-button>
+  </div>
+</p-dialog>

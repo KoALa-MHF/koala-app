@@ -98,6 +98,7 @@ export class Session extends BaseEntity {
   mediaId?: number;
 
   @Column()
+  @Field() //TODO: make it only visible for session owner
   @Index({ unique: true })
   @IsNotEmpty()
   code: string;
