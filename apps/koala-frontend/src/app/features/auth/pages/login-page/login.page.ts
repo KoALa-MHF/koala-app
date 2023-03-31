@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { credentialsValidator } from './credentials.validator';
 
@@ -27,7 +27,11 @@ export class LoginPage implements OnInit {
     }
   );
 
-  constructor(private readonly authService: AuthService, private readonly router: Router) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.isAuthenticated$.subscribe((isAuthenticated) => {
@@ -37,6 +41,12 @@ export class LoginPage implements OnInit {
         ]);
       }
     });
+
+    const sessionCode = this.route.snapshot.queryParamMap.get('sessionCode');
+
+    if (sessionCode) {
+      this.loginForm.get('sessionCode')?.setValue(sessionCode);
+    }
   }
 
   public onLogin() {

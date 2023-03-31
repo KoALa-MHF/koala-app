@@ -39,6 +39,11 @@
         "EXPORT_COL_LABEL": "Export",
         "DELETE_COL_LABEL": "Löschen"
       },
+      "QRCODE": {
+        "DIALOG_TITLE": "Session Beitreten",
+        "COPY_SUCCESS": "URL kopiert",
+        "COPY_ERROR": "URL konnte nicht kopiert werden"
+      },
       "ACC": {
         "CREATE": "Session Anlegen"
       }

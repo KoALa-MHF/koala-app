@@ -13,6 +13,7 @@ const CREATE_SESSION = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      code
       media {
         id
         name
@@ -44,6 +45,7 @@ const UPDATE_SESSION = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      code
       media {
         id
         name
