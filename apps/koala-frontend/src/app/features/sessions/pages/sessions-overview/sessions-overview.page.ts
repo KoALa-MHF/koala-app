@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
   ],
 })
 export class SessionsOverviewPage implements OnInit, OnDestroy {
+  qrCodeVisible = false;
   sessions: Session[] = [];
   routeSubscription: Subscription | undefined;
   createSessionModal = false;
@@ -116,5 +117,10 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
     this.sessionService.copySession(parseInt(selectedSession.id)).then(() => {
       this.loadSessions();
     });
+  }
+
+  public onSessionCodeDisplay(session: Session) {
+    this.qrCodeVisible = true;
+    this.selectedSession = session;
   }
 }

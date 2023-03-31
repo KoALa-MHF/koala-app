@@ -22,6 +22,9 @@ import { TabViewModule } from 'primeng/tabview';
 import { DialogModule } from 'primeng/dialog';
 import { SliderModule } from 'primeng/slider';
 import { AccordionModule } from 'primeng/accordion';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+
+import { QRCodeModule } from 'angularx-qrcode';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MixedCdkDragDropModule } from 'angular-mixed-cdk-drag-drop';
@@ -53,6 +56,7 @@ import { DeleteConfirmDialogComponent } from './components/delete-confirm-dialog
 import { UserSessionService } from './services/user-session.service';
 import { MarkerIconComponent } from './components/marker-icon/marker-icon.component';
 import { AnnotationComponent } from './components/annotation/annotation.component';
+import { SessionQrcodeComponent } from './components/session-qrcode/session-qrcode.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +83,7 @@ import { AnnotationComponent } from './components/annotation/annotation.componen
     DeleteConfirmDialogComponent,
     MarkerIconComponent,
     AnnotationComponent,
+    SessionQrcodeComponent,
   ],
   imports: [
     SharedModule,
@@ -101,6 +106,8 @@ import { AnnotationComponent } from './components/annotation/annotation.componen
     SliderModule,
     MixedCdkDragDropModule,
     AccordionModule,
+    OverlayPanelModule,
+    QRCodeModule,
   ],
   providers: [
     SessionsService,

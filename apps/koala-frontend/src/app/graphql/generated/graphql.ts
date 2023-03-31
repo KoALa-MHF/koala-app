@@ -282,6 +282,7 @@ export type QueryUserSessionArgs = {
 
 export type Session = {
   __typename?: 'Session';
+  code: Scalars['String'];
   /** Creation Date */
   createdAt: Scalars['DateTime'];
   /** Description */
@@ -425,6 +426,7 @@ export type CreateNewSessionMutation = {
     enablePlayer?: boolean | null;
     displaySampleSolution?: boolean | null;
     enableLiveAnalysis?: boolean | null;
+    code: string;
     createdAt: any;
     updatedAt: any;
     media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
@@ -450,6 +452,7 @@ export type UpdateSessionMutation = {
     enablePlayer?: boolean | null;
     displaySampleSolution?: boolean | null;
     enableLiveAnalysis?: boolean | null;
+    code: string;
     createdAt: any;
     updatedAt: any;
     media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
@@ -541,6 +544,7 @@ export type GetSessionsQuery = {
     enablePlayer?: boolean | null;
     displaySampleSolution?: boolean | null;
     enableLiveAnalysis?: boolean | null;
+    code: string;
     createdAt: any;
     updatedAt: any;
     media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
@@ -566,6 +570,7 @@ export type GetOneSessionQuery = {
     enablePlayer?: boolean | null;
     displaySampleSolution?: boolean | null;
     enableLiveAnalysis?: boolean | null;
+    code: string;
     createdAt: any;
     updatedAt: any;
     media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
@@ -607,6 +612,7 @@ export const CreateNewSessionDocument = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      code
       media {
         id
         name
@@ -648,6 +654,7 @@ export const UpdateSessionDocument = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      code
       media {
         id
         name
@@ -845,6 +852,7 @@ export const GetSessionsDocument = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      code
       media {
         id
         name
@@ -887,6 +895,7 @@ export const GetOneSessionDocument = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      code
       media {
         id
         name
