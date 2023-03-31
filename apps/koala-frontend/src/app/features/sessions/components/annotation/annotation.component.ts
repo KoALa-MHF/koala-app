@@ -1,4 +1,5 @@
 import { Component, Input, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Marker } from '../../types/marker.entity';
 import * as d3 from 'd3';
 
 export enum Display {
@@ -28,11 +29,11 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   @Input() annotationData: Map<number, Array<DataPoint>> = new Map<number, Array<DataPoint>>();
   @Input() totalTime = 1;
   @Input() currentTime = 0;
-  @Input() numberOfRows = 0;
+  @Input() markers: Marker[] = [];
 
   private annotationStrength = 5;
-  private previousTime = 0;
   private containerID = 'd3-container';
+  private labelsID = 'd3-labels';
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes) {
@@ -43,7 +44,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
           row++;
         });
       }
-      if (changes['numberOfRows']) {
+      if (changes['markers']) {
         this.drawLines();
       }
     }
@@ -59,20 +60,20 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   }
 
   private drawLines() {
-    const svg = d3.select('svg#d3-container');
-    let i = 1;
-    this.annotationData.forEach((_, key) => {
-      svg.append('g').attr('id', 'row_' + key);
-
-      const height = this.getPositionY(i);
-      svg
+    const svgC = d3.select(`svg#${this.containerID}`);
+    const svgL = d3.select(`svg#${this.labelsID}`);
+    this.markers.forEach((marker, i) => {
+      svgC.append('g').attr('id', 'row_' + (i + 1));
+      const text = marker.abbreviation || '';
+      const height = this.getPositionY(i + 1);
+      svgL.append('text').attr('y', height).text(text);
+      svgC
         .append('line')
         .style('stroke', 'black')
         .attr('x1', 5)
         .attr('x2', this.getContainerWidth())
         .attr('y1', height)
         .attr('y2', height);
-      i++;
     });
   }
 
@@ -118,7 +119,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
 
   private getPositionY(id: number) {
     const h = this.getContainerHeight() - 10;
-    const r = h / this.numberOfRows;
+    const r = h / this.markers.length;
     return (r / 2) * id;
   }
 
@@ -148,13 +149,15 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   }
 
   public onResize() {
-    const container = d3.select(`svg#${this.containerID}`);
-    container.selectAll('rect').remove();
-    container.selectAll('circle').remove();
-    container.selectAll('line').remove();
+    const svgC = d3.select(`svg#${this.containerID}`);
+    const svgL = d3.select(`svg#${this.labelsID}`);
+    svgC.selectAll('rect').remove();
+    svgC.selectAll('circle').remove();
+    svgC.selectAll('line').remove();
+    svgL.selectAll('text').remove();
+    this.drawLines();
     let row = 1;
     this.annotationData.forEach((_, id) => {
-      this.drawLines();
       this.drawAnnotations(id, row);
       row++;
     });

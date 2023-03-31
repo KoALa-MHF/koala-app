@@ -6,7 +6,7 @@
           <koala-app-audio-wave [waveContainer]="waveContainer"> </koala-app-audio-wave>
           <koala-app-annotation
             [annotationData]="AnnotationData"
-            [numberOfRows]="markers.length || 1"
+            [markers]="markers"
             [totalTime]="totalAudioTime"
             [currentTime]="currentAudioTime"
           ></koala-app-annotation>
