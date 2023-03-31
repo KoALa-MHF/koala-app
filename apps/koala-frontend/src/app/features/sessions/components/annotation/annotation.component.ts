@@ -23,7 +23,6 @@ export interface DataPoint {
     './annotation.component.scss',
     '../../session-common.scss',
   ],
-  providers: [],
 })
 export class AnnotationComponent implements AfterViewInit, OnChanges {
   @Input() annotationData: Map<number, Array<DataPoint>> = new Map<number, Array<DataPoint>>();
@@ -38,6 +37,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes) {
       if (changes['currentTime']) {
+        this.drawTimeline();
         let row = 1;
         this.annotationData.forEach((_, id) => {
           this.drawAnnotations(id, row);
@@ -45,13 +45,15 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
         });
       }
       if (changes['markers']) {
+        this.setContainerHeight();
         this.drawLines();
+        this.drawTimeline();
       }
     }
   }
 
   ngAfterViewInit() {
-    this.drawLines();
+    this.drawTimeline();
   }
 
   public addDataPoint(id: number, value: DataPoint) {
@@ -110,6 +112,29 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
           ),
         (exit) => exit.call((update) => update.transition(trans).attr('width', 0).attr('height', 0).remove())
       );
+  }
+
+  private drawTimeline() {
+    const line = d3.select(`svg#${this.containerID}`).selectAll('line#timeline').data<number>([
+      this.currentTime,
+    ]);
+
+    let time = 2;
+    if (this.getPositionXRatio() !== Infinity) {
+      time = this.currentTime * this.getPositionXRatio() < 2 ? 2 : this.currentTime * this.getPositionXRatio();
+    }
+
+    line.attr('x1', time);
+    line.attr('x2', time);
+    line.attr('y1', this.getPositionY(0) + 30);
+    line.attr('y2', this.getPositionY(this.markers.length) + 20);
+
+    line
+      .enter()
+      .append('line')
+      .style('stroke', 'rgba(73, 157, 255, 0.95)')
+      .attr('id', 'timeline')
+      .attr('stroke-width', 2);
   }
 
   private getPositionXRatio() {
@@ -176,6 +201,13 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
     if (container) {
       return container.getBoundingClientRect().height;
     }
-    return 500;
+    return this.markers.length * 60;
+  }
+
+  private setContainerHeight() {
+    const container = document.getElementById(this.containerID);
+    if (container) {
+      container.style.height = this.markers.length * 60 + 'px';
+    }
   }
 }
