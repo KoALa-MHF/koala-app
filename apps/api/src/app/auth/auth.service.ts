@@ -18,7 +18,6 @@ export class AuthService {
   async authenticateUserSession(code: string): Promise<Authentication> {
     try {
       const userSession = await this.userSessionService.findOneByCode(code);
-      console.log('---------> authenticateUserSession', userSession);
       return this.getAuthentication(userSession.userId);
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
