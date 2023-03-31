@@ -10,7 +10,11 @@
             [totalTime]="totalAudioTime"
             [currentTime]="currentAudioTime"
           ></koala-app-annotation>
-          <koala-marker-toolbar [markers]="markers" (event)="onMarkerButtonEvent($event)"></koala-marker-toolbar>
+          <koala-marker-toolbar
+            [markers]="markers"
+            (event)="onMarkerButtonEvent($event)"
+            [toolbarMode]="ToolbarMode.Session"
+          ></koala-marker-toolbar>
         </div>
         <koala-app-audio-player (mediaEvent)="onMediaEvent($event)"></koala-app-audio-player>
       </div>

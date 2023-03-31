@@ -1,6 +1,6 @@
 <div class="drag-drop-group" cdkDropListGroup mixedCdkDragDrop orientation="horizontal" (dropped)="dropped($event)">
   <span style="min-width: 64px; min-height: 64px" *ngFor="let marker of markers" cdkDropList mixedCdkDropList>
-    <div cdkDrag (mousedown)="onDragStarted(marker)" (cdkDragEnded)="onDragStopped()" (mouseup)="onDragStopped()">
+    <div cdkDrag [cdkDragDisabled]="toolbarMode === ToolbarMode.Session" (mousedown)="onDragStarted(marker)" (cdkDragEnded)="onDragStopped()" (mouseup)="onDragStopped()">
       <koala-marker-button
         cdkDragHandle
         *ngIf="marker"
