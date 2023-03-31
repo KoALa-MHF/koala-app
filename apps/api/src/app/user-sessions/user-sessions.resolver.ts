@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent, ObjectType, Field } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent } from '@nestjs/graphql';
 import { UserSessionsService } from './user-sessions.service';
 import { UserSession } from './entities/user-session.entity';
 import { CreateUserSessionInput } from './dto/create-user-session.input';
@@ -7,6 +7,7 @@ import { InviteUserSessionInput } from './dto/invite-user-session.input';
 import { SessionsService } from '../sessions/sessions.service';
 import { forwardRef, Inject } from '@nestjs/common';
 import { AnnotationsService } from '../annotations/annotations.service';
+import { UsersService } from '../users/users.service';
 
 @Resolver(() => UserSession)
 export class UserSessionsResolver {
@@ -15,7 +16,8 @@ export class UserSessionsResolver {
     @Inject(forwardRef(() => SessionsService))
     private readonly sessionsService: SessionsService,
     @Inject(forwardRef(() => AnnotationsService))
-    private readonly annotationsService: AnnotationsService
+    private readonly annotationsService: AnnotationsService,
+    private readonly usersService: UsersService
   ) {}
 
   @Mutation(() => UserSession)
@@ -69,6 +71,12 @@ export class UserSessionsResolver {
   session(@Parent() userSession: UserSession) {
     const { sessionId } = userSession;
     return this.sessionsService.findOne(sessionId, true);
+  }
+
+  @ResolveField()
+  user(@Parent() userSession: UserSession) {
+    const { userId } = userSession;
+    return this.usersService.findOne(userId);
   }
 
   @ResolveField()

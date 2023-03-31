@@ -4,6 +4,7 @@ import { EntityNotFoundError } from 'typeorm';
 import { SessionsService } from '../sessions/sessions.service';
 import { CreateUserSessionInput } from '../user-sessions/dto/create-user-session.input';
 import { UserSessionsService } from '../user-sessions/user-sessions.service';
+import { User } from '../users/entities/user.entity';
 import { Authentication } from './models/autentication.model';
 
 @Injectable()
@@ -17,10 +18,8 @@ export class AuthService {
   async authenticateUserSession(code: string): Promise<Authentication> {
     try {
       const userSession = await this.userSessionService.findOneByCode(code);
-
-      return this.getAccessToken({
-        sub: userSession.id,
-      });
+      console.log('---------> authenticateUserSession', userSession);
+      return this.getAuthentication(userSession.userId);
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
         throw new UnauthorizedException();
@@ -35,12 +34,12 @@ export class AuthService {
 
       const userSession = await this.userSessionService.create({
         sessionId: session.id,
-        email: 'test' + new Date().getTime() + '@koala-app.de',
+        user: {
+          email: 'test' + new Date().getTime() + '@koala-app.de',
+        },
       } as CreateUserSessionInput);
 
-      return this.getAccessToken({
-        sub: userSession.id,
-      });
+      return this.getAuthentication(userSession.userId);
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
         throw new UnauthorizedException();
@@ -49,9 +48,18 @@ export class AuthService {
     }
   }
 
-  private getAccessToken(payload: any): Authentication {
+  private async getAuthentication(userId: number): Promise<Authentication> {
+    const accessToken = await this.getAccessToken(userId);
     return {
-      accessToken: this.jwtService.sign(payload),
+      accessToken,
+      userId,
+    } as Authentication;
+  }
+
+  private async getAccessToken(userId: number): Promise<string> {
+    const payload = {
+      sub: userId,
     };
+    return await this.jwtService.signAsync(payload);
   }
 }

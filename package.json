@@ -39,6 +39,7 @@
     "@nestjs/typeorm": "^9.0.1",
     "@ngx-translate/core": "^14.0.0",
     "@ngx-translate/http-loader": "^7.0.0",
+    "@node-saml/passport-saml": "^4.0.2",
     "@nrwl/angular": "15.0.4",
     "@types/maildev": "^0.0.4",
     "angular-mixed-cdk-drag-drop": "^1.0.3",
