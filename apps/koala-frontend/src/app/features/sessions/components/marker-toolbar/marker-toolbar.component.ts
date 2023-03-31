@@ -23,6 +23,7 @@ export class MarkerToolbarComponent {
   dragActive = false;
   draggedMarker: Marker | null = null;
   ToolbarMode = ToolbarMode;
+  showDeleteConfirm = false;
 
   dropped(event: { previousIndex: number; currentIndex: number }) {
     const tempMarker = [
@@ -40,10 +41,9 @@ export class MarkerToolbarComponent {
     }
   }
 
-  onDelete(event: any) {
+  onDeleteRequested(event: any) {
     if (event.isPointerOverContainer) {
-      this.markers = this.markers.filter((marker) => marker.id !== this.draggedMarker?.id);
-      this.sortChange.emit(this.markers);
+      this.showDeleteConfirm = true;
 
       this.dragActive = false;
     }
@@ -56,5 +56,21 @@ export class MarkerToolbarComponent {
 
   onDragStopped() {
     this.dragActive = false;
+  }
+
+  onDelete() {
+    this.removeMarker();
+  }
+
+  onDeleteCancel() {
+    this.showDeleteConfirm = false;
+  }
+
+  private removeMarker() {
+    this.markers = this.markers.filter((marker) => marker.id !== this.draggedMarker?.id);
+    this.sortChange.emit(this.markers);
+
+    this.draggedMarker = null;
+    this.showDeleteConfirm = false;
   }
 }
