@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { MarkerService } from '../../services/marker.service';
 import { Marker } from '../../types/marker.entity';
 
 @Component({
@@ -6,18 +7,33 @@ import { Marker } from '../../types/marker.entity';
   templateUrl: './session-marker-library.component.html',
   styleUrls: [
     './session-marker-library.component.scss',
+    '../../session-common.scss',
   ],
 })
-export class SessionMarkerLibraryComponent {
+export class SessionMarkerLibraryComponent implements OnInit {
   @Output() markerAdd = new EventEmitter<Marker[]>();
   showMarkerList = false;
+  markers: Marker[] = [];
 
-  showMarkerListHelp() {
-    this.showMarkerList = true;
+  constructor(private readonly markerService: MarkerService) {}
+
+  ngOnInit() {
+    this.loadAllMarker();
   }
 
   onMarkerAdd(markers: Marker[]) {
     this.showMarkerList = false;
     this.markerAdd.emit(markers);
+  }
+
+  showMarkerListHelp() {
+    this.loadAllMarker();
+    this.showMarkerList = true;
+  }
+
+  private loadAllMarker() {
+    this.markerService.getAll().subscribe((result) => {
+      this.markers = result.data.markers;
+    });
   }
 }

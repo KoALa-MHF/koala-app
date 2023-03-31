@@ -1,5 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { MarkerService } from '../../services/marker.service';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Marker } from '../../types/marker.entity';
 
 @Component({
@@ -9,19 +8,11 @@ import { Marker } from '../../types/marker.entity';
     './marker-overview-list.component.scss',
   ],
 })
-export class MarkerOverviewListComponent implements OnInit {
+export class MarkerOverviewListComponent {
+  @Input() markers!: Marker[];
   @Output() markerAdd = new EventEmitter<Marker[]>();
 
-  markers: Marker[] = [];
   selectedMarkers: Marker[] = [];
-
-  constructor(private readonly markerService: MarkerService) {}
-
-  ngOnInit() {
-    this.markerService.getAll().subscribe((result) => {
-      this.markers = result.data.markers;
-    });
-  }
 
   addMarker() {
     this.markerAdd.emit(this.selectedMarkers);

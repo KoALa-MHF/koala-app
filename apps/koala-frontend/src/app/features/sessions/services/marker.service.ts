@@ -16,7 +16,7 @@ export class MarkerService {
   }
 
   getAll(ids?: Array<number>) {
-    return this.getMarkersGQL.fetch({ ids });
+    return this.getMarkersGQL.fetch({ ids }, { fetchPolicy: 'no-cache' });
   }
 
   getAllIcons(): MarkerIcon[] {
