@@ -7,8 +7,6 @@ import { MediaService } from '../media/media.service';
 import { ToolbarsService } from '../toolbars/toolbars.service';
 import { forwardRef, Inject, UseGuards } from '@nestjs/common';
 import { UserSessionsService } from '../user-sessions/user-sessions.service';
-import { AuthGuard } from '../core/guards/auth.guard';
-import { User } from '../core/decorators/user.decorator';
 
 @Resolver(() => Session)
 export class SessionsResolver {
