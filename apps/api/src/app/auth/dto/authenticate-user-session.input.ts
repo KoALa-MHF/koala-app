@@ -4,7 +4,7 @@ import { IsNotEmpty, Length, MaxLength } from 'class-validator';
 @InputType()
 export class AuthenticateUserSessionInput {
   @Field({ nullable: false, description: 'User Session Code' })
-  @Length(8, 8)
+  @Length(7, 8)
   @IsNotEmpty()
   code: string;
 }

@@ -14,7 +14,11 @@ export class AuthResolver {
     @Args('authenticateUserSessionInput')
     authenticateUserSessionInput: AuthenticateUserSessionInput
   ) {
-    return this.authService.authenticateUserSession(authenticateUserSessionInput.code);
+    if (authenticateUserSessionInput.code.length === 7) {
+      return this.authService.authenticateSession(authenticateUserSessionInput.code);
+    } else {
+      return this.authService.authenticateUserSession(authenticateUserSessionInput.code);
+    }
   }
 
   @Mutation(() => Authentication)
