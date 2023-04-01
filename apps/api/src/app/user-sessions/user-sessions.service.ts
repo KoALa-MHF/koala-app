@@ -10,6 +10,8 @@ import { CreateUserSessionInput } from './dto/create-user-session.input';
 import { UpdateUserSessionInput } from './dto/update-user-session.input';
 import { UserSession } from './entities/user-session.entity';
 
+const UNIQUE_USER_CONSTRAINT_ERROR = 'UNIQUE constraint failed: user_session.userId';
+
 @Injectable()
 export class UserSessionsService {
   constructor(
@@ -50,10 +52,11 @@ export class UserSessionsService {
 
   async create(createUserSessionInput: CreateUserSessionInput): Promise<UserSession> {
     try {
-      let user: User = await this.usersService.findByEmail(createUserSessionInput.user.email);
+      const email = createUserSessionInput.user?.email;
+      let user: User = await this.usersService.findByEmail(email);
       if (!user) {
         user = {
-          email: createUserSessionInput.user.email,
+          email: email,
         } as User;
       }
 
@@ -67,7 +70,7 @@ export class UserSessionsService {
 
       return await this.userSessionsRepository.save(userSession);
     } catch (error) {
-      if (error.message?.includes('UNIQUE constraint failed: user_session.userId')) {
+      if (error.message?.includes(UNIQUE_USER_CONSTRAINT_ERROR)) {
         const validationError = new ValidationError();
         validationError.property = 'user';
         validationError.constraints = { isUnique: 'user must be unique per session' };

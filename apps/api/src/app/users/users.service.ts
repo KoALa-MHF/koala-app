@@ -16,7 +16,7 @@ export class UsersService {
   }
 
   findByEmail(email: string) {
-    return this.usersRespository.findOneBy({ email });
+    return email ? this.usersRespository.findOneBy({ email }) : null;
   }
 
   async update(id: number, updateUserSessionInput: UpdateUserInput): Promise<User> {
