@@ -11,6 +11,7 @@
       (resetMarkerData)="onReset()"
       (markerAdd)="onAddMarker()"
     ></koala-marker-preview>
+    <koala-session-marker-library (markerAdd)="onAddMultipleMarkers($event)"></koala-session-marker-library>
   </div>
 
   <div style="width: 33%">

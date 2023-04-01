@@ -10,3 +10,13 @@ body {
   background: url('assets/bg_koala.png') no-repeat center fixed;
   background-size: cover;
 }
+
+@font-face {
+  font-family: 'Noto Music';
+  src: url('./assets/fonts/NotoMusic-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Noto Emoji';
+  src: url('./assets/fonts/NotoEmoji-Regular.ttf');
+}
