@@ -41,15 +41,6 @@ export class AnnotationsService {
     return this.annotationsRepository.save(newAnnotation);
   }
 
-  findAll(user: User): Promise<Annotation[]> {
-    return this.annotationsRepository
-      .createQueryBuilder('annotation')
-      .leftJoinAndSelect('annotation.userSession', 'userSession')
-      .leftJoinAndSelect('userSession.user', 'user')
-      .where('user.id = :id', { id: user.id })
-      .getMany();
-  }
-
   findAllByUserSession(userSessionId: number) {
     return this.annotationsRepository.findBy({
       userSessionId,
