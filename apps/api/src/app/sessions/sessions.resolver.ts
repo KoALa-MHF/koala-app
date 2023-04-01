@@ -67,6 +67,6 @@ export class SessionsResolver {
 
   @ResolveField()
   userSessions(@Parent() session: Session) {
-    return this.userSessionsService.findAll(session.id);
+    return this.userSessionsService.findAllBySession(session.id);
   }
 }

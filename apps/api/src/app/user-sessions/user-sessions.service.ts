@@ -1,8 +1,8 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ValidationError } from 'class-validator';
-import { In, Repository } from 'typeorm';
+import { FindManyOptions, FindOptionsWhere, In, Repository } from 'typeorm';
 import { ValidationErrorException } from '../core/exceptions/validation-error.exception';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
@@ -81,41 +81,51 @@ export class UserSessionsService {
     }
   }
 
-  findAll(sessionId?: number): Promise<UserSession[]> {
-    return this.userSessionsRepository.find({
-      where: {
-        sessionId,
-      },
+  findAll(user: User): Promise<UserSession[]> {
+    return this.userSessionsRepository.findBy({
+      userId: user.id,
     });
   }
 
-  findOne(id: number): Promise<UserSession> {
-    return this.userSessionsRepository.findOneByOrFail({ id });
+  findAllBySession(sessionId: number, user?: User): Promise<UserSession[]> {
+    return this.userSessionsRepository.findBy({
+      sessionId: sessionId,
+      userId: user?.id,
+    });
+  }
+
+  async findOne(id: number, user?: User): Promise<UserSession> {
+    const userSession = await this.userSessionsRepository.findOneBy({ id });
+
+    if (!userSession) {
+      throw new NotFoundException();
+    }
+
+    if (user && userSession.userId !== user.id) {
+      throw new ForbiddenException();
+    }
+
+    return userSession;
   }
 
   findOneByCode(code: string): Promise<UserSession> {
-    return this.userSessionsRepository.findOneByOrFail({
-      code,
+    return this.userSessionsRepository.findOneByOrFail({ code });
+  }
+
+  async update(id: number, updateUserSessionInput: UpdateUserSessionInput, user: User): Promise<UserSession> {
+    const userSession = await this.findOne(id, user);
+
+    this.userSessionsRepository.merge(userSession, {
+      note: updateUserSessionInput.note,
     });
+
+    return this.userSessionsRepository.save(userSession);
   }
 
-  async update(id: number, updateUserSessionInput: UpdateUserSessionInput): Promise<UserSession> {
-    try {
-      await this.userSessionsRepository.update(id, {
-        note: updateUserSessionInput.note,
-        // email: updateUserSessionInput.email, -> needs to be deleted
-      });
-
-      return this.findOne(id);
-    } catch (error) {
-      throw new BadRequestException(error.detail);
-    }
-  }
-
-  async remove(id: number) {
-    const userSession = await this.findOne(id);
-    await this.userSessionsRepository.delete(id);
-
+  async remove(id: number, user: User) {
+    const userSession = await this.findOne(id, user);
+    await this.userSessionsRepository.remove(userSession);
+    userSession.id = id;
     return userSession;
   }
 }
