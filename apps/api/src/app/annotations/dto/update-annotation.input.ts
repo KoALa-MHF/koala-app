@@ -3,7 +3,10 @@ import { InputType, OmitType, PartialType } from '@nestjs/graphql';
 
 @InputType()
 export class UpdateAnnotationInput extends PartialType(
-    OmitType(CreateAnnotationInput, ['userSessionId'] as const)
-  ) {
-    
-}
+  OmitType(CreateAnnotationInput, [
+    'userSessionId',
+    'start',
+    'end',
+    'markerId',
+  ] as const)
+) {}

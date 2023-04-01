@@ -1,8 +1,8 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ValidationError } from 'class-validator';
-import { FindManyOptions, FindOptionsWhere, In, Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { ValidationErrorException } from '../core/exceptions/validation-error.exception';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';

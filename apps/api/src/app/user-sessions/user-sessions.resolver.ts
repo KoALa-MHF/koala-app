@@ -86,6 +86,6 @@ export class UserSessionsResolver {
   @ResolveField()
   annotations(@Parent() userSession: UserSession) {
     const { id } = userSession;
-    return this.annotationsService.findAll(id);
+    return this.annotationsService.findAllByUserSession(id);
   }
 }
