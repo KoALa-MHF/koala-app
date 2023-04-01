@@ -37,7 +37,7 @@ export class UserSessionsService {
           template: 'session-invite',
           context: {
             sessionName: userSession.session.name,
-            code: userSession.session.code,
+            code: userSession.code,
             message: message,
           },
         });
