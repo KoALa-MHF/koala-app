@@ -1,0 +1,16 @@
+<h4 class="section-heading">{{ 'SESSION.MAINTAIN.SECTION_HEADINGS.MARKER_LIBRARY' | translate }}</h4>
+
+<p>{{ 'SESSION.MAINTAIN.MARKER.MARKER_LIBRARY_EXPLANATION' | translate }}</p>
+
+<button pButton pRipple class="p-button-raised" (click)="showMarkerListHelp()">
+  {{ 'SESSION.MAINTAIN.MARKER.LOAD_MARKER_BTN' | translate }}
+</button>
+
+<p-dialog
+  header="{{ 'SESSION.MAINTAIN.MARKER.LOAD_MARKER_DIALOG_TITLE' | translate }}"
+  [(visible)]="showMarkerList"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+>
+  <koala-marker-overview-list [markers]="markers" (markerAdd)="onMarkerAdd($event)"></koala-marker-overview-list>
+</p-dialog>
