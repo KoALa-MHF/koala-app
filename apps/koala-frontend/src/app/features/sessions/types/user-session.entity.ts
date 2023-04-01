@@ -1,6 +1,6 @@
 export interface UserSession {
   id: number;
   user?: {
-    email: string;
+    email?: string | null;
   };
 }
