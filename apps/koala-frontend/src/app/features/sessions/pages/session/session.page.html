@@ -3,6 +3,20 @@
     <p-tabPanel header="{{session.name}}">
       <div class="container">
         <div class="content">
+          <p-toolbar>
+            <div class="p-toolbar-group-start"></div>
+            <div class="p-toolbar-group-center">
+              <koala-app-audio-player (mediaEvent)="onMediaEvent($event)"></koala-app-audio-player>
+            </div>
+            <div class="p-toolbar-group-end">
+              <p-button
+                (click)="showSideBar = true"
+                label="Freigaben"
+                icon="pi pi-cog"
+                styleClass="p-button-text"
+              ></p-button>
+            </div>
+          </p-toolbar>
           <koala-app-audio-wave [waveContainer]="waveContainer"> </koala-app-audio-wave>
           <koala-app-annotation
             [annotationData]="AnnotationData"
@@ -16,9 +30,63 @@
             [toolbarMode]="ToolbarMode.Session"
           ></koala-marker-toolbar>
         </div>
-        <koala-app-audio-player (mediaEvent)="onMediaEvent($event)"></koala-app-audio-player>
       </div>
     </p-tabPanel>
     <p-tabPanel header="{{ 'SESSION.TABS.EVALUATION' | translate }}"> </p-tabPanel>
   </p-tabView>
 </div>
+
+<p-sidebar [(visible)]="showSideBar" position="right">
+  <form [formGroup]="sessionDetailsFormGroup">
+    <div class="form-group">
+      <b>Freigaben</b>
+    </div>
+    <div>
+      <p-checkbox
+        formControlName="editable"
+        [binary]="true"
+        label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.EDIT_ENABLED_LABEL' | translate }}"
+      ></p-checkbox>
+    </div>
+    <div>
+      <p-checkbox
+        formControlName="enablePlayer"
+        [binary]="true"
+        label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.PLAYER_ENABLED_LABEL' | translate }}"
+      ></p-checkbox>
+    </div>
+    <div>
+      <p-checkbox
+        formControlName="displaySampleSolution"
+        [binary]="true"
+        label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.SAMPLE_SOLUTION_ENABLED_LABEL' | translate }}"
+      ></p-checkbox>
+    </div>
+    <div>
+      <p-checkbox
+        formControlName="enableLiveAnalysis"
+        [binary]="true"
+        label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.ANALYSIS_ENABLED_LABEL' | translate }}"
+      ></p-checkbox>
+    </div>
+  </form>
+
+  <p-divider></p-divider>
+
+  <form [formGroup]="sidePanelForm">
+    <div class="form-group">
+      <b>Markers</b>
+    </div>
+    <div class="form-group overflow" [formGroup]="markersFormGroup">
+      <div *ngFor="let marker of markers">
+        <p-checkbox
+          type="checkbox"
+          [id]="marker.id"
+          [formControlName]="marker.id"
+          label="{{marker.name}}"
+          [binary]="true"
+        ></p-checkbox>
+      </div>
+    </div>
+  </form>
+</p-sidebar>

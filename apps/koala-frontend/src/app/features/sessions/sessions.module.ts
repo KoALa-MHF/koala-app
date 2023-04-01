@@ -23,6 +23,9 @@ import { DialogModule } from 'primeng/dialog';
 import { SliderModule } from 'primeng/slider';
 import { AccordionModule } from 'primeng/accordion';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { SidebarModule } from 'primeng/sidebar';
+import { DividerModule } from 'primeng/divider';
+import { ToolbarModule } from 'primeng/toolbar';
 
 import { QRCodeModule } from 'angularx-qrcode';
 
@@ -112,6 +115,9 @@ import { MarkerOverviewListComponent } from './components/marker-overview-list/m
     AccordionModule,
     OverlayPanelModule,
     QRCodeModule,
+    SidebarModule,
+    DividerModule,
+    ToolbarModule,
   ],
   providers: [
     SessionsService,

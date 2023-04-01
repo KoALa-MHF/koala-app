@@ -11,6 +11,7 @@ import { DataPoint, Display } from '../../components/annotation/annotation.compo
 import { Marker } from '../../types/marker.entity';
 import { MarkerType } from '../../../../graphql/generated/graphql';
 import { ToolbarMode } from '../../components/marker-toolbar/marker-toolbar.component';
+import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'koala-app-session',
@@ -20,6 +21,9 @@ import { ToolbarMode } from '../../components/marker-toolbar/marker-toolbar.comp
   ],
 })
 export class SessionPage implements OnInit {
+  sidePanelForm: FormGroup;
+  ToolbarMode = ToolbarMode;
+
   waveContainer!: string;
   mediaUri: string = environment.production ? 'https://koala-app.de/api/media' : 'http://localhost:4200/api/media';
   sessionId = 0;
@@ -30,8 +34,7 @@ export class SessionPage implements OnInit {
   currentAudioTime = 0;
   totalAudioTime = 0;
   audioPaused = true;
-
-  ToolbarMode = ToolbarMode;
+  showSideBar = false;
 
   constructor(
     private readonly sessionService: SessionsService,
@@ -39,8 +42,19 @@ export class SessionPage implements OnInit {
     private readonly route: ActivatedRoute,
     private mediaControlService: MediaControlService,
     private readonly messageService: MessageService,
-    private readonly translateService: TranslateService
-  ) {}
+    private readonly translateService: TranslateService,
+    private readonly formBuilder: FormBuilder
+  ) {
+    this.sidePanelForm = this.formBuilder.group({
+      details: this.formBuilder.group({
+        editable: new FormControl<boolean>(false),
+        enablePlayer: new FormControl<boolean>(false),
+        displaySampleSolution: new FormControl<boolean>(false),
+        enableLiveAnalysis: new FormControl<boolean>(false),
+      }),
+      markersArray: this.formBuilder.group({}),
+    });
+  }
 
   ngOnInit(): void {
     this.sessionId = parseInt(this.route.snapshot.paramMap.get('sessionId') || '0');
@@ -55,35 +69,57 @@ export class SessionPage implements OnInit {
       }
       this.mediaControlService.uuid = this.session.id;
       this.waveContainer = `waveContainer-${this.session.id}`;
-      try {
-        this.mediaControlService.load(`${this.mediaUri}/${this.session.media.id}`, this.waveContainer).then(() => {
-          this.mediaControlService.addEventHandler('audioprocess', (time) => {
-            // to reduce update frequency
-            this.currentAudioTime = time.toFixed(2);
-          });
-          this.mediaControlService.addEventHandler('ready', () => {
-            this.totalAudioTime = this.mediaControlService.getDuration();
-          });
-          this.mediaControlService.addEventHandler('pause', () => {
-            this.audioPaused = true;
-          });
-          this.mediaControlService.addEventHandler('play', () => {
-            this.audioPaused = false;
-          });
+      this.loadMediaData(this.session.media.id);
+      this.setSidePanelFormData();
+      this.loadMarkerData();
+    });
+  }
+
+  private loadMediaData(id: string): void {
+    try {
+      this.mediaControlService.load(`${this.mediaUri}/${id}`, this.waveContainer).then(() => {
+        this.mediaControlService.addEventHandler('audioprocess', (time) => {
+          // to reduce update frequency
+          this.currentAudioTime = time.toFixed(2);
         });
-      } catch (e) {
-        this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.BROKEN_AUDIO_FILE', 'SESSION.ERROR_DIALOG.SUMMARY');
-        console.log(e);
-      }
-      const markers = this.session?.toolbars[0]?.markers || [];
-      const markerIds: Array<number> = markers.map((marker) => parseInt(marker));
-      this.markerService.getAll(markerIds).subscribe((result) => {
-        const markers = result.data?.markers;
-        this.markers = markers;
-        for (const marker of markers) {
-          this.AnnotationData.set(marker.id, new Array<DataPoint>());
-        }
+        this.mediaControlService.addEventHandler('ready', () => {
+          this.totalAudioTime = this.mediaControlService.getDuration();
+        });
+        this.mediaControlService.addEventHandler('pause', () => {
+          this.audioPaused = true;
+        });
+        this.mediaControlService.addEventHandler('play', () => {
+          this.audioPaused = false;
+        });
       });
+    } catch (e) {
+      this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.BROKEN_AUDIO_FILE', 'SESSION.ERROR_DIALOG.SUMMARY');
+      console.log(e);
+    }
+  }
+
+  private setSidePanelFormData(): void {
+    this.sidePanelForm.get('details')?.get('editable')?.setValue(this.session.editable);
+    this.sidePanelForm.get('details')?.get('enablePlayer')?.setValue(this.session.enablePlayer);
+    this.sidePanelForm.get('details')?.get('displaySampleSolution')?.setValue(this.session.displaySampleSolution);
+    this.sidePanelForm.get('details')?.get('enableLiveAnalysis')?.setValue(this.session.enableLiveAnalysis);
+  }
+
+  private loadMarkerData(): void {
+    const markers = this.session?.toolbars[0]?.markers || [];
+    const markerIds: Array<number> = markers.map((marker) => parseInt(marker));
+    this.markerService.getAll(markerIds).subscribe((result) => {
+      const markers = result.data?.markers;
+      for (const marker of markers) {
+        const m = { hidden: false, ...marker };
+        this.markers.push(m);
+        this.markersFormGroup.addControl(marker.id + '', new FormControl(true));
+        this.AnnotationData.set(marker.id, new Array<DataPoint>());
+      }
+      this.markers = [
+        ...this.markers,
+      ];
+      this.onSidePanelFormChanges();
     });
   }
 
@@ -252,5 +288,45 @@ export class SessionPage implements OnInit {
           detail: results[detail],
         });
       });
+  }
+
+  onSidePanelFormChanges(): void {
+    this.sidePanelForm.get('markersArray')?.valueChanges.subscribe((val) => {
+      Object.keys(val).forEach((key) => {
+        this.markers.forEach((marker) => {
+          if (marker.id == Number(key)) {
+            marker.hidden = !val[key];
+          }
+        });
+      });
+      this.markers = [
+        ...this.markers,
+      ];
+    });
+    this.sidePanelForm.get('details')?.valueChanges.subscribe((details) => {
+      this.sessionService
+        .update(parseInt(this.session?.id || '0'), {
+          editable: details.editable,
+          enablePlayer: details.enablePlayer,
+          displaySampleSolution: details.displaySampleSolution,
+          enableLiveAnalysis: details.enableLiveAnalysis,
+        })
+        .subscribe({
+          error: () => {
+            this.messageService.add({
+              severity: 'error',
+              summary: this.translateService.instant('SESSION.MAINTAIN.SESSION_SETTINGS.SAVE_ERROR_MESSAGE_TITLE'),
+            });
+          },
+        });
+    });
+  }
+
+  get sessionDetailsFormGroup(): FormGroup {
+    return this.sidePanelForm.get('details') as FormGroup;
+  }
+
+  get markersFormGroup(): FormGroup {
+    return this.sidePanelForm.get('markersArray') as FormGroup;
   }
 }
