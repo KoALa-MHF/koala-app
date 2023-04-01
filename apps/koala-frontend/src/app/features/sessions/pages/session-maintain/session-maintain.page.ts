@@ -188,7 +188,8 @@ export class SessionMaintainPage implements OnInit {
         markerIds.forEach((markerId) => {
           for (let i = 0; i < markers.length; i++) {
             if (markers[i].id === markerId) {
-              this.markers.push(markers[i]);
+              const m = { hidden: false, ...markers[i] };
+              this.markers.push(m);
             }
           }
         });
@@ -228,6 +229,7 @@ export class SessionMaintainPage implements OnInit {
       abbreviation: this.maintainMarkerForm.value.abbreviation,
       color: this.maintainMarkerForm.value.color,
       icon: this.maintainMarkerForm.value.icon,
+      hidden: false,
     };
   }
 

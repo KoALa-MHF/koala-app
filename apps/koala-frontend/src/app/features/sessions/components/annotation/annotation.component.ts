@@ -45,6 +45,9 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
         });
       }
       if (changes['markers']) {
+        if (this.markers.length == 0) {
+          return;
+        }
         this.setContainerHeight();
         this.drawLines();
         this.drawTimeline();
@@ -64,19 +67,32 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   private drawLines() {
     const svgC = d3.select(`svg#${this.containerID}`);
     const svgL = d3.select(`svg#${this.labelsID}`);
-    this.markers.forEach((marker, i) => {
-      svgC.append('g').attr('id', 'row_' + (i + 1));
-      const text = marker.abbreviation || '';
-      const height = this.getPositionY(i + 1);
-      svgL.append('text').attr('y', height).text(text);
-      svgC
-        .append('line')
-        .style('stroke', 'black')
-        .attr('x1', 5)
-        .attr('x2', this.getContainerWidth())
-        .attr('y1', height)
-        .attr('y2', height);
-    });
+
+    const text = svgL.selectAll('text').data(this.markers);
+    const gRow = svgC.selectAll('g').data(this.markers);
+    const line = svgC.selectAll('line.marker').data(this.markers);
+
+    text.style('visibility', (m: Marker) => (m.hidden ? 'hidden' : 'visible'));
+    text
+      .enter()
+      .append('text')
+      .attr('y', (m: Marker) => this.getPositionY(m.id))
+      .text((m: Marker) => m.abbreviation || '');
+    gRow.style('visibility', (m: Marker) => (m.hidden ? 'hidden' : 'visible'));
+    gRow
+      .enter()
+      .append('g')
+      .attr('id', (m: Marker) => 'row_' + m.id);
+    line.style('visibility', (m: Marker) => (m.hidden ? 'hidden' : 'visible'));
+    line
+      .enter()
+      .append('line')
+      .style('stroke', 'black')
+      .attr('class', 'marker')
+      .attr('x1', 5)
+      .attr('x2', this.getContainerWidth())
+      .attr('y1', (m: Marker) => this.getPositionY(m.id))
+      .attr('y2', (m: Marker) => this.getPositionY(m.id));
   }
 
   private drawAnnotations(id: number, row: number) {
@@ -126,7 +142,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
 
     line.attr('x1', time);
     line.attr('x2', time);
-    line.attr('y1', this.getPositionY(0) + 30);
+    line.attr('y1', this.getPositionY(0));
     line.attr('y2', this.getPositionY(this.markers.length) + 20);
 
     line
@@ -178,9 +194,10 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
     const svgL = d3.select(`svg#${this.labelsID}`);
     svgC.selectAll('rect').remove();
     svgC.selectAll('circle').remove();
-    svgC.selectAll('line').remove();
+    svgC.selectAll('line.marker').remove();
     svgL.selectAll('text').remove();
     this.drawLines();
+    this.drawTimeline();
     let row = 1;
     this.annotationData.forEach((_, id) => {
       this.drawAnnotations(id, row);

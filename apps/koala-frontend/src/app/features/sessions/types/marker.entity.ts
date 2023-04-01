@@ -8,4 +8,5 @@ export interface Marker {
   abbreviation?: string | null;
   color: string;
   icon?: string | null;
+  hidden: boolean | true;
 }
