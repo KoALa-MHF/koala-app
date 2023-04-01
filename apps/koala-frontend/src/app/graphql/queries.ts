@@ -14,6 +14,9 @@ const GET_SESSIONS = gql`
       displaySampleSolution
       enableLiveAnalysis
       code
+      userSessions {
+        id
+      }
       media {
         id
         name

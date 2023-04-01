@@ -346,7 +346,7 @@ export class SessionMaintainPage implements OnInit {
   public onParticipantAdd(participant: UserSession) {
     const sessionId = parseInt(this.session?.id || '0');
     if (this.session) {
-      this.userSessionService.addParticipantToSession(sessionId, participant.user.email).subscribe({
+      this.userSessionService.addParticipantToSession(sessionId, participant.user?.email || '').subscribe({
         next: () => {
           this.loadSessionData(sessionId);
         },

@@ -579,6 +579,7 @@ export type GetSessionsQuery = {
     code: string;
     createdAt: any;
     updatedAt: any;
+    userSessions: Array<{ __typename?: 'UserSession'; id: number }>;
     media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
     toolbars: Array<{ __typename?: 'Toolbar'; id: string; markers: Array<string>; createdAt: any; updatedAt: any }>;
   }>;
@@ -888,6 +889,9 @@ export const GetSessionsDocument = gql`
       displaySampleSolution
       enableLiveAnalysis
       code
+      userSessions {
+        id
+      }
       media {
         id
         name
