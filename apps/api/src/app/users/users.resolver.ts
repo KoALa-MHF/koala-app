@@ -16,9 +16,10 @@ export class UsersResolver {
     return this.usersService.findOne(user.id);
   }
 
+  @UseGuards(AuthGuard)
   @Mutation(() => User)
   updateUser(
-    @Args('id', { type: () => Int }) id: number,
+    @CurrentUser() user: User,
     @Args('updateUserInput')
     updateUserInput: UpdateUserInput
   ) {
