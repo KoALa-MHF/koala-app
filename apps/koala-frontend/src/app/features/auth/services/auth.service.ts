@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject } from 'rxjs';
-import { AuthenticateSessionCodeGQL } from '../../../graphql/generated/graphql';
+import { AuthenticateSessionCodeGQL, GetUserGQL, UpdateUserGQL } from '../../../graphql/generated/graphql';
 import jwt_decode from 'jwt-decode';
 
 interface JWToken {
@@ -27,6 +27,8 @@ export class AuthService {
   constructor(
     private readonly router: Router,
     private readonly authenticateSessionCodeGQL: AuthenticateSessionCodeGQL,
+    private readonly meGQL: GetUserGQL,
+    private readonly updateMeGQL: UpdateUserGQL,
     private readonly messageService: MessageService,
     private readonly translate: TranslateService
   ) {
@@ -37,6 +39,10 @@ export class AuthService {
     }
 
     this.authenticatedSubject.next(this.isAccessTokenValid(this.storedUser.accessToken));
+  }
+
+  public getAccessToken() {
+    return this.storedUser.accessToken;
   }
 
   public loginViaUsername(username: string, password: string): Promise<boolean> {
@@ -91,6 +97,16 @@ export class AuthService {
     this.router.navigate([
       'auth',
     ]);
+  }
+
+  public me() {
+    return this.meGQL.fetch({}, { fetchPolicy: 'no-cache' });
+  }
+
+  public updateUser(displayName: string) {
+    return this.updateMeGQL.mutate({
+      displayName,
+    });
   }
 
   private storeUser() {

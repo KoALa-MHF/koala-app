@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { PrimeNGConfig } from 'primeng/api';
 import { LANGUAGE_CODE } from './core/components/header/header.component';
-import { AuthService } from './features/auth/services/auth.service';
 
 @Component({
   selector: 'koala-root',
@@ -12,16 +11,13 @@ import { AuthService } from './features/auth/services/auth.service';
   ],
 })
 export class AppComponent implements OnInit {
-  isAuthenticated$ = this.authService.isAuthenticated$;
+  showUserProfileDialog = false;
 
-  constructor(
-    private primengConfig: PrimeNGConfig,
-    private readonly translateService: TranslateService,
-    private readonly authService: AuthService
-  ) {}
+  constructor(private primengConfig: PrimeNGConfig, private readonly translateService: TranslateService) {}
 
   ngOnInit() {
     this.primengConfig.ripple = true;
+    this.translateService.setDefaultLang(LANGUAGE_CODE.GERMAN);
   }
 
   onLanguageChange(newLanguage: LANGUAGE_CODE) {
@@ -33,5 +29,9 @@ export class AppComponent implements OnInit {
         console.error('Language Switch Error');
       },
     });
+  }
+
+  onUserProfileEditRequest() {
+    this.showUserProfileDialog = true;
   }
 }
