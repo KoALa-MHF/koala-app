@@ -19,10 +19,13 @@ export enum LANGUAGE_CODE {
   ],
 })
 export class HeaderComponent {
-  @Output() languageChange: EventEmitter<LANGUAGE_CODE> = new EventEmitter<LANGUAGE_CODE>();
+  @Output() languageChange = new EventEmitter<LANGUAGE_CODE>();
+  @Output() userProfileEditRequest = new EventEmitter<void>();
+
   LANGUAGE_CODE = LANGUAGE_CODE;
 
   @ViewChild('languageSelector', { static: true }) languageSelector!: OverlayPanel;
+  @ViewChild('accountMenu', { static: true }) accountMenu!: OverlayPanel;
 
   isAuthenticated$ = this.authService.isAuthenticated$;
   language$ = merge(this.translateService.onDefaultLangChange, this.translateService.onLangChange).pipe(
@@ -50,6 +53,12 @@ export class HeaderComponent {
   }
 
   public onLogout() {
+    this.accountMenu.hide();
     this.authService.logout();
+  }
+
+  public onProfileEdit() {
+    this.accountMenu.hide();
+    this.userProfileEditRequest.emit();
   }
 }

@@ -1,5 +1,9 @@
 <div class="app-container">
-  <koala-header class="header" (languageChange)="onLanguageChange($event)"></koala-header>
+  <koala-header
+    class="header"
+    (languageChange)="onLanguageChange($event)"
+    (userProfileEditRequest)="onUserProfileEditRequest()"
+  ></koala-header>
 
   <div class="content content-card">
     <router-outlet></router-outlet>
@@ -9,3 +13,5 @@
 </div>
 
 <p-toast></p-toast>
+
+<koala-user-profile [(visible)]="showUserProfileDialog"></koala-user-profile>

@@ -8,9 +8,7 @@ import {
   RemoveUserSessionGQL,
 } from '../../../graphql/generated/graphql';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class UserSessionService {
   constructor(
     private readonly createUserSessionGQL: CreateUserSessionGQL,

@@ -14,9 +14,34 @@
     class="p-button-text"
   ></button>
 
-  <button *ngIf="isAuthenticated$ | async" pButton pRipple (click)="onLogout()" class="p-button-text">
-    {{ 'AUTH.MENU_ACTION.LOGOUT' | translate }}
+  <button
+    style="justify-content: center"
+    *ngIf="isAuthenticated$ | async"
+    pButton
+    pRipple
+    label=""
+    class="p-button-text"
+    (click)="accountMenu.toggle($event)"
+  >
+    <span style="font-size: x-large" class="pi pi-user"></span>
   </button>
+
+  <p-overlayPanel #accountMenu>
+    <ng-template pTemplate>
+      <button
+        *ngIf="isAuthenticated$ | async"
+        pButton
+        pRipple
+        (click)="onProfileEdit()"
+        class="p-button-text account-btn"
+      >
+        {{ 'AUTH.MENU_ACTION.PROFILE_EDIT' | translate }}
+      </button>
+      <button *ngIf="isAuthenticated$ | async" pButton pRipple (click)="onLogout()" class="p-button-text account-btn">
+        {{ 'AUTH.MENU_ACTION.LOGOUT' | translate }}
+      </button>
+    </ng-template>
+  </p-overlayPanel>
 
   <button pButton pRipple class="p-button-rounded p-button-text" (click)="languageSelector.toggle($event)">
     <i class="fi fi-{{ language$ | async }}"></i>

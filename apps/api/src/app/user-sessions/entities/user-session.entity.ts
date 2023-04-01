@@ -6,8 +6,9 @@ import { BeforeInsert, Column, Entity, Index, ManyToOne, OneToMany, PrimaryGener
 import { Annotation } from '../../annotations/entities/annotation.entity';
 import { BaseEntity } from '../../core/base.entity';
 import { Session } from '../../sessions/entities/session.entity';
+import { User } from '../../users/entities/user.entity';
 
-const nanoid = customAlphabet(nolookalikes, 7);
+const nanoid = customAlphabet(nolookalikes, 8);
 
 export enum UserSessionStatus {
   INITIAL = 'initial',
@@ -27,7 +28,7 @@ registerEnumType(UserSessionStatus, {
 @Entity()
 @Index(
   [
-    'email',
+    'user',
     'session',
   ],
   { unique: true }
@@ -52,8 +53,8 @@ export class UserSession extends BaseEntity {
   @IsNotEmpty()
   code: string;
 
-  @Column({ nullable: true, length: USER_SESSION_NOTE_MAX_LENGTH })
-  @Field({ nullable: true, description: 'User Session Note' })
+  @Column({ nullable: true, length: USER_SESSION_NOTE_MAX_LENGTH, default: '' })
+  @Field({ nullable: true, description: 'User Session Note', defaultValue: '' })
   @MaxLength(USER_SESSION_NOTE_MAX_LENGTH)
   note?: string;
 
@@ -65,10 +66,17 @@ export class UserSession extends BaseEntity {
   @Column()
   sessionId: number;
 
+  @ManyToOne(() => User, {
+    cascade: [
+      'insert',
+    ],
+  })
+  @Field((type) => User, { description: 'Associated User' })
+  @IsNotEmpty()
+  user: User;
+
   @Column()
-  @Field({ description: 'User Session Email' })
-  @IsEmail()
-  email: string;
+  userId: number;
 
   @Column({ nullable: true })
   @Field({ description: 'Invitation Date' })

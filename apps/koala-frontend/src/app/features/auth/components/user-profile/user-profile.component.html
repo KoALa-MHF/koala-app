@@ -1,0 +1,37 @@
+<p-dialog
+  header="{{ 'AUTH.PROFILE_DIALOG_TITLE' | translate }}"
+  [visible]="visible"
+  [modal]="true"
+  (visibleChange)="onClose()"
+>
+  <form [formGroup]="maintainUserProfileForm" class="form dialog-form">
+    <div>
+      <span class="p-float-label">
+        <input
+          id="display-name-input"
+          type="text"
+          pInputText
+          aria-describedby="display-name-help"
+          formControlName="displayName"
+        />
+        <label for="display-name-input">{{ 'AUTH.DISPLAY_NAME_INPUT_LABEL' | translate }}</label>
+      </span>
+      <small id="display-name-help" class="field-explanation">
+        {{ 'AUTH.DISPLAY_NAME_INPUT_EXPLANATION' | translate }}
+      </small>
+    </div>
+  </form>
+
+  <div style="display: flex; justify-content: end; margin-top: 10px">
+    <button
+      pButton
+      pRipple
+      class="p-button-raised p-button-primary"
+      type="submit"
+      [disabled]="!maintainUserProfileForm.valid || !maintainUserProfileForm.dirty"
+      (click)="onSave()"
+      label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.SAVE_BTN' | translate }}"
+      data-cy="session-data-save-btn"
+    ></button>
+  </div>
+</p-dialog>

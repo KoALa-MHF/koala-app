@@ -29,6 +29,8 @@ export type Annotation = {
   id: Scalars['Int'];
   /** Associated Marker */
   marker: Marker;
+  /** Annotation Note */
+  note?: Maybe<Scalars['String']>;
   /** Annotation Start Seconds */
   start: Scalars['Int'];
   /** Date of Last Update */
@@ -51,6 +53,8 @@ export type Authentication = {
   __typename?: 'Authentication';
   /** JWT Bearer Token */
   accessToken: Scalars['String'];
+  /** Authenticated user */
+  user: User;
 };
 
 export type CreateAnnotationInput = {
@@ -58,6 +62,8 @@ export type CreateAnnotationInput = {
   end?: InputMaybe<Scalars['Int']>;
   /** Associated Marker */
   markerId: Scalars['Int'];
+  /** Annotation Note */
+  note?: InputMaybe<Scalars['String']>;
   /** Annotation Start Seconds */
   start: Scalars['Int'];
   /** Associated User Session */
@@ -97,13 +103,18 @@ export type CreateSessionInput = {
   status?: InputMaybe<SessionStatus>;
 };
 
+export type CreateUserInput = {
+  /** User Email */
+  email?: InputMaybe<Scalars['String']>;
+};
+
 export type CreateUserSessionInput = {
-  /** User Session Email */
-  email: Scalars['String'];
   /** User Session Note */
   note?: InputMaybe<Scalars['String']>;
   /** Associated Session */
   sessionId: Scalars['Int'];
+  /** User Assopciated to the User Session */
+  user?: InputMaybe<CreateUserInput>;
 };
 
 export type InviteUserSessionInput = {
@@ -172,6 +183,7 @@ export type Mutation = {
   updateMarker: Marker;
   updateSession: Session;
   updateToolbar: Toolbar;
+  updateUser: User;
   updateUserSession: UserSession;
 };
 
@@ -243,6 +255,10 @@ export type MutationUpdateToolbarArgs = {
   updateToolbarInput: UpdateToolbarInput;
 };
 
+export type MutationUpdateUserArgs = {
+  updateUserInput: UpdateUserInput;
+};
+
 export type MutationUpdateUserSessionArgs = {
   id: Scalars['Int'];
   updateUserSessionInput: UpdateUserSessionInput;
@@ -254,6 +270,7 @@ export type Query = {
   annotations: Array<Annotation>;
   marker: Marker;
   markers: Array<Marker>;
+  me: User;
   session: Session;
   sessions: Array<Session>;
   userSession: UserSession;
@@ -334,12 +351,8 @@ export type Toolbar = {
 };
 
 export type UpdateAnnotationInput = {
-  /** Annotation End Seconds */
-  end?: InputMaybe<Scalars['Int']>;
-  /** Associated Marker */
-  markerId?: InputMaybe<Scalars['Int']>;
-  /** Annotation Start Seconds */
-  start?: InputMaybe<Scalars['Int']>;
+  /** Annotation Note */
+  note?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateMarkerInput = {
@@ -375,9 +388,28 @@ export type UpdateToolbarInput = {
   markers?: InputMaybe<Array<Scalars['String']>>;
 };
 
+export type UpdateUserInput = {
+  /** User Displayname */
+  displayName?: InputMaybe<Scalars['String']>;
+};
+
 export type UpdateUserSessionInput = {
   /** User Session Note */
   note?: InputMaybe<Scalars['String']>;
+};
+
+export type User = {
+  __typename?: 'User';
+  /** Creation Date */
+  createdAt: Scalars['DateTime'];
+  /** User Display Name */
+  displayName?: Maybe<Scalars['String']>;
+  /** User Email */
+  email?: Maybe<Scalars['String']>;
+  /** ID for User */
+  id: Scalars['ID'];
+  /** Date of Last Update */
+  updatedAt: Scalars['DateTime'];
 };
 
 export type UserSession = {
@@ -386,8 +418,6 @@ export type UserSession = {
   annotations: Array<Annotation>;
   /** Creation Date */
   createdAt: Scalars['DateTime'];
-  /** User Session Email */
-  email: Scalars['String'];
   /** ID for User Session */
   id: Scalars['Int'];
   /** Invitation Date */
@@ -400,6 +430,8 @@ export type UserSession = {
   status: UserSessionStatus;
   /** Date of Last Update */
   updatedAt: Scalars['DateTime'];
+  /** Associated User */
+  user: User;
 };
 
 export enum UserSessionStatus {
@@ -506,7 +538,7 @@ export type CreateUserSessionMutationVariables = Exact<{
 
 export type CreateUserSessionMutation = {
   __typename?: 'Mutation';
-  createUserSession: { __typename?: 'UserSession'; id: number };
+  createUserSession: { __typename?: 'UserSession'; id: number; user: { __typename?: 'User'; email?: string | null } };
 };
 
 export type InviteParticipantsMutationVariables = Exact<{
@@ -528,6 +560,15 @@ export type RemoveUserSessionMutation = {
   removeUserSession: { __typename?: 'UserSession'; id: number };
 };
 
+export type UpdateUserMutationVariables = Exact<{
+  displayName: Scalars['String'];
+}>;
+
+export type UpdateUserMutation = {
+  __typename?: 'Mutation';
+  updateUser: { __typename?: 'User'; id: string; displayName?: string | null };
+};
+
 export type GetSessionsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetSessionsQuery = {
@@ -547,6 +588,7 @@ export type GetSessionsQuery = {
     code: string;
     createdAt: any;
     updatedAt: any;
+    userSessions: Array<{ __typename?: 'UserSession'; id: number }>;
     media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
     toolbars: Array<{ __typename?: 'Toolbar'; id: string; markers: Array<string>; createdAt: any; updatedAt: any }>;
   }>;
@@ -575,7 +617,11 @@ export type GetOneSessionQuery = {
     updatedAt: any;
     media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
     toolbars: Array<{ __typename?: 'Toolbar'; id: string; markers: Array<string>; createdAt: any; updatedAt: any }>;
-    userSessions: Array<{ __typename?: 'UserSession'; id: number; email: string }>;
+    userSessions: Array<{
+      __typename?: 'UserSession';
+      id: number;
+      user: { __typename?: 'User'; email?: string | null };
+    }>;
   };
 };
 
@@ -597,6 +643,13 @@ export type GetMarkersQuery = {
     updatedAt: any;
     type: MarkerType;
   }>;
+};
+
+export type GetUserQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetUserQuery = {
+  __typename?: 'Query';
+  me: { __typename?: 'User'; id: string; displayName?: string | null; email?: string | null };
 };
 
 export const CreateNewSessionDocument = gql`
@@ -777,8 +830,11 @@ export class AuthenticateSessionCodeGQL extends Apollo.Mutation<
 }
 export const CreateUserSessionDocument = gql`
   mutation createUserSession($sessionId: Int!, $email: String!) {
-    createUserSession(createUserSessionInput: { sessionId: $sessionId, email: $email }) {
+    createUserSession(createUserSessionInput: { sessionId: $sessionId, user: { email: $email } }) {
       id
+      user {
+        email
+      }
     }
   }
 `;
@@ -839,6 +895,25 @@ export class RemoveUserSessionGQL extends Apollo.Mutation<
     super(apollo);
   }
 }
+export const UpdateUserDocument = gql`
+  mutation updateUser($displayName: String!) {
+    updateUser(updateUserInput: { displayName: $displayName }) {
+      id
+      displayName
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateUserGQL extends Apollo.Mutation<UpdateUserMutation, UpdateUserMutationVariables> {
+  override document = UpdateUserDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const GetSessionsDocument = gql`
   query GetSessions {
     sessions {
@@ -853,6 +928,9 @@ export const GetSessionsDocument = gql`
       displaySampleSolution
       enableLiveAnalysis
       code
+      userSessions {
+        id
+      }
       media {
         id
         name
@@ -911,7 +989,9 @@ export const GetOneSessionDocument = gql`
       }
       userSessions {
         id
-        email
+        user {
+          email
+        }
       }
       createdAt
       updatedAt
@@ -950,6 +1030,26 @@ export const GetMarkersDocument = gql`
 })
 export class GetMarkersGQL extends Apollo.Query<GetMarkersQuery, GetMarkersQueryVariables> {
   override document = GetMarkersDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const GetUserDocument = gql`
+  query getUser {
+    me {
+      id
+      displayName
+      email
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class GetUserGQL extends Apollo.Query<GetUserQuery, GetUserQueryVariables> {
+  override document = GetUserDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

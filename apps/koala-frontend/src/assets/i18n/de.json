@@ -280,8 +280,12 @@
   },
   "AUTH": {
     "MENU_ACTION": {
-      "LOGOUT": "Ausloggen"
+      "LOGOUT": "Ausloggen",
+      "PROFILE_EDIT": "Profil"
     },
+    "DISPLAY_NAME_INPUT_LABEL": "Anzeigename",
+    "DISPLAY_NAME_INPUT_EXPLANATION": "Hier können Sie den Namen ändern, der im Sessionscreen angezeigt wird",
+    "PROFILE_DIALOG_TITLE": "Profil Pflegen",
     "LOGIN": {
       "SESSION_CODE_PLACEHOLDER": "Session Code",
       "SESSION_CODE_LOGIN_ERROR_MESSAGE": "Anmeldung mit Session Code nicht erfolgreich"

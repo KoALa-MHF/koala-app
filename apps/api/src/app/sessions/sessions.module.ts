@@ -6,6 +6,7 @@ import { Session } from './entities/session.entity';
 import { MediaModule } from '../media/media.module';
 import { ToolbarsModule } from '../toolbars/toolbars.module';
 import { UserSessionsModule } from '../user-sessions/user-sessions.module';
+import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { UserSessionsModule } from '../user-sessions/user-sessions.module';
       Session,
     ]),
     MediaModule,
+    UsersModule,
     forwardRef(() => ToolbarsModule),
     forwardRef(() => UserSessionsModule),
   ],

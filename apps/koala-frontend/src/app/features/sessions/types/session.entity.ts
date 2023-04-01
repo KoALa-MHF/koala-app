@@ -1,6 +1,7 @@
 import { SessionStatus } from '../../../graphql/generated/graphql';
 import { Media } from './media.entity';
 import { Toolbar } from './toolbar.entity';
+import { UserSession } from './user-session.entity';
 
 export interface Session {
   id: string;
@@ -18,4 +19,5 @@ export interface Session {
   toolbars: Toolbar[];
   createdAt: Date;
   updatedAt: Date;
+  userSessions?: UserSession[];
 }

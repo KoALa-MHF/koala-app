@@ -1,5 +1,6 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
+import { ANNOTATION_NOTE_MAX_LENGTH } from '../entities/annotation.entity';
 
 @InputType()
 export class CreateAnnotationInput {
@@ -17,4 +18,9 @@ export class CreateAnnotationInput {
   @Field(() => Int, { description: 'Associated User Session' })
   @IsNotEmpty()
   userSessionId: number;
+
+  @Field({ defaultValue: '', description: 'Annotation Note' })
+  @MaxLength(ANNOTATION_NOTE_MAX_LENGTH)
+  @IsOptional()
+  note?: string;
 }

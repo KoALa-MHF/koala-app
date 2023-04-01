@@ -19,7 +19,7 @@
   </ng-template>
   <ng-template pTemplate="body" let-participant>
     <tr>
-      <td>{{ participant.email }}</td>
+      <td>{{ participant.user.email }}</td>
       <td>
         <button
           pButton
@@ -91,7 +91,8 @@
   [objectIdentifier]="selectedParticipant"
   title="{{ 'SESSION.MAINTAIN.PARTICIPANTS.DELETE_CONFIRM_DIALOG.TITLE' | translate }}"
   confirmText="{{
-    'SESSION.MAINTAIN.PARTICIPANTS.DELETE_CONFIRM_DIALOG.EXPLANATION' | translate: { email: selectedParticipant?.email }
+    'SESSION.MAINTAIN.PARTICIPANTS.DELETE_CONFIRM_DIALOG.EXPLANATION'
+      | translate: { email: selectedParticipant?.user?.email }
   }}"
   (cancel)="onDeleteCancel()"
   (confirm)="onDelete($event)"

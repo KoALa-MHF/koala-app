@@ -5,9 +5,13 @@ import { CreateAnnotationInput } from './dto/create-annotation.input';
 import { UpdateAnnotationInput } from './dto/update-annotation.input';
 import { MarkersService } from '../markers/markers.service';
 import { UserSessionsService } from '../user-sessions/user-sessions.service';
-import { forwardRef, Inject } from '@nestjs/common';
+import { forwardRef, Inject, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '../core/guards/auth.guard';
+import { CurrentUser } from '../core/decorators/user.decorator';
+import { User } from '../users/entities/user.entity';
 
 @Resolver(() => Annotation)
+@UseGuards(AuthGuard)
 export class AnnotationsResolver {
   constructor(
     private readonly annotationsService: AnnotationsService,
@@ -17,8 +21,11 @@ export class AnnotationsResolver {
   ) {}
 
   @Mutation(() => Annotation)
-  createAnnotation(@Args('createAnnotationInput') createAnnotationInput: CreateAnnotationInput) {
-    return this.annotationsService.create(createAnnotationInput);
+  createAnnotation(
+    @Args('createAnnotationInput') createAnnotationInput: CreateAnnotationInput,
+    @CurrentUser() user: User
+  ) {
+    return this.annotationsService.create(createAnnotationInput, user);
   }
 
   @Query(
@@ -27,26 +34,27 @@ export class AnnotationsResolver {
     ],
     { name: 'annotations' }
   )
-  findAll() {
-    return this.annotationsService.findAll();
+  findAll(@CurrentUser() user: User) {
+    return this.annotationsService.findAll(user);
   }
 
   @Query(() => Annotation, { name: 'annotation' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.annotationsService.findOne(id);
+  findOne(@Args('id', { type: () => Int }) id: number, @CurrentUser() user: User) {
+    return this.annotationsService.findOne(id, user);
   }
 
   @Mutation(() => Annotation)
   updateAnnotation(
     @Args('id', { type: () => Int }) id: number,
-    @Args('updateAnnotationInput') updateAnnotationInput: UpdateAnnotationInput
+    @Args('updateAnnotationInput') updateAnnotationInput: UpdateAnnotationInput,
+    @CurrentUser() user: User
   ) {
-    return this.annotationsService.update(id, updateAnnotationInput);
+    return this.annotationsService.update(id, updateAnnotationInput, user);
   }
 
   @Mutation(() => Annotation)
-  removeAnnotation(@Args('id', { type: () => Int }) id: number) {
-    return this.annotationsService.remove(id);
+  removeAnnotation(@Args('id', { type: () => Int }) id: number, @CurrentUser() user: User) {
+    return this.annotationsService.remove(id, user);
   }
 
   @ResolveField()

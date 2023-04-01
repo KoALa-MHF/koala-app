@@ -22,9 +22,7 @@ export interface MediaEvent {
   value?: number;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class MediaControlService {
   uuid!: string | HTMLElement;
   defaultOptions: WaveSurferParams = {

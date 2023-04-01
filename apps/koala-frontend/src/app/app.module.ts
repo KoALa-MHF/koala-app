@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpHeaders, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
@@ -22,6 +22,7 @@ import { AuthModule } from './features/auth/auth.module';
 import { LayoutComponent } from './layout.component';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { AuthInterceptor } from './features/auth/http-interceptors/auth-interceptor';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -42,7 +43,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserAnimationsModule,
     AppRoutingModule,
     TranslateModule.forRoot({
-      defaultLanguage: LANGUAGE_CODE.GERMAN,
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
@@ -54,6 +54,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ToastModule,
   ],
   providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     {
       provide: APOLLO_OPTIONS,
       useFactory(httpLink: HttpLink) {
