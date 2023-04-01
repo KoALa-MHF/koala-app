@@ -37,41 +37,42 @@
 </div>
 
 <p-sidebar [(visible)]="showSideBar" position="right">
-  <h3>Freigaben</h3>
-  <form [formGroup]="sessionDetailsFormGroup" class="form">
-    <p-checkbox
-      class="form-single-cell"
-      formControlName="editable"
-      [binary]="true"
-      label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.EDIT_ENABLED_LABEL' | translate }}"
-      data-cy="session-maintain-editable-check"
-    ></p-checkbox>
-
-    <p-checkbox
-      class="form-single-cell"
-      formControlName="enablePlayer"
-      [binary]="true"
-      label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.PLAYER_ENABLED_LABEL' | translate }}"
-      data-cy="session-maintain-player-check"
-    ></p-checkbox>
-
-    <p-checkbox
-      class="form-single-cell"
-      formControlName="displaySampleSolution"
-      [binary]="true"
-      label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.SAMPLE_SOLUTION_ENABLED_LABEL' | translate }}"
-      data-cy="session-maintain-sample-solution-check"
-    ></p-checkbox>
-
-    <p-checkbox
-      class="form-single-cell"
-      formControlName="enableLiveAnalysis"
-      [binary]="true"
-      label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.ANALYSIS_ENABLED_LABEL' | translate }}"
-      data-cy="session-maintain-analysis-check"
-    ></p-checkbox>
+  <form [formGroup]="sessionDetailsFormGroup">
+    <div class="form-group">
+      <b>Freigaben</b>
+    </div>
+    <div>
+      <p-checkbox
+        formControlName="editable"
+        [binary]="true"
+        label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.EDIT_ENABLED_LABEL' | translate }}"
+      ></p-checkbox>
+    </div>
+    <div>
+      <p-checkbox
+        formControlName="enablePlayer"
+        [binary]="true"
+        label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.PLAYER_ENABLED_LABEL' | translate }}"
+      ></p-checkbox>
+    </div>
+    <div>
+      <p-checkbox
+        formControlName="displaySampleSolution"
+        [binary]="true"
+        label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.SAMPLE_SOLUTION_ENABLED_LABEL' | translate }}"
+      ></p-checkbox>
+    </div>
+    <div>
+      <p-checkbox
+        formControlName="enableLiveAnalysis"
+        [binary]="true"
+        label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.ANALYSIS_ENABLED_LABEL' | translate }}"
+      ></p-checkbox>
+    </div>
   </form>
+
   <p-divider></p-divider>
+
   <form [formGroup]="sidePanelForm">
     <div class="form-group">
       <b>Markers</b>
