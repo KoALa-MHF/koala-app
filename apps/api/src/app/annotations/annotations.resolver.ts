@@ -28,16 +28,6 @@ export class AnnotationsResolver {
     return this.annotationsService.create(createAnnotationInput, user);
   }
 
-  @Query(
-    () => [
-      Annotation,
-    ],
-    { name: 'annotations' }
-  )
-  findAll(@CurrentUser() user: User) {
-    return this.annotationsService.findAll(user);
-  }
-
   @Query(() => Annotation, { name: 'annotation' })
   findOne(@Args('id', { type: () => Int }) id: number, @CurrentUser() user: User) {
     return this.annotationsService.findOne(id, user);
