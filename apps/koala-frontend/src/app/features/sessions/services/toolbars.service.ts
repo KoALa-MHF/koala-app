@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UpdateToolbarGQL, UpdateToolbarInput } from '../../../graphql/generated/graphql';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class ToolbarsService {
   constructor(private readonly updateToolbarGQL: UpdateToolbarGQL) {}
 

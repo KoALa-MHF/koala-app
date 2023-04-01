@@ -90,3 +90,13 @@ const GET_MARKERS = gql`
     }
   }
 `;
+
+const GET_USER = gql`
+  query getUser {
+    me {
+      id
+      displayName
+      email
+    }
+  }
+`;

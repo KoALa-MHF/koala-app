@@ -5,9 +5,7 @@ import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
 import { MutationResult } from 'apollo-angular';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class MediaService {
   constructor(private readonly http: HttpClient) {}
 

@@ -560,6 +560,15 @@ export type RemoveUserSessionMutation = {
   removeUserSession: { __typename?: 'UserSession'; id: number };
 };
 
+export type UpdateUserMutationVariables = Exact<{
+  displayName: Scalars['String'];
+}>;
+
+export type UpdateUserMutation = {
+  __typename?: 'Mutation';
+  updateUser: { __typename?: 'User'; id: string; displayName?: string | null };
+};
+
 export type GetSessionsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetSessionsQuery = {
@@ -630,6 +639,13 @@ export type GetMarkersQuery = {
     updatedAt: any;
     type: MarkerType;
   }>;
+};
+
+export type GetUserQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetUserQuery = {
+  __typename?: 'Query';
+  me: { __typename?: 'User'; id: string; displayName?: string | null; email: string };
 };
 
 export const CreateNewSessionDocument = gql`
@@ -875,6 +891,25 @@ export class RemoveUserSessionGQL extends Apollo.Mutation<
     super(apollo);
   }
 }
+export const UpdateUserDocument = gql`
+  mutation updateUser($displayName: String!) {
+    updateUser(updateUserInput: { displayName: $displayName }) {
+      id
+      displayName
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateUserGQL extends Apollo.Mutation<UpdateUserMutation, UpdateUserMutationVariables> {
+  override document = UpdateUserDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const GetSessionsDocument = gql`
   query GetSessions {
     sessions {
@@ -991,6 +1026,26 @@ export const GetMarkersDocument = gql`
 })
 export class GetMarkersGQL extends Apollo.Query<GetMarkersQuery, GetMarkersQueryVariables> {
   override document = GetMarkersDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const GetUserDocument = gql`
+  query getUser {
+    me {
+      id
+      displayName
+      email
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class GetUserGQL extends Apollo.Query<GetUserQuery, GetUserQueryVariables> {
+  override document = GetUserDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

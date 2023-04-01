@@ -130,3 +130,12 @@ const REMOVE_USERSESSION = gql`
     }
   }
 `;
+
+const UPDATE_USER = gql`
+  mutation updateUser($displayName: String!) {
+    updateUser(updateUserInput: { displayName: $displayName }) {
+      id
+      displayName
+    }
+  }
+`;
