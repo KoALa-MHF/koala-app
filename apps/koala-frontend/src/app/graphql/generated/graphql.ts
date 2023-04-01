@@ -29,6 +29,8 @@ export type Annotation = {
   id: Scalars['Int'];
   /** Associated Marker */
   marker: Marker;
+  /** Annotation Note */
+  note?: Maybe<Scalars['String']>;
   /** Annotation Start Seconds */
   start: Scalars['Int'];
   /** Date of Last Update */
@@ -60,6 +62,8 @@ export type CreateAnnotationInput = {
   end?: InputMaybe<Scalars['Int']>;
   /** Associated Marker */
   markerId: Scalars['Int'];
+  /** Annotation Note */
+  note?: InputMaybe<Scalars['String']>;
   /** Annotation Start Seconds */
   start: Scalars['Int'];
   /** Associated User Session */
@@ -101,7 +105,7 @@ export type CreateSessionInput = {
 
 export type CreateUserInput = {
   /** User Email */
-  email: Scalars['String'];
+  email?: InputMaybe<Scalars['String']>;
 };
 
 export type CreateUserSessionInput = {
@@ -110,7 +114,7 @@ export type CreateUserSessionInput = {
   /** Associated Session */
   sessionId: Scalars['Int'];
   /** User Assopciated to the User Session */
-  user: CreateUserInput;
+  user?: InputMaybe<CreateUserInput>;
 };
 
 export type InviteUserSessionInput = {
@@ -347,12 +351,8 @@ export type Toolbar = {
 };
 
 export type UpdateAnnotationInput = {
-  /** Annotation End Seconds */
-  end?: InputMaybe<Scalars['Int']>;
-  /** Associated Marker */
-  markerId?: InputMaybe<Scalars['Int']>;
-  /** Annotation Start Seconds */
-  start?: InputMaybe<Scalars['Int']>;
+  /** Annotation Note */
+  note?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateMarkerInput = {
@@ -405,7 +405,7 @@ export type User = {
   /** User Display Name */
   displayName?: Maybe<Scalars['String']>;
   /** User Email */
-  email: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
   /** ID for User */
   id: Scalars['ID'];
   /** Date of Last Update */
@@ -538,7 +538,7 @@ export type CreateUserSessionMutationVariables = Exact<{
 
 export type CreateUserSessionMutation = {
   __typename?: 'Mutation';
-  createUserSession: { __typename?: 'UserSession'; id: number; user: { __typename?: 'User'; email: string } };
+  createUserSession: { __typename?: 'UserSession'; id: number; user: { __typename?: 'User'; email?: string | null } };
 };
 
 export type InviteParticipantsMutationVariables = Exact<{
@@ -617,7 +617,11 @@ export type GetOneSessionQuery = {
     updatedAt: any;
     media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
     toolbars: Array<{ __typename?: 'Toolbar'; id: string; markers: Array<string>; createdAt: any; updatedAt: any }>;
-    userSessions: Array<{ __typename?: 'UserSession'; id: number; user: { __typename?: 'User'; email: string } }>;
+    userSessions: Array<{
+      __typename?: 'UserSession';
+      id: number;
+      user: { __typename?: 'User'; email?: string | null };
+    }>;
   };
 };
 
@@ -645,7 +649,7 @@ export type GetUserQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetUserQuery = {
   __typename?: 'Query';
-  me: { __typename?: 'User'; id: string; displayName?: string | null; email: string };
+  me: { __typename?: 'User'; id: string; displayName?: string | null; email?: string | null };
 };
 
 export const CreateNewSessionDocument = gql`
