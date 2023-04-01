@@ -62,7 +62,9 @@ const GET_ONE_SESSION = gql`
       }
       userSessions {
         id
-        email
+        user {
+          email
+        }
       }
       createdAt
       updatedAt

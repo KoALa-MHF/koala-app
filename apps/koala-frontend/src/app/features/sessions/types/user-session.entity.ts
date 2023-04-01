@@ -1,4 +1,6 @@
 export interface UserSession {
   id: number;
-  email: string;
+  user: {
+    email: string;
+  };
 }
