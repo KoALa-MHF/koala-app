@@ -33,7 +33,9 @@ export class SessionMarkerLibraryComponent implements OnInit {
 
   private loadAllMarker() {
     this.markerService.getAll().subscribe((result) => {
-      this.markers = result.data.markers;
+      this.markers = result.data.markers.map((marker) => {
+        return { ...marker, hidden: false };
+      });
     });
   }
 }
