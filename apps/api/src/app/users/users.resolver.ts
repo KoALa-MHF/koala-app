@@ -23,6 +23,6 @@ export class UsersResolver {
     @Args('updateUserInput')
     updateUserInput: UpdateUserInput
   ) {
-    return this.usersService.update(id, updateUserInput);
+    return this.usersService.update(user.id, updateUserInput);
   }
 }
