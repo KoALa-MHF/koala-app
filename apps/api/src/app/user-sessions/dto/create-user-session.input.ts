@@ -1,5 +1,5 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
-import { IsEmail, IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
+import { IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
 import { CreateUserInput } from '../../users/dto/create-user.input';
 import { USER_SESSION_NOTE_MAX_LENGTH } from '../entities/user-session.entity';
 
@@ -11,9 +11,10 @@ export class CreateUserSessionInput {
 
   @Field({ defaultValue: '', description: 'User Session Note' })
   @MaxLength(USER_SESSION_NOTE_MAX_LENGTH)
+  @IsOptional()
   note?: string;
 
-  @Field(() => CreateUserInput, { description: 'User Assopciated to the User Session' })
-  @IsNotEmpty()
-  user: CreateUserInput;
+  @Field(() => CreateUserInput, { description: 'User Assopciated to the User Session', nullable: true })
+  @IsOptional()
+  user?: CreateUserInput;
 }

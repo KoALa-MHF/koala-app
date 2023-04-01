@@ -1,5 +1,5 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { AfterLoad, AfterUpdate, BeforeUpdate, Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { AfterLoad, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '../../core/base.entity';
 
 @ObjectType()
@@ -16,10 +16,12 @@ export class User extends BaseEntity {
   @Field({ description: 'User Display Name', nullable: true, defaultValue: '' })
   displayName?: string;
 
-  @Column()
-  @Field({ description: 'User Email' })
-  @Index()
-  email: string;
+  @Column({
+    nullable: true,
+    unique: true,
+  })
+  @Field({ description: 'User Email', nullable: true })
+  email?: string;
 
   @Column({
     nullable: true,
@@ -27,7 +29,7 @@ export class User extends BaseEntity {
   samlId?: string;
 
   @AfterLoad()
-  async updateDisplayName() {
+  async updateDefaultValues() {
     this.displayName = this.displayName || '';
   }
 

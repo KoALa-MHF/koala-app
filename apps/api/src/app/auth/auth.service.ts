@@ -33,9 +33,6 @@ export class AuthService {
 
       const userSession = await this.userSessionService.create({
         sessionId: session.id,
-        user: {
-          email: 'test' + new Date().getTime() + '@koala-app.de',
-        },
       } as CreateUserSessionInput);
 
       return this.getAuthentication(userSession.userId);
