@@ -1,6 +1,15 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { UserSessionsService } from '../user-sessions/user-sessions.service';
+import { User } from '../users/entities/user.entity';
 import { CreateAnnotationInput } from './dto/create-annotation.input';
 import { UpdateAnnotationInput } from './dto/update-annotation.input';
 import { Annotation } from './entities/annotation.entity';
@@ -9,10 +18,14 @@ import { Annotation } from './entities/annotation.entity';
 export class AnnotationsService {
   constructor(
     @InjectRepository(Annotation)
-    private annotationsRepository: Repository<Annotation>
+    private annotationsRepository: Repository<Annotation>,
+    @Inject(forwardRef(() => UserSessionsService))
+    private readonly userSessionsService: UserSessionsService
   ) {}
 
-  create(createMarkerInput: CreateAnnotationInput) {
+  async create(createMarkerInput: CreateAnnotationInput, user: User) {
+    const userSession = await this.userSessionsService.findOne(createMarkerInput.userSessionId, user);
+
     const newAnnotation = this.annotationsRepository.create({
       start: createMarkerInput.start,
       end: createMarkerInput.end,
@@ -20,42 +33,53 @@ export class AnnotationsService {
         id: createMarkerInput.markerId,
       },
       userSession: {
-        id: createMarkerInput.userSessionId,
+        id: userSession.id,
       },
+      note: createMarkerInput.note,
     });
 
     return this.annotationsRepository.save(newAnnotation);
   }
 
-  findAll(userSessionId?: number) {
-    return this.annotationsRepository.find({
-      where: {
-        userSessionId,
-      },
+  findAllByUserSession(userSessionId: number) {
+    return this.annotationsRepository.findBy({
+      userSessionId,
     });
   }
 
-  findOne(id: number) {
-    return this.annotationsRepository.findOneByOrFail({ id });
-  }
+  async findOne(id: number, user?: User) {
+    const annotation = await this.annotationsRepository.findOne({
+      where: { id },
+      relations: {
+        userSession: true,
+      },
+    });
 
-  async update(id: number, updateAnnotationInput: UpdateAnnotationInput) {
-    try {
-      await this.annotationsRepository.update(id, {
-        start: updateAnnotationInput.start,
-        end: updateAnnotationInput.end,
-        marker: {
-          id: updateAnnotationInput.markerId,
-        },
-      });
-
-      return this.findOne(id);
-    } catch (error) {
-      throw new BadRequestException(error.detail);
+    if (!annotation) {
+      throw new NotFoundException();
     }
+
+    if (user && annotation.userSession.userId !== user.id) {
+      throw new ForbiddenException();
+    }
+
+    return annotation;
   }
 
-  remove(id: number) {
-    return this.annotationsRepository.delete(id);
+  async update(id: number, updateAnnotationInput: UpdateAnnotationInput, user: User) {
+    const annotation = await this.findOne(id, user);
+
+    this.annotationsRepository.merge(annotation, {
+      note: updateAnnotationInput.note,
+    });
+
+    return this.annotationsRepository.save(annotation);
+  }
+
+  async remove(id: number, user: User) {
+    const annotation = await this.findOne(id, user);
+    await this.annotationsRepository.remove(annotation);
+    annotation.id = id;
+    return annotation;
   }
 }

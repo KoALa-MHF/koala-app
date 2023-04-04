@@ -121,6 +121,8 @@
         "MARKER_PLACEMENT_EXPLANATION": "Per Drag&Drop lassen sich die Marker individuell anordnen.",
         "MARKER_CREATION_SUCCESS_MESSAGE_TITLE": "Marker erfolgreich erstellt und der Session hinzugefügt",
         "MARKER_CREATION_ERROR_MESSAGE_TITLE": "Markererstellung fehlgeschlagen",
+        "LOAD_MARKER_BTN": "Marker Laden",
+        "LOAD_MARKER_DIALOG_TITLE": "Marker",
         "DELETE_CONFIRM_DIALOG": {
           "TITLE": "Marker aus Session Entfernen",
           "EXPLANATION": "Wollen Sie wirklich den Marker '{{markerName}}' aus der Session entfernen?",
@@ -278,8 +280,12 @@
   },
   "AUTH": {
     "MENU_ACTION": {
-      "LOGOUT": "Ausloggen"
+      "LOGOUT": "Ausloggen",
+      "PROFILE_EDIT": "Profil"
     },
+    "DISPLAY_NAME_INPUT_LABEL": "Anzeigename",
+    "DISPLAY_NAME_INPUT_EXPLANATION": "Hier können Sie den Namen ändern, der im Sessionscreen angezeigt wird",
+    "PROFILE_DIALOG_TITLE": "Profil Pflegen",
     "LOGIN": {
       "SESSION_CODE_PLACEHOLDER": "Session Code",
       "SESSION_CODE_LOGIN_ERROR_MESSAGE": "Anmeldung mit Session Code nicht erfolgreich"

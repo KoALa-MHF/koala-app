@@ -31,7 +31,7 @@ export class SessionQrcodeComponent implements OnChanges {
       if (propName === 'session') {
         const change = changes[propName];
 
-        this.buildUrl(change.currentValue.code);
+        this.buildUrl(change.currentValue?.code);
       }
     }
   }

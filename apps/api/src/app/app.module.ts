@@ -25,6 +25,8 @@ import { Toolbar } from './toolbars/entities/toolbar.entity';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+import { User } from './users/entities/user.entity';
 
 @Module({
   imports: [
@@ -39,6 +41,7 @@ import { AuthModule } from './auth/auth.module';
         Marker,
         Annotation,
         UserSession,
+        User,
         Toolbar,
       ],
       synchronize: true,
@@ -78,6 +81,7 @@ import { AuthModule } from './auth/auth.module';
     MediaModule,
     MarkersModule,
     UserSessionsModule,
+    UsersModule,
     AnnotationsModule,
   ],
   controllers: [

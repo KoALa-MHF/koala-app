@@ -60,6 +60,8 @@ import { UserSessionService } from './services/user-session.service';
 import { MarkerIconComponent } from './components/marker-icon/marker-icon.component';
 import { AnnotationComponent } from './components/annotation/annotation.component';
 import { SessionQrcodeComponent } from './components/session-qrcode/session-qrcode.component';
+import { SessionMarkerLibraryComponent } from './components/session-marker-library/session-marker-library.component';
+import { MarkerOverviewListComponent } from './components/marker-overview-list/marker-overview-list.component';
 
 @NgModule({
   declarations: [
@@ -87,6 +89,8 @@ import { SessionQrcodeComponent } from './components/session-qrcode/session-qrco
     MarkerIconComponent,
     AnnotationComponent,
     SessionQrcodeComponent,
+    SessionMarkerLibraryComponent,
+    MarkerOverviewListComponent,
   ],
   imports: [
     SharedModule,

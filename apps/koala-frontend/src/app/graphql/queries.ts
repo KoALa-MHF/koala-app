@@ -14,6 +14,9 @@ const GET_SESSIONS = gql`
       displaySampleSolution
       enableLiveAnalysis
       code
+      userSessions {
+        id
+      }
       media {
         id
         name
@@ -62,7 +65,9 @@ const GET_ONE_SESSION = gql`
       }
       userSessions {
         id
-        email
+        user {
+          email
+        }
       }
       createdAt
       updatedAt
@@ -82,6 +87,16 @@ const GET_MARKERS = gql`
       createdAt
       updatedAt
       type
+    }
+  }
+`;
+
+const GET_USER = gql`
+  query getUser {
+    me {
+      id
+      displayName
+      email
     }
   }
 `;

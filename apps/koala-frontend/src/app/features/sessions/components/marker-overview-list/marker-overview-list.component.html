@@ -1,0 +1,28 @@
+<p-table [value]="markers" [(selection)]="selectedMarkers" dataKey="id" [scrollable]="true" scrollHeight="300px">
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 4rem">
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
+      <th>Name</th>
+      <th>Abbreviation/Icon</th>
+      <th>Description</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-marker>
+    <tr>
+      <td>
+        <p-tableCheckbox [value]="marker"></p-tableCheckbox>
+      </td>
+      <td>{{ marker.name }}</td>
+      <td>
+        <span *ngIf="marker.abbreviation">{{ marker.abbreviation }}</span>
+        <koala-marker-icon *ngIf="marker.icon" [iconCode]="marker.icon"></koala-marker-icon>
+      </td>
+      <td>{{ marker.description }}</td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="summary">
+    <p-button (click)="addMarker()" label="Marker Hinzufügen"></p-button>
+  </ng-template>
+</p-table>

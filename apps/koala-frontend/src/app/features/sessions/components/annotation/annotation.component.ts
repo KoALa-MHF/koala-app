@@ -80,7 +80,6 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
     text.enter().each((m: Marker, i: number, elements: any) => {
       this.drawLineText(m, elements[i]);
     });
-
     gRow.style('visibility', (m: Marker) => (m.hidden ? 'hidden' : 'visible'));
     gRow
       .enter()

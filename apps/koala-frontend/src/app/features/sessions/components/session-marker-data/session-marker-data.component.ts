@@ -18,6 +18,7 @@ export class SessionMarkerDataComponent {
 
   @Output() resetMarkerData = new EventEmitter();
   @Output() markerAdd = new EventEmitter();
+  @Output() multiMarkerAdd = new EventEmitter();
   @Output() markerSortChange = new EventEmitter<Marker[]>();
 
   public onReset() {
@@ -26,6 +27,10 @@ export class SessionMarkerDataComponent {
 
   public onAddMarker() {
     this.markerAdd.emit();
+  }
+
+  public onAddMultipleMarkers(markers: Marker[]) {
+    this.multiMarkerAdd.emit(markers);
   }
 
   public onSortChange(markers: Marker[]) {

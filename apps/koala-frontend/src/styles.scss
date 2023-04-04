@@ -10,3 +10,35 @@ body {
   background: url('assets/bg_koala.png') no-repeat center fixed;
   background-size: cover;
 }
+
+@font-face {
+  font-family: 'Noto Music';
+  src: url('./assets/fonts/NotoMusic-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Noto Emoji';
+  src: url('./assets/fonts/NotoEmoji-Regular.ttf');
+}
+
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.form * {
+  width: 100%;
+}
+
+.form > * {
+  padding-right: 30px;
+}
+
+.field-explanation {
+  opacity: 50%;
+  display: inline-block;
+  padding-left: 15px;
+}

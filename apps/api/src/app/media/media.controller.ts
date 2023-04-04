@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  InternalServerErrorException,
-  NotFoundException,
-  Param,
-  Res,
-  StreamableFile,
-} from '@nestjs/common';
+import { Controller, Get, InternalServerErrorException, NotFoundException, Param, Res } from '@nestjs/common';
 import { createReadStream } from 'fs';
 import { MediaService } from './media.service';
 import type { Response } from 'express';

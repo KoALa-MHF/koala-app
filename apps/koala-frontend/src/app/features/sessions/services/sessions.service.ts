@@ -17,9 +17,7 @@ import {
 } from '../../../graphql/generated/graphql';
 import { Session } from '../types/session.entity';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class SessionsService {
   allSessionsQuery: QueryRef<GetSessionsQuery, Exact<{ [key: string]: never }>>;
 
