@@ -1,5 +1,6 @@
 import { Component, Input, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import { Marker } from '../../types/marker.entity';
+import { MarkerService } from '../../services/marker.service';
 import * as d3 from 'd3';
 
 export enum Display {
@@ -34,6 +35,8 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   private containerID = 'd3-container';
   private labelsID = 'd3-labels';
 
+  constructor(private readonly markerService: MarkerService) {}
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes) {
       if (changes['currentTime']) {
@@ -65,19 +68,19 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   }
 
   private drawLines() {
+    this.markerService.getIconByCode('');
     const svgC = d3.select(`svg#${this.containerID}`);
     const svgL = d3.select(`svg#${this.labelsID}`);
 
-    const text = svgL.selectAll('text').data(this.markers);
+    const text = svgL.selectAll('text,foreignObject').data(this.markers);
     const gRow = svgC.selectAll('g').data(this.markers);
     const line = svgC.selectAll('line.marker').data(this.markers);
 
     text.style('visibility', (m: Marker) => (m.hidden ? 'hidden' : 'visible'));
-    text
-      .enter()
-      .append('text')
-      .attr('y', (m: Marker) => this.getPositionY(m.id))
-      .text((m: Marker) => m.abbreviation || '');
+    text.enter().each((m: Marker, i: number, elements: any) => {
+      this.drawLineText(m, elements[i]);
+    });
+
     gRow.style('visibility', (m: Marker) => (m.hidden ? 'hidden' : 'visible'));
     gRow
       .enter()
@@ -93,6 +96,28 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
       .attr('x2', this.getContainerWidth())
       .attr('y1', (m: Marker) => this.getPositionY(m.id))
       .attr('y2', (m: Marker) => this.getPositionY(m.id));
+  }
+
+  private drawLineText(m: Marker, element: any) {
+    const height = this.getPositionY(m.id);
+    element = d3
+      .select(element)
+      .append('svg:foreignObject')
+      .attr('width', '30px')
+      .attr('height', '30px')
+      .attr('y', height - 10)
+      .attr('id', `marker_text${m.id}`);
+    if (m.icon) {
+      const icon = this.markerService.getIconByCode(m.icon);
+      element.attr('font-family', 'primeicons');
+      if ((icon && icon.source === 'noto') || (icon && icon.source === 'noto_emoji')) {
+        element.html(icon?.code || '').style('font-size', 'x-large');
+      } else {
+        element.attr('class', `pi pi-${icon?.code}`);
+      }
+    } else {
+      element.text(m.abbreviation || '');
+    }
   }
 
   private drawAnnotations(id: number, row: number) {
