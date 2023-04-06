@@ -26,13 +26,13 @@ export class UserSessionsService {
       where: { id: In(ids) },
       relations: {
         session: true,
-        user: true,
+        owner: true,
       },
     });
     for (const userSession of userSessions) {
       try {
         await this.mailerService.sendMail({
-          to: userSession.user.email,
+          to: userSession.owner.email,
           subject: `Einladung zur KoALa Session ${userSession.session.name}`,
           template: 'session-invite',
           context: {
@@ -52,7 +52,7 @@ export class UserSessionsService {
 
   async create(createUserSessionInput: CreateUserSessionInput): Promise<UserSession> {
     try {
-      const email = createUserSessionInput.user?.email;
+      const email = createUserSessionInput.owner?.email;
       let user: User = await this.usersService.findByEmail(email);
       if (!user) {
         user = {
@@ -65,7 +65,7 @@ export class UserSessionsService {
         session: {
           id: createUserSessionInput.sessionId,
         },
-        user: user,
+        owner: user,
       });
 
       return await this.userSessionsRepository.save(userSession);
@@ -83,14 +83,14 @@ export class UserSessionsService {
 
   findAll(user: User): Promise<UserSession[]> {
     return this.userSessionsRepository.findBy({
-      userId: user.id,
+      ownerId: user.id,
     });
   }
 
   findAllBySession(sessionId: number, user?: User): Promise<UserSession[]> {
     return this.userSessionsRepository.findBy({
       sessionId: sessionId,
-      userId: user?.id,
+      ownerId: user?.id,
     });
   }
 
@@ -101,7 +101,7 @@ export class UserSessionsService {
       throw new NotFoundException();
     }
 
-    if (user && userSession.userId !== user.id) {
+    if (user && userSession.ownerId !== user.id) {
       throw new ForbiddenException();
     }
 

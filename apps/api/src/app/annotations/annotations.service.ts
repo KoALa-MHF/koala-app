@@ -59,7 +59,7 @@ export class AnnotationsService {
       throw new NotFoundException();
     }
 
-    if (user && annotation.userSession.userId !== user.id) {
+    if (user && annotation.userSession.ownerId !== user.id) {
       throw new ForbiddenException();
     }
 

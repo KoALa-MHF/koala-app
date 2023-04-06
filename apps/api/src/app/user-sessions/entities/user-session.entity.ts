@@ -28,7 +28,7 @@ registerEnumType(UserSessionStatus, {
 @Entity()
 @Index(
   [
-    'user',
+    'owner',
     'session',
   ],
   { unique: true }
@@ -71,12 +71,12 @@ export class UserSession extends BaseEntity {
       'insert',
     ],
   })
-  @Field((type) => User, { description: 'Associated User' })
+  @Field(() => User, { description: 'Associated User' })
   @IsNotEmpty()
-  user: User;
+  owner: User;
 
   @Column()
-  userId: number;
+  ownerId: number;
 
   @Column({ nullable: true })
   @Field({ description: 'Invitation Date' })

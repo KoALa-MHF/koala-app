@@ -105,9 +105,9 @@ const AUTHENTICATE_W_SESSIONCODE = gql`
 
 const CREATE_USERSESSION = gql`
   mutation createUserSession($sessionId: Int!, $email: String!) {
-    createUserSession(createUserSessionInput: { sessionId: $sessionId, user: { email: $email } }) {
+    createUserSession(createUserSessionInput: { sessionId: $sessionId, owner: { email: $email } }) {
       id
-      user {
+      owner {
         email
       }
     }

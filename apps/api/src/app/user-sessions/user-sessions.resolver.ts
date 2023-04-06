@@ -78,9 +78,9 @@ export class UserSessionsResolver {
   }
 
   @ResolveField()
-  user(@Parent() userSession: UserSession) {
-    const { userId } = userSession;
-    return this.usersService.findOne(userId);
+  owner(@Parent() userSession: UserSession) {
+    const { ownerId } = userSession;
+    return this.usersService.findOne(ownerId);
   }
 
   @ResolveField()

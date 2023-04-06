@@ -18,7 +18,7 @@ export class AuthService {
   async authenticateUserSession(code: string): Promise<Authentication> {
     try {
       const userSession = await this.userSessionService.findOneByCode(code);
-      return this.getAuthentication(userSession.userId);
+      return this.getAuthentication(userSession.ownerId);
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
         throw new UnauthorizedException();
@@ -35,7 +35,7 @@ export class AuthService {
         sessionId: session.id,
       } as CreateUserSessionInput);
 
-      return this.getAuthentication(userSession.userId);
+      return this.getAuthentication(userSession.ownerId);
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
         throw new UnauthorizedException();
