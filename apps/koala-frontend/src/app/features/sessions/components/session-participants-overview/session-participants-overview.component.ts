@@ -50,7 +50,7 @@ export class SessionParticipantsOverviewComponent implements OnInit {
   onAddParticipant() {
     this.participantAdd.emit({
       id: 0,
-      user: {
+      owner: {
         email: this.participantForm.get('email')?.value,
       },
     });
