@@ -122,12 +122,16 @@
         "MARKER_CREATION_SUCCESS_MESSAGE_TITLE": "Marker erfolgreich erstellt und der Session hinzugefügt",
         "MARKER_CREATION_ERROR_MESSAGE_TITLE": "Markererstellung fehlgeschlagen",
         "LOAD_MARKER_BTN": "Marker Laden",
-        "LOAD_MARKER_DIALOG_TITLE": "Marker",
         "DELETE_CONFIRM_DIALOG": {
           "TITLE": "Marker aus Session Entfernen",
           "EXPLANATION": "Wollen Sie wirklich den Marker '{{markerName}}' aus der Session entfernen?",
           "CONFIRM_BTN": "Entfernen",
           "CANCEL_BTN": "Abbrechen"
+        },
+        "LOAD_MARKER_DIALOG": {
+          "LOAD_MARKER_DIALOG_TITLE": "Marker Bibliothek",
+          "SEARCH_CLEAR_BTN": "Reset",
+          "SEARCH_INPUT_PLACEHOLDER": "Suchbegriff"
         }
       },
       "PARTICIPANTS": {
