@@ -111,10 +111,10 @@ export type CreateUserInput = {
 export type CreateUserSessionInput = {
   /** User Session Note */
   note?: InputMaybe<Scalars['String']>;
+  /** User Assopciated to the User Session */
+  owner?: InputMaybe<CreateUserInput>;
   /** Associated Session */
   sessionId: Scalars['Int'];
-  /** User Assopciated to the User Session */
-  user?: InputMaybe<CreateUserInput>;
 };
 
 export type InviteUserSessionInput = {
@@ -267,7 +267,6 @@ export type MutationUpdateUserSessionArgs = {
 export type Query = {
   __typename?: 'Query';
   annotation: Annotation;
-  annotations: Array<Annotation>;
   marker: Marker;
   markers: Array<Marker>;
   me: User;
@@ -424,14 +423,14 @@ export type UserSession = {
   invitedAt: Scalars['DateTime'];
   /** User Session Note */
   note?: Maybe<Scalars['String']>;
+  /** Associated User */
+  owner: User;
   /** Associated Session */
   session: Session;
   /** User Session Status */
   status: UserSessionStatus;
   /** Date of Last Update */
   updatedAt: Scalars['DateTime'];
-  /** Associated User */
-  user: User;
 };
 
 export enum UserSessionStatus {
@@ -538,7 +537,7 @@ export type CreateUserSessionMutationVariables = Exact<{
 
 export type CreateUserSessionMutation = {
   __typename?: 'Mutation';
-  createUserSession: { __typename?: 'UserSession'; id: number; user: { __typename?: 'User'; email?: string | null } };
+  createUserSession: { __typename?: 'UserSession'; id: number; owner: { __typename?: 'User'; email?: string | null } };
 };
 
 export type InviteParticipantsMutationVariables = Exact<{
@@ -620,7 +619,7 @@ export type GetOneSessionQuery = {
     userSessions: Array<{
       __typename?: 'UserSession';
       id: number;
-      user: { __typename?: 'User'; email?: string | null };
+      owner: { __typename?: 'User'; email?: string | null };
     }>;
   };
 };
@@ -830,9 +829,9 @@ export class AuthenticateSessionCodeGQL extends Apollo.Mutation<
 }
 export const CreateUserSessionDocument = gql`
   mutation createUserSession($sessionId: Int!, $email: String!) {
-    createUserSession(createUserSessionInput: { sessionId: $sessionId, user: { email: $email } }) {
+    createUserSession(createUserSessionInput: { sessionId: $sessionId, owner: { email: $email } }) {
       id
-      user {
+      owner {
         email
       }
     }
@@ -989,7 +988,7 @@ export const GetOneSessionDocument = gql`
       }
       userSessions {
         id
-        user {
+        owner {
           email
         }
       }

@@ -16,5 +16,5 @@ export class CreateUserSessionInput {
 
   @Field(() => CreateUserInput, { description: 'User Assopciated to the User Session', nullable: true })
   @IsOptional()
-  user?: CreateUserInput;
+  owner?: CreateUserInput;
 }

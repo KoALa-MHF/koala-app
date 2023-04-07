@@ -65,7 +65,7 @@ const GET_ONE_SESSION = gql`
       }
       userSessions {
         id
-        user {
+        owner {
           email
         }
       }
