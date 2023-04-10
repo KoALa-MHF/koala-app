@@ -2,14 +2,14 @@
 sidebar_position: 1
 ---
 
-# Installation
+# Installation {#getting-started-installation}
 
-## Prerequisites
+## Prerequisites {#getting-started-prerequisites}
 
 - Install [Node.js](https://nodejs.org) 18 LTS version
 - Clone this repository
 
-## Setup
+## Setup {#getting-started-setup}
 
 To install the KoALa app on your local machine, open a terminal window and run the following command in the root folder of the KoALa app:
 
@@ -17,7 +17,7 @@ To install the KoALa app on your local machine, open a terminal window and run t
 npm install
 ```
 
-## Start Frontend
+## Start Frontend {#getting-started-start-frontend}
 
 To run the frontend in development mode, run the following command in the root folder of the KoALa app:
 
@@ -33,7 +33,7 @@ npm run start
 
 Open the url http://localhost:4200 in a browser.
 
-## Start Backend
+## Start Backend {#getting-started-start-backend}
 
 To start the server in development / local mode, run the following command in the root folder of the KoALa app:
 
@@ -49,13 +49,13 @@ npm run start:api
 
 You can check the GraphQL API through the GraphQL playground by opening the url http://localhost:3333/graphql in a browser.
 
-## Run Frontend and Backend Together
+## Run Frontend and Backend Together {#getting-started-start-frontend-backend}
 
 ```Bash
 npm run start:all
 ```
 
-### Generate GraphQL Angular Types/Requests
+### Generate GraphQL Angular Types/Requests {#getting-started-generate-graphql-requests}
 
 To regenerate the client access objects to the GraphQL server based on the changes in the server, run the following commands in separate sessions in the root folder of the KoALa app (wait for the first command to start the server completely, because a running server is needed for the code generation to work):
 
@@ -71,7 +71,7 @@ npm run start:api
 npm run codegen
 ```
 
-## Execute E2E Tests
+## Execute E2E Tests {#getting-started-execute-e2e}
 
 First you need to start the KoALa server locally, because the end2end tests rely on a running server instance. You can do that by running the following command in your terminal (see also [Start Backend](#start-backend))
 

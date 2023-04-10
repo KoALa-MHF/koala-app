@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Installation
 
-## Prerequisites
+## Blubb {#getting-started-prerequisites}
 
 - Install [Node.js](https://nodejs.org) 18 LTS version
 - Clone this repository
