@@ -1,4 +1,33 @@
-<p-table [value]="markers" [(selection)]="selectedMarkers" dataKey="id" [scrollable]="true" scrollHeight="300px">
+<p-table
+  #markerOverviewTable
+  [value]="markers"
+  [(selection)]="selectedMarkers"
+  dataKey="id"
+  [scrollable]="true"
+  scrollHeight="300px"
+  [globalFilterFields]="['name', 'abbreviation', 'description']"
+>
+  <ng-template pTemplate="caption">
+    <div class="marker-search-area">
+      <button
+        pButton
+        label="{{ 'SESSION.MAINTAIN.MARKER.LOAD_MARKER_DIALOG.SEARCH_CLEAR_BTN' | translate }}"
+        class="p-button-outlined"
+        icon="pi pi-filter-slash"
+        (click)="clear(markerOverviewTable, markerOverviewSearchInput)"
+      ></button>
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input
+          #markerOverviewSearchInput
+          pInputText
+          type="text"
+          (input)="applyFilterGlobal($event, 'contains')"
+          placeholder="{{ 'SESSION.MAINTAIN.MARKER.LOAD_MARKER_DIALOG.SEARCH_INPUT_PLACEHOLDER' | translate }}"
+        />
+      </span>
+    </div>
+  </ng-template>
   <ng-template pTemplate="header">
     <tr>
       <th style="width: 4rem">
