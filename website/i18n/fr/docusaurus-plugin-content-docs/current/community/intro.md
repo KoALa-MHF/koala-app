@@ -4,4 +4,4 @@ sidebar_position: 1
 
 # Overview
 
-Welcome to KoALa Community
+Bienvenue dans la communauté KoALa
