@@ -185,7 +185,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   private getPositionY(id: number) {
     const h = this.getContainerHeight() - 10;
     const r = h / this.markers.length;
-    return (r / 2) * id;
+    return r * (id - 1) + r / 2;
   }
 
   private getRectHeight(d: DataPoint) {
@@ -248,7 +248,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   private setContainerHeight() {
     const container = document.getElementById(this.containerID);
     if (container) {
-      container.style.height = this.markers.length * 60 + 'px';
+      container.style.height = this.markers.length * 40 + 'px';
     }
   }
 }
