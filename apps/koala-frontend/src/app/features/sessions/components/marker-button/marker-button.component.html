@@ -6,7 +6,7 @@
   class="p-button-raised marker-button"
   [class.marker-button-event]="marker.type === MarkerType.Event"
   [class.marker-button-range]="marker.type === MarkerType.Range"
-  (click)="onClick($event)"
+  (click)="onClick()"
   *ngIf="marker.type === MarkerType.Event || marker.type === MarkerType.Range"
 >
   <koala-marker-icon [iconCode]="marker.icon"></koala-marker-icon>

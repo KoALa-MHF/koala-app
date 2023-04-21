@@ -178,20 +178,23 @@ export class SessionPage implements OnInit {
     }
   }
 
-  onMarkerButtonEvent(m: Marker) {
+  onMarkerButtonEvent({ marker, value }: { marker: Marker; value?: number }) {
     if (this.audioPaused) {
       return;
     }
-    let aData = this.AnnotationData.get(m.id);
+    let aData = this.AnnotationData.get(marker.id);
     if (aData == undefined) {
       // wtf typescript, how is this still undefined...
-      aData = this.AnnotationData.set(m.id, new Array<DataPoint>()).get(m.id);
+      aData = this.AnnotationData.set(marker.id, new Array<DataPoint>()).get(marker.id);
     } else {
-      if (m.type == MarkerType.Event) {
-        this.onMarkerEvent(m, aData);
+      if (marker.type === MarkerType.Event) {
+        this.onMarkerEvent(marker, aData);
       }
-      if (m.type == MarkerType.Range) {
-        this.onMarkerRange(m, aData);
+      if (marker.type === MarkerType.Range) {
+        this.onMarkerRange(marker, aData);
+      }
+      if (marker.type === MarkerType.Slider) {
+        this.onMarkerSliderRange(marker, aData, 0);
       }
     }
   }
@@ -252,8 +255,8 @@ export class SessionPage implements OnInit {
     });
   }
 
-  onMarkerSliderRange(m: Marker, aData: DataPoint[]) {
-    const strength = m.id; // todo: until we have a field in the Marker interface
+  onMarkerSliderRange(m: Marker, aData: DataPoint[], value: number) {
+    const strength = value; // todo: until we have a field in the Marker interface
     if (this.audioPaused) {
       return;
     }
