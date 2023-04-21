@@ -23,5 +23,5 @@ jobs:
         key: ${{ secrets.SERVER_KEY }}
         command: |
           cd /koala
-          export IMAGE_TAG=${{  github.ref_name }}
+          export IMAGE_TAG=v${{ github.ref_name }}
           docker compose up -d --remove-orphans
