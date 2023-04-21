@@ -6,9 +6,23 @@
   class="p-button-raised marker-button"
   [class.marker-button-event]="marker.type === MarkerType.Event"
   [class.marker-button-range]="marker.type === MarkerType.Range"
-  style="justify-content: center"
   (click)="onClick($event)"
+  *ngIf="marker.type === MarkerType.Event || marker.type === MarkerType.Range"
 >
   <koala-marker-icon [iconCode]="marker.icon"></koala-marker-icon>
   <span [style.margin-left]="marker.icon && marker.abbreviation ? '10px' : '0px'">{{ marker.abbreviation }}</span>
 </button>
+
+<div
+  *ngIf="marker.type === MarkerType.Slider"
+  [style.background-color]="marker.color"
+  [class.marker-button-slider]="marker.type === MarkerType.Slider"
+  class="marker-button slider-marker"
+>
+  <p-slider
+    style="width: 100%"
+    [(ngModel)]="sliderValue"
+    [min]="marker.valueRangeFrom!"
+    [max]="marker.valueRangeTo!"
+  ></p-slider>
+</div>

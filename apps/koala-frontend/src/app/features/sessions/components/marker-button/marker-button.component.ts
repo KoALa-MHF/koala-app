@@ -15,6 +15,7 @@ export class MarkerButtonComponent {
   @Output() event = new EventEmitter<Marker>();
   isActive = false;
   range = 0;
+  sliderValue = 0;
 
   onClick(ev: any) {
     console.log(ev);

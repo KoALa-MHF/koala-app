@@ -96,6 +96,8 @@ const GET_MARKERS = gql`
       createdAt
       updatedAt
       type
+      valueRangeFrom
+      valueRangeTo
     }
   }
 `;

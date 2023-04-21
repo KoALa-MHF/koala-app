@@ -9,4 +9,6 @@ export interface Marker {
   color: string;
   icon?: string | null;
   hidden: boolean | true;
+  valueRangeFrom?: number | null;
+  valueRangeTo?: number | null;
 }

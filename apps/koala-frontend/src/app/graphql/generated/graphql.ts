@@ -83,6 +83,10 @@ export type CreateMarkerInput = {
   name: Scalars['String'];
   /** Marker Type */
   type: MarkerType;
+  /** Marker Value Range From */
+  valueRangeFrom?: InputMaybe<Scalars['Int']>;
+  /** Marker Value Range To */
+  valueRangeTo?: InputMaybe<Scalars['Int']>;
 };
 
 export type CreateMediaInput = {
@@ -144,11 +148,16 @@ export type Marker = {
   type: MarkerType;
   /** Date of Last Update */
   updatedAt: Scalars['DateTime'];
+  /** Marker Value Range From */
+  valueRangeFrom?: Maybe<Scalars['Int']>;
+  /** Marker Value Range To */
+  valueRangeTo?: Maybe<Scalars['Int']>;
 };
 
 export enum MarkerType {
   Event = 'EVENT',
   Range = 'RANGE',
+  Slider = 'SLIDER',
 }
 
 export type Media = {
@@ -367,6 +376,10 @@ export type UpdateMarkerInput = {
   name?: InputMaybe<Scalars['String']>;
   /** Marker Type */
   type?: InputMaybe<MarkerType>;
+  /** Marker Value Range From */
+  valueRangeFrom?: InputMaybe<Scalars['Int']>;
+  /** Marker Value Range To */
+  valueRangeTo?: InputMaybe<Scalars['Int']>;
 };
 
 export type UpdateSessionInput = {
@@ -664,6 +677,8 @@ export type GetMarkersQuery = {
     createdAt: any;
     updatedAt: any;
     type: MarkerType;
+    valueRangeFrom?: number | null;
+    valueRangeTo?: number | null;
   }>;
 };
 
@@ -1078,6 +1093,8 @@ export const GetMarkersDocument = gql`
       createdAt
       updatedAt
       type
+      valueRangeFrom
+      valueRangeTo
     }
   }
 `;

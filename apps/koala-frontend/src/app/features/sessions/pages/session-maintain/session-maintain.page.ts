@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { MutationResult } from 'apollo-angular';
-import { datesStartEndValidator } from '../../../../shared/dates.validator';
 import { MessageService } from 'primeng/api';
-import { UpdateSessionMutation } from '../../../../graphql/generated/graphql';
+import { MarkerType, UpdateSessionMutation } from '../../../../graphql/generated/graphql';
 import { UserSession } from '../../types/user-session.entity';
 import { MarkerService } from '../../services/marker.service';
 import { MediaService } from '../../services/media.service';
@@ -14,8 +13,15 @@ import { ToolbarsService } from '../../services/toolbars.service';
 import { Marker } from '../../types/marker.entity';
 import { Session } from '../../types/session.entity';
 import { iconAbbreviationValidator } from '../../../../shared/icon-abbreviation.validator';
+import { datesStartEndValidator } from '../../../../shared/dates.validator';
+import { markerRangeValueValidator } from '../../../../shared/greater-than.validator';
 import { UserSessionService } from '../../services/user-session.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
+
+const DEFAULT_ICON_COLOR = '#555bcf';
+const DEFAULT_VALUE_RANGE_FROM = 0;
+const DEFAULT_VALUE_RANGE_TO = 10;
 
 @Component({
   selector: 'koala-session-maintain',
@@ -25,7 +31,7 @@ import { TranslateService } from '@ngx-translate/core';
     '../../session-common.scss',
   ],
 })
-export class SessionMaintainPage implements OnInit {
+export class SessionMaintainPage implements OnInit, OnDestroy {
   maintainSessionForm: FormGroup;
   maintainMarkerForm: FormGroup;
 
@@ -33,6 +39,8 @@ export class SessionMaintainPage implements OnInit {
   session: Session | null = null;
   participants: UserSession[] = [];
   markers: Array<Marker> = [];
+
+  markerTypeValueChangeSubscription?: Subscription;
 
   constructor(
     private readonly sessionService: SessionsService,
@@ -84,13 +92,34 @@ export class SessionMaintainPage implements OnInit {
         ]),
         description: new FormControl<string>(''),
         abbreviation: new FormControl<string>(''),
-        color: new FormControl<string>('#555bcf', { nonNullable: true }),
+        color: new FormControl<string>(DEFAULT_ICON_COLOR, { nonNullable: true }),
         icon: new FormControl<string>(''),
+        valueRangeFrom: new FormControl<number>(DEFAULT_VALUE_RANGE_FROM),
+        valueRangeTo: new FormControl<number>(DEFAULT_VALUE_RANGE_TO),
       },
       {
-        validators: iconAbbreviationValidator,
+        validators: [
+          iconAbbreviationValidator,
+          markerRangeValueValidator,
+        ],
       }
     );
+
+    this.markerTypeValueChangeSubscription = this.maintainMarkerForm
+      .get('type')
+      ?.valueChanges.subscribe((currentType) => {
+        switch (currentType) {
+          case MarkerType.Event || MarkerType.Range:
+            this.maintainMarkerForm.get('valueRangeFrom')?.reset(DEFAULT_VALUE_RANGE_FROM);
+            this.maintainMarkerForm.get('valueRangeTo')?.reset(DEFAULT_VALUE_RANGE_TO);
+            break;
+
+          case MarkerType.Slider:
+            this.maintainMarkerForm.get('icon')?.reset();
+            this.maintainMarkerForm.get('abbreviation')?.reset();
+            break;
+        }
+      });
   }
 
   ngOnInit(): void {
@@ -98,6 +127,10 @@ export class SessionMaintainPage implements OnInit {
     const routeSessionId = parseInt(this.route.snapshot.paramMap.get('sessionId') || '0');
 
     this.loadSessionData(routeSessionId);
+  }
+
+  ngOnDestroy(): void {
+    this.markerTypeValueChangeSubscription?.unsubscribe();
   }
 
   /*--------------------------
@@ -230,11 +263,17 @@ export class SessionMaintainPage implements OnInit {
       color: this.maintainMarkerForm.value.color,
       icon: this.maintainMarkerForm.value.icon,
       hidden: false,
+      valueRangeFrom: this.maintainMarkerForm.value.valueRangeFrom,
+      valueRangeTo: this.maintainMarkerForm.value.valueRangeTo,
     };
   }
 
   public onResetMarkerData() {
-    this.maintainMarkerForm.reset();
+    this.maintainMarkerForm.reset({
+      valueRangeFrom: DEFAULT_VALUE_RANGE_FROM,
+      valueRangeTo: DEFAULT_VALUE_RANGE_TO,
+      color: DEFAULT_ICON_COLOR,
+    });
   }
 
   public onAddMarker() {
@@ -246,6 +285,8 @@ export class SessionMaintainPage implements OnInit {
         abbreviation: this.maintainMarkerForm.value.abbreviation,
         color: this.maintainMarkerForm.value.color,
         icon: this.maintainMarkerForm.value.icon,
+        valueRangeFrom: this.maintainMarkerForm.value.valueRangeFrom,
+        valueRangeTo: this.maintainMarkerForm.value.valueRangeTo,
       })
       .subscribe({
         next: (result) => {
