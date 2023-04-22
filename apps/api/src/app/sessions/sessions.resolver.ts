@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent, Subscription } from '@nestjs/graphql';
 import { SessionsService } from './sessions.service';
 import { Session } from './entities/session.entity';
 import { CreateSessionInput } from './dto/create-session.input';
@@ -12,6 +12,9 @@ import { CurrentUser } from '../core/decorators/user.decorator';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { RegisteredUserGuard } from '../core/guards/registerd-user.guard';
+import { PubSub } from 'graphql-subscriptions';
+
+const pubSub = new PubSub();
 
 @Resolver(() => Session)
 @UseGuards(AuthGuard)
@@ -54,13 +57,20 @@ export class SessionsResolver {
     @Args('updateSessionInput') updateSessionInput: UpdateSessionInput,
     @CurrentUser() user: User
   ) {
-    return this.sessionsService.update(id, updateSessionInput, user);
+    const session = this.sessionsService.update(id, updateSessionInput, user);
+    pubSub.publish('updatedSession', { updatedSession: session });
+    return session;
   }
 
   @Mutation(() => Session)
   @UseGuards(RegisteredUserGuard)
   removeSession(@Args('id', { type: () => Int }) id: number, @CurrentUser() user: User) {
     return this.sessionsService.remove(id, user);
+  }
+
+  @Subscription((returns) => Comment)
+  updatedSession() {
+    return pubSub.asyncIterator('updatedSession');
   }
 
   @ResolveField()

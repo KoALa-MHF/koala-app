@@ -36,9 +36,12 @@ import { DatabaseModule } from './database.module';
     DatabaseModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      debug: true,
-      playground: true,
+      debug: true, // TODO: Dislable when production
+      playground: true, // TODO: Dislable when production
       autoSchemaFile: true,
+      subscriptions: {
+        'graphql-ws': true,
+      },
       formatError: formatError,
       introspection: true,
     }),
