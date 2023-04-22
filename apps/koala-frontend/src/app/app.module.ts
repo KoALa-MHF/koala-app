@@ -3,10 +3,11 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { HttpClient, HttpClientModule, HttpHeaders, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { WebSocketLink } from '@apollo/client/link/ws';
 
 import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
-import { InMemoryCache } from '@apollo/client/core';
+import { InMemoryCache, split } from '@apollo/client/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -23,6 +24,8 @@ import { LayoutComponent } from './layout.component';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { AuthInterceptor } from './features/auth/http-interceptors/auth-interceptor';
+import { getMainDefinition } from '@apollo/client/utilities';
+import { OperationDefinitionNode } from 'graphql';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -58,12 +61,32 @@ export function HttpLoaderFactory(http: HttpClient) {
     {
       provide: APOLLO_OPTIONS,
       useFactory(httpLink: HttpLink) {
+        // Create a WebSocket link:
+        const ws = new WebSocketLink({
+          uri: 'ws://localhost:3333/graphql',
+          options: {
+            reconnect: true,
+          },
+        });
+
         const uri: string = environment.baseUrl + '/graphql';
+        const http = httpLink.create({
+          uri: uri,
+        });
+
+        const link = split(
+          // split based on operation type
+          ({ query }) => {
+            const { kind, operation } = getMainDefinition(query) as OperationDefinitionNode;
+            return kind === 'OperationDefinition' && operation === 'subscription';
+          },
+          ws,
+          http
+        );
+
         return {
           cache: new InMemoryCache(),
-          link: httpLink.create({
-            uri: uri,
-          }),
+          link: link,
         };
       },
       deps: [

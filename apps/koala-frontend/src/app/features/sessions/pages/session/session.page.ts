@@ -97,6 +97,16 @@ export class SessionPage implements OnInit {
       }
       this.setSidePanelFormData();
     });
+    this.sessionService.subscribeUpdated().subscribe((response) => {
+      const session = response.data?.sessionUpdated;
+      if (session) {
+        const details = this.sidePanelForm.get('details');
+        details?.get('editable')?.setValue(session.editable);
+        details?.get('enablePlayer')?.setValue(session.enablePlayer);
+        details?.get('displaySampleSolution')?.setValue(session.displaySampleSolution);
+        details?.get('enableLiveAnalysis')?.setValue(session.enableLiveAnalysis);
+      }
+    });
   }
 
   private loadMediaData(id: string): Promise<void> {

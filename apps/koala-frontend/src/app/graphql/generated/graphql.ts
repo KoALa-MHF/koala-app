@@ -349,6 +349,11 @@ export enum SessionStatus {
   Open = 'OPEN',
 }
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  sessionUpdated: Session;
+};
+
 export type Toolbar = {
   __typename?: 'Toolbar';
   /** Creation Date */
@@ -695,6 +700,31 @@ export type GetUserQueryVariables = Exact<{ [key: string]: never }>;
 export type GetUserQuery = {
   __typename?: 'Query';
   me: { __typename?: 'User'; id: string; displayName?: string | null; email?: string | null };
+};
+
+export type OnSessionUpdatedSubscriptionVariables = Exact<{ [key: string]: never }>;
+
+export type OnSessionUpdatedSubscription = {
+  __typename?: 'Subscription';
+  sessionUpdated: {
+    __typename?: 'Session';
+    id: string;
+    name: string;
+    description?: string | null;
+    status?: SessionStatus | null;
+    start?: any | null;
+    end?: any | null;
+    editable?: boolean | null;
+    enablePlayer?: boolean | null;
+    displaySampleSolution?: boolean | null;
+    enableLiveAnalysis?: boolean | null;
+    toolbars: Array<{ __typename?: 'Toolbar'; id: string; markers: Array<string>; createdAt: any; updatedAt: any }>;
+    userSessions: Array<{
+      __typename?: 'UserSession';
+      id: number;
+      owner: { __typename?: 'User'; email?: string | null };
+    }>;
+  };
 };
 
 export const CreateNewSessionDocument = gql`
@@ -1134,6 +1164,48 @@ export const GetUserDocument = gql`
 })
 export class GetUserGQL extends Apollo.Query<GetUserQuery, GetUserQueryVariables> {
   override document = GetUserDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const OnSessionUpdatedDocument = gql`
+  subscription onSessionUpdated {
+    sessionUpdated {
+      id
+      name
+      description
+      status
+      start
+      end
+      editable
+      enablePlayer
+      displaySampleSolution
+      enableLiveAnalysis
+      toolbars {
+        id
+        markers
+        createdAt
+        updatedAt
+      }
+      userSessions {
+        id
+        owner {
+          email
+        }
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class OnSessionUpdatedGQL extends Apollo.Subscription<
+  OnSessionUpdatedSubscription,
+  OnSessionUpdatedSubscriptionVariables
+> {
+  override document = OnSessionUpdatedDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

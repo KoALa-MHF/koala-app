@@ -58,7 +58,7 @@ export class SessionsResolver {
     @CurrentUser() user: User
   ) {
     const session = this.sessionsService.update(id, updateSessionInput, user);
-    pubSub.publish('updatedSession', { updatedSession: session });
+    pubSub.publish('sessionUpdated', { sessionUpdated: session });
     return session;
   }
 
@@ -69,8 +69,8 @@ export class SessionsResolver {
   }
 
   @Subscription((returns) => Session)
-  updatedSession() {
-    return pubSub.asyncIterator('updatedSession');
+  sessionUpdated() {
+    return pubSub.asyncIterator('sessionUpdated');
   }
 
   @ResolveField()

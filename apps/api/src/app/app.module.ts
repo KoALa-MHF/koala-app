@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { GraphQLModule } from '@nestjs/graphql';
+import { GraphQLModule, SubscriptionConfig } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 import { AppController } from './app.controller';
@@ -39,9 +39,7 @@ import { DatabaseModule } from './database.module';
       debug: true, // TODO: Dislable when production
       playground: true, // TODO: Dislable when production
       autoSchemaFile: true,
-      subscriptions: {
-        'graphql-ws': true,
-      },
+      installSubscriptionHandlers: true,
       formatError: formatError,
       introspection: true,
     }),
