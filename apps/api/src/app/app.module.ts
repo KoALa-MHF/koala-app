@@ -27,25 +27,13 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { User } from './users/entities/user.entity';
+import { DatabaseModule } from './database.module';
 
 @Module({
   imports: [
     ConfigModule,
     AuthModule,
-    TypeOrmModule.forRoot({
-      type: 'better-sqlite3',
-      database: databaseConfig.name,
-      entities: [
-        Session,
-        Media,
-        Marker,
-        Annotation,
-        UserSession,
-        User,
-        Toolbar,
-      ],
-      synchronize: true,
-    }),
+    DatabaseModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       debug: true,

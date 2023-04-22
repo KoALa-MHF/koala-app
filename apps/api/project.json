@@ -44,6 +44,12 @@
         }
       }
     },
+    "seed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "NODE_ENV=development nest start --entryFile=apps/api/src/seed --path=apps/api/tsconfig.app.json"
+      }
+    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": [
