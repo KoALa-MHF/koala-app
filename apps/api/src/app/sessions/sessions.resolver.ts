@@ -7,8 +7,12 @@ import { MediaService } from '../media/media.service';
 import { ToolbarsService } from '../toolbars/toolbars.service';
 import { forwardRef, Inject, UseGuards } from '@nestjs/common';
 import { UserSessionsService } from '../user-sessions/user-sessions.service';
+import { AuthGuard } from '../core/guards/auth.guard';
+import { CurrentUser } from '../core/decorators/user.decorator';
+import { User } from '../users/entities/user.entity';
 
 @Resolver(() => Session)
+@UseGuards(AuthGuard)
 export class SessionsResolver {
   constructor(
     private readonly sessionsService: SessionsService,
@@ -20,8 +24,8 @@ export class SessionsResolver {
   ) {}
 
   @Mutation(() => Session)
-  createSession(@Args('createSessionInput') createSessionInput: CreateSessionInput) {
-    return this.sessionsService.create(createSessionInput);
+  createSession(@Args('createSessionInput') createSessionInput: CreateSessionInput, @CurrentUser() user: User) {
+    return this.sessionsService.create(createSessionInput, user);
   }
 
   @Query(
@@ -30,8 +34,8 @@ export class SessionsResolver {
     ],
     { name: 'sessions' }
   )
-  findAll() {
-    return this.sessionsService.findAll();
+  findAll(@CurrentUser() user: User) {
+    return this.sessionsService.findAll(user);
   }
 
   @Query(() => Session, { name: 'session' })

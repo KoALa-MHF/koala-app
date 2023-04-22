@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Toolbar } from '../toolbars/entities/toolbar.entity';
+import { User } from '../users/entities/user.entity';
 
 import { CreateSessionInput } from './dto/create-session.input';
 import { UpdateSessionInput } from './dto/update-session.input';
@@ -14,7 +15,7 @@ export class SessionsService {
     private sessionsRepository: Repository<Session>
   ) {}
 
-  async create(createSessionInput: CreateSessionInput): Promise<Session> {
+  async create(createSessionInput: CreateSessionInput, owner: User): Promise<Session> {
     const newSession = this.sessionsRepository.create({
       ...createSessionInput,
       media: {
@@ -23,14 +24,17 @@ export class SessionsService {
       toolbars: [
         new Toolbar(),
       ],
+      owner: owner,
     });
 
     const savedSession = await this.sessionsRepository.save(newSession);
     return this.findOne(savedSession.id);
   }
 
-  findAll(): Promise<Session[]> {
-    return this.sessionsRepository.find();
+  findAll(owner: User): Promise<Session[]> {
+    return this.sessionsRepository.findBy({
+      ownerId: owner.id,
+    });
   }
 
   findOne(id: number, withDeleted = false): Promise<Session> {
