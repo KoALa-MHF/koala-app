@@ -68,7 +68,7 @@ export class SessionsResolver {
     return this.sessionsService.remove(id, user);
   }
 
-  @Subscription((returns) => Comment)
+  @Subscription((returns) => Session)
   updatedSession() {
     return pubSub.asyncIterator('updatedSession');
   }
