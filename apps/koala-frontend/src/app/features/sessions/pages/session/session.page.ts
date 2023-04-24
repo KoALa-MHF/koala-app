@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
 import { MarkerService } from '../../services/marker.service';
@@ -15,6 +15,7 @@ import { MarkerType } from '../../../../graphql/generated/graphql';
 import { ToolbarMode } from '../../components/marker-toolbar/marker-toolbar.component';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { filter } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'koala-app-session',
@@ -23,7 +24,7 @@ import { filter } from 'rxjs';
     './session.page.scss',
   ],
 })
-export class SessionPage implements OnInit {
+export class SessionPage implements OnInit, OnDestroy {
   sidePanelForm: FormGroup;
   ToolbarMode = ToolbarMode;
 
@@ -39,6 +40,8 @@ export class SessionPage implements OnInit {
   audioPaused = true;
   showSideBar = false;
   userID = -1;
+
+  sessionUpdatedSubscription?: Subscription;
 
   constructor(
     private readonly sessionService: SessionsService,
@@ -97,7 +100,7 @@ export class SessionPage implements OnInit {
       }
       this.setSidePanelFormData();
     });
-    this.sessionService.subscribeUpdated().subscribe((response) => {
+    this.sessionUpdatedSubscription = this.sessionService.subscribeUpdated().subscribe((response) => {
       const session = response.data?.sessionUpdated;
       if (session) {
         const details = this.sidePanelForm.get('details');
@@ -107,6 +110,10 @@ export class SessionPage implements OnInit {
         details?.get('enableLiveAnalysis')?.setValue(session.enableLiveAnalysis);
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.sessionUpdatedSubscription?.unsubscribe();
   }
 
   private loadMediaData(id: string): Promise<void> {
