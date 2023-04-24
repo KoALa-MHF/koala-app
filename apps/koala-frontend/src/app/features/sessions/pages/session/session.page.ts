@@ -63,6 +63,8 @@ export class SessionPage implements OnInit, OnDestroy {
       }),
       markersArray: this.formBuilder.group({}),
     });
+
+    this.onSidePanelFormChanges();
   }
 
   async ngOnInit() {
@@ -86,6 +88,8 @@ export class SessionPage implements OnInit, OnDestroy {
         media: result.data?.session.media,
       };
 
+      this.setSidePanelFormData(this.session);
+
       if (this.session.media == undefined) {
         this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.NO_AUDIO_FILE', 'SESSION.ERROR_DIALOG.NO_AUDIO_FILE_SUM');
         return;
@@ -93,21 +97,17 @@ export class SessionPage implements OnInit, OnDestroy {
 
       this.mediaControlService.uuid = this.session.id;
       this.waveContainer = `waveContainer-${this.session.id}`;
+
       await this.loadMediaData(this.session.media.id);
       const userSessions = this.session.userSessions?.filter((s) => s.id == this.userID);
       if (userSessions) {
         this.loadMarkerData(userSessions);
       }
-      this.setSidePanelFormData();
     });
     this.sessionUpdatedSubscription = this.sessionService.subscribeUpdated().subscribe((response) => {
       const session = response.data?.sessionUpdated;
       if (session) {
-        const details = this.sidePanelForm.get('details');
-        details?.get('editable')?.setValue(session.editable);
-        details?.get('enablePlayer')?.setValue(session.enablePlayer);
-        details?.get('displaySampleSolution')?.setValue(session.displaySampleSolution);
-        details?.get('enableLiveAnalysis')?.setValue(session.enableLiveAnalysis);
+        this.setSidePanelFormData(session);
       }
     });
   }
@@ -160,11 +160,23 @@ export class SessionPage implements OnInit, OnDestroy {
       });
   }
 
-  private setSidePanelFormData(): void {
-    this.sidePanelForm.get('details')?.get('editable')?.setValue(this.session.editable);
-    this.sidePanelForm.get('details')?.get('enablePlayer')?.setValue(this.session.enablePlayer);
-    this.sidePanelForm.get('details')?.get('displaySampleSolution')?.setValue(this.session.displaySampleSolution);
-    this.sidePanelForm.get('details')?.get('enableLiveAnalysis')?.setValue(this.session.enableLiveAnalysis);
+  private setSidePanelFormData(session: Session): void {
+    console.log('Side Panel Data Set');
+    const sidePanelForm = this.sidePanelForm.get('details');
+    let details = sidePanelForm?.value;
+
+    if (details) {
+      details = {
+        ...details,
+        editable: session.editable || false,
+        enablePlayer: session.enablePlayer || false,
+        displaySampleSolution: session.displaySampleSolution || false,
+        enableLiveAnalysis: session.enableLiveAnalysis || false,
+      };
+    }
+
+    //reset dirty state
+    sidePanelForm?.reset(details);
   }
 
   private loadMarkerData(userSessions: any[]): void {
@@ -183,6 +195,7 @@ export class SessionPage implements OnInit, OnDestroy {
       this.markers = [
         ...this.markers,
       ];
+
       this.AnnotationData = new Map(this.AnnotationData);
     });
   }
@@ -426,21 +439,24 @@ export class SessionPage implements OnInit, OnDestroy {
       ];
     });
     this.sidePanelForm.get('details')?.valueChanges.subscribe((details) => {
-      this.sessionService
-        .update(parseInt(this.session?.id || '0'), {
-          editable: details.editable,
-          enablePlayer: details.enablePlayer,
-          displaySampleSolution: details.displaySampleSolution,
-          enableLiveAnalysis: details.enableLiveAnalysis,
-        })
-        .subscribe({
-          error: () => {
-            this.messageService.add({
-              severity: 'error',
-              summary: this.translateService.instant('SESSION.MAINTAIN.SESSION_SETTINGS.SAVE_ERROR_MESSAGE_TITLE'),
-            });
-          },
-        });
+      console.log('Value Changes Detected');
+      if (this.sidePanelForm.get('details')?.dirty) {
+        this.sessionService
+          .update(parseInt(this.session?.id || '0'), {
+            editable: details.editable,
+            enablePlayer: details.enablePlayer,
+            displaySampleSolution: details.displaySampleSolution,
+            enableLiveAnalysis: details.enableLiveAnalysis,
+          })
+          .subscribe({
+            error: () => {
+              this.messageService.add({
+                severity: 'error',
+                summary: this.translateService.instant('SESSION.MAINTAIN.SESSION_SETTINGS.SAVE_ERROR_MESSAGE_TITLE'),
+              });
+            },
+          });
+      }
     });
   }
 
