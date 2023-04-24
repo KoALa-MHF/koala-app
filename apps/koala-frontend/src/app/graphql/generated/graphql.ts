@@ -352,9 +352,14 @@ export enum SessionStatus {
 export type Subscription = {
   __typename?: 'Subscription';
   sessionUpdated: Session;
+  toolbarUpdated: Toolbar;
 };
 
 export type SubscriptionSessionUpdatedArgs = {
+  id: Scalars['ID'];
+};
+
+export type SubscriptionToolbarUpdatedArgs = {
   id: Scalars['ID'];
 };
 
@@ -731,6 +736,15 @@ export type OnSessionUpdatedSubscription = {
       owner: { __typename?: 'User'; email?: string | null };
     }>;
   };
+};
+
+export type OnToolbarUpdatedSubscriptionVariables = Exact<{
+  toolbarId: Scalars['ID'];
+}>;
+
+export type OnToolbarUpdatedSubscription = {
+  __typename?: 'Subscription';
+  toolbarUpdated: { __typename?: 'Toolbar'; id: string; markers: Array<string>; createdAt: any; updatedAt: any };
 };
 
 export const CreateNewSessionDocument = gql`
@@ -1212,6 +1226,30 @@ export class OnSessionUpdatedGQL extends Apollo.Subscription<
   OnSessionUpdatedSubscriptionVariables
 > {
   override document = OnSessionUpdatedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const OnToolbarUpdatedDocument = gql`
+  subscription onToolbarUpdated($toolbarId: ID!) {
+    toolbarUpdated(id: $toolbarId) {
+      id
+      markers
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class OnToolbarUpdatedGQL extends Apollo.Subscription<
+  OnToolbarUpdatedSubscription,
+  OnToolbarUpdatedSubscriptionVariables
+> {
+  override document = OnToolbarUpdatedDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

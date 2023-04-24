@@ -28,3 +28,14 @@ const SUBSCRIBE_SESSION_UPDATED = gql`
     }
   }
 `;
+
+const SUBSCRIBE_TOOLBAR_UPDATED = gql`
+  subscription onToolbarUpdated($toolbarId: ID!) {
+    toolbarUpdated(id: $toolbarId) {
+      id
+      markers
+      createdAt
+      updatedAt
+    }
+  }
+`;

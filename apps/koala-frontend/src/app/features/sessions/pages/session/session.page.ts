@@ -16,6 +16,8 @@ import { ToolbarMode } from '../../components/marker-toolbar/marker-toolbar.comp
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { filter } from 'rxjs';
 import { Subscription } from 'rxjs';
+import { ToolbarsService } from '../../services/toolbars.service';
+import { Toolbar } from '../../types/toolbar.entity';
 
 @Component({
   selector: 'koala-app-session',
@@ -42,6 +44,7 @@ export class SessionPage implements OnInit, OnDestroy {
   userID = -1;
 
   sessionUpdatedSubscription?: Subscription;
+  toolbarUpdatedSubscription?: Subscription;
 
   constructor(
     private readonly sessionService: SessionsService,
@@ -52,7 +55,8 @@ export class SessionPage implements OnInit, OnDestroy {
     private mediaControlService: MediaControlService,
     private readonly messageService: MessageService,
     private readonly translateService: TranslateService,
-    private readonly formBuilder: FormBuilder
+    private readonly formBuilder: FormBuilder,
+    private readonly toolbarService: ToolbarsService
   ) {
     this.sidePanelForm = this.formBuilder.group({
       details: this.formBuilder.group({
@@ -90,6 +94,17 @@ export class SessionPage implements OnInit, OnDestroy {
 
       this.setSidePanelFormData(this.session);
 
+      this.toolbarUpdatedSubscription = this.toolbarService
+        .subscribeUpdated(parseInt(this.session.toolbars[0]?.id))
+        .subscribe({
+          next: () => {
+            const userSessions = this.session.userSessions?.filter((s) => s.id == this.userID);
+            if (userSessions) {
+                this.loadMarkerData(userSessions);
+            }
+          },
+        });
+
       if (this.session.media == undefined) {
         this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.NO_AUDIO_FILE', 'SESSION.ERROR_DIALOG.NO_AUDIO_FILE_SUM');
         return;
@@ -104,6 +119,7 @@ export class SessionPage implements OnInit, OnDestroy {
         this.loadMarkerData(userSessions);
       }
     });
+
     this.sessionUpdatedSubscription = this.sessionService.subscribeUpdated(this.sessionId).subscribe((response) => {
       const session = response.data?.sessionUpdated;
       if (session) {
@@ -114,6 +130,7 @@ export class SessionPage implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.sessionUpdatedSubscription?.unsubscribe();
+    this.toolbarUpdatedSubscription?.unsubscribe();
   }
 
   private loadMediaData(id: string): Promise<void> {
@@ -161,7 +178,6 @@ export class SessionPage implements OnInit, OnDestroy {
   }
 
   private setSidePanelFormData(session: Session): void {
-    console.log('Side Panel Data Set');
     const sidePanelForm = this.sidePanelForm.get('details');
     let details = sidePanelForm?.value;
 
@@ -177,6 +193,20 @@ export class SessionPage implements OnInit, OnDestroy {
 
     //reset dirty state
     sidePanelForm?.reset(details);
+  }
+
+  private setSidePanelMarkerData(toolbar: Toolbar) {
+    const markerArray = this.sidePanelForm.get('markersArray');
+    let sidePanelMarker = markerArray?.value;
+
+    if (sidePanelMarker) {
+      sidePanelMarker = {
+        ...sidePanelMarker,
+      };
+    }
+
+    //reset dirty state
+    markerArray?.reset(sidePanelMarker);
   }
 
   private loadMarkerData(userSessions: any[]): void {
@@ -438,8 +468,8 @@ export class SessionPage implements OnInit, OnDestroy {
         ...this.markers,
       ];
     });
+
     this.sidePanelForm.get('details')?.valueChanges.subscribe((details) => {
-      console.log('Value Changes Detected');
       if (this.sidePanelForm.get('details')?.dirty) {
         this.sessionService
           .update(parseInt(this.session?.id || '0'), {
