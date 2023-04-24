@@ -326,6 +326,8 @@ export class SessionMaintainPage implements OnInit {
                   summary: this.translateService.instant('SESSION.MAINTAIN.AUDIO.UPLOAD_SUCCESS_MESSAGE_TITLE'),
                   detail: this.translateService.instant('SESSION.MAINTAIN.AUDIO.UPLOAD_SUCCESS_MESSAGE'),
                 });
+
+                this.loadSessionData(parseInt(this.session?.id || '0'));
               },
               error: (err) => {
                 console.log(err);
