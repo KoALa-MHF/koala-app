@@ -139,3 +139,19 @@ const UPDATE_USER = gql`
     }
   }
 `;
+
+const CREATE_ANNOTATION = gql`
+  mutation createAnnotation($createAnnotation: CreateAnnotationInput!) {
+    createAnnotation(createAnnotationInput: $createAnnotation) {
+      id
+      marker {
+        id
+      }
+      userSession {
+        id
+      }
+      start
+      end
+    }
+  }
+`;

@@ -68,6 +68,15 @@ const GET_ONE_SESSION = gql`
         owner {
           email
         }
+        annotations {
+          id
+          end
+          start
+          marker {
+            id
+            color
+          }
+        }
       }
       createdAt
       updatedAt

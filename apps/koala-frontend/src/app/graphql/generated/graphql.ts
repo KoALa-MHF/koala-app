@@ -568,6 +568,22 @@ export type UpdateUserMutation = {
   updateUser: { __typename?: 'User'; id: string; displayName?: string | null };
 };
 
+export type CreateAnnotationMutationVariables = Exact<{
+  createAnnotation: CreateAnnotationInput;
+}>;
+
+export type CreateAnnotationMutation = {
+  __typename?: 'Mutation';
+  createAnnotation: {
+    __typename?: 'Annotation';
+    id: number;
+    start: number;
+    end?: number | null;
+    marker: { __typename?: 'Marker'; id: number };
+    userSession: { __typename?: 'UserSession'; id: number };
+  };
+};
+
 export type GetSessionsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetSessionsQuery = {
@@ -620,6 +636,13 @@ export type GetOneSessionQuery = {
       __typename?: 'UserSession';
       id: number;
       owner: { __typename?: 'User'; email?: string | null };
+      annotations: Array<{
+        __typename?: 'Annotation';
+        id: number;
+        end?: number | null;
+        start: number;
+        marker: { __typename?: 'Marker'; id: number; color: string };
+      }>;
     }>;
   };
 };
@@ -913,6 +936,32 @@ export class UpdateUserGQL extends Apollo.Mutation<UpdateUserMutation, UpdateUse
     super(apollo);
   }
 }
+export const CreateAnnotationDocument = gql`
+  mutation createAnnotation($createAnnotation: CreateAnnotationInput!) {
+    createAnnotation(createAnnotationInput: $createAnnotation) {
+      id
+      marker {
+        id
+      }
+      userSession {
+        id
+      }
+      start
+      end
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateAnnotationGQL extends Apollo.Mutation<CreateAnnotationMutation, CreateAnnotationMutationVariables> {
+  override document = CreateAnnotationDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const GetSessionsDocument = gql`
   query GetSessions {
     sessions {
@@ -990,6 +1039,15 @@ export const GetOneSessionDocument = gql`
         id
         owner {
           email
+        }
+        annotations {
+          id
+          end
+          start
+          marker {
+            id
+            color
+          }
         }
       }
       createdAt

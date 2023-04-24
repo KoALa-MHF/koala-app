@@ -39,14 +39,6 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes) {
-      if (changes['currentTime']) {
-        this.drawTimeline();
-        let i = 0;
-        this.annotationData.forEach((_, row) => {
-          this.drawAnnotations(row, i);
-          i++;
-        });
-      }
       if (changes['markers']) {
         if (this.markers.length == 0) {
           return;
@@ -54,6 +46,14 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
         this.setContainerHeight();
         this.drawLines();
         this.drawTimeline();
+      }
+      if (changes['currentTime'] || changes['annotationData']) {
+        this.drawTimeline();
+        let i = 0;
+        this.annotationData.forEach((_, row) => {
+          this.drawAnnotations(row, i);
+          i++;
+        });
       }
     }
   }
@@ -71,7 +71,6 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
     this.markerService.getIconByCode('');
     const svgC = d3.select(`svg#${this.containerID}`);
     const svgL = d3.select(`svg#${this.labelsID}`);
-
     const text = svgL.selectAll('text,foreignObject').data(this.markers);
     const gRow = svgC.selectAll('g').data(this.markers);
     const line = svgC.selectAll('line.marker').data(this.markers);
