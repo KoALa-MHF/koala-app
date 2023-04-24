@@ -24,7 +24,10 @@
       "MEDIA_CONTROLS": "Fehler beim abspielen der Audio Datei",
       "NO_AUDIO_FILE": "Kein Audio File gefunden",
       "NO_AUDIO_FILE_SUM": "Bitte speichern sie erst ein Audio File",
-      "BROKEN_AUDIO_FILE": "Audio Datei konnte nicht geladen werden"
+      "BROKEN_AUDIO_FILE": "Audio Datei konnte nicht geladen werden",
+      "NO_USER_SESSION": "Es konnte keine Benutzer Session gefunden werden",
+      "NO_USER_SESSION_SUM": "Bitte legen sie eine Benutzer Session an",
+      "ANNOTATION_ERROR": "Annotation konnte nicht gespeichert werden"
     },
     "OVERVIEW": {
       "OWN_SESSIONS_TITLE": "Meine Sessions",
