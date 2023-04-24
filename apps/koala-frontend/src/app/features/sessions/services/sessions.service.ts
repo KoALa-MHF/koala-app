@@ -61,8 +61,10 @@ export class SessionsService {
     return this.deleteSessionGQL.mutate({ id });
   }
 
-  subscribeUpdated() {
-    return this.onSessionUpdatedGQL.subscribe();
+  subscribeUpdated(id: number) {
+    return this.onSessionUpdatedGQL.subscribe({
+      sessionId: id.toString(),
+    });
   }
 
   copySession(sessionId: number): Promise<Session | null> {

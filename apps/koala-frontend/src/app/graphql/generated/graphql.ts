@@ -354,6 +354,10 @@ export type Subscription = {
   sessionUpdated: Session;
 };
 
+export type SubscriptionSessionUpdatedArgs = {
+  id: Scalars['ID'];
+};
+
 export type Toolbar = {
   __typename?: 'Toolbar';
   /** Creation Date */
@@ -702,7 +706,9 @@ export type GetUserQuery = {
   me: { __typename?: 'User'; id: string; displayName?: string | null; email?: string | null };
 };
 
-export type OnSessionUpdatedSubscriptionVariables = Exact<{ [key: string]: never }>;
+export type OnSessionUpdatedSubscriptionVariables = Exact<{
+  sessionId: Scalars['ID'];
+}>;
 
 export type OnSessionUpdatedSubscription = {
   __typename?: 'Subscription';
@@ -1170,8 +1176,8 @@ export class GetUserGQL extends Apollo.Query<GetUserQuery, GetUserQueryVariables
   }
 }
 export const OnSessionUpdatedDocument = gql`
-  subscription onSessionUpdated {
-    sessionUpdated {
+  subscription onSessionUpdated($sessionId: ID!) {
+    sessionUpdated(id: $sessionId) {
       id
       name
       description

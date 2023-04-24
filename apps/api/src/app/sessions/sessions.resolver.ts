@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent, Subscription } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent, Subscription, ID } from '@nestjs/graphql';
 import { SessionsService } from './sessions.service';
 import { Session } from './entities/session.entity';
 import { CreateSessionInput } from './dto/create-session.input';
@@ -68,8 +68,14 @@ export class SessionsResolver {
     return this.sessionsService.remove(id, user);
   }
 
-  @Subscription((returns) => Session)
-  sessionUpdated() {
+  @Subscription((returns) => Session, {
+    filter: async (payload, variables) => {
+      const payloadResult = await payload.sessionUpdated;
+
+      return payloadResult.id == variables.id;
+    },
+  })
+  sessionUpdated(@Args('id', { type: () => ID }) id: number) {
     return pubSub.asyncIterator('sessionUpdated');
   }
 

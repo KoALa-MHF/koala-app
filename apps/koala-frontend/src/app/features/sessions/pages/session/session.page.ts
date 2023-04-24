@@ -104,7 +104,7 @@ export class SessionPage implements OnInit, OnDestroy {
         this.loadMarkerData(userSessions);
       }
     });
-    this.sessionUpdatedSubscription = this.sessionService.subscribeUpdated().subscribe((response) => {
+    this.sessionUpdatedSubscription = this.sessionService.subscribeUpdated(this.sessionId).subscribe((response) => {
       const session = response.data?.sessionUpdated;
       if (session) {
         this.setSidePanelFormData(session);

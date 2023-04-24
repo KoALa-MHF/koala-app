@@ -1,8 +1,8 @@
 import { gql } from 'apollo-angular';
 
 const SUBSCRIBE_SESSION_UPDATED = gql`
-  subscription onSessionUpdated {
-    sessionUpdated {
+  subscription onSessionUpdated($sessionId: ID!) {
+    sessionUpdated(id: $sessionId) {
       id
       name
       description
