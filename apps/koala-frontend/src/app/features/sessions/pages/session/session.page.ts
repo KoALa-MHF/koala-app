@@ -162,7 +162,7 @@ export class SessionPage implements OnInit {
           id: annotation.id,
           startTime: annotation.start / 1000,
           endTime: annotation.end != null ? annotation.end / 1000 : 0,
-          strength: 0,
+          strength: annotation.value,
           disply: annotation.end == null ? Display.Circle : Display.Rect,
           color: annotation.marker.color,
         });
@@ -256,7 +256,8 @@ export class SessionPage implements OnInit {
   }
 
   onMarkerSliderRange(m: Marker, aData: DataPoint[], value: number) {
-    const strength = value; // todo: until we have a field in the Marker interface
+    console.log(value);
+    const strength = value;
     if (this.audioPaused) {
       return;
     }

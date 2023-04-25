@@ -152,6 +152,7 @@ const CREATE_ANNOTATION = gql`
       }
       start
       end
+      value
     }
   }
 `;

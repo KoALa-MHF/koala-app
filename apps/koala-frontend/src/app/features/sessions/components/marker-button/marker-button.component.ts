@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Marker } from '../../types/marker.entity';
 import { MarkerType } from '../../../../graphql/generated/graphql';
 
@@ -9,13 +9,17 @@ import { MarkerType } from '../../../../graphql/generated/graphql';
     './marker-button.component.scss',
   ],
 })
-export class MarkerButtonComponent {
+export class MarkerButtonComponent implements OnInit {
   MarkerType = MarkerType;
   @Input() marker!: Marker;
   @Output() event = new EventEmitter<{ marker: Marker; value?: number }>();
   isActive = false;
   range = 0;
   sliderValue = 0;
+
+  ngOnInit(): void {
+    this.sliderValue = this.marker.valueRangeFrom || 0;
+  }
 
   onClick() {
     switch (this.marker.type) {
@@ -42,6 +46,6 @@ export class MarkerButtonComponent {
   }
 
   private sliderButton() {
-    this.event.emit({ marker: this.marker, value: this.sliderValue });
+    this.event.emit({ marker: this.marker, value: this.sliderValue || 0 });
   }
 }

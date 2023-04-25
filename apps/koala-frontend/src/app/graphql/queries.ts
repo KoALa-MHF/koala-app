@@ -72,6 +72,7 @@ const GET_ONE_SESSION = gql`
           id
           end
           start
+          value
           marker {
             id
             color
