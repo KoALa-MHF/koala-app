@@ -29,6 +29,7 @@ export class AnnotationsService {
     const newAnnotation = this.annotationsRepository.create({
       start: createMarkerInput.start,
       end: createMarkerInput.end,
+      value: createMarkerInput.value,
       marker: {
         id: createMarkerInput.markerId,
       },

@@ -1,6 +1,8 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Marker } from '../../types/marker.entity';
 import { MarkerType } from '../../../../graphql/generated/graphql';
+import { MediaActions, MediaControlService } from '../../services/media-control.service';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'koala-marker-button',
@@ -21,6 +23,16 @@ export class MarkerButtonComponent implements OnInit {
     this.sliderValue = this.marker.valueRangeFrom || 0;
   }
 
+  constructor(private readonly mediaControlService: MediaControlService) {
+    this.mediaControlService.mediaPlayStateChanged$
+      .pipe(filter((mediaAction) => mediaAction === MediaActions.Play))
+      .subscribe({
+        next: () => {
+          this.sliderButton();
+        },
+      });
+  }
+
   onClick() {
     switch (this.marker.type) {
       case MarkerType.Event:
@@ -32,7 +44,7 @@ export class MarkerButtonComponent implements OnInit {
     }
   }
 
-  onSlideEnd(event: any) {
+  onSlideEnd() {
     this.sliderButton();
   }
 
