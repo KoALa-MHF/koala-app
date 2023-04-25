@@ -22,6 +22,7 @@
   <p-slider
     style="width: 100%"
     [(ngModel)]="sliderValue"
+    (onSlideEnd)="onSlideEnd($event)"
     [min]="marker.valueRangeFrom!"
     [max]="marker.valueRangeTo!"
   ></p-slider>

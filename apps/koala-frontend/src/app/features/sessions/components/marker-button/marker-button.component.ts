@@ -25,10 +25,11 @@ export class MarkerButtonComponent {
       case MarkerType.Range:
         this.rangeButton();
         break;
-      case MarkerType.Slider:
-        this.sliderButton();
-        break;
     }
+  }
+
+  onSlideEnd(event: any) {
+    this.sliderButton();
   }
 
   private rangeButton() {

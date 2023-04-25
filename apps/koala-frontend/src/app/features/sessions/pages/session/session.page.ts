@@ -194,7 +194,7 @@ export class SessionPage implements OnInit {
         this.onMarkerRange(marker, aData);
       }
       if (marker.type === MarkerType.Slider) {
-        this.onMarkerSliderRange(marker, aData, 0);
+        this.onMarkerSliderRange(marker, aData, value || 0);
       }
     }
   }
