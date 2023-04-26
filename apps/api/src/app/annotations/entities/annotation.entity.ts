@@ -23,6 +23,10 @@ export class Annotation extends BaseEntity {
   @Field(() => Int, { nullable: true, description: 'Annotation End Seconds' })
   end?: number;
 
+  @Column({ nullable: true })
+  @Field(() => Int, { nullable: true, description: 'Annotation Value' })
+  value?: number;
+
   @ManyToOne(() => Marker)
   @Field((type) => Marker, { description: 'Associated Marker' })
   @IsNotEmpty()

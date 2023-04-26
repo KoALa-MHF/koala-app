@@ -11,6 +11,9 @@ export class CreateAnnotationInput {
   @Field(() => Int, { nullable: true, description: 'Annotation End Seconds' })
   end?: number;
 
+  @Field(() => Int, { nullable: true, description: 'Annotation Value' })
+  value?: number;
+
   @Field(() => Int, { description: 'Associated Marker' })
   @IsNotEmpty()
   markerId: number;

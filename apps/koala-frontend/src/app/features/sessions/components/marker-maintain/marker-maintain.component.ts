@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MarkerType } from '../../../../graphql/generated/graphql';
 import { MarkerService } from '../../services/marker.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'koala-marker-maintain',
@@ -17,11 +18,15 @@ export class MarkerMaintainComponent {
   markerTypes = [
     {
       type: MarkerType.Event,
-      name: 'Event',
+      name: this.translateService.instant('SESSION.MAINTAIN.MARKER.MARKER_EVENT_TYPE'),
     },
     {
       type: MarkerType.Range,
-      name: 'Range',
+      name: this.translateService.instant('SESSION.MAINTAIN.MARKER.MARKER_RANGE_TYPE'),
+    },
+    {
+      type: MarkerType.Slider,
+      name: this.translateService.instant('SESSION.MAINTAIN.MARKER.MARKER_SLIDER_TYPE'),
     },
   ];
 
@@ -37,5 +42,5 @@ export class MarkerMaintainComponent {
     return this.markerDataForm.get('type')?.value;
   }
 
-  constructor(private readonly markerService: MarkerService) {}
+  constructor(private readonly markerService: MarkerService, private readonly translateService: TranslateService) {}
 }

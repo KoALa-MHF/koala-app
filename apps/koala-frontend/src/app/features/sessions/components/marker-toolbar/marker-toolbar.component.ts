@@ -18,7 +18,7 @@ export class MarkerToolbarComponent {
   @Input() toolbarMode: ToolbarMode = ToolbarMode.Maintenance;
   @Input() markers!: Marker[];
   @Output() sortChange = new EventEmitter<Marker[]>();
-  @Output() event = new EventEmitter<Marker>();
+  @Output() event = new EventEmitter<{ marker: Marker; value?: number }>();
 
   dragActive = false;
   draggedMarker: Marker | null = null;
@@ -35,9 +35,9 @@ export class MarkerToolbarComponent {
     this.sortChange.emit(this.markers);
   }
 
-  onMarkerButtonEvent(m: Marker) {
+  onMarkerButtonEvent(event: { marker: Marker; value?: number }) {
     if (this.toolbarMode === ToolbarMode.Session) {
-      this.event.emit(m);
+      this.event.emit(event);
     }
   }
 

@@ -72,6 +72,7 @@ const GET_ONE_SESSION = gql`
           id
           end
           start
+          value
           marker {
             id
             color
@@ -96,6 +97,8 @@ const GET_MARKERS = gql`
       createdAt
       updatedAt
       type
+      valueRangeFrom
+      valueRangeTo
     }
   }
 `;

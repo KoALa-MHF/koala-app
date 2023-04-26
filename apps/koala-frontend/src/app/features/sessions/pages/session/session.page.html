@@ -25,6 +25,7 @@
             [currentTime]="currentAudioTime"
           ></koala-app-annotation>
           <koala-marker-toolbar
+            [toolbarMode]="ToolbarMode.Session"
             [markers]="markers"
             (event)="onMarkerButtonEvent($event)"
             [toolbarMode]="ToolbarMode.Session"

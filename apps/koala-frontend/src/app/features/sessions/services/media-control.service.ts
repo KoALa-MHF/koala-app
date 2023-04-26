@@ -7,6 +7,7 @@ import { EventHandler } from 'wavesurfer.js/types/util';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import MP3Tag from 'mp3tag.js';
+import { Subject } from 'rxjs';
 
 export enum MediaActions {
   Play = 1,
@@ -15,6 +16,7 @@ export enum MediaActions {
   SkipBackward,
   VolumeChange,
   Mute,
+  Ready,
 }
 
 export interface MediaEvent {
@@ -44,6 +46,9 @@ export class MediaControlService {
   };
   waves = new Map<string | HTMLElement, WaveSurfer>();
 
+  private mediaPlayStateChangedSubject = new Subject<MediaActions>();
+  public mediaPlayStateChanged$ = this.mediaPlayStateChangedSubject.asObservable();
+
   async load(trackurl: string, uuid: string) {
     this.uuid = uuid;
     let plugin: any = undefined;
@@ -70,6 +75,17 @@ export class MediaControlService {
     );
     try {
       const w = this.getWave();
+
+      this.addEventHandler('pause', () => {
+        this.mediaPlayStateChangedSubject.next(MediaActions.Stop);
+      });
+      this.addEventHandler('play', () => {
+        this.mediaPlayStateChangedSubject.next(MediaActions.Play);
+      });
+      this.addEventHandler('ready', () => {
+        this.mediaPlayStateChangedSubject.next(MediaActions.Ready);
+      });
+
       const audio = new Audio();
       audio.src = URL.createObjectURL(audioBlob);
       w.load(audio);
@@ -136,8 +152,10 @@ export class MediaControlService {
       const w = this.getWave();
       if (!w.isPlaying()) {
         w.play();
+        this.mediaPlayStateChangedSubject.next(MediaActions.Play);
       } else {
         w?.pause();
+        this.mediaPlayStateChangedSubject.next(MediaActions.Stop);
       }
     } catch (error) {
       console.error(error);

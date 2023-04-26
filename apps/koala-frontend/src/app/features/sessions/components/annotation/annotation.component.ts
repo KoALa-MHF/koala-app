@@ -11,7 +11,7 @@ export enum Display {
 export interface DataPoint {
   id: number;
   strength: number;
-  disply: Display;
+  display: Display;
   startTime: number;
   endTime: number;
   color: string;
@@ -131,7 +131,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
         (enter) =>
           enter
             .append((d: DataPoint) => {
-              return document.createElementNS(d3.namespaces['svg'], d.disply);
+              return document.createElementNS(d3.namespaces['svg'], d.display);
             })
             .attr('x', (d: DataPoint) => this.getPositionXRatio() * d.startTime)
             .attr('y', (d: DataPoint) => this.getRectPositionY(d, posY))
@@ -202,7 +202,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   }
 
   private getRectWidth(d: DataPoint) {
-    if (d.disply == Display.Circle) {
+    if (d.display == Display.Circle) {
       return 0;
     }
     if (d.endTime == 0) {

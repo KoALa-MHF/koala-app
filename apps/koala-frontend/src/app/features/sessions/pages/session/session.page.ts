@@ -14,6 +14,7 @@ import { Marker } from '../../types/marker.entity';
 import { MarkerType } from '../../../../graphql/generated/graphql';
 import { ToolbarMode } from '../../components/marker-toolbar/marker-toolbar.component';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'koala-app-session',
@@ -106,17 +107,31 @@ export class SessionPage implements OnInit {
           // to reduce update frequency
           this.currentAudioTime = time.toFixed(2);
         });
-        this.mediaControlService.addEventHandler('pause', () => {
-          this.audioPaused = true;
-        });
-        this.mediaControlService.addEventHandler('play', () => {
-          this.audioPaused = false;
-        });
-        return new Promise<void>((resolve) => {
-          this.mediaControlService.addEventHandler('ready', () => {
-            this.totalAudioTime = this.mediaControlService.getDuration();
-            resolve();
+
+        this.mediaControlService.mediaPlayStateChanged$
+          .pipe(filter((mediaAction) => mediaAction === MediaActions.Stop))
+          .subscribe({
+            next: () => {
+              this.audioPaused = true;
+            },
           });
+
+        this.mediaControlService.mediaPlayStateChanged$
+          .pipe(filter((mediaAction) => mediaAction === MediaActions.Play))
+          .subscribe({
+            next: () => {
+              this.audioPaused = false;
+            },
+          });
+        return new Promise<void>((resolve) => {
+          this.mediaControlService.mediaPlayStateChanged$
+            .pipe(filter((mediaAction) => mediaAction === MediaActions.Ready))
+            .subscribe({
+              next: () => {
+                this.totalAudioTime = this.mediaControlService.getDuration();
+                resolve();
+              },
+            });
         });
       })
       .catch((e) => {
@@ -162,8 +177,8 @@ export class SessionPage implements OnInit {
           id: annotation.id,
           startTime: annotation.start / 1000,
           endTime: annotation.end != null ? annotation.end / 1000 : 0,
-          strength: 0,
-          disply: annotation.end == null ? Display.Circle : Display.Rect,
+          strength: annotation.value,
+          display: annotation.end == null ? Display.Circle : Display.Rect,
           color: annotation.marker.color,
         });
       }
@@ -178,20 +193,23 @@ export class SessionPage implements OnInit {
     }
   }
 
-  onMarkerButtonEvent(m: Marker) {
+  onMarkerButtonEvent({ marker, value }: { marker: Marker; value?: number }) {
     if (this.audioPaused) {
       return;
     }
-    let aData = this.AnnotationData.get(m.id);
+    let aData = this.AnnotationData.get(marker.id);
     if (aData == undefined) {
       // wtf typescript, how is this still undefined...
-      aData = this.AnnotationData.set(m.id, new Array<DataPoint>()).get(m.id);
+      aData = this.AnnotationData.set(marker.id, new Array<DataPoint>()).get(marker.id);
     } else {
-      if (m.type == MarkerType.Event) {
-        this.onMarkerEvent(m, aData);
+      if (marker.type === MarkerType.Event) {
+        this.onMarkerEvent(marker, aData);
       }
-      if (m.type == MarkerType.Range) {
-        this.onMarkerRange(m, aData);
+      if (marker.type === MarkerType.Range) {
+        this.onMarkerRange(marker, aData);
+      }
+      if (marker.type === MarkerType.Slider) {
+        this.onMarkerSliderRange(marker, aData, value || 0);
       }
     }
   }
@@ -204,7 +222,7 @@ export class SessionPage implements OnInit {
       strength: 0,
       id: aData.length,
       color: m.color,
-      disply: Display.Circle,
+      display: Display.Circle,
     });
     this.annotationService
       .create({
@@ -248,12 +266,12 @@ export class SessionPage implements OnInit {
       strength: 0,
       id: aData.length,
       color: m.color,
-      disply: Display.Rect,
+      display: Display.Rect,
     });
   }
 
-  onMarkerSliderRange(m: Marker, aData: DataPoint[]) {
-    const strength = m.id; // todo: until we have a field in the Marker interface
+  onMarkerSliderRange(m: Marker, aData: DataPoint[], value: number) {
+    const strength = value;
     if (this.audioPaused) {
       return;
     }
@@ -265,7 +283,7 @@ export class SessionPage implements OnInit {
         strength: strength,
         id: 1,
         color: m.color,
-        disply: Display.Rect,
+        display: Display.Rect,
       });
       return;
     }
@@ -273,6 +291,21 @@ export class SessionPage implements OnInit {
     if (latest && latest.strength != strength) {
       if (latest.endTime == 0) {
         latest.endTime = t;
+
+        this.annotationService
+          .create({
+            start: Math.floor(latest.startTime * 1000),
+            end: Math.floor(latest.endTime * 1000),
+            value: latest.strength,
+            userSessionId: this.userID,
+            markerId: m.id,
+          })
+          .subscribe({
+            error: (error) => {
+              this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.ANNOTATION_ERROR', '');
+              console.log(error);
+            },
+          });
       }
       if (strength != 0) {
         aData.push({
@@ -281,7 +314,7 @@ export class SessionPage implements OnInit {
           strength: strength,
           id: aData.length,
           color: m.color,
-          disply: Display.Rect,
+          display: Display.Rect,
         });
       }
       this.AnnotationData.set(m.id, aData);
