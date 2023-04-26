@@ -17,7 +17,7 @@ export class UserSessionsSeeder implements SeederInterface<UserSession> {
       userSessions.push(
         this.userSessionRepository.create({
           owner: options.users[i],
-          session: options.sessions[i],
+          session: options.sessions[2 - i],
         })
       );
     }
