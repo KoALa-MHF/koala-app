@@ -39,21 +39,22 @@ export class SessionsResolver {
   }
 
   @Query(() => Session, { name: 'session' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.sessionsService.findOne(id);
+  findOne(@Args('id', { type: () => Int }) id: number, @CurrentUser() user: User) {
+    return this.sessionsService.findOne(id, user);
   }
 
   @Mutation(() => Session)
   updateSession(
     @Args('id', { type: () => Int }) id: number,
-    @Args('updateSessionInput') updateSessionInput: UpdateSessionInput
+    @Args('updateSessionInput') updateSessionInput: UpdateSessionInput,
+    @CurrentUser() user: User
   ) {
-    return this.sessionsService.update(id, updateSessionInput);
+    return this.sessionsService.update(id, updateSessionInput, user);
   }
 
   @Mutation(() => Session)
-  removeSession(@Args('id', { type: () => Int }) id: number) {
-    return this.sessionsService.remove(id);
+  removeSession(@Args('id', { type: () => Int }) id: number, @CurrentUser() user: User) {
+    return this.sessionsService.remove(id, user);
   }
 
   @ResolveField()
