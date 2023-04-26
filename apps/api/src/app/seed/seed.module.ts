@@ -10,6 +10,7 @@ import { UserSessionsSeeder } from './seeders/user-sessions.seeder';
 import { UserSession } from '../user-sessions/entities/user-session.entity';
 import { Annotation } from '../annotations/entities/annotation.entity';
 import { Marker } from '../markers/entities/marker.entity';
+import { Toolbar } from '../toolbars/entities/toolbar.entity';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { Marker } from '../markers/entities/marker.entity';
       Session,
       UserSession,
       Annotation,
+      Toolbar,
       Marker,
     ]),
   ],

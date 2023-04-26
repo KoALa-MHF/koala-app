@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Session } from '../../sessions/entities/session.entity';
 import { faker } from '@faker-js/faker';
 import { SeederInterface, SeederOptions } from '../seeder.interface';
+import { Toolbar } from '../../toolbars/entities/toolbar.entity';
 
 @Injectable()
 export class SessionsSeeder implements SeederInterface<Session> {
@@ -19,6 +20,9 @@ export class SessionsSeeder implements SeederInterface<Session> {
         this.sessionsRepository.create({
           name: faker.commerce.productName(),
           owner: options.users[i],
+          toolbars: [
+            new Toolbar(),
+          ],
         })
       );
     }
