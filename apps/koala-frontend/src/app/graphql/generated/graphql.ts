@@ -37,6 +37,8 @@ export type Annotation = {
   updatedAt: Scalars['DateTime'];
   /** Associated UserSession */
   userSession: UserSession;
+  /** Annotation Value */
+  value?: Maybe<Scalars['Int']>;
 };
 
 export type AuthenticateSessionInput = {
@@ -68,6 +70,8 @@ export type CreateAnnotationInput = {
   start: Scalars['Int'];
   /** Associated User Session */
   userSessionId: Scalars['Int'];
+  /** Annotation Value */
+  value?: InputMaybe<Scalars['Int']>;
 };
 
 export type CreateMarkerInput = {
@@ -83,6 +87,10 @@ export type CreateMarkerInput = {
   name: Scalars['String'];
   /** Marker Type */
   type: MarkerType;
+  /** Marker Value Range From */
+  valueRangeFrom?: InputMaybe<Scalars['Int']>;
+  /** Marker Value Range To */
+  valueRangeTo?: InputMaybe<Scalars['Int']>;
 };
 
 export type CreateMediaInput = {
@@ -144,11 +152,16 @@ export type Marker = {
   type: MarkerType;
   /** Date of Last Update */
   updatedAt: Scalars['DateTime'];
+  /** Marker Value Range From */
+  valueRangeFrom?: Maybe<Scalars['Int']>;
+  /** Marker Value Range To */
+  valueRangeTo?: Maybe<Scalars['Int']>;
 };
 
 export enum MarkerType {
   Event = 'EVENT',
   Range = 'RANGE',
+  Slider = 'SLIDER',
 }
 
 export type Media = {
@@ -352,6 +365,8 @@ export type Toolbar = {
 export type UpdateAnnotationInput = {
   /** Annotation Note */
   note?: InputMaybe<Scalars['String']>;
+  /** Annotation Value */
+  value?: InputMaybe<Scalars['Int']>;
 };
 
 export type UpdateMarkerInput = {
@@ -367,6 +382,10 @@ export type UpdateMarkerInput = {
   name?: InputMaybe<Scalars['String']>;
   /** Marker Type */
   type?: InputMaybe<MarkerType>;
+  /** Marker Value Range From */
+  valueRangeFrom?: InputMaybe<Scalars['Int']>;
+  /** Marker Value Range To */
+  valueRangeTo?: InputMaybe<Scalars['Int']>;
 };
 
 export type UpdateSessionInput = {
@@ -568,6 +587,23 @@ export type UpdateUserMutation = {
   updateUser: { __typename?: 'User'; id: string; displayName?: string | null };
 };
 
+export type CreateAnnotationMutationVariables = Exact<{
+  createAnnotation: CreateAnnotationInput;
+}>;
+
+export type CreateAnnotationMutation = {
+  __typename?: 'Mutation';
+  createAnnotation: {
+    __typename?: 'Annotation';
+    id: number;
+    start: number;
+    end?: number | null;
+    value?: number | null;
+    marker: { __typename?: 'Marker'; id: number };
+    userSession: { __typename?: 'UserSession'; id: number };
+  };
+};
+
 export type GetSessionsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetSessionsQuery = {
@@ -620,6 +656,14 @@ export type GetOneSessionQuery = {
       __typename?: 'UserSession';
       id: number;
       owner: { __typename?: 'User'; email?: string | null };
+      annotations: Array<{
+        __typename?: 'Annotation';
+        id: number;
+        end?: number | null;
+        start: number;
+        value?: number | null;
+        marker: { __typename?: 'Marker'; id: number; color: string };
+      }>;
     }>;
   };
 };
@@ -641,6 +685,8 @@ export type GetMarkersQuery = {
     createdAt: any;
     updatedAt: any;
     type: MarkerType;
+    valueRangeFrom?: number | null;
+    valueRangeTo?: number | null;
   }>;
 };
 
@@ -913,6 +959,33 @@ export class UpdateUserGQL extends Apollo.Mutation<UpdateUserMutation, UpdateUse
     super(apollo);
   }
 }
+export const CreateAnnotationDocument = gql`
+  mutation createAnnotation($createAnnotation: CreateAnnotationInput!) {
+    createAnnotation(createAnnotationInput: $createAnnotation) {
+      id
+      marker {
+        id
+      }
+      userSession {
+        id
+      }
+      start
+      end
+      value
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateAnnotationGQL extends Apollo.Mutation<CreateAnnotationMutation, CreateAnnotationMutationVariables> {
+  override document = CreateAnnotationDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const GetSessionsDocument = gql`
   query GetSessions {
     sessions {
@@ -991,6 +1064,16 @@ export const GetOneSessionDocument = gql`
         owner {
           email
         }
+        annotations {
+          id
+          end
+          start
+          value
+          marker {
+            id
+            color
+          }
+        }
       }
       createdAt
       updatedAt
@@ -1020,6 +1103,8 @@ export const GetMarkersDocument = gql`
       createdAt
       updatedAt
       type
+      valueRangeFrom
+      valueRangeTo
     }
   }
 `;

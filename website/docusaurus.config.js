@@ -24,7 +24,11 @@ const config = {
   // to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en'],
+    locales: [
+      'en',
+      'fr',
+      'de',
+    ],
   },
 
   presets: [
@@ -36,15 +40,13 @@ const config = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/KoALa-MHF/koala-app/tree/main/website/',
+          editUrl: 'https://github.com/KoALa-MHF/koala-app/tree/main/website/',
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/KoALa-MHF/koala-app/tree/main/website/',
+          editUrl: 'https://github.com/KoALa-MHF/koala-app/tree/main/website/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -55,13 +57,13 @@ const config = {
 
   plugins: [
     [
-      "docusaurus-graphql-plugin",
+      'docusaurus-graphql-plugin',
       {
         // can be a path, a glob or an URL
-        schema: "http://localhost:3333/graphql",
-        routeBasePath: "/docs/development/api",
+        schema: 'http://localhost:3333/graphql',
+        routeBasePath: '/docs/development/api',
         sidebar: {
-          label: "GraphQL API",
+          label: 'GraphQL API',
           position: 4,
         },
       },
@@ -71,12 +73,14 @@ const config = {
   themes: [
     [
       // @ts-ignore
-      "@easyops-cn/docusaurus-search-local",
+      '@easyops-cn/docusaurus-search-local',
       /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
       // @ts-ignore
       ({
         hashed: true,
-        language: ["en"],
+        language: [
+          'en',
+        ],
         highlightSearchTermsOnTargetPage: true,
         explicitSearchResultPath: true,
       }),
@@ -105,7 +109,11 @@ const config = {
             position: 'left',
             label: 'Development',
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
+          { to: '/blog', label: 'Blog', position: 'left' },
+          {
+            type: 'localeDropdown',
+            position: 'right',
+          },
           {
             href: 'https://github.com/KoALa-MHF/koala-app',
             label: 'GitHub',

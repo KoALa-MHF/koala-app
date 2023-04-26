@@ -26,6 +26,7 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { SidebarModule } from 'primeng/sidebar';
 import { DividerModule } from 'primeng/divider';
 import { ToolbarModule } from 'primeng/toolbar';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 import { QRCodeModule } from 'angularx-qrcode';
 
@@ -53,6 +54,7 @@ import { SessionParticipantsComponent } from './components/session-participants/
 import { SessionParticipantsOverviewComponent } from './components/session-participants-overview/session-participants-overview.component';
 import { SessionParticipantsInvitationComponent } from './components/session-participants-invitation/session-participants-invitation.component';
 import { MarkerService } from './services/marker.service';
+import { AnnotationService } from './services/annotation.service';
 import { MarkerButtonComponent } from './components/marker-button/marker-button.component';
 import { MarkerToolbarComponent } from './components/marker-toolbar/marker-toolbar.component';
 import { DeleteConfirmDialogComponent } from './components/delete-confirm-dialog/delete-confirm-dialog.component';
@@ -118,6 +120,7 @@ import { MarkerOverviewListComponent } from './components/marker-overview-list/m
     SidebarModule,
     DividerModule,
     ToolbarModule,
+    InputNumberModule,
   ],
   providers: [
     SessionsService,
@@ -126,6 +129,7 @@ import { MarkerOverviewListComponent } from './components/marker-overview-list/m
     MediaControlService,
     ToolbarsService,
     UserSessionService,
+    AnnotationService,
   ],
 })
 export class SessionsModule {}

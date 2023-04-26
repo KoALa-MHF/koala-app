@@ -2,6 +2,6 @@
 sidebar_position: 1
 ---
 
-# Overview
+# Overview {#community-overview}
 
 Welcome to KoALa Community

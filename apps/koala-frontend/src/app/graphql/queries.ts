@@ -68,6 +68,16 @@ const GET_ONE_SESSION = gql`
         owner {
           email
         }
+        annotations {
+          id
+          end
+          start
+          value
+          marker {
+            id
+            color
+          }
+        }
       }
       createdAt
       updatedAt
@@ -87,6 +97,8 @@ const GET_MARKERS = gql`
       createdAt
       updatedAt
       type
+      valueRangeFrom
+      valueRangeTo
     }
   }
 `;
