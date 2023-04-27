@@ -3,9 +3,13 @@ import { ToolbarsService } from './toolbars.service';
 import { Toolbar } from './entities/toolbar.entity';
 import { UpdateToolbarInput } from './dto/update-toolbar.input';
 import { SessionsService } from '../sessions/sessions.service';
-import { forwardRef, Inject } from '@nestjs/common';
+import { forwardRef, Inject, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '../core/guards/auth.guard';
+import { CurrentUser } from '../core/decorators/user.decorator';
+import { User } from '../users/entities/user.entity';
 
 @Resolver(() => Toolbar)
+@UseGuards(AuthGuard)
 export class ToolbarsResolver {
   constructor(
     private readonly toolbarsService: ToolbarsService,
@@ -16,14 +20,15 @@ export class ToolbarsResolver {
   @Mutation(() => Toolbar)
   updateToolbar(
     @Args('id', { type: () => Int }) id: number,
-    @Args('updateToolbarInput') updateToolbarInput: UpdateToolbarInput
+    @Args('updateToolbarInput') updateToolbarInput: UpdateToolbarInput,
+    @CurrentUser() user: User
   ) {
-    return this.toolbarsService.update(id, updateToolbarInput);
+    return this.toolbarsService.update(id, updateToolbarInput, user);
   }
 
   @ResolveField()
-  async session(@Parent() toolbar: Toolbar) {
+  async session(@Parent() toolbar: Toolbar, @CurrentUser() user: User) {
     const { sessionId } = toolbar;
-    return this.sessionService.findOne(sessionId, true);
+    return this.sessionService.findOne(sessionId, user);
   }
 }
