@@ -88,9 +88,19 @@ export class UserSessionsService {
   }
 
   findAllBySession(sessionId: number, user?: User): Promise<UserSession[]> {
-    return this.userSessionsRepository.findBy({
-      sessionId: sessionId,
-      ownerId: user?.id,
+    return this.userSessionsRepository.find({
+      where: [
+        {
+          sessionId: sessionId,
+          ownerId: user?.id,
+        },
+        {
+          sessionId: sessionId,
+          session: {
+            ownerId: user?.id,
+          },
+        },
+      ],
     });
   }
 
