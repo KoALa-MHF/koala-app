@@ -15,7 +15,10 @@ const SUBSCRIBE_SESSION_UPDATED = gql`
       enableLiveAnalysis
       toolbars {
         id
-        markers
+        markers {
+          markerId
+          visible
+        }
         createdAt
         updatedAt
       }
@@ -33,7 +36,10 @@ const SUBSCRIBE_TOOLBAR_UPDATED = gql`
   subscription onToolbarUpdated($toolbarId: ID!) {
     toolbarUpdated(id: $toolbarId) {
       id
-      markers
+      markers {
+        markerId
+        visible
+      }
       createdAt
       updatedAt
     }

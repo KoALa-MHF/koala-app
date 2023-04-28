@@ -1,8 +1,8 @@
-import { Marker } from './marker.entity';
+import { ToolbarMarker } from './toolbar-marker.entity';
 
 export interface Toolbar {
   id: string;
-  markers: string[];
+  markers?: ToolbarMarker[] | null;
   createdAt: Date;
   updatedAt: Date;
 }

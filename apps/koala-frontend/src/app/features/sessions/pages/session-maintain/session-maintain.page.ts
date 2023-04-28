@@ -194,9 +194,12 @@ export class SessionMaintainPage implements OnInit, OnDestroy {
 
       this.setSessionGeneralDataForm(this.session);
 
-      const markers = this.session?.toolbars[0]?.markers || [];
-      const markerIds: Array<number> = markers.map((marker) => parseInt(marker));
-      this.refreshSessionMarkers(markerIds);
+      const sessionToolbars = this.session?.toolbars;
+      if (sessionToolbars) {
+        const markers = sessionToolbars[0].markers || [];
+        const markerIds: Array<number> = markers.map((marker) => parseInt(marker.markerId));
+        this.refreshSessionMarkers(markerIds);
+      }
     });
   }
 
@@ -293,14 +296,20 @@ export class SessionMaintainPage implements OnInit, OnDestroy {
           const markerId = result.data?.createMarker.id;
 
           if (markerId) {
-            const toolbar = this.session?.toolbars[0];
-            if (toolbar) {
-              const markers = [
-                ...toolbar.markers,
-              ];
-              markers.push(markerId + '');
+            const toolbars = this.session?.toolbars;
+            if (toolbars) {
+              const toolbar = toolbars[0];
+              if (toolbar.markers) {
+                const markers = [
+                  ...toolbar.markers,
+                ];
+                markers.push({ markerId: markerId.toString(), visible: true });
 
-              this.updateToolbarMarker(parseInt(toolbar.id), markers);
+                this.updateToolbarMarker(
+                  parseInt(toolbar.id),
+                  markers.map((toolbarMarker) => toolbarMarker.markerId)
+                );
+              }
             }
           }
         },
@@ -311,25 +320,32 @@ export class SessionMaintainPage implements OnInit, OnDestroy {
   }
 
   public onAddExistingMarkers(markers: Marker[]) {
-    const toolbar = this.session?.toolbars[0];
+    const toolbars = this.session?.toolbars;
 
-    if (toolbar) {
-      const updatedMarkers = [
-        ...toolbar.markers,
-      ];
-      markers.forEach((marker) => {
-        const found = updatedMarkers.findIndex((markerTemp) => marker.id.toString() === markerTemp);
-        if (found === -1) {
-          updatedMarkers.push(marker.id + '');
-        }
-      });
-      this.updateToolbarMarker(parseInt(toolbar?.id || '0'), updatedMarkers);
+    if (toolbars) {
+      const toolbar = toolbars[0];
+      if (toolbar.markers) {
+        const updatedMarkers = [
+          ...toolbar.markers,
+        ];
+        markers.forEach((marker) => {
+          const found = updatedMarkers.findIndex((markerTemp) => marker.id.toString() === markerTemp.markerId);
+          if (found === -1) {
+            updatedMarkers.push({ markerId: marker.id.toString(), visible: true });
+          }
+        });
+        this.updateToolbarMarker(
+          parseInt(toolbar?.id || '0'),
+          updatedMarkers.map((toolbarMarker) => toolbarMarker.markerId)
+        );
+      }
     }
   }
 
   public onMarkerSortChange(markers: Marker[]) {
-    const toolbar = this.session?.toolbars[0];
-    if (toolbar) {
+    const toolbars = this.session?.toolbars;
+    if (toolbars) {
+      const toolbar = toolbars[0];
       this.updateToolbarMarker(
         parseInt(toolbar.id),
         markers.map((marker) => marker.id.toString())

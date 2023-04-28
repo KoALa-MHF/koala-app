@@ -16,7 +16,7 @@ export interface Session {
   enableLiveAnalysis?: boolean | null;
   media?: Media | null;
   code?: string;
-  toolbars: Toolbar[];
+  toolbars?: Toolbar[] | null;
   createdAt?: Date;
   updatedAt?: Date;
   userSessions?: UserSession[];

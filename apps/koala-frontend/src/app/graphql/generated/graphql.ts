@@ -192,6 +192,7 @@ export type Mutation = {
   removeMarker: Marker;
   removeSession: Session;
   removeUserSession: UserSession;
+  setMarkerVisible: Toolbar;
   updateAnnotation: Annotation;
   updateMarker: Marker;
   updateSession: Session;
@@ -246,6 +247,11 @@ export type MutationRemoveSessionArgs = {
 
 export type MutationRemoveUserSessionArgs = {
   id: Scalars['Int'];
+};
+
+export type MutationSetMarkerVisibleArgs = {
+  id: Scalars['Int'];
+  updateToolbarMarkerVisible: SetToolbarMarkerVisibilityInput;
 };
 
 export type MutationUpdateAnnotationArgs = {
@@ -336,7 +342,7 @@ export type Session = {
   start?: Maybe<Scalars['DateTime']>;
   /** Session Status */
   status?: Maybe<SessionStatus>;
-  /** Associated Session */
+  /** Associated Toolbars */
   toolbars: Array<Toolbar>;
   /** Date of Last Update */
   updatedAt: Scalars['DateTime'];
@@ -348,6 +354,11 @@ export enum SessionStatus {
   Closed = 'CLOSED',
   Open = 'OPEN',
 }
+
+export type SetToolbarMarkerVisibilityInput = {
+  markerId: Scalars['ID'];
+  visible: Scalars['Boolean'];
+};
 
 export type Subscription = {
   __typename?: 'Subscription';
@@ -369,11 +380,18 @@ export type Toolbar = {
   createdAt: Scalars['DateTime'];
   /** ID for Media */
   id: Scalars['ID'];
-  markers: Array<Scalars['String']>;
+  markers?: Maybe<Array<ToolbarMarker>>;
   /** Associated Session */
   session: Session;
   /** Date of Last Update */
   updatedAt: Scalars['DateTime'];
+};
+
+export type ToolbarMarker = {
+  __typename?: 'ToolbarMarker';
+  /** Marker ID */
+  markerId: Scalars['ID'];
+  visible: Scalars['Boolean'];
 };
 
 export type UpdateAnnotationInput = {
@@ -494,7 +512,13 @@ export type CreateNewSessionMutation = {
     createdAt: any;
     updatedAt: any;
     media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
-    toolbars: Array<{ __typename?: 'Toolbar'; id: string; markers: Array<string>; createdAt: any; updatedAt: any }>;
+    toolbars: Array<{
+      __typename?: 'Toolbar';
+      id: string;
+      createdAt: any;
+      updatedAt: any;
+      markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+    }>;
   };
 };
 
@@ -551,7 +575,11 @@ export type UpdateToolbarMutationVariables = Exact<{
 
 export type UpdateToolbarMutation = {
   __typename?: 'Mutation';
-  updateToolbar: { __typename?: 'Toolbar'; id: string; markers: Array<string> };
+  updateToolbar: {
+    __typename?: 'Toolbar';
+    id: string;
+    markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+  };
 };
 
 export type AuthenticateSessionCodeMutationVariables = Exact<{
@@ -639,7 +667,13 @@ export type GetSessionsQuery = {
     updatedAt: any;
     userSessions: Array<{ __typename?: 'UserSession'; id: number }>;
     media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
-    toolbars: Array<{ __typename?: 'Toolbar'; id: string; markers: Array<string>; createdAt: any; updatedAt: any }>;
+    toolbars: Array<{
+      __typename?: 'Toolbar';
+      id: string;
+      createdAt: any;
+      updatedAt: any;
+      markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+    }>;
   }>;
 };
 
@@ -665,7 +699,13 @@ export type GetOneSessionQuery = {
     createdAt: any;
     updatedAt: any;
     media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
-    toolbars: Array<{ __typename?: 'Toolbar'; id: string; markers: Array<string>; createdAt: any; updatedAt: any }>;
+    toolbars: Array<{
+      __typename?: 'Toolbar';
+      id: string;
+      createdAt: any;
+      updatedAt: any;
+      markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+    }>;
     userSessions: Array<{
       __typename?: 'UserSession';
       id: number;
@@ -729,7 +769,13 @@ export type OnSessionUpdatedSubscription = {
     enablePlayer?: boolean | null;
     displaySampleSolution?: boolean | null;
     enableLiveAnalysis?: boolean | null;
-    toolbars: Array<{ __typename?: 'Toolbar'; id: string; markers: Array<string>; createdAt: any; updatedAt: any }>;
+    toolbars: Array<{
+      __typename?: 'Toolbar';
+      id: string;
+      createdAt: any;
+      updatedAt: any;
+      markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+    }>;
     userSessions: Array<{
       __typename?: 'UserSession';
       id: number;
@@ -744,7 +790,13 @@ export type OnToolbarUpdatedSubscriptionVariables = Exact<{
 
 export type OnToolbarUpdatedSubscription = {
   __typename?: 'Subscription';
-  toolbarUpdated: { __typename?: 'Toolbar'; id: string; markers: Array<string>; createdAt: any; updatedAt: any };
+  toolbarUpdated: {
+    __typename?: 'Toolbar';
+    id: string;
+    createdAt: any;
+    updatedAt: any;
+    markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+  };
 };
 
 export const CreateNewSessionDocument = gql`
@@ -770,7 +822,10 @@ export const CreateNewSessionDocument = gql`
       }
       toolbars {
         id
-        markers
+        markers {
+          markerId
+          visible
+        }
         createdAt
         updatedAt
       }
@@ -887,7 +942,10 @@ export const UpdateToolbarDocument = gql`
   mutation updateToolbar($id: Int!, $updateToolbarInput: UpdateToolbarInput!) {
     updateToolbar(id: $id, updateToolbarInput: $updateToolbarInput) {
       id
-      markers
+      markers {
+        markerId
+        visible
+      }
     }
   }
 `;
@@ -1062,7 +1120,10 @@ export const GetSessionsDocument = gql`
       }
       toolbars {
         id
-        markers
+        markers {
+          markerId
+          visible
+        }
         createdAt
         updatedAt
       }
@@ -1105,7 +1166,10 @@ export const GetOneSessionDocument = gql`
       }
       toolbars {
         id
-        markers
+        markers {
+          markerId
+          visible
+        }
         createdAt
         updatedAt
       }
@@ -1204,7 +1268,10 @@ export const OnSessionUpdatedDocument = gql`
       enableLiveAnalysis
       toolbars {
         id
-        markers
+        markers {
+          markerId
+          visible
+        }
         createdAt
         updatedAt
       }
@@ -1235,7 +1302,10 @@ export const OnToolbarUpdatedDocument = gql`
   subscription onToolbarUpdated($toolbarId: ID!) {
     toolbarUpdated(id: $toolbarId) {
       id
-      markers
+      markers {
+        markerId
+        visible
+      }
       createdAt
       updatedAt
     }

@@ -94,16 +94,20 @@ export class SessionPage implements OnInit, OnDestroy {
 
       this.setSidePanelFormData(this.session);
 
-      this.toolbarUpdatedSubscription = this.toolbarService
-        .subscribeUpdated(parseInt(this.session.toolbars[0]?.id))
-        .subscribe({
+      const toolbars = this.session.toolbars;
+
+      if (toolbars) {
+        const toolbar = toolbars[0];
+
+        this.toolbarUpdatedSubscription = this.toolbarService.subscribeUpdated(parseInt(toolbar.id)).subscribe({
           next: () => {
             const userSessions = this.session.userSessions?.filter((s) => s.id == this.userID);
             if (userSessions) {
-                this.loadMarkerData(userSessions);
+              this.loadMarkerData(userSessions);
             }
           },
         });
+      }
 
       if (this.session.media == undefined) {
         this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.NO_AUDIO_FILE', 'SESSION.ERROR_DIALOG.NO_AUDIO_FILE_SUM');
@@ -210,24 +214,28 @@ export class SessionPage implements OnInit, OnDestroy {
   }
 
   private loadMarkerData(userSessions: any[]): void {
-    const markers = this.session?.toolbars[0]?.markers || [];
-    const markerIds: Array<number> = markers.map((marker) => parseInt(marker));
-    this.markerService.getAll(markerIds).subscribe((result) => {
-      const markers = result.data?.markers;
-      for (const marker of markers) {
-        const m = { hidden: false, ...marker };
-        this.markers.push(m);
-        this.markersFormGroup.addControl(marker.id + '', new FormControl(true));
-        this.AnnotationData.set(marker.id, new Array<DataPoint>());
-      }
-      this.loadAnnotations(userSessions);
-      this.onSidePanelFormChanges();
-      this.markers = [
-        ...this.markers,
-      ];
+    const toolbars = this.session?.toolbars;
+    if (toolbars) {
+      const toolbar = toolbars[0];
+      const markers = toolbar?.markers || [];
+      const markerIds: Array<number> = markers.map((marker) => parseInt(marker.markerId));
+      this.markerService.getAll(markerIds).subscribe((result) => {
+        const markers = result.data?.markers;
+        for (const marker of markers) {
+          const m = { hidden: false, ...marker };
+          this.markers.push(m);
+          this.markersFormGroup.addControl(marker.id + '', new FormControl(true));
+          this.AnnotationData.set(marker.id, new Array<DataPoint>());
+        }
+        this.loadAnnotations(userSessions);
+        this.onSidePanelFormChanges();
+        this.markers = [
+          ...this.markers,
+        ];
 
-      this.AnnotationData = new Map(this.AnnotationData);
-    });
+        this.AnnotationData = new Map(this.AnnotationData);
+      });
+    }
   }
 
   private loadAnnotations(userSessions: any[]): void {

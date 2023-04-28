@@ -26,7 +26,10 @@ const GET_SESSIONS = gql`
       }
       toolbars {
         id
-        markers
+        markers {
+          markerId
+          visible
+        }
         createdAt
         updatedAt
       }
@@ -59,7 +62,10 @@ const GET_ONE_SESSION = gql`
       }
       toolbars {
         id
-        markers
+        markers {
+          markerId
+          visible
+        }
         createdAt
         updatedAt
       }

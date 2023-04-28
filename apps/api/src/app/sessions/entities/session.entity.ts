@@ -6,6 +6,7 @@ import { Media } from '../../media/entities/media.entity';
 import { customAlphabet } from 'nanoid';
 import { nolookalikes } from 'nanoid-dictionary';
 import { Toolbar } from '../../toolbars/entities/toolbar.entity';
+import { Toolbar as ToolbarType } from '../../toolbars/dto/toolbar';
 import { UserSession } from '../../user-sessions/entities/user-session.entity';
 import { User } from '../../users/entities/user.entity';
 
@@ -121,9 +122,9 @@ export class Session extends BaseEntity {
   })
   @Field(
     (type) => [
-      Toolbar,
+      ToolbarType,
     ],
-    { description: 'Associated Session' }
+    { description: 'Associated Toolbars' }
   )
   toolbars: Toolbar[];
 

@@ -23,7 +23,10 @@ const CREATE_SESSION = gql`
       }
       toolbars {
         id
-        markers
+        markers {
+          markerId
+          visible
+        }
         createdAt
         updatedAt
       }
@@ -90,7 +93,10 @@ const UPDATE_TOOLBAR = gql`
   mutation updateToolbar($id: Int!, $updateToolbarInput: UpdateToolbarInput!) {
     updateToolbar(id: $id, updateToolbarInput: $updateToolbarInput) {
       id
-      markers
+      markers {
+        markerId
+        visible
+      }
     }
   }
 `;
