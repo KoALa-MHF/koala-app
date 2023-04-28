@@ -7,6 +7,7 @@ import { customAlphabet } from 'nanoid';
 import { nolookalikes } from 'nanoid-dictionary';
 import { Toolbar } from '../../toolbars/entities/toolbar.entity';
 import { UserSession } from '../../user-sessions/entities/user-session.entity';
+import { User } from '../../users/entities/user.entity';
 
 const nanoid = customAlphabet(nolookalikes, 7);
 
@@ -102,6 +103,18 @@ export class Session extends BaseEntity {
   @Index({ unique: true })
   @IsNotEmpty()
   code: string;
+
+  @ManyToOne(() => User, {
+    cascade: [
+      'insert',
+    ],
+  })
+  @Field((type) => User, { description: 'Associated User' })
+  @IsNotEmpty()
+  owner: User;
+
+  @Column()
+  ownerId: number;
 
   @OneToMany(() => Toolbar, (toolbar) => toolbar.session, {
     cascade: true,

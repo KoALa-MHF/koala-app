@@ -72,9 +72,9 @@ export class UserSessionsResolver {
   }
 
   @ResolveField()
-  session(@Parent() userSession: UserSession) {
+  session(@Parent() userSession: UserSession, @CurrentUser() user: User) {
     const { sessionId } = userSession;
-    return this.sessionsService.findOne(sessionId, true);
+    return this.sessionsService.findOne(sessionId, user);
   }
 
   @ResolveField()
