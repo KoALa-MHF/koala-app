@@ -332,6 +332,8 @@ export type Session = {
   media?: Maybe<Media>;
   /** Session Name */
   name: Scalars['String'];
+  /** Associated User */
+  owner: User;
   /** Start of Session */
   start?: Maybe<Scalars['DateTime']>;
   /** Session Status */
@@ -626,6 +628,7 @@ export type GetSessionsQuery = {
     userSessions: Array<{ __typename?: 'UserSession'; id: number }>;
     media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
     toolbars: Array<{ __typename?: 'Toolbar'; id: string; markers: Array<string>; createdAt: any; updatedAt: any }>;
+    owner: { __typename?: 'User'; id: string; createdAt: any; updatedAt: any };
   }>;
 };
 
@@ -665,6 +668,7 @@ export type GetOneSessionQuery = {
         marker: { __typename?: 'Marker'; id: number; color: string };
       }>;
     }>;
+    owner: { __typename?: 'User'; id: string; createdAt: any; updatedAt: any };
   };
 };
 
@@ -1016,6 +1020,11 @@ export const GetSessionsDocument = gql`
         createdAt
         updatedAt
       }
+      owner {
+        id
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -1074,6 +1083,11 @@ export const GetOneSessionDocument = gql`
             color
           }
         }
+      }
+      owner {
+        id
+        createdAt
+        updatedAt
       }
       createdAt
       updatedAt

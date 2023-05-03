@@ -8,7 +8,7 @@
         </span>
       </ng-template>
       <koala-sessions-overview-table
-        [sessions]="sessions"
+        [sessions]="sessionsOwner"
         (sessionDelete)="onSessionDelete($event)"
         (sessionCreate)="onSessionCreateRequested()"
         (sessionExport)="onSessionExport($event)"
@@ -23,7 +23,7 @@
         <span> {{ 'SESSION.OVERVIEW.OTHER_SESSIONS_TITLE' | translate }} </span>
       </ng-template>
 
-      <koala-sessions-overview-table [sessions]="sessions"></koala-sessions-overview-table>
+      <koala-sessions-overview-table [sessions]="sessionsParticipants"></koala-sessions-overview-table>
     </p-accordionTab>
   </p-accordion>
 </div>

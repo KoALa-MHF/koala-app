@@ -30,6 +30,11 @@ const GET_SESSIONS = gql`
         createdAt
         updatedAt
       }
+      owner {
+        id
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -78,6 +83,11 @@ const GET_ONE_SESSION = gql`
             color
           }
         }
+      }
+      owner {
+        id
+        createdAt
+        updatedAt
       }
       createdAt
       updatedAt
