@@ -50,10 +50,7 @@ export class LoginPage implements OnInit {
   }
 
   public onLogin() {
-    if (this.username !== '' && this.password !== '') {
-      //use username and password prefereably over session code
-      this.authService.loginViaUsername('', '');
-    } else if (this.sessionCode && this.sessionCode !== null && this.sessionCode !== '') {
+    if (this.sessionCode && this.sessionCode !== null && this.sessionCode !== '') {
       this.authService.loginViaSessionCode(this.sessionCode);
     } else {
       //should not happen because form is not validated => error

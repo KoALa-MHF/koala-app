@@ -10,6 +10,7 @@ import { UserSessionsService } from '../user-sessions/user-sessions.service';
 import { AuthGuard } from '../core/guards/auth.guard';
 import { CurrentUser } from '../core/decorators/user.decorator';
 import { User } from '../users/entities/user.entity';
+import { UsersService } from '../users/users.service';
 
 @Resolver(() => Session)
 @UseGuards(AuthGuard)
@@ -20,7 +21,8 @@ export class SessionsResolver {
     @Inject(forwardRef(() => ToolbarsService))
     private readonly toolbarsService: ToolbarsService,
     @Inject(forwardRef(() => UserSessionsService))
-    private readonly userSessionsService: UserSessionsService
+    private readonly userSessionsService: UserSessionsService,
+    private readonly usersService: UsersService
   ) {}
 
   @Mutation(() => Session)
@@ -73,5 +75,10 @@ export class SessionsResolver {
   @ResolveField()
   userSessions(@Parent() session: Session, @CurrentUser() user: User) {
     return this.userSessionsService.findAllBySession(session.id, user);
+  }
+
+  @ResolveField()
+  owner(@Parent() session: Session) {
+    return this.usersService.findOne(session.ownerId);
   }
 }
