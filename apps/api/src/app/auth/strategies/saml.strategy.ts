@@ -1,10 +1,12 @@
 import { PassportStrategy } from '@nestjs/passport';
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Strategy, Profile } from '@node-saml/passport-saml';
+import { UsersService } from '../../users/users.service';
+import { EntityNotFoundError } from 'typeorm';
 
 @Injectable()
 export class SamlStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(private readonly usersService: UsersService) {
     super({
       issuer: 'tastysoft.de', // TODO Move this to configuration
       callbackUrl: 'http://localhost:3333/api/auth/sso/saml/ac',
@@ -16,12 +18,9 @@ export class SamlStrategy extends PassportStrategy(Strategy) {
 
   async validate(profile: Profile) {
     try {
-      return {
-        email: profile.email,
-        id: profile.id,
-      };
-    } catch (e) {
-      throw new ForbiddenException('invalid user attributes');
+      return this.usersService.upsertBySamlProfile(profile);
+    } catch (error) {
+      throw new UnauthorizedException();
     }
   }
 }

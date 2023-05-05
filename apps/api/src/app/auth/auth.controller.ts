@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { SamlAuthGuard } from '../core/guards/saml-auth.guard';
+import { User } from '../users/entities/user.entity';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -16,11 +17,11 @@ export class AuthController {
   @Post('sso/saml/ac')
   @UseGuards(SamlAuthGuard)
   async samlAssertionConsumer(@Req() req, @Res() res) {
-    console.log('USER ---------->', req.user);
-    //this routes gets executed on successful assertion from IdP
-    if (req.user) {
-      console.log('USER', req.user);
-      res.redirect('/?jwt=' + 223232323);
+    const user: User = req.user;
+    if (user) {
+      console.log('USER', user);
+      const authentication = await this.authService.authenticateSamlUser(user);
+      res.redirect('/?jwt=' + authentication.accessToken);
     }
   }
 }

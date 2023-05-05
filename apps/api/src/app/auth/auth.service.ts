@@ -44,6 +44,13 @@ export class AuthService {
     }
   }
 
+  async authenticateSamlUser(user: User): Promise<Authentication> {
+    if (!user.samlId) {
+      throw new Error('Only users with a connected SAML ID can be authenticated');
+    }
+    return this.getAuthentication(user.id);
+  }
+
   private async getAuthentication(userId: number): Promise<Authentication> {
     const accessToken = await this.getAccessToken(userId);
     return {
