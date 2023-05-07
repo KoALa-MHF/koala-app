@@ -19,9 +19,8 @@ export class AuthController {
   async samlAssertionConsumer(@Req() req, @Res() res) {
     const user: User = req.user;
     if (user) {
-      console.log('USER', user);
       const authentication = await this.authService.authenticateSamlUser(user);
-      res.redirect('/?jwt=' + authentication.accessToken);
+      res.redirect('http://localhost:4200/auth?jwt=' + authentication.accessToken); // TODO: Env variable
     }
   }
 }

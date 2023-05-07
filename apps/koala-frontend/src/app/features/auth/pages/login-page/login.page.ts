@@ -43,10 +43,21 @@ export class LoginPage implements OnInit {
     });
 
     const sessionCode = this.route.snapshot.queryParamMap.get('sessionCode');
+    const jwt = this.route.snapshot.queryParamMap.get('jwt');
+
+    if (jwt) {
+      this.authService.loginViaSaml(jwt);
+    }
 
     if (sessionCode) {
       this.loginForm.get('sessionCode')?.setValue(sessionCode);
     }
+  }
+
+  public onLoginViaSaml() {
+    // TODO: must be moved to environment file
+    window.location.href =
+      'http://localhost:4000/saml/login?acsUrl=http://localhost:3333/api/auth/sso/saml/ac&audience=tastysoft.de';
   }
 
   public onLogin() {

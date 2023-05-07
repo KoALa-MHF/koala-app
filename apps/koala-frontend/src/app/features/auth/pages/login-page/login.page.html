@@ -48,5 +48,17 @@
         [disabled]="!loginForm.valid"
       ></button>
     </div>
+    <div style="display: flex; flex-direction: row">
+      <button
+        pButton
+        pRipple
+        type="submmit"
+        (click)="onLoginViaSaml()"
+        style="border-radius: 15px"
+        class="p-button-raised"
+      >
+        Login via SAML
+      </button>
+    </div>
   </div>
 </div>
