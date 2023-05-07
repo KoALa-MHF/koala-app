@@ -20,19 +20,29 @@ export class UsersService {
     return email ? this.usersRespository.findOneBy({ email }) : null;
   }
 
+  findBySamlId(samlId: string) {
+    return this.usersRespository.findOneBy({ samlId });
+  }
+
   async upsertBySamlProfile(profile: Profile): Promise<User> {
     const displayName = `${profile.firstName} ${profile.lastName}`;
-    let user = await this.findByEmail(profile.email);
+    const samlId = profile.id as string;
+    const email = profile.email;
+
+    let user = await this.findBySamlId(samlId);
+    if (!user) {
+      user = await this.findByEmail(email);
+    }
+
     if (user) {
-      if (!user.samlId) {
-        user.samlId = profile.id as string;
-      }
+      user.samlId = samlId;
+      user.email = email;
       user.displayName = displayName;
     } else {
       user = this.usersRespository.create({
-        email: profile.email,
-        samlId: profile.id as string,
-        displayName: displayName,
+        email,
+        samlId,
+        displayName,
       });
     }
 
