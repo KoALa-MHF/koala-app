@@ -11,6 +11,7 @@ import { AuthGuard } from '../core/guards/auth.guard';
 import { CurrentUser } from '../core/decorators/user.decorator';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
+import { RegisteredUserGuard } from '../core/guards/registerd-user.guard';
 
 @Resolver(() => Session)
 @UseGuards(AuthGuard)
@@ -26,6 +27,7 @@ export class SessionsResolver {
   ) {}
 
   @Mutation(() => Session)
+  @UseGuards(RegisteredUserGuard)
   createSession(@Args('createSessionInput') createSessionInput: CreateSessionInput, @CurrentUser() user: User) {
     return this.sessionsService.create(createSessionInput, user);
   }
@@ -46,6 +48,7 @@ export class SessionsResolver {
   }
 
   @Mutation(() => Session)
+  @UseGuards(RegisteredUserGuard)
   updateSession(
     @Args('id', { type: () => Int }) id: number,
     @Args('updateSessionInput') updateSessionInput: UpdateSessionInput,
@@ -55,6 +58,7 @@ export class SessionsResolver {
   }
 
   @Mutation(() => Session)
+  @UseGuards(RegisteredUserGuard)
   removeSession(@Args('id', { type: () => Int }) id: number, @CurrentUser() user: User) {
     return this.sessionsService.remove(id, user);
   }
