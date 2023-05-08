@@ -9,6 +9,10 @@ export const ConfigModule = TypedConfigModule.forRoot({
       separator: '__',
     }),
   ],
+  normalize(config) {
+    config.mail.port = parseInt(config.mail.port, 10);
+    return config;
+  },
 });
 
 export const config = selectConfig(ConfigModule, Config);
