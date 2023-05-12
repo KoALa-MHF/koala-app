@@ -10,6 +10,8 @@ import { UserSessionsService } from '../user-sessions/user-sessions.service';
 import { AuthGuard } from '../core/guards/auth.guard';
 import { CurrentUser } from '../core/decorators/user.decorator';
 import { User } from '../users/entities/user.entity';
+import { UsersService } from '../users/users.service';
+import { RegisteredUserGuard } from '../core/guards/registerd-user.guard';
 
 @Resolver(() => Session)
 @UseGuards(AuthGuard)
@@ -20,10 +22,12 @@ export class SessionsResolver {
     @Inject(forwardRef(() => ToolbarsService))
     private readonly toolbarsService: ToolbarsService,
     @Inject(forwardRef(() => UserSessionsService))
-    private readonly userSessionsService: UserSessionsService
+    private readonly userSessionsService: UserSessionsService,
+    private readonly usersService: UsersService
   ) {}
 
   @Mutation(() => Session)
+  @UseGuards(RegisteredUserGuard)
   createSession(@Args('createSessionInput') createSessionInput: CreateSessionInput, @CurrentUser() user: User) {
     return this.sessionsService.create(createSessionInput, user);
   }
@@ -44,6 +48,7 @@ export class SessionsResolver {
   }
 
   @Mutation(() => Session)
+  @UseGuards(RegisteredUserGuard)
   updateSession(
     @Args('id', { type: () => Int }) id: number,
     @Args('updateSessionInput') updateSessionInput: UpdateSessionInput,
@@ -53,6 +58,7 @@ export class SessionsResolver {
   }
 
   @Mutation(() => Session)
+  @UseGuards(RegisteredUserGuard)
   removeSession(@Args('id', { type: () => Int }) id: number, @CurrentUser() user: User) {
     return this.sessionsService.remove(id, user);
   }
@@ -68,6 +74,12 @@ export class SessionsResolver {
   @ResolveField()
   toolbars(@Parent() session: Session) {
     return this.toolbarsService.findAll(session.id);
+  }
+
+  @ResolveField()
+  owner(@Parent() session: Session) {
+    const { ownerId } = session;
+    return this.usersService.findOne(ownerId);
   }
 
   @ResolveField()

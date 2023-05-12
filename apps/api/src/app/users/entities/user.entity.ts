@@ -25,6 +25,7 @@ export class User extends BaseEntity {
 
   @Column({
     nullable: true,
+    unique: true,
   })
   samlId?: string;
 

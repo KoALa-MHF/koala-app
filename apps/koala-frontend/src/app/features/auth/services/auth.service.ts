@@ -52,6 +52,10 @@ export class AuthService {
     });
   }
 
+  public loginViaSaml(accessToken: string) {
+    this.handleLoginSuccess(accessToken);
+  }
+
   public loginViaSessionCode(sessionCode: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       if (sessionCode === 'ABC') {

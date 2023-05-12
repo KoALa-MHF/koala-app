@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { credentialsValidator } from './credentials.validator';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'koala-login-page',
@@ -43,10 +44,19 @@ export class LoginPage implements OnInit {
     });
 
     const sessionCode = this.route.snapshot.queryParamMap.get('sessionCode');
+    const jwt = this.route.snapshot.queryParamMap.get('jwt');
+
+    if (jwt) {
+      this.authService.loginViaSaml(jwt);
+    }
 
     if (sessionCode) {
       this.loginForm.get('sessionCode')?.setValue(sessionCode);
     }
+  }
+
+  public onLoginViaSaml() {
+    window.location.href = environment.samlUrl;
   }
 
   public onLogin() {
