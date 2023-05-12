@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { credentialsValidator } from './credentials.validator';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'koala-login-page',
@@ -55,9 +56,7 @@ export class LoginPage implements OnInit {
   }
 
   public onLoginViaSaml() {
-    // TODO: must be moved to environment file
-    window.location.href =
-      'http://localhost:4000/saml/login?acsUrl=http://localhost:3333/api/auth/sso/saml/ac&audience=tastysoft.de';
+    window.location.href = environment.samlUrl;
   }
 
   public onLogin() {

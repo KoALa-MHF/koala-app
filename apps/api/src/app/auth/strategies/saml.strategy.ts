@@ -8,7 +8,6 @@ import { Config } from '../../config/config';
 @Injectable()
 export class SamlStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly usersService: UsersService, private readonly config: Config) {
-    console.log(config);
     super({
       issuer: config.samlConfig.issuer,
       callbackUrl: config.samlConfig.callbackUrl,
@@ -17,7 +16,6 @@ export class SamlStrategy extends PassportStrategy(Strategy) {
       audiance: config.samlConfig.audiance,
       wantAuthnResponseSigned: config.samlConfig.wantAuthnResponseSigned,
     });
-    console.log(config);
   }
 
   async validate(profile: Profile) {
