@@ -4,7 +4,7 @@ import { SeedService } from './app/seed/seed.service';
 
 async function bootstrap() {
   //TODO: final version should contain this check
-  /*if (process.env.NODE_ENV !== 'development') {
+  /*if (process.env['NODE' + '_ENV'] !== 'development') {
     throw new Error('Seeding database is only allowed for development');
   }*/
   const appContext = await NestFactory.createApplicationContext(SeedModule);
