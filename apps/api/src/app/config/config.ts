@@ -57,5 +57,5 @@ export class Config {
 
   @Type(() => SamlConfig)
   @ValidateNested()
-  public readonly samlConfig: SamlConfig = new SamlConfig();
+  public readonly saml: SamlConfig = new SamlConfig();
 }

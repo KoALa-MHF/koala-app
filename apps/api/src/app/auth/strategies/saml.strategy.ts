@@ -9,18 +9,17 @@ import { Config } from '../../config/config';
 export class SamlStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly usersService: UsersService, private readonly config: Config) {
     super({
-      issuer: config.samlConfig.issuer,
-      callbackUrl: config.samlConfig.callbackUrl,
-      cert: config.samlConfig.cert,
-      entryPoint: config.samlConfig.entryPoint,
-      audiance: config.samlConfig.audiance,
-      wantAuthnResponseSigned: config.samlConfig.wantAuthnResponseSigned,
+      issuer: config.saml.issuer,
+      callbackUrl: config.saml.callbackUrl,
+      cert: config.saml.cert,
+      entryPoint: config.saml.entryPoint,
+      audiance: config.saml.audiance,
+      wantAuthnResponseSigned: config.saml.wantAuthnResponseSigned,
     });
   }
 
   async validate(profile: Profile) {
     try {
-      console.log('PROFILE', profile);
       return this.usersService.upsertBySamlProfile(profile);
     } catch (error) {
       throw new UnauthorizedException();
