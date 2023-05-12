@@ -18,7 +18,7 @@ function setupMailDevelopmentServer() {
 }
 
 async function bootstrap() {
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env['NODE' + '_ENV'] === 'development') {
     setupMailDevelopmentServer();
   }
 
