@@ -44,3 +44,6 @@ koala
 koala-shm
 koala-wal
 uploads
+.env.development.json
+.env
+.env.json

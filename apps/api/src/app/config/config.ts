@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsString, IsUrl, ValidateNested } from 'class-validator';
 
 export class MailConfig {
   @IsString()
@@ -25,6 +25,27 @@ export class DatabaseConfig {
   public readonly name: string = 'database/koala';
 }
 
+export class SamlConfig {
+  @IsString()
+  public readonly issuer: string;
+
+  @IsString()
+  public readonly callbackUrl: string;
+
+  @IsString()
+  public readonly cert: string;
+
+  @IsString()
+  @IsUrl()
+  public readonly entryPoint: string;
+
+  @IsString()
+  public readonly audiance: string;
+
+  @IsBoolean()
+  public readonly wantAuthnResponseSigned: boolean = false;
+}
+
 export class Config {
   @Type(() => DatabaseConfig)
   @ValidateNested()
@@ -33,4 +54,8 @@ export class Config {
   @Type(() => MailConfig)
   @ValidateNested()
   public readonly mail: MailConfig = new MailConfig();
+
+  @Type(() => SamlConfig)
+  @ValidateNested()
+  public readonly samlConfig: SamlConfig = new SamlConfig();
 }
