@@ -1,11 +1,12 @@
 import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Config } from '../config/config';
 import { SamlAuthGuard } from '../core/guards/saml-auth.guard';
 import { User } from '../users/entities/user.entity';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService, private readonly config: Config) {}
 
   @Get('sso/saml/login')
   @UseGuards(SamlAuthGuard)
@@ -20,7 +21,7 @@ export class AuthController {
     const user: User = req.user;
     if (user) {
       const authentication = await this.authService.authenticateSamlUser(user);
-      res.redirect('http://localhost:4200/auth?jwt=' + authentication.accessToken); // TODO: Env variable
+      res.redirect(this.config.saml.redirectFrontendUrl + authentication.accessToken);
     }
   }
 }
