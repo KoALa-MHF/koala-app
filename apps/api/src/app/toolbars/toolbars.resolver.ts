@@ -13,7 +13,6 @@ import { Toolbar } from './dto/toolbar';
 const pubSub = new PubSub();
 
 @Resolver(() => Toolbar)
-@UseGuards(AuthGuard)
 export class ToolbarsResolver {
   constructor(
     private readonly toolbarsService: ToolbarsService,
@@ -22,6 +21,7 @@ export class ToolbarsResolver {
   ) {}
 
   @Mutation(() => Toolbar)
+  @UseGuards(AuthGuard)
   async updateToolbar(
     @Args('id', { type: () => Int }) id: number,
     @Args('updateToolbarInput') updateToolbarInput: UpdateToolbarInput,
@@ -34,6 +34,7 @@ export class ToolbarsResolver {
   }
 
   @Mutation(() => Toolbar)
+  @UseGuards(AuthGuard)
   setMarkerVisible(
     @Args('id', { type: () => Int }) id: number,
     @Args('updateToolbarMarkerVisible') setToolbarMarkerVisibilityInput: SetToolbarMarkerVisibilityInput
@@ -42,6 +43,7 @@ export class ToolbarsResolver {
   }
 
   @ResolveField()
+  @UseGuards(AuthGuard)
   async session(@Parent() toolbar: Toolbar, @CurrentUser() user: User) {
     const { session } = toolbar;
     return this.sessionService.findOne(session.id, user);

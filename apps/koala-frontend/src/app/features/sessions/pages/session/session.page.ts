@@ -239,7 +239,7 @@ export class SessionPage implements OnInit, OnDestroy {
   }
 
   private loadAnnotations(userSessions: any[]): void {
-    if (userSessions[0].annotations) {
+    if (userSessions && userSessions[0].annotations) {
       for (const annotation of userSessions[0].annotations) {
         this.AnnotationData.get(annotation.marker.id)?.push({
           id: annotation.id,

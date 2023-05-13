@@ -42,6 +42,13 @@ import { DatabaseModule } from './database.module';
       installSubscriptionHandlers: true,
       formatError: formatError,
       introspection: true,
+      subscriptions: {
+        'subscriptions-transport-ws': {
+          onConnect: (connectionParams) => {
+            console.log(connectionParams);
+          },
+        },
+      },
     }),
     MailerModule.forRoot({
       transport: {

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { HttpClient, HttpClientModule, HttpHeaders, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { WebSocketLink } from '@apollo/client/link/ws';
 
 import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
@@ -17,7 +17,6 @@ import { environment } from '../environments/environment';
 
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { LANGUAGE_CODE } from './core/components/header/header.component';
 import { SharedModule } from './shared/shared.module';
 import { AuthModule } from './features/auth/auth.module';
 import { LayoutComponent } from './layout.component';
@@ -66,6 +65,9 @@ export function HttpLoaderFactory(http: HttpClient) {
           uri: 'ws://localhost:3333/graphql',
           options: {
             reconnect: true,
+            connectionParams: () => {
+              return { param1: 'Param1' };
+            },
           },
         });
 

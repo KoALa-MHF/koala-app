@@ -17,7 +17,6 @@ import { PubSub } from 'graphql-subscriptions';
 const pubSub = new PubSub();
 
 @Resolver(() => Session)
-@UseGuards(AuthGuard)
 export class SessionsResolver {
   constructor(
     private readonly sessionsService: SessionsService,
@@ -31,6 +30,7 @@ export class SessionsResolver {
 
   @Mutation(() => Session)
   @UseGuards(RegisteredUserGuard)
+  @UseGuards(AuthGuard)
   createSession(@Args('createSessionInput') createSessionInput: CreateSessionInput, @CurrentUser() user: User) {
     return this.sessionsService.create(createSessionInput, user);
   }
@@ -41,17 +41,20 @@ export class SessionsResolver {
     ],
     { name: 'sessions' }
   )
+  @UseGuards(AuthGuard)
   findAll(@CurrentUser() user: User) {
     return this.sessionsService.findAll(user);
   }
 
   @Query(() => Session, { name: 'session' })
+  @UseGuards(AuthGuard)
   findOne(@Args('id', { type: () => Int }) id: number, @CurrentUser() user: User) {
     return this.sessionsService.findOne(id, user);
   }
 
   @Mutation(() => Session)
   @UseGuards(RegisteredUserGuard)
+  @UseGuards(AuthGuard)
   updateSession(
     @Args('id', { type: () => Int }) id: number,
     @Args('updateSessionInput') updateSessionInput: UpdateSessionInput,
@@ -64,6 +67,7 @@ export class SessionsResolver {
 
   @Mutation(() => Session)
   @UseGuards(RegisteredUserGuard)
+  @UseGuards(AuthGuard)
   removeSession(@Args('id', { type: () => Int }) id: number, @CurrentUser() user: User) {
     return this.sessionsService.remove(id, user);
   }
@@ -80,6 +84,7 @@ export class SessionsResolver {
   }
 
   @ResolveField()
+  @UseGuards(AuthGuard)
   media(@Parent() session: Session) {
     const { mediaId } = session;
     if (mediaId) {
@@ -88,17 +93,20 @@ export class SessionsResolver {
   }
 
   @ResolveField()
+  @UseGuards(AuthGuard)
   toolbars(@Parent() session: Session) {
     return this.toolbarsService.findAll(session.id);
   }
 
   @ResolveField()
+  @UseGuards(AuthGuard)
   owner(@Parent() session: Session) {
     const { ownerId } = session;
     return this.usersService.findOne(ownerId);
   }
 
   @ResolveField()
+  @UseGuards(AuthGuard)
   userSessions(@Parent() session: Session, @CurrentUser() user: User) {
     return this.userSessionsService.findAllBySession(session.id, user);
   }
