@@ -92,7 +92,7 @@ export class SessionPage implements OnInit {
       this.waveContainer = `waveContainer-${this.session.id}`;
       await this.loadMediaData(this.session.media.id);
       const userSessions = this.session.userSessions?.filter((s) => s.id == this.userID);
-      if (userSessions) {
+      if (userSessions && userSessions.length > 0) {
         this.loadMarkerData(userSessions);
       }
       this.setSidePanelFormData();
