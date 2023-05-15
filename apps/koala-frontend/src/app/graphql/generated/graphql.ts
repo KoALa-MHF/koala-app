@@ -192,6 +192,7 @@ export type Mutation = {
   removeMarker: Marker;
   removeSession: Session;
   removeUserSession: UserSession;
+  setMarkerVisible: Toolbar;
   updateAnnotation: Annotation;
   updateMarker: Marker;
   updateSession: Session;
@@ -246,6 +247,11 @@ export type MutationRemoveSessionArgs = {
 
 export type MutationRemoveUserSessionArgs = {
   id: Scalars['Int'];
+};
+
+export type MutationSetMarkerVisibleArgs = {
+  id: Scalars['Int'];
+  updateToolbarMarkerVisible: SetToolbarMarkerVisibilityInput;
 };
 
 export type MutationUpdateAnnotationArgs = {
@@ -338,7 +344,7 @@ export type Session = {
   start?: Maybe<Scalars['DateTime']>;
   /** Session Status */
   status?: Maybe<SessionStatus>;
-  /** Associated Session */
+  /** Associated Toolbars */
   toolbars: Array<Toolbar>;
   /** Date of Last Update */
   updatedAt: Scalars['DateTime'];
@@ -351,17 +357,43 @@ export enum SessionStatus {
   Open = 'OPEN',
 }
 
+export type SetToolbarMarkerVisibilityInput = {
+  markerId: Scalars['ID'];
+  visible: Scalars['Boolean'];
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  sessionUpdated: Session;
+  toolbarUpdated: Toolbar;
+};
+
+export type SubscriptionSessionUpdatedArgs = {
+  id: Scalars['ID'];
+};
+
+export type SubscriptionToolbarUpdatedArgs = {
+  id: Scalars['ID'];
+};
+
 export type Toolbar = {
   __typename?: 'Toolbar';
   /** Creation Date */
   createdAt: Scalars['DateTime'];
   /** ID for Media */
   id: Scalars['ID'];
-  markers: Array<Scalars['String']>;
+  markers?: Maybe<Array<ToolbarMarker>>;
   /** Associated Session */
   session: Session;
   /** Date of Last Update */
   updatedAt: Scalars['DateTime'];
+};
+
+export type ToolbarMarker = {
+  __typename?: 'ToolbarMarker';
+  /** Marker ID */
+  markerId: Scalars['ID'];
+  visible: Scalars['Boolean'];
 };
 
 export type UpdateAnnotationInput = {
@@ -482,7 +514,13 @@ export type CreateNewSessionMutation = {
     createdAt: any;
     updatedAt: any;
     media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
-    toolbars: Array<{ __typename?: 'Toolbar'; id: string; markers: Array<string>; createdAt: any; updatedAt: any }>;
+    toolbars: Array<{
+      __typename?: 'Toolbar';
+      id: string;
+      createdAt: any;
+      updatedAt: any;
+      markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+    }>;
   };
 };
 
@@ -539,7 +577,25 @@ export type UpdateToolbarMutationVariables = Exact<{
 
 export type UpdateToolbarMutation = {
   __typename?: 'Mutation';
-  updateToolbar: { __typename?: 'Toolbar'; id: string; markers: Array<string> };
+  updateToolbar: {
+    __typename?: 'Toolbar';
+    id: string;
+    markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+  };
+};
+
+export type SetMarkerVisibilityInToolbarMutationVariables = Exact<{
+  id: Scalars['Int'];
+  setToolbarMarkerVisibilityInput: SetToolbarMarkerVisibilityInput;
+}>;
+
+export type SetMarkerVisibilityInToolbarMutation = {
+  __typename?: 'Mutation';
+  setMarkerVisible: {
+    __typename?: 'Toolbar';
+    id: string;
+    markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+  };
 };
 
 export type AuthenticateSessionCodeMutationVariables = Exact<{
@@ -627,7 +683,13 @@ export type GetSessionsQuery = {
     updatedAt: any;
     userSessions: Array<{ __typename?: 'UserSession'; id: number }>;
     media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
-    toolbars: Array<{ __typename?: 'Toolbar'; id: string; markers: Array<string>; createdAt: any; updatedAt: any }>;
+    toolbars: Array<{
+      __typename?: 'Toolbar';
+      id: string;
+      createdAt: any;
+      updatedAt: any;
+      markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+    }>;
     owner: { __typename?: 'User'; id: string; createdAt: any; updatedAt: any };
   }>;
 };
@@ -654,11 +716,17 @@ export type GetOneSessionQuery = {
     createdAt: any;
     updatedAt: any;
     media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
-    toolbars: Array<{ __typename?: 'Toolbar'; id: string; markers: Array<string>; createdAt: any; updatedAt: any }>;
+    toolbars: Array<{
+      __typename?: 'Toolbar';
+      id: string;
+      createdAt: any;
+      updatedAt: any;
+      markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+    }>;
     userSessions: Array<{
       __typename?: 'UserSession';
       id: number;
-      owner: { __typename?: 'User'; email?: string | null };
+      owner: { __typename?: 'User'; id: string; email?: string | null };
       annotations: Array<{
         __typename?: 'Annotation';
         id: number;
@@ -701,6 +769,54 @@ export type GetUserQuery = {
   me: { __typename?: 'User'; id: string; displayName?: string | null; email?: string | null };
 };
 
+export type OnSessionUpdatedSubscriptionVariables = Exact<{
+  sessionId: Scalars['ID'];
+}>;
+
+export type OnSessionUpdatedSubscription = {
+  __typename?: 'Subscription';
+  sessionUpdated: {
+    __typename?: 'Session';
+    id: string;
+    name: string;
+    description?: string | null;
+    status?: SessionStatus | null;
+    start?: any | null;
+    end?: any | null;
+    editable?: boolean | null;
+    enablePlayer?: boolean | null;
+    displaySampleSolution?: boolean | null;
+    enableLiveAnalysis?: boolean | null;
+    toolbars: Array<{
+      __typename?: 'Toolbar';
+      id: string;
+      createdAt: any;
+      updatedAt: any;
+      markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+    }>;
+    userSessions: Array<{
+      __typename?: 'UserSession';
+      id: number;
+      owner: { __typename?: 'User'; email?: string | null };
+    }>;
+  };
+};
+
+export type OnToolbarUpdatedSubscriptionVariables = Exact<{
+  toolbarId: Scalars['ID'];
+}>;
+
+export type OnToolbarUpdatedSubscription = {
+  __typename?: 'Subscription';
+  toolbarUpdated: {
+    __typename?: 'Toolbar';
+    id: string;
+    createdAt: any;
+    updatedAt: any;
+    markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+  };
+};
+
 export const CreateNewSessionDocument = gql`
   mutation createNewSession($session: CreateSessionInput!) {
     createSession(createSessionInput: $session) {
@@ -724,7 +840,10 @@ export const CreateNewSessionDocument = gql`
       }
       toolbars {
         id
-        markers
+        markers {
+          markerId
+          visible
+        }
         createdAt
         updatedAt
       }
@@ -841,7 +960,10 @@ export const UpdateToolbarDocument = gql`
   mutation updateToolbar($id: Int!, $updateToolbarInput: UpdateToolbarInput!) {
     updateToolbar(id: $id, updateToolbarInput: $updateToolbarInput) {
       id
-      markers
+      markers {
+        markerId
+        visible
+      }
     }
   }
 `;
@@ -851,6 +973,31 @@ export const UpdateToolbarDocument = gql`
 })
 export class UpdateToolbarGQL extends Apollo.Mutation<UpdateToolbarMutation, UpdateToolbarMutationVariables> {
   override document = UpdateToolbarDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SetMarkerVisibilityInToolbarDocument = gql`
+  mutation setMarkerVisibilityInToolbar($id: Int!, $setToolbarMarkerVisibilityInput: SetToolbarMarkerVisibilityInput!) {
+    setMarkerVisible(id: $id, updateToolbarMarkerVisible: $setToolbarMarkerVisibilityInput) {
+      id
+      markers {
+        markerId
+        visible
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class SetMarkerVisibilityInToolbarGQL extends Apollo.Mutation<
+  SetMarkerVisibilityInToolbarMutation,
+  SetMarkerVisibilityInToolbarMutationVariables
+> {
+  override document = SetMarkerVisibilityInToolbarDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
@@ -1016,7 +1163,10 @@ export const GetSessionsDocument = gql`
       }
       toolbars {
         id
-        markers
+        markers {
+          markerId
+          visible
+        }
         createdAt
         updatedAt
       }
@@ -1064,13 +1214,17 @@ export const GetOneSessionDocument = gql`
       }
       toolbars {
         id
-        markers
+        markers {
+          markerId
+          visible
+        }
         createdAt
         updatedAt
       }
       userSessions {
         id
         owner {
+          id
           email
         }
         annotations {
@@ -1148,6 +1302,78 @@ export const GetUserDocument = gql`
 })
 export class GetUserGQL extends Apollo.Query<GetUserQuery, GetUserQueryVariables> {
   override document = GetUserDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const OnSessionUpdatedDocument = gql`
+  subscription onSessionUpdated($sessionId: ID!) {
+    sessionUpdated(id: $sessionId) {
+      id
+      name
+      description
+      status
+      start
+      end
+      editable
+      enablePlayer
+      displaySampleSolution
+      enableLiveAnalysis
+      toolbars {
+        id
+        markers {
+          markerId
+          visible
+        }
+        createdAt
+        updatedAt
+      }
+      userSessions {
+        id
+        owner {
+          email
+        }
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class OnSessionUpdatedGQL extends Apollo.Subscription<
+  OnSessionUpdatedSubscription,
+  OnSessionUpdatedSubscriptionVariables
+> {
+  override document = OnSessionUpdatedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const OnToolbarUpdatedDocument = gql`
+  subscription onToolbarUpdated($toolbarId: ID!) {
+    toolbarUpdated(id: $toolbarId) {
+      id
+      markers {
+        markerId
+        visible
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class OnToolbarUpdatedGQL extends Apollo.Subscription<
+  OnToolbarUpdatedSubscription,
+  OnToolbarUpdatedSubscriptionVariables
+> {
+  override document = OnToolbarUpdatedDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

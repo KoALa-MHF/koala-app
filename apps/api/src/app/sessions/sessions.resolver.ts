@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent, Subscription, ID } from '@nestjs/graphql';
 import { SessionsService } from './sessions.service';
 import { Session } from './entities/session.entity';
 import { CreateSessionInput } from './dto/create-session.input';
@@ -12,9 +12,11 @@ import { CurrentUser } from '../core/decorators/user.decorator';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { RegisteredUserGuard } from '../core/guards/registerd-user.guard';
+import { PubSub } from 'graphql-subscriptions';
+
+const pubSub = new PubSub();
 
 @Resolver(() => Session)
-@UseGuards(AuthGuard)
 export class SessionsResolver {
   constructor(
     private readonly sessionsService: SessionsService,
@@ -28,6 +30,7 @@ export class SessionsResolver {
 
   @Mutation(() => Session)
   @UseGuards(RegisteredUserGuard)
+  @UseGuards(AuthGuard)
   createSession(@Args('createSessionInput') createSessionInput: CreateSessionInput, @CurrentUser() user: User) {
     return this.sessionsService.create(createSessionInput, user);
   }
@@ -38,32 +41,50 @@ export class SessionsResolver {
     ],
     { name: 'sessions' }
   )
+  @UseGuards(AuthGuard)
   findAll(@CurrentUser() user: User) {
     return this.sessionsService.findAll(user);
   }
 
   @Query(() => Session, { name: 'session' })
+  @UseGuards(AuthGuard)
   findOne(@Args('id', { type: () => Int }) id: number, @CurrentUser() user: User) {
     return this.sessionsService.findOne(id, user);
   }
 
   @Mutation(() => Session)
   @UseGuards(RegisteredUserGuard)
+  @UseGuards(AuthGuard)
   updateSession(
     @Args('id', { type: () => Int }) id: number,
     @Args('updateSessionInput') updateSessionInput: UpdateSessionInput,
     @CurrentUser() user: User
   ) {
-    return this.sessionsService.update(id, updateSessionInput, user);
+    const session = this.sessionsService.update(id, updateSessionInput, user);
+    pubSub.publish('sessionUpdated', { sessionUpdated: session });
+    return session;
   }
 
   @Mutation(() => Session)
   @UseGuards(RegisteredUserGuard)
+  @UseGuards(AuthGuard)
   removeSession(@Args('id', { type: () => Int }) id: number, @CurrentUser() user: User) {
     return this.sessionsService.remove(id, user);
   }
 
+  @Subscription((returns) => Session, {
+    filter: async (payload, variables) => {
+      const payloadResult = await payload.sessionUpdated;
+
+      return payloadResult.id == variables.id;
+    },
+  })
+  sessionUpdated(@Args('id', { type: () => ID }) id: number) {
+    return pubSub.asyncIterator('sessionUpdated');
+  }
+
   @ResolveField()
+  @UseGuards(AuthGuard)
   media(@Parent() session: Session) {
     const { mediaId } = session;
     if (mediaId) {
@@ -72,17 +93,20 @@ export class SessionsResolver {
   }
 
   @ResolveField()
+  @UseGuards(AuthGuard)
   toolbars(@Parent() session: Session) {
     return this.toolbarsService.findAll(session.id);
   }
 
   @ResolveField()
+  @UseGuards(AuthGuard)
   owner(@Parent() session: Session) {
     const { ownerId } = session;
     return this.usersService.findOne(ownerId);
   }
 
   @ResolveField()
+  @UseGuards(AuthGuard)
   userSessions(@Parent() session: Session, @CurrentUser() user: User) {
     return this.userSessionsService.findAllBySession(session.id, user);
   }

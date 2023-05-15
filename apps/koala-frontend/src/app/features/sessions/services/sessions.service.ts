@@ -12,6 +12,8 @@ import {
   UpdateSessionGQL,
   UpdateSessionInput,
   CreateSessionInput,
+  OnSessionUpdatedGQL,
+  Exact,
   CreateNewSessionMutation,
 } from '../../../graphql/generated/graphql';
 import { Session } from '../types/session.entity';
@@ -23,7 +25,8 @@ export class SessionsService {
     private readonly getOneSessionGQL: GetOneSessionGQL,
     private readonly createSessionGQL: CreateNewSessionGQL,
     private readonly updateSessionGQL: UpdateSessionGQL,
-    private readonly deleteSessionGQL: DeleteSessionGQL
+    private readonly deleteSessionGQL: DeleteSessionGQL,
+    private readonly onSessionUpdatedGQL: OnSessionUpdatedGQL
   ) {}
 
   getAll() {
@@ -52,6 +55,12 @@ export class SessionsService {
 
   delete(id: number) {
     return this.deleteSessionGQL.mutate({ id });
+  }
+
+  subscribeUpdated(id: number) {
+    return this.onSessionUpdatedGQL.subscribe({
+      sessionId: id.toString(),
+    });
   }
 
   copySession(sessionId: number): Promise<Session | null> {

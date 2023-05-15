@@ -8,7 +8,7 @@ export interface Marker {
   abbreviation?: string | null;
   color: string;
   icon?: string | null;
-  hidden: boolean | true;
+  visible: boolean | true;
   valueRangeFrom?: number | null;
   valueRangeTo?: number | null;
 }

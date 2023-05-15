@@ -15,10 +15,10 @@ export interface Session {
   displaySampleSolution?: boolean | null;
   enableLiveAnalysis?: boolean | null;
   media?: Media | null;
-  code: string;
-  toolbars: Toolbar[];
-  createdAt: Date;
-  updatedAt: Date;
+  code?: string;
+  toolbars?: Toolbar[] | null;
+  createdAt?: Date;
+  updatedAt?: Date;
   userSessions?: UserSession[];
   owner?: User;
 }

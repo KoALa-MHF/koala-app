@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
 import { MarkerService } from '../../services/marker.service';
@@ -15,6 +15,8 @@ import { MarkerType } from '../../../../graphql/generated/graphql';
 import { ToolbarMode } from '../../components/marker-toolbar/marker-toolbar.component';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { filter } from 'rxjs';
+import { Subscription } from 'rxjs';
+import { ToolbarsService } from '../../services/toolbars.service';
 
 @Component({
   selector: 'koala-app-session',
@@ -23,7 +25,7 @@ import { filter } from 'rxjs';
     './session.page.scss',
   ],
 })
-export class SessionPage implements OnInit {
+export class SessionPage implements OnInit, OnDestroy {
   sidePanelForm: FormGroup;
   ToolbarMode = ToolbarMode;
 
@@ -40,16 +42,20 @@ export class SessionPage implements OnInit {
   showSideBar = false;
   userID = -1;
 
+  sessionUpdatedSubscription?: Subscription;
+  toolbarUpdatedSubscription?: Subscription;
+
   constructor(
     private readonly sessionService: SessionsService,
     private readonly annotationService: AnnotationService,
     private readonly markerService: MarkerService,
     private readonly authService: AuthService,
     private readonly route: ActivatedRoute,
-    private mediaControlService: MediaControlService,
+    private readonly mediaControlService: MediaControlService,
     private readonly messageService: MessageService,
     private readonly translateService: TranslateService,
-    private readonly formBuilder: FormBuilder
+    private readonly formBuilder: FormBuilder,
+    private readonly toolbarService: ToolbarsService
   ) {
     this.sidePanelForm = this.formBuilder.group({
       details: this.formBuilder.group({
@@ -58,8 +64,9 @@ export class SessionPage implements OnInit {
         displaySampleSolution: new FormControl<boolean>(false),
         enableLiveAnalysis: new FormControl<boolean>(false),
       }),
-      markersArray: this.formBuilder.group({}),
     });
+
+    this.onSidePanelFormChanges();
   }
 
   async ngOnInit() {
@@ -83,6 +90,30 @@ export class SessionPage implements OnInit {
         media: result.data?.session.media,
       };
 
+      this.setSidePanelFormData(this.session);
+
+      const toolbars = this.session.toolbars;
+
+      if (toolbars) {
+        const toolbar = toolbars[0];
+
+        this.toolbarUpdatedSubscription = this.toolbarService.subscribeUpdated(parseInt(toolbar.id)).subscribe({
+          next: (data) => {
+            const newMarkers = data.data?.toolbarUpdated.markers;
+            if (newMarkers) {
+              newMarkers.forEach((newMarker) => {
+                const markerIndex = this.markers.findIndex((m) => m.id.toString() == newMarker.markerId);
+                this.markers[markerIndex].visible = newMarker.visible;
+              });
+              //trigger change detection
+              this.markers = [
+                ...this.markers,
+              ];
+            }
+          },
+        });
+      }
+
       if (this.session.media == undefined) {
         this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.NO_AUDIO_FILE', 'SESSION.ERROR_DIALOG.NO_AUDIO_FILE_SUM');
         return;
@@ -90,13 +121,25 @@ export class SessionPage implements OnInit {
 
       this.mediaControlService.uuid = this.session.id;
       this.waveContainer = `waveContainer-${this.session.id}`;
+
       await this.loadMediaData(this.session.media.id);
       const userSessions = this.session.userSessions?.filter((s) => s.id == this.userID);
       if (userSessions) {
         this.loadMarkerData(userSessions);
       }
-      this.setSidePanelFormData();
     });
+
+    this.sessionUpdatedSubscription = this.sessionService.subscribeUpdated(this.sessionId).subscribe((response) => {
+      const session = response.data?.sessionUpdated;
+      if (session) {
+        this.setSidePanelFormData(session);
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.sessionUpdatedSubscription?.unsubscribe();
+    this.toolbarUpdatedSubscription?.unsubscribe();
   }
 
   private loadMediaData(id: string): Promise<void> {
@@ -143,35 +186,72 @@ export class SessionPage implements OnInit {
       });
   }
 
-  private setSidePanelFormData(): void {
-    this.sidePanelForm.get('details')?.get('editable')?.setValue(this.session.editable);
-    this.sidePanelForm.get('details')?.get('enablePlayer')?.setValue(this.session.enablePlayer);
-    this.sidePanelForm.get('details')?.get('displaySampleSolution')?.setValue(this.session.displaySampleSolution);
-    this.sidePanelForm.get('details')?.get('enableLiveAnalysis')?.setValue(this.session.enableLiveAnalysis);
+  private setSidePanelFormData(session: Session): void {
+    const sidePanelForm = this.sidePanelForm.get('details');
+    let details = sidePanelForm?.value;
+
+    if (details) {
+      details = {
+        ...details,
+        editable: session.editable || false,
+        enablePlayer: session.enablePlayer || false,
+        displaySampleSolution: session.displaySampleSolution || false,
+        enableLiveAnalysis: session.enableLiveAnalysis || false,
+      };
+    }
+
+    //reset dirty state
+    sidePanelForm?.reset(details);
+  }
+
+  onMarkerDisplayChange(value: boolean, marker: Marker) {
+    this.markers = this.markers.map((m) => (m.id == marker.id ? { ...m, visible: value } : m));
+
+    const toolbars = this.session.toolbars;
+
+    if (toolbars) {
+      const toolbar = toolbars[0];
+      this.toolbarService
+        .setVisibilityForMarker(parseInt(toolbar.id), {
+          markerId: marker.id.toString(),
+          visible: value,
+        })
+        .subscribe({
+          error: (error) => {
+            console.log('Toolbar Update Error');
+            console.log(error);
+          },
+        });
+    }
   }
 
   private loadMarkerData(userSessions: any[]): void {
-    const markers = this.session?.toolbars[0]?.markers || [];
-    const markerIds: Array<number> = markers.map((marker) => parseInt(marker));
-    this.markerService.getAll(markerIds).subscribe((result) => {
-      const markers = result.data?.markers;
-      for (const marker of markers) {
-        const m = { hidden: false, ...marker };
-        this.markers.push(m);
-        this.markersFormGroup.addControl(marker.id + '', new FormControl(true));
-        this.AnnotationData.set(marker.id, new Array<DataPoint>());
-      }
-      this.loadAnnotations(userSessions);
-      this.onSidePanelFormChanges();
-      this.markers = [
-        ...this.markers,
-      ];
-      this.AnnotationData = new Map(this.AnnotationData);
-    });
+    const toolbars = this.session?.toolbars;
+    if (toolbars) {
+      const toolbar = toolbars[0];
+      const toolbarMarkers = toolbar?.markers || [];
+      const markerIds: Array<number> = toolbarMarkers.map((marker) => parseInt(marker.markerId));
+      this.markerService.getAll(markerIds).subscribe((result) => {
+        const markers = result.data?.markers;
+        for (const marker of markers) {
+          const toolbarMarker = toolbarMarkers.find((t) => parseInt(t.markerId) == marker.id);
+          const m = { visible: toolbarMarker ? toolbarMarker.visible : true, ...marker };
+          this.markers.push(m);
+
+          this.AnnotationData.set(marker.id, new Array<DataPoint>());
+        }
+        this.loadAnnotations(userSessions);
+        this.markers = [
+          ...this.markers,
+        ];
+
+        this.AnnotationData = new Map(this.AnnotationData);
+      });
+    }
   }
 
   private loadAnnotations(userSessions: any[]): void {
-    if (userSessions[0].annotations) {
+    if (userSessions.length > 0 && userSessions[0].annotations) {
       for (const annotation of userSessions[0].annotations) {
         this.AnnotationData.get(annotation.marker.id)?.push({
           id: annotation.id,
@@ -396,34 +476,24 @@ export class SessionPage implements OnInit {
   }
 
   onSidePanelFormChanges(): void {
-    this.sidePanelForm.get('markersArray')?.valueChanges.subscribe((val) => {
-      Object.keys(val).forEach((key) => {
-        this.markers.forEach((marker) => {
-          if (marker.id == Number(key)) {
-            marker.hidden = !val[key];
-          }
-        });
-      });
-      this.markers = [
-        ...this.markers,
-      ];
-    });
     this.sidePanelForm.get('details')?.valueChanges.subscribe((details) => {
-      this.sessionService
-        .update(parseInt(this.session?.id || '0'), {
-          editable: details.editable,
-          enablePlayer: details.enablePlayer,
-          displaySampleSolution: details.displaySampleSolution,
-          enableLiveAnalysis: details.enableLiveAnalysis,
-        })
-        .subscribe({
-          error: () => {
-            this.messageService.add({
-              severity: 'error',
-              summary: this.translateService.instant('SESSION.MAINTAIN.SESSION_SETTINGS.SAVE_ERROR_MESSAGE_TITLE'),
-            });
-          },
-        });
+      if (this.sidePanelForm.get('details')?.dirty) {
+        this.sessionService
+          .update(parseInt(this.session?.id || '0'), {
+            editable: details.editable,
+            enablePlayer: details.enablePlayer,
+            displaySampleSolution: details.displaySampleSolution,
+            enableLiveAnalysis: details.enableLiveAnalysis,
+          })
+          .subscribe({
+            error: () => {
+              this.messageService.add({
+                severity: 'error',
+                summary: this.translateService.instant('SESSION.MAINTAIN.SESSION_SETTINGS.SAVE_ERROR_MESSAGE_TITLE'),
+              });
+            },
+          });
+      }
     });
   }
 

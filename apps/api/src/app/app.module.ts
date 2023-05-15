@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { GraphQLModule } from '@nestjs/graphql';
+import { GraphQLModule, SubscriptionConfig } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 import { AppController } from './app.controller';
@@ -36,11 +36,19 @@ import { DatabaseModule } from './database.module';
     DatabaseModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      debug: true,
-      playground: true,
+      debug: true, // TODO: Dislable when production
+      playground: true, // TODO: Dislable when production
       autoSchemaFile: true,
+      installSubscriptionHandlers: true,
       formatError: formatError,
       introspection: true,
+      subscriptions: {
+        'subscriptions-transport-ws': {
+          onConnect: (connectionParams) => {
+            console.log(connectionParams);
+          },
+        },
+      },
     }),
     MailerModule.forRoot({
       transport: {

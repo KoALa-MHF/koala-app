@@ -68,23 +68,22 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   }
 
   private drawLines() {
-    this.markerService.getIconByCode('');
     const svgC = d3.select(`svg#${this.containerID}`);
     const svgL = d3.select(`svg#${this.labelsID}`);
     const text = svgL.selectAll('text,foreignObject').data(this.markers);
     const gRow = svgC.selectAll('g').data(this.markers);
     const line = svgC.selectAll('line.marker').data(this.markers);
 
-    text.style('visibility', (m: Marker) => (m.hidden ? 'hidden' : 'visible'));
+    text.style('visibility', (m: Marker) => (m.visible ? 'visible' : 'hidden'));
     text.enter().each((m: Marker, i: number, elements: any) => {
       this.drawLineText(m, elements[i], i);
     });
-    gRow.style('visibility', (m: Marker) => (m.hidden ? 'hidden' : 'visible'));
+    gRow.style('visibility', (m: Marker) => (m.visible ? 'visible' : 'hidden'));
     gRow
       .enter()
       .append('g')
       .attr('id', (m: Marker) => 'row_' + m.id);
-    line.style('visibility', (m: Marker) => (m.hidden ? 'hidden' : 'visible'));
+    line.style('visibility', (m: Marker) => (m.visible ? 'visible' : 'hidden'));
     line
       .enter()
       .append('line')
@@ -93,7 +92,8 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
       .attr('x1', 5)
       .attr('x2', this.getContainerWidth())
       .attr('y1', (m: Marker, index: number) => this.getPositionY(index))
-      .attr('y2', (m: Marker, index: number) => this.getPositionY(index));
+      .attr('y2', (m: Marker, index: number) => this.getPositionY(index))
+      .attr('visibility', (m: Marker) => (m.visible ? 'visible' : 'hidden'));
   }
 
   private drawLineText(m: Marker, element: any, index: number) {
@@ -104,7 +104,8 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
       .attr('width', '30px')
       .attr('height', '30px')
       .attr('y', height - 10)
-      .attr('id', `marker_text${index}`);
+      .attr('id', `marker_text${index}`)
+      .attr('visibility', m.visible ? 'visible' : 'hidden');
     if (m.icon) {
       const icon = this.markerService.getIconByCode(m.icon);
       element.attr('font-family', 'primeicons');
