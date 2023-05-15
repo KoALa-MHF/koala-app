@@ -101,6 +101,18 @@ const UPDATE_TOOLBAR = gql`
   }
 `;
 
+const SET_MARKER_VISIBILITY_IN_TOOLBAR = gql`
+  mutation setMarkerVisibilityInToolbar($id: Int!, $setToolbarMarkerVisibilityInput: SetToolbarMarkerVisibilityInput!) {
+    setMarkerVisible(id: $id, updateToolbarMarkerVisible: $setToolbarMarkerVisibilityInput) {
+      id
+      markers {
+        markerId
+        visible
+      }
+    }
+  }
+`;
+
 const AUTHENTICATE_W_SESSIONCODE = gql`
   mutation authenticateSessionCode($sessionCode: String!) {
     authenticateUserSession(authenticateUserSessionInput: { code: $sessionCode }) {

@@ -75,16 +75,16 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
     const gRow = svgC.selectAll('g').data(this.markers);
     const line = svgC.selectAll('line.marker').data(this.markers);
 
-    text.style('visibility', (m: Marker) => (m.hidden ? 'hidden' : 'visible'));
+    text.style('visibility', (m: Marker) => (m.visible ? 'visible' : 'hidden'));
     text.enter().each((m: Marker, i: number, elements: any) => {
       this.drawLineText(m, elements[i], i);
     });
-    gRow.style('visibility', (m: Marker) => (m.hidden ? 'hidden' : 'visible'));
+    gRow.style('visibility', (m: Marker) => (m.visible ? 'visible' : 'hidden'));
     gRow
       .enter()
       .append('g')
       .attr('id', (m: Marker) => 'row_' + m.id);
-    line.style('visibility', (m: Marker) => (m.hidden ? 'hidden' : 'visible'));
+    line.style('visibility', (m: Marker) => (m.visible ? 'visible' : 'hidden'));
     line
       .enter()
       .append('line')

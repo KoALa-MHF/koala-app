@@ -224,7 +224,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy {
         markerIds.forEach((markerId) => {
           for (let i = 0; i < markers.length; i++) {
             if (markers[i].id === markerId) {
-              const m = { hidden: false, ...markers[i] };
+              const m = { visible: true, ...markers[i] };
               this.markers.push(m);
             }
           }
@@ -265,7 +265,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy {
       abbreviation: this.maintainMarkerForm.value.abbreviation,
       color: this.maintainMarkerForm.value.color,
       icon: this.maintainMarkerForm.value.icon,
-      hidden: false,
+      visible: true,
       valueRangeFrom: this.maintainMarkerForm.value.valueRangeFrom,
       valueRangeTo: this.maintainMarkerForm.value.valueRangeTo,
     };

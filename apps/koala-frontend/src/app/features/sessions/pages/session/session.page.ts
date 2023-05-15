@@ -52,7 +52,7 @@ export class SessionPage implements OnInit, OnDestroy {
     private readonly markerService: MarkerService,
     private readonly authService: AuthService,
     private readonly route: ActivatedRoute,
-    private mediaControlService: MediaControlService,
+    private readonly mediaControlService: MediaControlService,
     private readonly messageService: MessageService,
     private readonly translateService: TranslateService,
     private readonly formBuilder: FormBuilder,
@@ -205,7 +205,7 @@ export class SessionPage implements OnInit, OnDestroy {
 
     if (sidePanelMarker) {
       sidePanelMarker = {
-        ...sidePanelMarker,
+        ...toolbar.markers,
       };
     }
 
@@ -217,18 +217,46 @@ export class SessionPage implements OnInit, OnDestroy {
     const toolbars = this.session?.toolbars;
     if (toolbars) {
       const toolbar = toolbars[0];
-      const markers = toolbar?.markers || [];
-      const markerIds: Array<number> = markers.map((marker) => parseInt(marker.markerId));
+      const toolbarMarkers = toolbar?.markers || [];
+      const markerIds: Array<number> = toolbarMarkers.map((marker) => parseInt(marker.markerId));
       this.markerService.getAll(markerIds).subscribe((result) => {
         const markers = result.data?.markers;
         for (const marker of markers) {
-          const m = { hidden: false, ...marker };
+          const toolbarMarker = toolbarMarkers.find((t) => parseInt(t.markerId) == marker.id);
+          const m = { visible: toolbarMarker ? toolbarMarker.visible : true, ...marker };
           this.markers.push(m);
-          this.markersFormGroup.addControl(marker.id + '', new FormControl(true));
+          const formControlCheckbox = new FormControl(m.visible);
+          formControlCheckbox.valueChanges.subscribe({
+            next: function (this: SessionPage, marker: any, val: boolean | null) {
+              console.log(marker);
+              console.log(val);
+              console.log(this);
+
+              const toolbars = this.session.toolbars;
+
+              if (toolbars) {
+                const toolbar = toolbars[0];
+                this.toolbarService
+                  .setVisibilityForMarker(parseInt(toolbar.id), {
+                    markerId: marker.id,
+                    visible: val === null ? true : val,
+                  })
+                  .subscribe({
+                    next: (result) => {
+                      this.loadMarkerData(this.session.userSessions || []);
+                    },
+                    error: (error) => {
+                      console.log('Toolbar Update Error');
+                      console.log(error);
+                    },
+                  });
+              }
+            }.bind(this, m),
+          });
+          this.markersFormGroup.setControl(marker.id + '', formControlCheckbox);
           this.AnnotationData.set(marker.id, new Array<DataPoint>());
         }
         this.loadAnnotations(userSessions);
-        this.onSidePanelFormChanges();
         this.markers = [
           ...this.markers,
         ];
@@ -239,7 +267,7 @@ export class SessionPage implements OnInit, OnDestroy {
   }
 
   private loadAnnotations(userSessions: any[]): void {
-    if (userSessions && userSessions[0].annotations) {
+    if (userSessions.length > 0 && userSessions[0].annotations) {
       for (const annotation of userSessions[0].annotations) {
         this.AnnotationData.get(annotation.marker.id)?.push({
           id: annotation.id,
@@ -464,19 +492,6 @@ export class SessionPage implements OnInit, OnDestroy {
   }
 
   onSidePanelFormChanges(): void {
-    this.sidePanelForm.get('markersArray')?.valueChanges.subscribe((val) => {
-      Object.keys(val).forEach((key) => {
-        this.markers.forEach((marker) => {
-          if (marker.id == Number(key)) {
-            marker.hidden = !val[key];
-          }
-        });
-      });
-      this.markers = [
-        ...this.markers,
-      ];
-    });
-
     this.sidePanelForm.get('details')?.valueChanges.subscribe((details) => {
       if (this.sidePanelForm.get('details')?.dirty) {
         this.sessionService

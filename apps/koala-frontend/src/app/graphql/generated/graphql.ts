@@ -338,6 +338,8 @@ export type Session = {
   media?: Maybe<Media>;
   /** Session Name */
   name: Scalars['String'];
+  /** Associated User */
+  owner: User;
   /** Start of Session */
   start?: Maybe<Scalars['DateTime']>;
   /** Session Status */
@@ -576,6 +578,20 @@ export type UpdateToolbarMutationVariables = Exact<{
 export type UpdateToolbarMutation = {
   __typename?: 'Mutation';
   updateToolbar: {
+    __typename?: 'Toolbar';
+    id: string;
+    markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+  };
+};
+
+export type SetMarkerVisibilityInToolbarMutationVariables = Exact<{
+  id: Scalars['Int'];
+  setToolbarMarkerVisibilityInput: SetToolbarMarkerVisibilityInput;
+}>;
+
+export type SetMarkerVisibilityInToolbarMutation = {
+  __typename?: 'Mutation';
+  setMarkerVisible: {
     __typename?: 'Toolbar';
     id: string;
     markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
@@ -955,6 +971,31 @@ export const UpdateToolbarDocument = gql`
 })
 export class UpdateToolbarGQL extends Apollo.Mutation<UpdateToolbarMutation, UpdateToolbarMutationVariables> {
   override document = UpdateToolbarDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SetMarkerVisibilityInToolbarDocument = gql`
+  mutation setMarkerVisibilityInToolbar($id: Int!, $setToolbarMarkerVisibilityInput: SetToolbarMarkerVisibilityInput!) {
+    setMarkerVisible(id: $id, updateToolbarMarkerVisible: $setToolbarMarkerVisibilityInput) {
+      id
+      markers {
+        markerId
+        visible
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class SetMarkerVisibilityInToolbarGQL extends Apollo.Mutation<
+  SetMarkerVisibilityInToolbarMutation,
+  SetMarkerVisibilityInToolbarMutationVariables
+> {
+  override document = SetMarkerVisibilityInToolbarDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

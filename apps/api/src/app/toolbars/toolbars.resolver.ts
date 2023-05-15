@@ -35,11 +35,15 @@ export class ToolbarsResolver {
 
   @Mutation(() => Toolbar)
   @UseGuards(AuthGuard)
-  setMarkerVisible(
+  async setMarkerVisible(
     @Args('id', { type: () => Int }) id: number,
     @Args('updateToolbarMarkerVisible') setToolbarMarkerVisibilityInput: SetToolbarMarkerVisibilityInput
   ) {
-    return this.toolbarsService.setToolbarMarkerVisibility(id, setToolbarMarkerVisibilityInput);
+    await this.toolbarsService.setToolbarMarkerVisibility(id, setToolbarMarkerVisibilityInput);
+
+    const toolbar = await this.toolbarsService.findOne(id);
+    //pubSub.publish('toolbarUpdated', { toolbarUpdated: toolbar });
+    return toolbar;
   }
 
   @ResolveField()
