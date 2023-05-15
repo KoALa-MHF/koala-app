@@ -4,6 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { map, merge } from 'rxjs';
 import { AuthService } from '../../../features/auth/services/auth.service';
+import { environment } from '../../../../environments/environment';
 
 export enum LANGUAGE_CODE {
   GERMAN = 'de',
@@ -50,6 +51,10 @@ export class HeaderComponent {
   public onLanguageSelected(languageCode: LANGUAGE_CODE) {
     this.languageSelector.hide();
     this.languageChange.emit(languageCode);
+  }
+
+  public onLogin() {
+    window.location.href = environment.samlUrl;
   }
 
   public onLogout() {
