@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
-import { BehaviorSubject } from 'rxjs';
-import { AuthenticateSessionCodeGQL, GetUserGQL, UpdateUserGQL } from '../../../graphql/generated/graphql';
+import { BehaviorSubject, map } from 'rxjs';
+import { AuthenticateSessionCodeGQL, GetUserGQL, UpdateUserGQL, User } from '../../../graphql/generated/graphql';
 import jwt_decode from 'jwt-decode';
 
 interface JWToken {
   exp: number;
   iat: number;
+  sub: number;
 }
 
 class KoalaUserStorage {
@@ -104,7 +105,13 @@ export class AuthService {
   }
 
   public me() {
-    return this.meGQL.fetch({}, { fetchPolicy: 'no-cache' });
+    return this.meGQL.fetch({}, { fetchPolicy: 'no-cache' }).pipe(map((data) => data.data.me));
+  }
+
+  public getLoggedInUserId() {
+    const decoded: JWToken = jwt_decode(this.storedUser.accessToken || '');
+
+    return decoded.sub;
   }
 
   public updateUser(displayName: string) {

@@ -2,6 +2,16 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Session } from '../../types/session.entity';
 import { Router } from '@angular/router';
 
+export interface SessionOverviewActions {
+  createSession: boolean;
+  copySession: boolean;
+  enterSession: boolean;
+  deleteSession: boolean;
+  exportSession: boolean;
+  updateSession: boolean;
+  displaySessionCode: boolean;
+}
+
 @Component({
   selector: 'koala-sessions-overview-table',
   templateUrl: './sessions-overview-table.component.html',
@@ -12,6 +22,15 @@ import { Router } from '@angular/router';
 export class SessionsOverviewTableComponent {
   @Input()
   sessions: Session[] = [];
+  @Input() supportedActions: SessionOverviewActions = {
+    createSession: true,
+    copySession: true,
+    enterSession: true,
+    deleteSession: true,
+    exportSession: true,
+    updateSession: true,
+    displaySessionCode: true,
+  };
 
   @Output() sessionDelete = new EventEmitter<Session>();
   @Output() sessionCreate = new EventEmitter<void>();

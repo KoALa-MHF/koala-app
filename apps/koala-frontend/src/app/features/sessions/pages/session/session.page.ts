@@ -66,7 +66,7 @@ export class SessionPage implements OnInit {
     this.sessionId = parseInt(this.route.snapshot.paramMap.get('sessionId') || '0');
     this.authService.me().subscribe({
       next: (data) => {
-        this.userID = parseInt(data.data.me.id);
+        this.userID = parseInt(data.id);
       },
       error: (e) => {
         this.showErrorMessage(
