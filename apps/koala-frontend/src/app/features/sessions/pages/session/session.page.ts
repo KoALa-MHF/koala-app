@@ -100,10 +100,13 @@ export class SessionPage implements OnInit, OnDestroy {
         const toolbar = toolbars[0];
 
         this.toolbarUpdatedSubscription = this.toolbarService.subscribeUpdated(parseInt(toolbar.id)).subscribe({
-          next: () => {
-            const userSessions = this.session.userSessions?.filter((s) => s.id == this.userID);
-            if (userSessions) {
-              this.loadMarkerData(userSessions);
+          next: (data) => {
+            const newMarkers = data.data?.toolbarUpdated.markers;
+            if (newMarkers) {
+              newMarkers.forEach((newMarker) => {
+                const markerIndex = this.markers.findIndex((m) => m.id.toString() == newMarker.markerId);
+                this.markers[markerIndex].visible = newMarker.visible;
+              });
             }
           },
         });
@@ -211,6 +214,27 @@ export class SessionPage implements OnInit, OnDestroy {
 
     //reset dirty state
     markerArray?.reset(sidePanelMarker);
+  }
+
+  onMarkerDisplayChange(value: boolean, marker: Marker) {
+    this.markers.map((m) => (m.id == marker.id ? { ...m, visible: value } : m));
+
+    const toolbars = this.session.toolbars;
+
+    if (toolbars) {
+      const toolbar = toolbars[0];
+      this.toolbarService
+        .setVisibilityForMarker(parseInt(toolbar.id), {
+          markerId: marker.id.toString(),
+          visible: value,
+        })
+        .subscribe({
+          error: (error) => {
+            console.log('Toolbar Update Error');
+            console.log(error);
+          },
+        });
+    }
   }
 
   private loadMarkerData(userSessions: any[]): void {

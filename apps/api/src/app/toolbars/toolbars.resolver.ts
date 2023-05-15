@@ -42,7 +42,7 @@ export class ToolbarsResolver {
     await this.toolbarsService.setToolbarMarkerVisibility(id, setToolbarMarkerVisibilityInput);
 
     const toolbar = await this.toolbarsService.findOne(id);
-    //pubSub.publish('toolbarUpdated', { toolbarUpdated: toolbar });
+    pubSub.publish('toolbarUpdated', { toolbarUpdated: toolbar });
     return toolbar;
   }
 
