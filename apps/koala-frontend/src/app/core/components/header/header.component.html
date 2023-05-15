@@ -3,6 +3,41 @@
     <p-image src="../../../../assets/koala-logo-schriftzug_petrol.png" alt="KoALa Logo" height="30"></p-image>
   </span>
 
+  <button
+    pButton
+    pRipple
+    *ngIf="isAuthenticated$ | async"
+    icon="pi pi-home"
+    label="Meine Sessions"
+    class="p-button-text"
+    style="margin-left: 50px; margin-right: 50px"
+    (click)="onMySessions()"
+  ></button>
+
+  <button pButton pRipple *ngIf="isAuthenticated$ | async" class="p-button-text" (click)="onSession()">
+    <span>&#x266B;</span><span style="margin-left: 8px">Session</span>
+  </button>
+
+  <button
+    pButton
+    pRipple
+    *ngIf="isAuthenticated$ | async"
+    icon="pi pi-chart-bar"
+    label="Auswertung"
+    class="p-button-text"
+    (click)="onAnalysis()"
+  ></button>
+
+  <button
+    pButton
+    pRipple
+    *ngIf="isAuthenticated$ | async"
+    icon="pi pi-info-circle"
+    label="Sessioninfo"
+    class="p-button-text"
+    (click)="onSessionInfo()"
+  ></button>
+
   <span class="toolbar-spacer"></span>
 
   <button

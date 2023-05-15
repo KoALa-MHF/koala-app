@@ -48,6 +48,18 @@ export class HeaderComponent {
     ]);
   }
 
+  public onMySessions() {
+    this.router.navigate([
+      '',
+    ]);
+  }
+
+  public onSession() {}
+
+  public onAnalysis() {}
+
+  public onSessionInfo() {}
+
   public onLanguageSelected(languageCode: LANGUAGE_CODE) {
     this.languageSelector.hide();
     this.languageChange.emit(languageCode);
