@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ApolloQueryResult } from '@apollo/client/core';
-import { MutationResult, QueryRef } from 'apollo-angular';
+import { MutationResult } from 'apollo-angular';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {
   CreateNewSessionGQL,
   DeleteSessionGQL,
   GetSessionsGQL,
-  GetSessionsQuery,
   GetOneSessionGQL,
   GetOneSessionQuery,
   UpdateSessionGQL,
@@ -20,8 +20,6 @@ import { Session } from '../types/session.entity';
 
 @Injectable()
 export class SessionsService {
-  allSessionsQuery: QueryRef<GetSessionsQuery, Exact<{ [key: string]: never }>>;
-
   constructor(
     private readonly getSessionGQL: GetSessionsGQL,
     private readonly getOneSessionGQL: GetOneSessionGQL,
@@ -29,12 +27,10 @@ export class SessionsService {
     private readonly updateSessionGQL: UpdateSessionGQL,
     private readonly deleteSessionGQL: DeleteSessionGQL,
     private readonly onSessionUpdatedGQL: OnSessionUpdatedGQL
-  ) {
-    this.allSessionsQuery = this.getSessionGQL.watch({});
-  }
+  ) {}
 
-  getAll(): Promise<ApolloQueryResult<GetSessionsQuery>> {
-    return this.allSessionsQuery.refetch();
+  getAll() {
+    return this.getSessionGQL.fetch({}, { fetchPolicy: 'no-cache' }).pipe(map((data) => data.data.sessions));
   }
 
   getOne(id: number): Observable<ApolloQueryResult<GetOneSessionQuery>> {

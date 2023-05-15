@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Session } from '../../types/session.entity';
 import { SessionsService } from '../../services/sessions.service';
 import { Subscription } from 'rxjs';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'koala-sessions-overview',
@@ -16,6 +17,8 @@ import { Subscription } from 'rxjs';
 export class SessionsOverviewPage implements OnInit, OnDestroy {
   qrCodeVisible = false;
   sessions: Session[] = [];
+  sessionsOwner: Session[] = [];
+  sessionsParticipants: Session[] = [];
   routeSubscription: Subscription | undefined;
   createSessionModal = false;
   createSessionForm!: FormGroup;
@@ -25,7 +28,8 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
   constructor(
     private readonly sessionService: SessionsService,
     private readonly router: Router,
-    private route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -45,8 +49,16 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
   }
 
   private loadSessions() {
-    this.sessionService.getAll().then((result) => {
-      this.sessions = result.data?.sessions;
+    this.sessionService.getAll().subscribe({
+      next: (sessions) => {
+        this.sessions = sessions;
+        this.sessionsOwner = this.sessions.filter(
+          (session) => session.owner?.id === this.authService.getLoggedInUserId().toString()
+        );
+        this.sessionsParticipants = this.sessions.filter(
+          (session) => session.owner?.id !== this.authService.getLoggedInUserId().toString()
+        );
+      },
     });
   }
 

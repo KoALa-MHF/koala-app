@@ -1,11 +1,8 @@
 <div class="table-toolbar">
-  <span style="font: 500 20px / 32px Roboto, 'Helvetica Neue', sans-serif">
-    {{ 'SESSION.OVERVIEW.OWN_SESSIONS_TITLE' | translate }}
-  </span>
   <button
     pButton
     pRipple
-    style="margin-left: 30px"
+    *ngIf="supportedActions.createSession"
     label="{{ 'SESSION.CREATE_SESSION_MENU_LABEL' | translate }}"
     icon="pi pi-plus-circle"
     data-cy="session-create-btn"
@@ -15,6 +12,7 @@
   ></button>
 
   <button
+    *ngIf="supportedActions.copySession"
     label="{{ 'SESSION.DUPLICATE_SESSION_MENU_LABEL' | translate }}"
     icon="pi pi-clone"
     pButton
@@ -25,6 +23,7 @@
   ></button>
 
   <button
+    *ngIf="supportedActions.enterSession"
     label="{{ 'SESSION.ENTER_SESSION_MENU_LABEL' | translate }}"
     icon="pi pi-arrow-circle-right"
     pButton
@@ -56,16 +55,16 @@
       <th id="SessionOverviewTableHeaderLastChangedDateColumn">
         {{ 'SESSION.OVERVIEW.TABLE_HEADER.CHANGED_DATE_COL_LABEL' | translate }}
       </th>
-      <th id="SessionOverviewTableHeaderSettingsColumn">
+      <th id="SessionOverviewTableHeaderSettingsColumn" *ngIf="supportedActions.updateSession">
         {{ 'SESSION.OVERVIEW.TABLE_HEADER.SETTINGS_COL_LABEL' | translate }}
       </th>
-      <th id="SessionOverviewTableHeaderLinkColumn">
+      <th id="SessionOverviewTableHeaderLinkColumn" *ngIf="supportedActions.displaySessionCode">
         {{ 'SESSION.OVERVIEW.TABLE_HEADER.LINK_COL_LABEL' | translate }}
       </th>
-      <th id="SessionOverviewTableHeaderExportColumn">
+      <th id="SessionOverviewTableHeaderExportColumn" *ngIf="supportedActions.exportSession">
         {{ 'SESSION.OVERVIEW.TABLE_HEADER.EXPORT_COL_LABEL' | translate }}
       </th>
-      <th id="SessionOverviewTableHeaderDeleteColumn">
+      <th id="SessionOverviewTableHeaderDeleteColumn" *ngIf="supportedActions.deleteSession">
         {{ 'SESSION.OVERVIEW.TABLE_HEADER.DELETE_COL_LABEL' | translate }}
       </th>
     </tr>
@@ -83,7 +82,7 @@
       <td data-column="updatedAt" data-cy="session-overview-updated-at-col">
         {{ session.updatedAt | date: 'medium' }}
       </td>
-      <td>
+      <td *ngIf="supportedActions.updateSession">
         <button
           pButton
           pRipple
@@ -95,7 +94,7 @@
           data-cy="session-overview-settings-btn"
         ></button>
       </td>
-      <td>
+      <td *ngIf="supportedActions.displaySessionCode">
         <button
           pButton
           pRipple
@@ -107,7 +106,7 @@
           data-cy="session-overview-qrcode-btn"
         ></button>
       </td>
-      <td>
+      <td *ngIf="supportedActions.exportSession">
         <button
           pButton
           pRipple
@@ -119,7 +118,7 @@
           data-cy="session-overview-export-btn"
         ></button>
       </td>
-      <td>
+      <td *ngIf="supportedActions.deleteSession">
         <button
           pButton
           pRipple

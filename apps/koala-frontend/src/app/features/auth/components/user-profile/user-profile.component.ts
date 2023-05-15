@@ -52,7 +52,7 @@ export class UserProfileComponent implements OnInit, OnChanges {
 
   private readUserData() {
     this.authService.me().subscribe((result) => {
-      this.maintainUserProfileForm.get('displayName')?.setValue(result.data.me.displayName || '');
+      this.maintainUserProfileForm.get('displayName')?.setValue(result.displayName || '');
     });
   }
 }

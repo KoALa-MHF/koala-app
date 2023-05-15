@@ -690,6 +690,7 @@ export type GetSessionsQuery = {
       updatedAt: any;
       markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
     }>;
+    owner: { __typename?: 'User'; id: string; createdAt: any; updatedAt: any };
   }>;
 };
 
@@ -735,6 +736,7 @@ export type GetOneSessionQuery = {
         marker: { __typename?: 'Marker'; id: number; color: string };
       }>;
     }>;
+    owner: { __typename?: 'User'; id: string; createdAt: any; updatedAt: any };
   };
 };
 
@@ -1168,6 +1170,11 @@ export const GetSessionsDocument = gql`
         createdAt
         updatedAt
       }
+      owner {
+        id
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -1230,6 +1237,11 @@ export const GetOneSessionDocument = gql`
             color
           }
         }
+      }
+      owner {
+        id
+        createdAt
+        updatedAt
       }
       createdAt
       updatedAt

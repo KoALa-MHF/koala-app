@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { credentialsValidator } from './credentials.validator';
-import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'koala-login-page',
@@ -15,18 +13,11 @@ import { environment } from '../../../../../environments/environment';
 export class LoginPage implements OnInit {
   isAuthenticated$ = this.authService.isAuthenticated$;
 
-  loginForm = new FormGroup(
-    {
-      username: new FormControl<string>(''),
-      password: new FormControl<string>(''),
-      sessionCode: new FormControl<string>(''),
-    },
-    {
-      validators: [
-        credentialsValidator,
-      ],
-    }
-  );
+  loginForm = new FormGroup({
+    sessionCode: new FormControl<string>('', [
+      Validators.required,
+    ]),
+  });
 
   constructor(
     private readonly authService: AuthService,
@@ -55,27 +46,10 @@ export class LoginPage implements OnInit {
     }
   }
 
-  public onLoginViaSaml() {
-    window.location.href = environment.samlUrl;
-  }
-
-  public onLogin() {
-    if (this.username !== '' && this.password !== '') {
-      //use username and password prefereably over session code
-      this.authService.loginViaUsername('', '');
-    } else if (this.sessionCode && this.sessionCode !== null && this.sessionCode !== '') {
+  public onCodeLogin() {
+    if (this.sessionCode) {
       this.authService.loginViaSessionCode(this.sessionCode);
-    } else {
-      //should not happen because form is not validated => error
     }
-  }
-
-  get username() {
-    return this.loginForm.get('username')?.value;
-  }
-
-  get password() {
-    return this.loginForm.get('password')?.value;
   }
 
   get sessionCode() {
