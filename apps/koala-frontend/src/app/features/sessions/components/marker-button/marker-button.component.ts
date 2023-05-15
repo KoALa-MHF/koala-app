@@ -28,7 +28,9 @@ export class MarkerButtonComponent implements OnInit {
       .pipe(filter((mediaAction) => mediaAction === MediaActions.Play))
       .subscribe({
         next: () => {
-          this.sliderButton();
+          if (this.marker.type === MarkerType.Slider) {
+            this.sliderButton();
+          }
         },
       });
   }

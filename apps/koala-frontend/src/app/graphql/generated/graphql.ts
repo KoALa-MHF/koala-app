@@ -725,7 +725,7 @@ export type GetOneSessionQuery = {
     userSessions: Array<{
       __typename?: 'UserSession';
       id: number;
-      owner: { __typename?: 'User'; email?: string | null };
+      owner: { __typename?: 'User'; id: string; email?: string | null };
       annotations: Array<{
         __typename?: 'Annotation';
         id: number;
@@ -1217,6 +1217,7 @@ export const GetOneSessionDocument = gql`
       userSessions {
         id
         owner {
+          id
           email
         }
         annotations {

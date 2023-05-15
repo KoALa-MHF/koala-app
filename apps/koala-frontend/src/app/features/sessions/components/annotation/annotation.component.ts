@@ -68,7 +68,6 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   }
 
   private drawLines() {
-    this.markerService.getIconByCode('');
     const svgC = d3.select(`svg#${this.containerID}`);
     const svgL = d3.select(`svg#${this.labelsID}`);
     const text = svgL.selectAll('text,foreignObject').data(this.markers);
@@ -93,7 +92,8 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
       .attr('x1', 5)
       .attr('x2', this.getContainerWidth())
       .attr('y1', (m: Marker, index: number) => this.getPositionY(index))
-      .attr('y2', (m: Marker, index: number) => this.getPositionY(index));
+      .attr('y2', (m: Marker, index: number) => this.getPositionY(index))
+      .attr('visibility', (m: Marker) => (m.visible ? 'visible' : 'hidden'));
   }
 
   private drawLineText(m: Marker, element: any, index: number) {
@@ -104,7 +104,8 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
       .attr('width', '30px')
       .attr('height', '30px')
       .attr('y', height - 10)
-      .attr('id', `marker_text${index}`);
+      .attr('id', `marker_text${index}`)
+      .attr('visibility', m.visible ? 'visible' : 'hidden');
     if (m.icon) {
       const icon = this.markerService.getIconByCode(m.icon);
       element.attr('font-family', 'primeicons');

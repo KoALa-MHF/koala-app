@@ -72,6 +72,7 @@ const GET_ONE_SESSION = gql`
       userSessions {
         id
         owner {
+          id
           email
         }
         annotations {
