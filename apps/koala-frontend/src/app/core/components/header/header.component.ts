@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { OverlayPanel } from 'primeng/overlaypanel';
-import { map, merge } from 'rxjs';
+import { filter, map, merge } from 'rxjs';
 import { AuthService } from '../../../features/auth/services/auth.service';
 import { environment } from '../../../../environments/environment';
 
@@ -28,6 +28,7 @@ export class HeaderComponent {
   @ViewChild('languageSelector', { static: true }) languageSelector!: OverlayPanel;
   @ViewChild('accountMenu', { static: true }) accountMenu!: OverlayPanel;
 
+  isOnAnySessionPage = false;
   isAuthenticated$ = this.authService.isAuthenticated$;
   language$ = merge(this.translateService.onDefaultLangChange, this.translateService.onLangChange).pipe(
     map((event) => event.lang),
@@ -40,7 +41,16 @@ export class HeaderComponent {
     private readonly router: Router,
     private readonly translateService: TranslateService,
     private readonly authService: AuthService
-  ) {}
+  ) {
+    this.router.events.pipe(filter((event: any) => event instanceof NavigationEnd)).subscribe((event) => {
+      const routeUrl: string = event.url;
+      if (routeUrl.match('^/sessions/[0-9]*') !== null) {
+        this.isOnAnySessionPage = true;
+      } else {
+        this.isOnAnySessionPage = false;
+      }
+    });
+  }
 
   public onToolbarHomePressed() {
     this.router.navigate([
@@ -58,7 +68,11 @@ export class HeaderComponent {
 
   public onAnalysis() {}
 
-  public onSessionInfo() {}
+  public onSessionInfo() {
+    this.router.navigate([
+      this.router.url + '/info',
+    ]);
+  }
 
   public onLanguageSelected(languageCode: LANGUAGE_CODE) {
     this.languageSelector.hide();

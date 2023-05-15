@@ -14,14 +14,20 @@
     (click)="onMySessions()"
   ></button>
 
-  <button pButton pRipple *ngIf="isAuthenticated$ | async" class="p-button-text" (click)="onSession()">
+  <button
+    pButton
+    pRipple
+    *ngIf="(isAuthenticated$ | async) && isOnAnySessionPage"
+    class="p-button-text"
+    (click)="onSession()"
+  >
     <span>&#x266B;</span><span style="margin-left: 8px">Session</span>
   </button>
 
   <button
     pButton
     pRipple
-    *ngIf="isAuthenticated$ | async"
+    *ngIf="(isAuthenticated$ | async) && isOnAnySessionPage"
     icon="pi pi-chart-bar"
     label="Auswertung"
     class="p-button-text"
@@ -31,7 +37,7 @@
   <button
     pButton
     pRipple
-    *ngIf="isAuthenticated$ | async"
+    *ngIf="(isAuthenticated$ | async) && isOnAnySessionPage"
     icon="pi pi-info-circle"
     label="Sessioninfo"
     class="p-button-text"
