@@ -17,7 +17,6 @@ import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { filter } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { ToolbarsService } from '../../services/toolbars.service';
-import { Toolbar } from '../../types/toolbar.entity';
 
 @Component({
   selector: 'koala-app-session',
@@ -65,7 +64,6 @@ export class SessionPage implements OnInit, OnDestroy {
         displaySampleSolution: new FormControl<boolean>(false),
         enableLiveAnalysis: new FormControl<boolean>(false),
       }),
-      markersArray: this.formBuilder.group({}),
     });
 
     this.onSidePanelFormChanges();
@@ -107,6 +105,10 @@ export class SessionPage implements OnInit, OnDestroy {
                 const markerIndex = this.markers.findIndex((m) => m.id.toString() == newMarker.markerId);
                 this.markers[markerIndex].visible = newMarker.visible;
               });
+              //trigger change detection
+              this.markers = [
+                ...this.markers,
+              ];
             }
           },
         });
@@ -202,22 +204,8 @@ export class SessionPage implements OnInit, OnDestroy {
     sidePanelForm?.reset(details);
   }
 
-  private setSidePanelMarkerData(toolbar: Toolbar) {
-    const markerArray = this.sidePanelForm.get('markersArray');
-    let sidePanelMarker = markerArray?.value;
-
-    if (sidePanelMarker) {
-      sidePanelMarker = {
-        ...toolbar.markers,
-      };
-    }
-
-    //reset dirty state
-    markerArray?.reset(sidePanelMarker);
-  }
-
   onMarkerDisplayChange(value: boolean, marker: Marker) {
-    this.markers.map((m) => (m.id == marker.id ? { ...m, visible: value } : m));
+    this.markers = this.markers.map((m) => (m.id == marker.id ? { ...m, visible: value } : m));
 
     const toolbars = this.session.toolbars;
 
@@ -249,35 +237,7 @@ export class SessionPage implements OnInit, OnDestroy {
           const toolbarMarker = toolbarMarkers.find((t) => parseInt(t.markerId) == marker.id);
           const m = { visible: toolbarMarker ? toolbarMarker.visible : true, ...marker };
           this.markers.push(m);
-          const formControlCheckbox = new FormControl(m.visible);
-          formControlCheckbox.valueChanges.subscribe({
-            next: function (this: SessionPage, marker: any, val: boolean | null) {
-              console.log(marker);
-              console.log(val);
-              console.log(this);
 
-              const toolbars = this.session.toolbars;
-
-              if (toolbars) {
-                const toolbar = toolbars[0];
-                this.toolbarService
-                  .setVisibilityForMarker(parseInt(toolbar.id), {
-                    markerId: marker.id,
-                    visible: val === null ? true : val,
-                  })
-                  .subscribe({
-                    next: (result) => {
-                      this.loadMarkerData(this.session.userSessions || []);
-                    },
-                    error: (error) => {
-                      console.log('Toolbar Update Error');
-                      console.log(error);
-                    },
-                  });
-              }
-            }.bind(this, m),
-          });
-          this.markersFormGroup.setControl(marker.id + '', formControlCheckbox);
           this.AnnotationData.set(marker.id, new Array<DataPoint>());
         }
         this.loadAnnotations(userSessions);
