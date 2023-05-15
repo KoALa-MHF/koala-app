@@ -62,7 +62,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       useFactory(httpLink: HttpLink) {
         // Create a WebSocket link:
         const ws = new WebSocketLink({
-          uri: 'ws://localhost:3333/graphql',
+          uri: environment.wsBaseUrl + '/graphql',
           options: {
             reconnect: true,
             connectionParams: () => {
