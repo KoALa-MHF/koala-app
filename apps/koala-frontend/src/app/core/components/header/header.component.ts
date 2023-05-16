@@ -29,6 +29,7 @@ export class HeaderComponent {
   @ViewChild('accountMenu', { static: true }) accountMenu!: OverlayPanel;
 
   isOnAnySessionPage = false;
+  sessionId = -1;
   isAuthenticated$ = this.authService.isAuthenticated$;
   language$ = merge(this.translateService.onDefaultLangChange, this.translateService.onLangChange).pipe(
     map((event) => event.lang),
@@ -46,6 +47,10 @@ export class HeaderComponent {
       const routeUrl: string = event.url;
       if (routeUrl.match('^/sessions/[^a-zA-Z]') !== null) {
         this.isOnAnySessionPage = true;
+        const sessionIdInURL = routeUrl.match('[1-9]+');
+        if (sessionIdInURL) {
+          this.sessionId = parseInt(sessionIdInURL[0]);
+        }
       } else {
         this.isOnAnySessionPage = false;
       }
@@ -64,13 +69,21 @@ export class HeaderComponent {
     ]);
   }
 
-  public onSession() {}
+  public onSession() {
+    this.router.navigate([
+      '/sessions/' + this.sessionId,
+    ]);
+  }
 
-  public onAnalysis() {}
+  public onAnalysis() {
+    this.router.navigate([
+      '/sessions/' + this.sessionId + '/analysis',
+    ]);
+  }
 
   public onSessionInfo() {
     this.router.navigate([
-      this.router.url + '/info',
+      '/sessions/' + this.sessionId + '/info',
     ]);
   }
 

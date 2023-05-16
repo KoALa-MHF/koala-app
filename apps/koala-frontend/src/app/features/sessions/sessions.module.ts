@@ -65,6 +65,7 @@ import { SessionQrcodeComponent } from './components/session-qrcode/session-qrco
 import { SessionMarkerLibraryComponent } from './components/session-marker-library/session-marker-library.component';
 import { MarkerOverviewListComponent } from './components/marker-overview-list/marker-overview-list.component';
 import { SessionInfoPage } from './pages/session-info/session-info.page';
+import { SessionAnalysisPage } from './pages/session-analysis/session-analysis.page';
 
 @NgModule({
   declarations: [
@@ -95,6 +96,7 @@ import { SessionInfoPage } from './pages/session-info/session-info.page';
     SessionMarkerLibraryComponent,
     MarkerOverviewListComponent,
     SessionInfoPage,
+    SessionAnalysisPage,
   ],
   imports: [
     SharedModule,
