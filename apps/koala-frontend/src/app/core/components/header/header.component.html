@@ -8,7 +8,7 @@
     pRipple
     *ngIf="isAuthenticated$ | async"
     icon="pi pi-home"
-    label="Meine Sessions"
+    label="{{ 'SESSION.MY_SESSIONS_NAV_BTN' | translate }}"
     class="p-button-text"
     style="margin-left: 50px; margin-right: 50px"
     (click)="onMySessions()"
@@ -29,7 +29,7 @@
     pRipple
     *ngIf="(isAuthenticated$ | async) && isOnAnySessionPage"
     icon="pi pi-chart-bar"
-    label="Auswertung"
+    label="{{ 'SESSION.ANALYSIS_NAV_BTN' | translate }}"
     class="p-button-text"
     (click)="onAnalysis()"
   ></button>
@@ -39,7 +39,7 @@
     pRipple
     *ngIf="(isAuthenticated$ | async) && isOnAnySessionPage"
     icon="pi pi-info-circle"
-    label="Sessioninfo"
+    label="{{ 'SESSION.INFO_NAV_BTN' | translate }}"
     class="p-button-text"
     (click)="onSessionInfo()"
   ></button>
@@ -51,7 +51,7 @@
     pRipple
     *ngIf="(isAuthenticated$ | async) && isOnSessionPage"
     icon="pi pi-cog"
-    label="Freigaben"
+    label="{{ 'SESSION.SESSION_SETTINGS_BTN' | translate }}"
     class="p-button-text"
     (click)="onSessionSettings()"
   ></button>
@@ -63,7 +63,7 @@
     pRipple
     *ngIf="(isAuthenticated$ | async) === false"
     icon="pi pi-sign-in"
-    label="Login"
+    label="{{ 'LOGIN_NAV_BTN' | translate }}"
     class="p-button-text"
     (click)="onLogin()"
   ></button>
