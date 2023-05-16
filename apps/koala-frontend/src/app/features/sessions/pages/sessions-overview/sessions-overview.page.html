@@ -25,6 +25,7 @@
 
       <koala-sessions-overview-table
         [sessions]="sessionsParticipants"
+        (sessionEnter)="onSessionEnter($event)"
         [supportedActions]="{createSession: false,
         copySession: false,
         enterSession: true,
