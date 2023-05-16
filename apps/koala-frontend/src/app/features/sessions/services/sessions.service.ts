@@ -13,7 +13,6 @@ import {
   UpdateSessionInput,
   CreateSessionInput,
   OnSessionUpdatedGQL,
-  Exact,
   CreateNewSessionMutation,
 } from '../../../graphql/generated/graphql';
 import { Session } from '../types/session.entity';

@@ -1,0 +1,15 @@
+<p-accordion [activeIndex]="0">
+  <p-accordionTab header="Sessionbeschreibung"> {{session?.description}} </p-accordionTab>
+  <p-accordionTab header="Markerbeschreibung">
+    <div class="marker-description-container">
+      <div *ngFor="let marker of markers">
+        <div class="marker-name">{{marker.name}}</div>
+        <div class="marker-btn-visualization">
+          <koala-marker-button [marker]="marker"></koala-marker-button>
+        </div>
+
+        <div class="marker-description">{{marker.description}}</div>
+      </div>
+    </div>
+  </p-accordionTab>
+</p-accordion>

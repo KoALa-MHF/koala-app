@@ -1,0 +1,19 @@
+.marker-name {
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.marker-btn-visualization {
+  margin-bottom: 20px;
+}
+
+.marker-description {
+  max-width: 250px;
+}
+
+.marker-description-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: flex-start;
+}

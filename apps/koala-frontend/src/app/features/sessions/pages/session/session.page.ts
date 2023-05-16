@@ -17,6 +17,7 @@ import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { filter } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { ToolbarsService } from '../../services/toolbars.service';
+import { NavigationService } from '../../services/navigation.service';
 
 @Component({
   selector: 'koala-app-session',
@@ -45,6 +46,8 @@ export class SessionPage implements OnInit, OnDestroy {
   sessionUpdatedSubscription?: Subscription;
   toolbarUpdatedSubscription?: Subscription;
 
+  sessionSettingsToggled$ = this.navigationService.sessionSettingsSidePanelToggled$;
+
   constructor(
     private readonly sessionService: SessionsService,
     private readonly annotationService: AnnotationService,
@@ -55,7 +58,8 @@ export class SessionPage implements OnInit, OnDestroy {
     private readonly messageService: MessageService,
     private readonly translateService: TranslateService,
     private readonly formBuilder: FormBuilder,
-    private readonly toolbarService: ToolbarsService
+    private readonly toolbarService: ToolbarsService,
+    private readonly navigationService: NavigationService
   ) {
     this.sidePanelForm = this.formBuilder.group({
       details: this.formBuilder.group({
@@ -495,6 +499,10 @@ export class SessionPage implements OnInit, OnDestroy {
           });
       }
     });
+  }
+
+  onSidebarHide() {
+    this.navigationService.setSessionSettingsSidePanelVisible(false);
   }
 
   get sessionDetailsFormGroup(): FormGroup {

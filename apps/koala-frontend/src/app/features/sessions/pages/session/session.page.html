@@ -8,14 +8,6 @@
             <div class="p-toolbar-group-center">
               <koala-app-audio-player (mediaEvent)="onMediaEvent($event)"></koala-app-audio-player>
             </div>
-            <div class="p-toolbar-group-end">
-              <p-button
-                (click)="showSideBar = true"
-                label="Freigaben"
-                icon="pi pi-cog"
-                styleClass="p-button-text"
-              ></p-button>
-            </div>
           </p-toolbar>
           <koala-app-audio-wave [waveContainer]="waveContainer"> </koala-app-audio-wave>
           <koala-app-annotation
@@ -37,10 +29,10 @@
   </p-tabView>
 </div>
 
-<p-sidebar [(visible)]="showSideBar" position="right">
+<p-sidebar [visible]="(sessionSettingsToggled$ | async) || false" (onHide)="onSidebarHide()" position="right">
   <form [formGroup]="sessionDetailsFormGroup">
     <div class="form-group">
-      <b>Freigaben</b>
+      <b>{{'SESSION.SIDEBAR.SESSION_GENERAL_SETTINGS_TITLE' | translate}}</b>
     </div>
     <div>
       <p-checkbox
@@ -75,7 +67,7 @@
   <p-divider></p-divider>
 
   <div class="form-group">
-    <b>Markers</b>
+    <b>{{'SESSION.SIDEBAR.MARKER_TITLE' | translate}}</b>
   </div>
   <div class="form-group overflow">
     <div *ngFor="let marker of markers">

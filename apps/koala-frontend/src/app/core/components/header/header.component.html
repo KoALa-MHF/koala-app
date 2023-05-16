@@ -3,14 +3,67 @@
     <p-image src="../../../../assets/koala-logo-schriftzug_petrol.png" alt="KoALa Logo" height="30"></p-image>
   </span>
 
+  <button
+    pButton
+    pRipple
+    *ngIf="isAuthenticated$ | async"
+    icon="pi pi-home"
+    label="{{ 'SESSION.MY_SESSIONS_NAV_BTN' | translate }}"
+    class="p-button-text"
+    style="margin-left: 50px; margin-right: 50px"
+    (click)="onMySessions()"
+  ></button>
+
+  <button
+    pButton
+    pRipple
+    *ngIf="(isAuthenticated$ | async) && isOnAnySessionPage"
+    class="p-button-text"
+    (click)="onSession()"
+  >
+    <span>&#x266B;</span><span style="margin-left: 8px">Session</span>
+  </button>
+
+  <button
+    pButton
+    pRipple
+    *ngIf="(isAuthenticated$ | async) && isOnAnySessionPage"
+    icon="pi pi-chart-bar"
+    label="{{ 'SESSION.ANALYSIS_NAV_BTN' | translate }}"
+    class="p-button-text"
+    (click)="onAnalysis()"
+  ></button>
+
+  <button
+    pButton
+    pRipple
+    *ngIf="(isAuthenticated$ | async) && isOnAnySessionPage"
+    icon="pi pi-info-circle"
+    label="{{ 'SESSION.INFO_NAV_BTN' | translate }}"
+    class="p-button-text"
+    (click)="onSessionInfo()"
+  ></button>
+
   <span class="toolbar-spacer"></span>
+
+  <button
+    pButton
+    pRipple
+    *ngIf="(isAuthenticated$ | async) && isOnSessionPage"
+    icon="pi pi-cog"
+    label="{{ 'SESSION.SESSION_SETTINGS_BTN' | translate }}"
+    class="p-button-text"
+    (click)="onSessionSettings()"
+  ></button>
+
+  <p-divider layout="vertical"></p-divider>
 
   <button
     pButton
     pRipple
     *ngIf="(isAuthenticated$ | async) === false"
     icon="pi pi-sign-in"
-    label="Login"
+    label="{{ 'LOGIN_NAV_BTN' | translate }}"
     class="p-button-text"
     (click)="onLogin()"
   ></button>
