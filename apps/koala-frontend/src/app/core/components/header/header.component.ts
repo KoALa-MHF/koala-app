@@ -5,6 +5,7 @@ import { OverlayPanel } from 'primeng/overlaypanel';
 import { filter, map, merge } from 'rxjs';
 import { AuthService } from '../../../features/auth/services/auth.service';
 import { environment } from '../../../../environments/environment';
+import { NavigationService } from '../../../features/sessions/services/navigation.service';
 
 export enum LANGUAGE_CODE {
   GERMAN = 'de',
@@ -29,6 +30,7 @@ export class HeaderComponent {
   @ViewChild('accountMenu', { static: true }) accountMenu!: OverlayPanel;
 
   isOnAnySessionPage = false;
+  isOnSessionPage = false;
   sessionId = -1;
   isAuthenticated$ = this.authService.isAuthenticated$;
   language$ = merge(this.translateService.onDefaultLangChange, this.translateService.onLangChange).pipe(
@@ -41,7 +43,8 @@ export class HeaderComponent {
   constructor(
     private readonly router: Router,
     private readonly translateService: TranslateService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly navigationService: NavigationService
   ) {
     this.router.events.pipe(filter((event: any) => event instanceof NavigationEnd)).subscribe((event) => {
       const routeUrl: string = event.url;
@@ -51,8 +54,16 @@ export class HeaderComponent {
         if (sessionIdInURL) {
           this.sessionId = parseInt(sessionIdInURL[0]);
         }
+
+        const sessionDetailsURL = routeUrl.match('^/sessions/[^a-zA-Z]*/.');
+        if (!sessionDetailsURL) {
+          this.isOnSessionPage = true;
+        } else {
+          this.isOnSessionPage = false;
+        }
       } else {
         this.isOnAnySessionPage = false;
+        this.isOnSessionPage = false;
       }
     });
   }
@@ -85,6 +96,10 @@ export class HeaderComponent {
     this.router.navigate([
       '/sessions/' + this.sessionId + '/info',
     ]);
+  }
+
+  public onSessionSettings() {
+    this.navigationService.setSessionSettingsSidePanelVisible(true);
   }
 
   public onLanguageSelected(languageCode: LANGUAGE_CODE) {

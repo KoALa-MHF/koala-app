@@ -49,6 +49,18 @@
   <button
     pButton
     pRipple
+    *ngIf="(isAuthenticated$ | async) && isOnSessionPage"
+    icon="pi pi-cog"
+    label="Freigaben"
+    class="p-button-text"
+    (click)="onSessionSettings()"
+  ></button>
+
+  <p-divider layout="vertical"></p-divider>
+
+  <button
+    pButton
+    pRipple
     *ngIf="(isAuthenticated$ | async) === false"
     icon="pi pi-sign-in"
     label="Login"
