@@ -44,7 +44,7 @@ export class HeaderComponent {
   ) {
     this.router.events.pipe(filter((event: any) => event instanceof NavigationEnd)).subscribe((event) => {
       const routeUrl: string = event.url;
-      if (routeUrl.match('^/sessions/[0-9]*') !== null) {
+      if (routeUrl.match('^/sessions/[^a-zA-Z]') !== null) {
         this.isOnAnySessionPage = true;
       } else {
         this.isOnAnySessionPage = false;
