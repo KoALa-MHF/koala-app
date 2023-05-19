@@ -74,13 +74,13 @@
     <tr [pSelectableRow]="session">
       <td data-column="sessionName" data-cy="session-overview-name-col">{{ session.name }}</td>
       <td data-column="createdAt" data-cy="session-overview-created-at-col">
-        {{ session.createdAt | date: 'medium' }}
+        {{ session.createdAt | localizedDate }}
       </td>
       <td data-column="participants" data-cy="session-overview-participants-col">
         {{ session.userSessions?.length || 0 }}
       </td>
       <td data-column="updatedAt" data-cy="session-overview-updated-at-col">
-        {{ session.updatedAt | date: 'medium' }}
+        {{ session.updatedAt | localizedDate }}
       </td>
       <td *ngIf="supportedActions.updateSession">
         <button

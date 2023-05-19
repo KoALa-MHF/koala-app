@@ -1,10 +1,13 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { LocalizedDatePipe } from './localized-date.pipe';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    LocalizedDatePipe,
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -15,6 +18,10 @@ import { TranslateModule } from '@ngx-translate/core';
     FormsModule,
     ReactiveFormsModule,
     TranslateModule,
+    LocalizedDatePipe,
+  ],
+  providers: [
+    DatePipe,
   ],
 })
 export class SharedModule {}
