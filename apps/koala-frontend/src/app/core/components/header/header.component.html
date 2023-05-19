@@ -56,7 +56,10 @@
     (click)="onSessionSettings()"
   ></button>
 
-  <p-divider layout="vertical"></p-divider>
+  <p-divider
+    layout="vertical"
+    *ngIf="(isAuthenticated$ | async) && (isOnAnySessionPage || isOnSessionPage)"
+  ></p-divider>
 
   <button
     pButton
