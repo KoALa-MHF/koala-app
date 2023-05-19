@@ -33,7 +33,7 @@ export class MediaService {
     formData.append('map', JSON.stringify(_map));
     formData.append('file', media.file);
 
-    const graphQLEndpoint = environment.production ? 'https://koala-app.de/graphql' : 'http://localhost:4200/graphql';
+    const graphQLEndpoint = `${environment.baseUrl}/graphql`;
 
     return this.http.post<MutationResult<CreateMediaMutation>>(graphQLEndpoint, formData);
   }
