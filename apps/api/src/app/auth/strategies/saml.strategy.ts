@@ -1,6 +1,6 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { Strategy, Profile } from '@node-saml/passport-saml';
+import { Strategy, Profile, SamlOptions } from '@node-saml/passport-saml';
 import { UsersService } from '../../users/users.service';
 import { Config } from '../../config/config';
 
@@ -14,7 +14,7 @@ export class SamlStrategy extends PassportStrategy(Strategy) {
       entryPoint: config.saml.entryPoint,
       audience: config.saml.audience,
       wantAuthnResponseSigned: config.saml.wantAuthnResponseSigned,
-    });
+    } as SamlOptions);
   }
 
   async validate(profile: Profile) {
