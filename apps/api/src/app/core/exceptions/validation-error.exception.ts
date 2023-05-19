@@ -1,4 +1,4 @@
-import { UserInputError } from 'apollo-server-express';
+import { UserInputError } from '@nestjs/apollo';
 import { ValidationError } from 'class-validator';
 
 export class ValidationErrorException extends UserInputError {
@@ -10,7 +10,7 @@ export class ValidationErrorException extends UserInputError {
           ]
         : validationError;
     super('VALIDATION_ERROR', {
-      invalidArgs: validationErrors,
+      extensions: { invalidArgs: validationErrors },
     });
   }
 }

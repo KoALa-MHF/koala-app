@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CreateMediaInput, CreateMediaMutation } from '../../../graphql/generated/graphql';
 import { environment } from '../../../../environments/environment';
@@ -35,6 +35,10 @@ export class MediaService {
 
     const graphQLEndpoint = `${environment.baseUrl}/graphql`;
 
-    return this.http.post<MutationResult<CreateMediaMutation>>(graphQLEndpoint, formData);
+    return this.http.post<MutationResult<CreateMediaMutation>>(graphQLEndpoint, formData, {
+      headers: new HttpHeaders({
+        'apollo-require-preflight': 'true',
+      }),
+    });
   }
 }
