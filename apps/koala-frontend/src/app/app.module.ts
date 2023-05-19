@@ -17,6 +17,9 @@ import { environment } from '../environments/environment';
 
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import localeEn from '@angular/common/locales/en';
+import localeDe from '@angular/common/locales/de';
+import localeFr from '@angular/common/locales/fr';
 import { SharedModule } from './shared/shared.module';
 import { AuthModule } from './features/auth/auth.module';
 import { LayoutComponent } from './layout.component';
@@ -25,6 +28,7 @@ import { MessageService } from 'primeng/api';
 import { AuthInterceptor } from './features/auth/http-interceptors/auth-interceptor';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { OperationDefinitionNode } from 'graphql';
+import { registerLocaleData } from '@angular/common';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -101,4 +105,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppComponent,
   ],
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {
+    registerLocaleData(localeEn, 'en');
+    registerLocaleData(localeDe, 'de');
+    registerLocaleData(localeFr, 'fr');
+  }
+}
