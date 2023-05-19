@@ -40,7 +40,7 @@ export class SamlConfig {
   public readonly entryPoint: string;
 
   @IsString()
-  public readonly audiance: string;
+  public readonly audience: string;
 
   @IsBoolean()
   public readonly wantAuthnResponseSigned: boolean = false;
