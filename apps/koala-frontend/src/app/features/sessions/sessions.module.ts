@@ -66,6 +66,7 @@ import { SessionMarkerLibraryComponent } from './components/session-marker-libra
 import { MarkerOverviewListComponent } from './components/marker-overview-list/marker-overview-list.component';
 import { SessionInfoPage } from './pages/session-info/session-info.page';
 import { SessionAnalysisPage } from './pages/session-analysis/session-analysis.page';
+import { VisibleFilterPipe } from './components/marker-toolbar/marker-visible.pipe';
 
 @NgModule({
   declarations: [
@@ -97,6 +98,7 @@ import { SessionAnalysisPage } from './pages/session-analysis/session-analysis.p
     MarkerOverviewListComponent,
     SessionInfoPage,
     SessionAnalysisPage,
+    VisibleFilterPipe,
   ],
   imports: [
     SharedModule,

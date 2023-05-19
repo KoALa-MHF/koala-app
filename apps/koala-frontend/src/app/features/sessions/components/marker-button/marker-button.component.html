@@ -7,14 +7,14 @@
   [class.marker-button-event]="marker.type === MarkerType.Event"
   [class.marker-button-range]="marker.type === MarkerType.Range"
   (click)="onClick()"
-  *ngIf="marker.type === MarkerType.Event || marker.type === MarkerType.Range"
+  *ngIf="(marker.type === MarkerType.Event || marker.type === MarkerType.Range) && marker.visible === true"
 >
   <koala-marker-icon [iconCode]="marker.icon"></koala-marker-icon>
   <span [style.margin-left]="marker.icon && marker.abbreviation ? '10px' : '0px'">{{ marker.abbreviation }}</span>
 </button>
 
 <div
-  *ngIf="marker.type === MarkerType.Slider"
+  *ngIf="marker.type === MarkerType.Slider && marker.visible === true"
   [style.background-color]="marker.color"
   [class.marker-button-slider]="marker.type === MarkerType.Slider"
   class="marker-button slider-marker"
