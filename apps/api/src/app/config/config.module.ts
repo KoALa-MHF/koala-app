@@ -1,5 +1,7 @@
 import { TypedConfigModule, fileLoader, selectConfig, dotenvLoader } from 'nest-typed-config';
 import { Config, DatabaseConfig, MailConfig, SamlConfig } from './config';
+import { plainToClass } from 'class-transformer';
+import { validateSync } from 'class-validator';
 
 export const ConfigModule = TypedConfigModule.forRoot({
   schema: Config,
@@ -9,6 +11,19 @@ export const ConfigModule = TypedConfigModule.forRoot({
       separator: '__',
     }),
   ],
+  validate: (rawConfig: any) => {
+    const config = plainToClass(Config, rawConfig);
+    const schemaErrors = validateSync(config, {
+      forbidUnknownValues: true,
+      whitelist: true,
+    });
+
+    if (schemaErrors.length) {
+      throw new Error(TypedConfigModule.getConfigErrorMessage(schemaErrors));
+    }
+
+    return config as Config;
+  },
   normalize(config) {
     config.mail.port = parseInt(config.mail.port, 10);
     return config;
