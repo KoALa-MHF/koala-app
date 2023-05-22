@@ -17,7 +17,9 @@ import {
 } from '../../../graphql/generated/graphql';
 import { Session } from '../types/session.entity';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class SessionsService {
   constructor(
     private readonly getSessionGQL: GetSessionsGQL,
