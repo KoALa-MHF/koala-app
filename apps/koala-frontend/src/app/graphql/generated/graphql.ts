@@ -65,7 +65,7 @@ export type CreateAnnotationInput = {
   /** Associated Marker */
   markerId: Scalars['Int'];
   /** Annotation Note */
-  note?: InputMaybe<Scalars['String']>;
+  note?: Scalars['String'];
   /** Annotation Start Seconds */
   start: Scalars['Int'];
   /** Associated User Session */
@@ -78,9 +78,9 @@ export type CreateMarkerInput = {
   /** Marker Name Abbreviation (e.g. for small screen sizes */
   abbreviation?: InputMaybe<Scalars['String']>;
   /** Marker Color */
-  color?: InputMaybe<Scalars['String']>;
+  color?: Scalars['String'];
   /** Marker Descritpion */
-  description?: InputMaybe<Scalars['String']>;
+  description?: Scalars['String'];
   /** Marker Icon */
   icon?: InputMaybe<Scalars['String']>;
   /** Marker Name */
@@ -108,7 +108,7 @@ export type CreateSessionInput = {
   mediaId?: InputMaybe<Scalars['Int']>;
   name: Scalars['String'];
   start?: InputMaybe<Scalars['DateTime']>;
-  status?: InputMaybe<SessionStatus>;
+  status?: SessionStatus;
 };
 
 export type CreateUserInput = {
@@ -118,7 +118,7 @@ export type CreateUserInput = {
 
 export type CreateUserSessionInput = {
   /** User Session Note */
-  note?: InputMaybe<Scalars['String']>;
+  note?: Scalars['String'];
   /** User Assopciated to the User Session */
   owner?: InputMaybe<CreateUserInput>;
   /** Associated Session */
@@ -290,6 +290,7 @@ export type Query = {
   markers: Array<Marker>;
   me: User;
   session: Session;
+  sessionByCode: Session;
   sessions: Array<Session>;
   userSession: UserSession;
   userSessions: Array<UserSession>;
@@ -309,6 +310,10 @@ export type QueryMarkersArgs = {
 
 export type QuerySessionArgs = {
   id: Scalars['Int'];
+};
+
+export type QuerySessionByCodeArgs = {
+  code: Scalars['String'];
 };
 
 export type QueryUserSessionArgs = {
@@ -437,7 +442,7 @@ export type UpdateSessionInput = {
 };
 
 export type UpdateToolbarInput = {
-  markers?: InputMaybe<Array<Scalars['String']>>;
+  markers?: Array<Scalars['String']>;
 };
 
 export type UpdateUserInput = {
@@ -738,6 +743,15 @@ export type GetOneSessionQuery = {
     }>;
     owner: { __typename?: 'User'; id: string; createdAt: any; updatedAt: any };
   };
+};
+
+export type GetOneSessionBySessionCodeQueryVariables = Exact<{
+  code: Scalars['String'];
+}>;
+
+export type GetOneSessionBySessionCodeQuery = {
+  __typename?: 'Query';
+  sessionByCode: { __typename?: 'Session'; id: string };
 };
 
 export type GetMarkersQueryVariables = Exact<{
@@ -1254,6 +1268,27 @@ export const GetOneSessionDocument = gql`
 })
 export class GetOneSessionGQL extends Apollo.Query<GetOneSessionQuery, GetOneSessionQueryVariables> {
   override document = GetOneSessionDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const GetOneSessionBySessionCodeDocument = gql`
+  query GetOneSessionBySessionCode($code: String!) {
+    sessionByCode(code: $code) {
+      id
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class GetOneSessionBySessionCodeGQL extends Apollo.Query<
+  GetOneSessionBySessionCodeQuery,
+  GetOneSessionBySessionCodeQueryVariables
+> {
+  override document = GetOneSessionBySessionCodeDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

@@ -14,10 +14,13 @@ import {
   CreateSessionInput,
   OnSessionUpdatedGQL,
   CreateNewSessionMutation,
+  GetOneSessionBySessionCodeGQL,
 } from '../../../graphql/generated/graphql';
 import { Session } from '../types/session.entity';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class SessionsService {
   constructor(
     private readonly getSessionGQL: GetSessionsGQL,
@@ -25,7 +28,8 @@ export class SessionsService {
     private readonly createSessionGQL: CreateNewSessionGQL,
     private readonly updateSessionGQL: UpdateSessionGQL,
     private readonly deleteSessionGQL: DeleteSessionGQL,
-    private readonly onSessionUpdatedGQL: OnSessionUpdatedGQL
+    private readonly onSessionUpdatedGQL: OnSessionUpdatedGQL,
+    private readonly getOneSessionBySessionCodeGQL: GetOneSessionBySessionCodeGQL
   ) {}
 
   getAll() {
@@ -33,12 +37,11 @@ export class SessionsService {
   }
 
   getOne(id: number): Observable<ApolloQueryResult<GetOneSessionQuery>> {
-    return this.getOneSessionGQL.fetch(
-      {
-        sessionId: id,
-      },
-      { fetchPolicy: 'no-cache' }
-    );
+    return this.getOneSessionGQL.fetch({ sessionId: id }, { fetchPolicy: 'no-cache' });
+  }
+
+  getOneBySessionCode(code: string) {
+    return this.getOneSessionBySessionCodeGQL.fetch({ code }, { fetchPolicy: 'no-cache' });
   }
 
   create(session: CreateSessionInput) {

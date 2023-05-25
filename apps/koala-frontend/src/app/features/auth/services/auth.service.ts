@@ -5,6 +5,7 @@ import { MessageService } from 'primeng/api';
 import { BehaviorSubject, map } from 'rxjs';
 import { AuthenticateSessionCodeGQL, GetUserGQL, UpdateUserGQL, User } from '../../../graphql/generated/graphql';
 import jwt_decode from 'jwt-decode';
+import { SessionsService } from '../../sessions/services/sessions.service';
 
 interface JWToken {
   exp: number;
@@ -31,7 +32,8 @@ export class AuthService {
     private readonly meGQL: GetUserGQL,
     private readonly updateMeGQL: UpdateUserGQL,
     private readonly messageService: MessageService,
-    private readonly translate: TranslateService
+    private readonly translate: TranslateService,
+    private readonly sessionService: SessionsService
   ) {
     const savedUser = sessionStorage.getItem('koala-user');
 
@@ -72,6 +74,19 @@ export class AuthService {
             next: (result) => {
               if (result.data?.authenticateUserSession.accessToken) {
                 this.handleLoginSuccess(result.data?.authenticateUserSession.accessToken);
+
+                this.sessionService.getOneBySessionCode(sessionCode).subscribe({
+                  next: (response) => {
+                    const sessionId = response.data.sessionByCode.id;
+
+                    if (sessionId) {
+                      this.router.navigate([
+                        '/sessions/' + sessionId,
+                      ]);
+                    }
+                  },
+                });
+
                 resolve(true);
               } else {
                 //no successful login after all
