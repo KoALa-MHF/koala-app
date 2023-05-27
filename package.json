@@ -48,7 +48,7 @@
     "angular-mixed-cdk-drag-drop": "^1.0.3",
     "angularx-qrcode": "^14.0.0",
     "apollo-angular": "^4.1.0",
-    "better-sqlite3": "^8.0.1",
+    "better-sqlite3": "^8.3.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "d3": "^7.8.2",
@@ -74,7 +74,7 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.0.0",
     "tslib": "^2.3.0",
-    "typeorm": "^0.3.11",
+    "typeorm": "^0.3.16",
     "wavesurfer.js": "^6.4.0",
     "zone.js": "~0.11.4"
   },
