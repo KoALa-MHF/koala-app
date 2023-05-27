@@ -122,6 +122,7 @@
         "MARKER_DESCRIPTION_INPUT_LABEL": "Beschreibung",
         "MARKER_DESCRIPTION_INPUT_EXPLANATION": "Fügen Sie dem Marker ggf. eine Beschreibung hinzu.",
         "MARKER_ABBREVIATION_INPUT_LABEL": "Abkürzung",
+        "MARKER_ABBREVIATION_INPUT_LABEL_MANDATORY": "Abkürzung*",
         "MARKER_ABBREVIATION_INPUT_EXPLANATION": "Wählen Sie ggf. eine Abkürzung für den Marker.",
         "MARKER_RANGE_FROM_INPUT_LABEL": "Minimum-Wert",
         "MARKER_RANGE_FROM_INPUT_EXPLANATION": "Wählen Sie einen Minimum-Wert für den Slider.",
