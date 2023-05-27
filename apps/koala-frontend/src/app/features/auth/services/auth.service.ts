@@ -46,50 +46,37 @@ export class AuthService {
     return this.storedUser.accessToken;
   }
 
-  public loginViaUsername(username: string, password: string): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      this.handleLoginSuccess('toBeChanged');
-      resolve(true);
-    });
-  }
-
   public loginViaSaml(accessToken: string) {
     this.handleLoginSuccess(accessToken);
   }
 
   public loginViaSessionCode(sessionCode: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      if (sessionCode === 'ABC') {
-        //special handling
-        this.handleLoginSuccess(sessionCode);
-        resolve(true);
-      } else {
-        this.authenticateSessionCodeGQL
-          .mutate({
-            sessionCode,
-          })
-          .subscribe({
-            next: (result) => {
-              if (result.data?.authenticateUserSession.accessToken) {
-                this.handleLoginSuccess(result.data?.authenticateUserSession.accessToken);
-                resolve(true);
-              } else {
-                //no successful login after all
-                this.logout();
-                reject(false);
-              }
-            },
-            error: () => {
-              this.messageService.add({
-                severity: 'error',
-                summary: this.translate.instant('AUTH.LOGIN.SESSION_CODE_LOGIN_ERROR_MESSAGE'),
-              });
-
+      this.authenticateSessionCodeGQL
+        .mutate({
+          sessionCode,
+        })
+        .subscribe({
+          next: (result) => {
+            if (result.data?.authenticateUserSession.accessToken) {
+              this.handleLoginSuccess(result.data?.authenticateUserSession.accessToken);
+              resolve(true);
+            } else {
+              //no successful login after all
               this.logout();
               reject(false);
-            },
-          });
-      }
+            }
+          },
+          error: () => {
+            this.messageService.add({
+              severity: 'error',
+              summary: this.translate.instant('AUTH.LOGIN.SESSION_CODE_LOGIN_ERROR_MESSAGE'),
+            });
+
+            this.logout();
+            reject(false);
+          },
+        });
     });
   }
 

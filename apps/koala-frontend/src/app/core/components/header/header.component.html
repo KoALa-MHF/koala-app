@@ -49,7 +49,7 @@
   <button
     pButton
     pRipple
-    *ngIf="(isAuthenticated$ | async) && isOnSessionPage"
+    *ngIf="(isAuthenticated$ | async) && isOnSessionPage && isUserSessionOwner"
     icon="pi pi-cog"
     label="{{ 'SESSION.SESSION_SETTINGS_BTN' | translate }}"
     class="p-button-text"
@@ -58,7 +58,7 @@
 
   <p-divider
     layout="vertical"
-    *ngIf="(isAuthenticated$ | async) && (isOnAnySessionPage || isOnSessionPage)"
+    *ngIf="(isAuthenticated$ | async) && (isOnAnySessionPage || isOnSessionPage) && isUserSessionOwner"
   ></p-divider>
 
   <button
