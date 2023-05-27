@@ -27,7 +27,7 @@
   <button
     pButton
     pRipple
-    *ngIf="(isAuthenticated$ | async) && isOnAnySessionPage"
+    *ngIf="(isAuthenticated$ | async) && (isSessionAnalysisNavEnabled$ | async) && isOnAnySessionPage"
     icon="pi pi-chart-bar"
     label="{{ 'SESSION.ANALYSIS_NAV_BTN' | translate }}"
     class="p-button-text"

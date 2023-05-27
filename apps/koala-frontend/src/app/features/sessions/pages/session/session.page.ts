@@ -95,6 +95,7 @@ export class SessionPage implements OnInit, OnDestroy {
       };
 
       this.setSidePanelFormData(this.session);
+      this.navigationService.setAnalysisNavEnabled(this.session.isOwner || false);
 
       const toolbars = this.session.toolbars;
 

@@ -44,6 +44,7 @@ export class HeaderComponent {
       return lang !== LANGUAGE_CODE.ENGLISH ? lang : 'gb';
     })
   );
+  isSessionAnalysisNavEnabled$ = this.navigationService.sessionAnalysisNavEnabledToggled$;
 
   constructor(
     private readonly router: Router,
