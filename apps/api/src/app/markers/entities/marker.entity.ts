@@ -38,7 +38,7 @@ export class Marker extends BaseEntity {
 
   @Column({ nullable: true })
   @Field({ nullable: true, description: 'Marker Name Abbreviation (e.g. for small screen sizes' })
-  @ValidateIf((o) => o.type !== MarkerType.SLIDER && (!o.icon || o.abbreviation))
+  @ValidateIf((o) => !o.icon || o.abbreviation)
   @IsNotEmpty()
   abbreviation: string;
 
