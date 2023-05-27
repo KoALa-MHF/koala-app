@@ -8,6 +8,8 @@
   },
   "SESSION": {
     "CREATE_SESSION_MENU_LABEL": "Neue Session",
+    "EXPORT_SESSIONS_MENU_LABEL": "Session Exportieren",
+    "DELETE_SESSIONS_MENU_LABEL": "Session Löschen",
     "DUPLICATE_SESSION_MENU_LABEL": "Session Duplizieren",
     "ENTER_SESSION_MENU_LABEL": "Session Beitreten",
     "SESSION_SETTINGS_BTN": "Freigaben",
@@ -48,8 +50,8 @@
         "CHANGED_DATE_COL_LABEL": "Letzter Zugriff",
         "SETTINGS_COL_LABEL": "Einstellungen",
         "LINK_COL_LABEL": "Link/QRCode",
-        "EXPORT_COL_LABEL": "Export",
-        "DELETE_COL_LABEL": "Löschen"
+        "COPY_COL_LABEL": "Duplizieren",
+        "ENTER_COL_LABEL": "Beitreten"
       },
       "QRCODE": {
         "DIALOG_TITLE": "Session Beitreten",
@@ -120,6 +122,7 @@
         "MARKER_DESCRIPTION_INPUT_LABEL": "Beschreibung",
         "MARKER_DESCRIPTION_INPUT_EXPLANATION": "Fügen Sie dem Marker ggf. eine Beschreibung hinzu.",
         "MARKER_ABBREVIATION_INPUT_LABEL": "Abkürzung",
+        "MARKER_ABBREVIATION_INPUT_LABEL_MANDATORY": "Abkürzung*",
         "MARKER_ABBREVIATION_INPUT_EXPLANATION": "Wählen Sie ggf. eine Abkürzung für den Marker.",
         "MARKER_RANGE_FROM_INPUT_LABEL": "Minimum-Wert",
         "MARKER_RANGE_FROM_INPUT_EXPLANATION": "Wählen Sie einen Minimum-Wert für den Slider.",
@@ -183,6 +186,7 @@
     "DELETE_CONFIRM_DIALOG": {
       "TITLE": "Löschen",
       "EXPLANATION": "Wollen Sie wirklich die Session '{{sessionName}}' löschen?",
+      "EXPLANATION_MULTI_SESSION": "Wollen Sie die {{sessionCount}} ausgewählten Sessions löschen?",
       "CONFIRM_BTN": "Löschen",
       "CANCEL_BTN": "Abbrechen"
     }

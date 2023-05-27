@@ -6,6 +6,9 @@ import { filter, map, merge } from 'rxjs';
 import { AuthService } from '../../../features/auth/services/auth.service';
 import { environment } from '../../../../environments/environment';
 import { NavigationService } from '../../../features/sessions/services/navigation.service';
+import { SessionsService } from '../../../features/sessions/services/sessions.service';
+import { ApolloQueryResult } from '@apollo/client/core';
+import { GetOneSessionQuery } from '../../../graphql/generated/graphql';
 
 export enum LANGUAGE_CODE {
   GERMAN = 'de',
@@ -32,6 +35,8 @@ export class HeaderComponent {
   isOnAnySessionPage = false;
   isOnSessionPage = false;
   sessionId = -1;
+  isUserSessionOwner = false;
+
   isAuthenticated$ = this.authService.isAuthenticated$;
   language$ = merge(this.translateService.onDefaultLangChange, this.translateService.onLangChange).pipe(
     map((event) => event.lang),
@@ -44,7 +49,8 @@ export class HeaderComponent {
     private readonly router: Router,
     private readonly translateService: TranslateService,
     private readonly authService: AuthService,
-    private readonly navigationService: NavigationService
+    private readonly navigationService: NavigationService,
+    private readonly sessionService: SessionsService
   ) {
     this.router.events.pipe(filter((event: any) => event instanceof NavigationEnd)).subscribe((event) => {
       const routeUrl: string = event.url;
@@ -53,6 +59,13 @@ export class HeaderComponent {
         const sessionIdInURL = routeUrl.match('[1-9]+');
         if (sessionIdInURL) {
           this.sessionId = parseInt(sessionIdInURL[0]);
+          this.sessionService.getOne(this.sessionId).subscribe({
+            next: (response: ApolloQueryResult<GetOneSessionQuery>) => {
+              const selectedSession = response.data.session;
+
+              this.isUserSessionOwner = selectedSession.owner.id === this.authService.getLoggedInUserId().toString();
+            },
+          });
         }
 
         const sessionDetailsURL = routeUrl.match('^/sessions/[^a-zA-Z]*/.');

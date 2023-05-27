@@ -192,13 +192,15 @@ export class SessionMaintainPage implements OnInit, OnDestroy {
           ])
         : (this.participants = []);
 
-      this.setSessionGeneralDataForm(this.session);
+      if (this.session) {
+        this.setSessionGeneralDataForm(this.session);
 
-      const sessionToolbars = this.session?.toolbars;
-      if (sessionToolbars) {
-        const markers = sessionToolbars[0].markers || [];
-        const markerIds: Array<number> = markers.map((marker) => parseInt(marker.markerId));
-        this.refreshSessionMarkers(markerIds);
+        const sessionToolbars = this.session?.toolbars;
+        if (sessionToolbars) {
+          const markers = sessionToolbars[0].markers || [];
+          const markerIds: Array<number> = markers.map((marker) => parseInt(marker.markerId));
+          this.refreshSessionMarkers(markerIds);
+        }
       }
     });
   }

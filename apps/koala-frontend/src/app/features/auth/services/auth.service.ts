@@ -48,24 +48,12 @@ export class AuthService {
     return this.storedUser.accessToken;
   }
 
-  public loginViaUsername(username: string, password: string): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      this.handleLoginSuccess('toBeChanged');
-      resolve(true);
-    });
-  }
-
   public loginViaSaml(accessToken: string) {
     this.handleLoginSuccess(accessToken);
   }
 
   public loginViaSessionCode(sessionCode: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      if (sessionCode === 'ABC') {
-        //special handling
-        this.handleLoginSuccess(sessionCode);
-        resolve(true);
-      } else {
         this.authenticateSessionCodeGQL
           .mutate({
             sessionCode,
@@ -99,12 +87,18 @@ export class AuthService {
                 severity: 'error',
                 summary: this.translate.instant('AUTH.LOGIN.SESSION_CODE_LOGIN_ERROR_MESSAGE'),
               });
+            }
+          },
+          error: () => {
+            this.messageService.add({
+              severity: 'error',
+              summary: this.translate.instant('AUTH.LOGIN.SESSION_CODE_LOGIN_ERROR_MESSAGE'),
+            });
 
-              this.logout();
-              reject(false);
-            },
-          });
-      }
+            this.logout();
+            reject(false);
+          },
+        });
     });
   }
 
