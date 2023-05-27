@@ -67,6 +67,7 @@ import { MarkerOverviewListComponent } from './components/marker-overview-list/m
 import { SessionInfoPage } from './pages/session-info/session-info.page';
 import { SessionAnalysisPage } from './pages/session-analysis/session-analysis.page';
 import { VisibleFilterPipe } from './components/marker-toolbar/marker-visible.pipe';
+import { SessionOwnerPipe } from './pipes/session-owner.pipe';
 
 @NgModule({
   declarations: [
@@ -99,6 +100,7 @@ import { VisibleFilterPipe } from './components/marker-toolbar/marker-visible.pi
     SessionInfoPage,
     SessionAnalysisPage,
     VisibleFilterPipe,
+    SessionOwnerPipe,
   ],
   imports: [
     SharedModule,
