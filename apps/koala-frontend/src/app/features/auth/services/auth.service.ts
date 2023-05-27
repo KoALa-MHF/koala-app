@@ -54,39 +54,32 @@ export class AuthService {
 
   public loginViaSessionCode(sessionCode: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
-        this.authenticateSessionCodeGQL
-          .mutate({
-            sessionCode,
-          })
-          .subscribe({
-            next: (result) => {
-              if (result.data?.authenticateUserSession.accessToken) {
-                this.handleLoginSuccess(result.data?.authenticateUserSession.accessToken);
+      this.authenticateSessionCodeGQL
+        .mutate({
+          sessionCode,
+        })
+        .subscribe({
+          next: (result) => {
+            if (result.data?.authenticateUserSession.accessToken) {
+              this.handleLoginSuccess(result.data?.authenticateUserSession.accessToken);
 
-                this.sessionService.getOneBySessionCode(sessionCode).subscribe({
-                  next: (response) => {
-                    const sessionId = response.data.sessionByCode.id;
+              this.sessionService.getOneBySessionCode(sessionCode).subscribe({
+                next: (response) => {
+                  const sessionId = response.data.sessionByCode.id;
 
-                    if (sessionId) {
-                      this.router.navigate([
-                        '/sessions/' + sessionId,
-                      ]);
-                    }
-                  },
-                });
-
-                resolve(true);
-              } else {
-                //no successful login after all
-                this.logout();
-                reject(false);
-              }
-            },
-            error: () => {
-              this.messageService.add({
-                severity: 'error',
-                summary: this.translate.instant('AUTH.LOGIN.SESSION_CODE_LOGIN_ERROR_MESSAGE'),
+                  if (sessionId) {
+                    this.router.navigate([
+                      '/sessions/' + sessionId,
+                    ]);
+                  }
+                },
               });
+
+              resolve(true);
+            } else {
+              //no successful login after all
+              this.logout();
+              reject(false);
             }
           },
           error: () => {
@@ -94,9 +87,6 @@ export class AuthService {
               severity: 'error',
               summary: this.translate.instant('AUTH.LOGIN.SESSION_CODE_LOGIN_ERROR_MESSAGE'),
             });
-
-            this.logout();
-            reject(false);
           },
         });
     });
