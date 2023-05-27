@@ -88,10 +88,10 @@ export class SessionPage implements OnInit, OnDestroy {
         console.log(e);
       },
     });
-    this.sessionService.getOne(this.sessionId).subscribe(async (result) => {
+    this.sessionService.getOne(this.sessionId).subscribe(async (session) => {
       this.session = {
-        ...result.data?.session,
-        media: result.data?.session.media,
+        ...session,
+        media: session.media,
       };
 
       this.setSidePanelFormData(this.session);

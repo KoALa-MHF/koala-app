@@ -17,6 +17,7 @@ import {
   GetOneSessionBySessionCodeGQL,
 } from '../../../graphql/generated/graphql';
 import { Session } from '../types/session.entity';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -29,19 +30,39 @@ export class SessionsService {
     private readonly updateSessionGQL: UpdateSessionGQL,
     private readonly deleteSessionGQL: DeleteSessionGQL,
     private readonly onSessionUpdatedGQL: OnSessionUpdatedGQL,
-    private readonly getOneSessionBySessionCodeGQL: GetOneSessionBySessionCodeGQL
+    private readonly getOneSessionBySessionCodeGQL: GetOneSessionBySessionCodeGQL,
+    private readonly authService: AuthService
   ) {}
 
-  getAll() {
-    return this.getSessionGQL.fetch({}, { fetchPolicy: 'no-cache' }).pipe(map((data) => data.data.sessions));
-  }
-
-  getOne(id: number): Observable<ApolloQueryResult<GetOneSessionQuery>> {
-    return this.getOneSessionGQL.fetch({ sessionId: id }, { fetchPolicy: 'no-cache' });
+  getAll(): Observable<Session[]> {
+    return this.getSessionGQL.fetch({}, { fetchPolicy: 'no-cache' }).pipe(
+      map((data) => data.data.sessions),
+      map((sessions) =>
+        sessions.map((session: Session) => {
+          return { ...session, isOwner: this.authService.getLoggedInUserId().toString() === session.owner?.id };
+        })
+      )
+    );
   }
 
   getOneBySessionCode(code: string) {
     return this.getOneSessionBySessionCodeGQL.fetch({ code }, { fetchPolicy: 'no-cache' });
+  }
+
+  getOne(id: number): Observable<Session> {
+    return this.getOneSessionGQL
+      .fetch(
+        {
+          sessionId: id,
+        },
+        { fetchPolicy: 'no-cache' }
+      )
+      .pipe(
+        map((data) => data.data.session),
+        map((session) => {
+          return { ...session, isOwner: this.authService.getLoggedInUserId().toString() === session.owner?.id };
+        })
+      );
   }
 
   create(session: CreateSessionInput) {
@@ -68,18 +89,18 @@ export class SessionsService {
   copySession(sessionId: number): Promise<Session | null> {
     return new Promise<Session | null>((resolve, reject) => {
       this.getOne(sessionId).subscribe({
-        next: (result: ApolloQueryResult<GetOneSessionQuery>) => {
+        next: (session: Session) => {
           this.createSessionGQL
             .mutate({
               session: {
-                name: result.data.session.name + ' Copy',
-                description: result.data.session.description,
-                displaySampleSolution: result.data.session.displaySampleSolution,
-                editable: result.data.session.editable,
-                enableLiveAnalysis: result.data.session.enableLiveAnalysis,
-                enablePlayer: result.data.session.enablePlayer,
-                end: result.data.session.end,
-                start: result.data.session.start,
+                name: session.name + ' Copy',
+                description: session.description,
+                displaySampleSolution: session.displaySampleSolution,
+                editable: session.editable,
+                enableLiveAnalysis: session.enableLiveAnalysis,
+                enablePlayer: session.enablePlayer,
+                end: session.end,
+                start: session.start,
               },
             })
             .subscribe({

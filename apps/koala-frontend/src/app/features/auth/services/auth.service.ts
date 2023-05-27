@@ -107,7 +107,7 @@ export class AuthService {
     return this.meGQL.fetch({}, { fetchPolicy: 'no-cache' }).pipe(map((data) => data.data.me));
   }
 
-  public getLoggedInUserId() {
+  public getLoggedInUserId(): number {
     const decoded: JWToken = jwt_decode(this.storedUser.accessToken || '');
 
     return decoded.sub;
