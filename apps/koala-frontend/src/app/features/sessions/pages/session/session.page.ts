@@ -95,7 +95,7 @@ export class SessionPage implements OnInit, OnDestroy {
       };
 
       this.setSidePanelFormData(this.session);
-      this.navigationService.setAnalysisNavEnabled(this.session.isOwner || false);
+      this.navigationService.setAnalysisNavEnabled(this.session.enableLiveAnalysis || false);
 
       const toolbars = this.session.toolbars;
 
@@ -137,7 +137,9 @@ export class SessionPage implements OnInit, OnDestroy {
     this.sessionUpdatedSubscription = this.sessionService.subscribeUpdated(this.sessionId).subscribe((response) => {
       const session = response.data?.sessionUpdated;
       if (session) {
-        this.setSidePanelFormData(session);
+        this.session = session;
+        this.setSidePanelFormData(this.session);
+        this.navigationService.setAnalysisNavEnabled(this.session.enableLiveAnalysis || false);
       }
     });
   }

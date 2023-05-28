@@ -63,8 +63,7 @@ export class HeaderComponent {
           this.sessionId = parseInt(sessionIdInURL[0]);
           this.sessionService.getOne(this.sessionId).subscribe({
             next: (selectedSession: Session) => {
-              this.isUserSessionOwner =
-                selectedSession.owner?.id === this.accessTokenService.getLoggedInUserId().toString();
+              this.isUserSessionOwner = selectedSession.isOwner || false;
             },
           });
         }
