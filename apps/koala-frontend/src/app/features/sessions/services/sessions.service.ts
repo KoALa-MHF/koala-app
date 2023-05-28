@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ApolloQueryResult } from '@apollo/client/core';
 import { MutationResult } from 'apollo-angular';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -8,16 +7,19 @@ import {
   DeleteSessionGQL,
   GetSessionsGQL,
   GetOneSessionGQL,
-  GetOneSessionQuery,
   UpdateSessionGQL,
   UpdateSessionInput,
   CreateSessionInput,
   OnSessionUpdatedGQL,
   CreateNewSessionMutation,
+  GetOneSessionBySessionCodeGQL,
 } from '../../../graphql/generated/graphql';
 import { Session } from '../types/session.entity';
+import { AccessTokenService } from '../../auth/services/access-token.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class SessionsService {
   constructor(
     private readonly getSessionGQL: GetSessionsGQL,
@@ -25,20 +27,36 @@ export class SessionsService {
     private readonly createSessionGQL: CreateNewSessionGQL,
     private readonly updateSessionGQL: UpdateSessionGQL,
     private readonly deleteSessionGQL: DeleteSessionGQL,
-    private readonly onSessionUpdatedGQL: OnSessionUpdatedGQL
+    private readonly onSessionUpdatedGQL: OnSessionUpdatedGQL,
+    private readonly getOneSessionBySessionCodeGQL: GetOneSessionBySessionCodeGQL,
+    private readonly accessTokenService: AccessTokenService
   ) {}
 
-  getAll() {
-    return this.getSessionGQL.fetch({}, { fetchPolicy: 'no-cache' }).pipe(map((data) => data.data.sessions));
+  getAll(): Observable<Session[]> {
+    return this.getSessionGQL.fetch({}, { fetchPolicy: 'no-cache' }).pipe(
+      map((data) => data.data.sessions),
+      map((sessions) => sessions.map((session) => this.addIsOwner(session)))
+    );
   }
 
-  getOne(id: number): Observable<ApolloQueryResult<GetOneSessionQuery>> {
-    return this.getOneSessionGQL.fetch(
-      {
-        sessionId: id,
-      },
-      { fetchPolicy: 'no-cache' }
-    );
+  getSessionIdBySessionCode(code: string): Observable<number> {
+    return this.getOneSessionBySessionCodeGQL
+      .fetch({ code }, { fetchPolicy: 'no-cache' })
+      .pipe(map((response) => parseInt(response.data.sessionByCode.id)));
+  }
+
+  getOne(id: number): Observable<Session> {
+    return this.getOneSessionGQL
+      .fetch(
+        {
+          sessionId: id,
+        },
+        { fetchPolicy: 'no-cache' }
+      )
+      .pipe(
+        map((data) => data.data.session),
+        map((session) => this.addIsOwner(session))
+      );
   }
 
   create(session: CreateSessionInput) {
@@ -56,27 +74,38 @@ export class SessionsService {
     return this.deleteSessionGQL.mutate({ id });
   }
 
-  subscribeUpdated(id: number) {
-    return this.onSessionUpdatedGQL.subscribe({
-      sessionId: id.toString(),
-    });
+  subscribeUpdated(id: number): Observable<Session | undefined> {
+    return this.onSessionUpdatedGQL
+      .subscribe({
+        sessionId: id.toString(),
+      })
+      .pipe(
+        map((response) => response.data?.sessionUpdated),
+        map((session?: Session) => {
+          if (session) {
+            return this.addIsOwner(session);
+          } else {
+            return session;
+          }
+        })
+      );
   }
 
   copySession(sessionId: number): Promise<Session | null> {
     return new Promise<Session | null>((resolve, reject) => {
       this.getOne(sessionId).subscribe({
-        next: (result: ApolloQueryResult<GetOneSessionQuery>) => {
+        next: (session: Session) => {
           this.createSessionGQL
             .mutate({
               session: {
-                name: result.data.session.name + ' Copy',
-                description: result.data.session.description,
-                displaySampleSolution: result.data.session.displaySampleSolution,
-                editable: result.data.session.editable,
-                enableLiveAnalysis: result.data.session.enableLiveAnalysis,
-                enablePlayer: result.data.session.enablePlayer,
-                end: result.data.session.end,
-                start: result.data.session.start,
+                name: session.name + ' Copy',
+                description: session.description,
+                displaySampleSolution: session.displaySampleSolution,
+                editable: session.editable,
+                enableLiveAnalysis: session.enableLiveAnalysis,
+                enablePlayer: session.enablePlayer,
+                end: session.end,
+                start: session.start,
               },
             })
             .subscribe({
@@ -90,5 +119,9 @@ export class SessionsService {
         },
       });
     });
+  }
+
+  private addIsOwner(session: Session) {
+    return { ...session, isOwner: this.accessTokenService.getLoggedInUserId().toString() === session.owner?.id };
   }
 }

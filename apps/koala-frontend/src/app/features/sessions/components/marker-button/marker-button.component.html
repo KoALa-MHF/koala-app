@@ -7,6 +7,7 @@
   [class.marker-button-event]="marker.type === MarkerType.Event"
   [class.marker-button-range]="marker.type === MarkerType.Range"
   (click)="onClick()"
+  [disabled]="!enabled"
   *ngIf="(marker.type === MarkerType.Event || marker.type === MarkerType.Range) && marker.visible === true"
 >
   <koala-marker-icon [iconCode]="marker.icon"></koala-marker-icon>
@@ -20,6 +21,7 @@
   class="marker-button slider-marker"
 >
   <p-slider
+    [disabled]="!enabled"
     style="width: 100%"
     [(ngModel)]="sliderValue"
     (onSlideEnd)="onSlideEnd()"

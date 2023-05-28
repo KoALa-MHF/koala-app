@@ -8,7 +8,7 @@
         </span>
       </ng-template>
       <koala-sessions-overview-table
-        [sessions]="sessionsOwner"
+        [sessions]="sessions | isOwner:true"
         (sessionDelete)="onSessionDelete($event)"
         (sessionCreate)="onSessionCreateRequested()"
         (sessionExport)="onSessionExport($event)"
@@ -24,7 +24,7 @@
       </ng-template>
 
       <koala-sessions-overview-table
-        [sessions]="sessionsParticipants"
+        [sessions]="sessions | isOwner:false"
         (sessionEnter)="onSessionEnter($event)"
         [supportedActions]="{createSession: false,
         copySession: false,
@@ -89,9 +89,9 @@
 
 <koala-delete-confirm-dialog
   *ngIf="showDeleteConfirm"
-  [objectIdentifier]="selectedSession?.id"
+  [objectIdentifier]="selectedSessions"
   title="{{ 'SESSION.DELETE_CONFIRM_DIALOG.TITLE' | translate }}"
-  confirmText="{{ 'SESSION.DELETE_CONFIRM_DIALOG.EXPLANATION' | translate: { sessionName: selectedSession?.name } }}"
+  confirmText="{{ selectedSessions?.length === 1 ? ( 'SESSION.DELETE_CONFIRM_DIALOG.EXPLANATION' | translate: { sessionName:  selectedSession?.name } ) : ( 'SESSION.DELETE_CONFIRM_DIALOG.EXPLANATION_MULTI_SESSION' | translate: { sessionCount:  selectedSessions?.length } ) }}"
   (cancel)="onSessionDeleteCancel()"
   (confirm)="onSessionDeleteConfirmed($event)"
 ></koala-delete-confirm-dialog>

@@ -6,6 +6,9 @@ import { filter, map, merge } from 'rxjs';
 import { AuthService } from '../../../features/auth/services/auth.service';
 import { environment } from '../../../../environments/environment';
 import { NavigationService } from '../../../features/sessions/services/navigation.service';
+import { SessionsService } from '../../../features/sessions/services/sessions.service';
+import { Session } from '../../../features/sessions/types/session.entity';
+import { AccessTokenService } from '../../../features/auth/services/access-token.service';
 
 export enum LANGUAGE_CODE {
   GERMAN = 'de',
@@ -32,6 +35,8 @@ export class HeaderComponent {
   isOnAnySessionPage = false;
   isOnSessionPage = false;
   sessionId = -1;
+  isUserSessionOwner = false;
+
   isAuthenticated$ = this.authService.isAuthenticated$;
   language$ = merge(this.translateService.onDefaultLangChange, this.translateService.onLangChange).pipe(
     map((event) => event.lang),
@@ -39,12 +44,15 @@ export class HeaderComponent {
       return lang !== LANGUAGE_CODE.ENGLISH ? lang : 'gb';
     })
   );
+  isSessionAnalysisNavEnabled$ = this.navigationService.sessionAnalysisNavEnabledToggled$;
 
   constructor(
     private readonly router: Router,
     private readonly translateService: TranslateService,
     private readonly authService: AuthService,
-    private readonly navigationService: NavigationService
+    private readonly navigationService: NavigationService,
+    private readonly sessionService: SessionsService,
+    private readonly accessTokenService: AccessTokenService
   ) {
     this.router.events.pipe(filter((event: any) => event instanceof NavigationEnd)).subscribe((event) => {
       const routeUrl: string = event.url;
@@ -53,6 +61,11 @@ export class HeaderComponent {
         const sessionIdInURL = routeUrl.match('[1-9]+');
         if (sessionIdInURL) {
           this.sessionId = parseInt(sessionIdInURL[0]);
+          this.sessionService.getOne(this.sessionId).subscribe({
+            next: (selectedSession: Session) => {
+              this.isUserSessionOwner = selectedSession.isOwner || false;
+            },
+          });
         }
 
         const sessionDetailsURL = routeUrl.match('^/sessions/[^a-zA-Z]*/.');

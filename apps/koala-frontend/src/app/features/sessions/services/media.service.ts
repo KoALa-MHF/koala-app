@@ -2,11 +2,19 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CreateMediaInput, CreateMediaMutation } from '../../../graphql/generated/graphql';
 import { environment } from '../../../../environments/environment';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { MutationResult } from 'apollo-angular';
+
+export enum MediaUploadState {
+  started,
+  completed,
+}
 
 @Injectable()
 export class MediaService {
+  private mediaUploadState = new BehaviorSubject<MediaUploadState>(MediaUploadState.completed);
+  public mediaUploadStateChanged$ = this.mediaUploadState.asObservable();
+
   constructor(private readonly http: HttpClient) {}
 
   create(media: CreateMediaInput): Observable<MutationResult<CreateMediaMutation>> {
@@ -35,10 +43,14 @@ export class MediaService {
 
     const graphQLEndpoint = `${environment.baseUrl}/graphql`;
 
-    return this.http.post<MutationResult<CreateMediaMutation>>(graphQLEndpoint, formData, {
-      headers: new HttpHeaders({
-        'apollo-require-preflight': 'true',
-      }),
-    });
+    this.mediaUploadState.next(MediaUploadState.started);
+
+    return this.http
+      .post<MutationResult<CreateMediaMutation>>(graphQLEndpoint, formData, {
+        headers: new HttpHeaders({
+          'apollo-require-preflight': 'true',
+        }),
+      })
+      .pipe(tap(() => this.mediaUploadState.next(MediaUploadState.completed)));
   }
 }

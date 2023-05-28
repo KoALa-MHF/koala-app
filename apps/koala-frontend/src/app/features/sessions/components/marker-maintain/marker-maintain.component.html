@@ -43,17 +43,21 @@
     </small>
   </div>
 
-  <div *ngIf="markerType !== MarkerType.Slider">
+  <div>
     <span class="p-float-label">
       <input
-        [maxlength]="markerType === MarkerType.Range ? 6 : 2"
+        [maxlength]="markerType !== MarkerType.Event ? 6 : 2"
         id="marker-abbreviation-input"
         type="text"
         formControlName="abbreviation"
         pInputText
       />
       <label for="marker-abbreviation-input">
-        {{ 'SESSION.MAINTAIN.MARKER.MARKER_ABBREVIATION_INPUT_LABEL' | translate }}
+        {{
+          markerType !== MarkerType.Slider
+            ? ('SESSION.MAINTAIN.MARKER.MARKER_ABBREVIATION_INPUT_LABEL' | translate)
+            : ('SESSION.MAINTAIN.MARKER.MARKER_ABBREVIATION_INPUT_LABEL_MANDATORY' | translate)
+        }}
       </label>
     </span>
     <small id="marker-name-help" class="field-explanation">

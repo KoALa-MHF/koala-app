@@ -3,6 +3,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { LocalizedDatePipe } from './localized-date.pipe';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @NgModule({
   declarations: [
@@ -12,6 +13,7 @@ import { LocalizedDatePipe } from './localized-date.pipe';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    ProgressSpinnerModule,
   ],
   exports: [
     CommonModule,
@@ -19,6 +21,7 @@ import { LocalizedDatePipe } from './localized-date.pipe';
     ReactiveFormsModule,
     TranslateModule,
     LocalizedDatePipe,
+    ProgressSpinnerModule,
   ],
   providers: [
     DatePipe,

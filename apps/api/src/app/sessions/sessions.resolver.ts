@@ -52,6 +52,18 @@ export class SessionsResolver {
     return this.sessionsService.findOne(id, user);
   }
 
+  @Query(() => Session, { name: 'sessionByCode' })
+  @UseGuards(AuthGuard)
+  async findOneBySessionCode(@Args('code', { type: () => String }) code: string) {
+    let session = await this.sessionsService.findOneByCode(code);
+
+    if (!session) {
+      session = await this.sessionsService.findOneByUserSessionCode(code);
+    }
+
+    return session;
+  }
+
   @Mutation(() => Session)
   @UseGuards(RegisteredUserGuard)
   @UseGuards(AuthGuard)

@@ -102,6 +102,14 @@ const GET_ONE_SESSION = gql`
   }
 `;
 
+const GET_SESSION_ID_BY_CODE = gql`
+  query GetOneSessionBySessionCode($code: String!) {
+    sessionByCode(code: $code) {
+      id
+    }
+  }
+`;
+
 const GET_MARKERS = gql`
   query GetMarkers($ids: [Int!]) {
     markers(ids: $ids) {

@@ -17,12 +17,11 @@ import { AuthService } from '../../../auth/services/auth.service';
 export class SessionsOverviewPage implements OnInit, OnDestroy {
   qrCodeVisible = false;
   sessions: Session[] = [];
-  sessionsOwner: Session[] = [];
-  sessionsParticipants: Session[] = [];
   routeSubscription: Subscription | undefined;
   createSessionModal = false;
   createSessionForm!: FormGroup;
   showDeleteConfirm = false;
+  selectedSessions?: Session[];
   selectedSession?: Session;
 
   constructor(
@@ -52,12 +51,6 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
     this.sessionService.getAll().subscribe({
       next: (sessions) => {
         this.sessions = sessions;
-        this.sessionsOwner = this.sessions.filter(
-          (session) => session.owner?.id === this.authService.getLoggedInUserId().toString()
-        );
-        this.sessionsParticipants = this.sessions.filter(
-          (session) => session.owner?.id !== this.authService.getLoggedInUserId().toString()
-        );
       },
     });
   }
@@ -96,27 +89,29 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
     ]);
   }
 
-  public onSessionExport(session: Session) {
-    console.log('Session Export Pressed for Session: ' + session.id + ', ' + session.name);
+  public onSessionExport(sessions: Session[]) {
+    console.log('Session Export Pressed for Sessions: ' + sessions);
   }
 
-  public onSessionDelete(session: Session) {
+  public onSessionDelete(sessions: Session[]) {
     //confirm deletion first
-    this.selectedSession = session;
+    this.selectedSessions = sessions;
     this.showDeleteConfirm = true;
   }
 
   public onSessionDeleteCancel() {
-    this.selectedSession = undefined;
+    this.selectedSessions = [];
     this.showDeleteConfirm = false;
   }
 
-  public onSessionDeleteConfirmed(sessionId: string) {
-    this.sessionService.delete(parseInt(sessionId)).subscribe({
-      next: () => {
-        this.showDeleteConfirm = false;
-        this.loadSessions();
-      },
+  public onSessionDeleteConfirmed(sessions: Session[]) {
+    sessions.forEach((session) => {
+      this.sessionService.delete(parseInt(session.id)).subscribe({
+        next: () => {
+          this.showDeleteConfirm = false;
+          this.loadSessions();
+        },
+      });
     });
   }
 

@@ -12,37 +12,45 @@
   ></button>
 
   <button
-    *ngIf="supportedActions.copySession"
-    label="{{ 'SESSION.DUPLICATE_SESSION_MENU_LABEL' | translate }}"
-    icon="pi pi-clone"
     pButton
     pRipple
-    (click)="onSessionCopy()"
+    *ngIf="supportedActions.exportSession"
+    label="{{ 'SESSION.EXPORT_SESSIONS_MENU_LABEL' | translate }}"
+    icon="pi pi-file-export"
     class="p-button-text menu-button"
-    [disabled]="!this.selectedSession"
+    aria-labelledby="SessionOverviewTableHeaderExportColumn"
+    (click)="onExport()"
+    data-cy="session-overview-export-btn"
+    [disabled]="selectedSessions.length === 0"
   ></button>
 
   <button
-    *ngIf="supportedActions.enterSession"
-    label="{{ 'SESSION.ENTER_SESSION_MENU_LABEL' | translate }}"
-    icon="pi pi-arrow-circle-right"
     pButton
     pRipple
-    (click)="onSessionEnter()"
+    *ngIf="supportedActions.deleteSession"
+    label="{{ 'SESSION.DELETE_SESSIONS_MENU_LABEL' | translate }}"
+    name="deleteButton"
+    icon="pi pi-trash"
     class="p-button-text menu-button"
-    [disabled]="!this.selectedSession"
+    aria-labelledby="SessionOverviewTableHeaderDeleteColumn"
+    (click)="onSessionDelete()"
+    data-cy="session-overview-delete-btn"
+    [disabled]="selectedSessions.length === 0"
   ></button>
 </div>
 
 <p-table
-  selectionMode="single"
+  selectionMode="multi"
   [value]="sessions"
   class="mat-elevation-z8"
   data-cy="session-overview-table"
-  [(selection)]="selectedSession"
+  [(selection)]="selectedSessions"
 >
   <ng-template pTemplate="header">
     <tr>
+      <th style="width: 4rem">
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
       <th id="SessionOverviewTableHeaderNameColumn">
         {{ 'SESSION.OVERVIEW.TABLE_HEADER.NAME_COL_LABEL' | translate }}
       </th>
@@ -62,16 +70,19 @@
         {{ 'SESSION.OVERVIEW.TABLE_HEADER.LINK_COL_LABEL' | translate }}
       </th>
       <th id="SessionOverviewTableHeaderExportColumn" *ngIf="supportedActions.exportSession">
-        {{ 'SESSION.OVERVIEW.TABLE_HEADER.EXPORT_COL_LABEL' | translate }}
+        {{ 'SESSION.OVERVIEW.TABLE_HEADER.COPY_COL_LABEL' | translate }}
       </th>
       <th id="SessionOverviewTableHeaderDeleteColumn" *ngIf="supportedActions.deleteSession">
-        {{ 'SESSION.OVERVIEW.TABLE_HEADER.DELETE_COL_LABEL' | translate }}
+        {{ 'SESSION.OVERVIEW.TABLE_HEADER.ENTER_COL_LABEL' | translate }}
       </th>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-session>
     <tr [pSelectableRow]="session">
+      <td>
+        <p-tableCheckbox [value]="session"></p-tableCheckbox>
+      </td>
       <td data-column="sessionName" data-cy="session-overview-name-col">{{ session.name }}</td>
       <td data-column="createdAt" data-cy="session-overview-created-at-col">
         {{ session.createdAt | localizedDate }}
@@ -106,29 +117,24 @@
           data-cy="session-overview-qrcode-btn"
         ></button>
       </td>
-      <td *ngIf="supportedActions.exportSession">
+      <td *ngIf="supportedActions.copySession">
         <button
+          icon="pi pi-clone"
           pButton
           pRipple
-          data-column="export"
-          icon="pi pi-file-export"
-          class="p-button-text"
-          aria-labelledby="SessionOverviewTableHeaderExportColumn"
-          (click)="onExport(session)"
-          data-cy="session-overview-export-btn"
+          data-column="copy"
+          (click)="onSessionCopy(session)"
+          class="p-button-text menu-button"
         ></button>
       </td>
-      <td *ngIf="supportedActions.deleteSession">
+      <td *ngIf="supportedActions.enterSession">
         <button
+          icon="pi pi-arrow-circle-right"
           pButton
           pRipple
-          data-column="delete"
-          name="deleteButton"
-          icon="pi pi-trash"
-          class="p-button-text"
-          aria-labelledby="SessionOverviewTableHeaderDeleteColumn"
-          (click)="onSessionDelete(session)"
-          data-cy="session-overview-delete-btn"
+          data-column="enter"
+          (click)="onSessionEnter(session)"
+          class="p-button-text menu-button"
         ></button>
       </td>
     </tr>

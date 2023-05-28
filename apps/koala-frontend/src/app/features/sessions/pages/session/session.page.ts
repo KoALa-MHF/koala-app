@@ -88,13 +88,14 @@ export class SessionPage implements OnInit, OnDestroy {
         console.log(e);
       },
     });
-    this.sessionService.getOne(this.sessionId).subscribe(async (result) => {
+    this.sessionService.getOne(this.sessionId).subscribe(async (session) => {
       this.session = {
-        ...result.data?.session,
-        media: result.data?.session.media,
+        ...session,
+        media: session.media,
       };
 
       this.setSidePanelFormData(this.session);
+      this.navigationService.setAnalysisNavEnabled(this.session.enableLiveAnalysis || false);
 
       const toolbars = this.session.toolbars;
 
@@ -133,12 +134,15 @@ export class SessionPage implements OnInit, OnDestroy {
       }
     });
 
-    this.sessionUpdatedSubscription = this.sessionService.subscribeUpdated(this.sessionId).subscribe((response) => {
-      const session = response.data?.sessionUpdated;
-      if (session) {
-        this.setSidePanelFormData(session);
-      }
-    });
+    this.sessionUpdatedSubscription = this.sessionService
+      .subscribeUpdated(this.sessionId)
+      .subscribe((session?: Session) => {
+        if (session) {
+          this.session = { ...session, owner: this.session.owner, isOwner: this.session.isOwner };
+          this.setSidePanelFormData(this.session);
+          this.navigationService.setAnalysisNavEnabled(this.session.enableLiveAnalysis || false);
+        }
+      });
   }
 
   ngOnDestroy(): void {

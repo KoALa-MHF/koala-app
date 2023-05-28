@@ -85,8 +85,16 @@ export class SessionsService {
   }
 
   findOneByCode(code: string): Promise<Session> {
-    return this.sessionsRepository.findOneByOrFail({
+    return this.sessionsRepository.findOneBy({
       code,
+    });
+  }
+
+  findOneByUserSessionCode(code: string): Promise<Session> {
+    return this.sessionsRepository.findOneBy({
+      userSessions: {
+        code,
+      },
     });
   }
 
