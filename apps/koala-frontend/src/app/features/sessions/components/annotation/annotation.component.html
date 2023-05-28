@@ -1,4 +1,4 @@
 <div style="display: flex">
-  <svg id="d3-labels" style="width: 30px; margin-top: 30px"></svg>
-  <svg (window:resize)="onResize()" id="d3-container" style="width: 100%; margin: 30px 0"></svg>
+  <svg [id]="'d3-labels-' + d3ContainerID" style="width: 30px; margin-top: 30px"></svg>
+  <svg (window:resize)="onResize()" [id]="'d3-container-' + d3ContainerID" style="width: 100%; margin: 30px 0"></svg>
 </div>
