@@ -24,10 +24,10 @@ export class SessionInfoPage implements OnInit {
 
   ngOnInit() {
     const sessionId = parseInt(this.route.snapshot.paramMap.get('sessionId') || '0');
-    this.sessionService.getOne(sessionId).subscribe((response) => {
-      this.session = response.data.session;
+    this.sessionService.getOne(sessionId).subscribe((session) => {
+      this.session = session;
 
-      const toolbars = response.data.session.toolbars;
+      const toolbars = this.session.toolbars;
 
       if (toolbars) {
         const toolbar = toolbars[0];

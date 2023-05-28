@@ -3,27 +3,15 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, map } from 'rxjs';
-import { AuthenticateSessionCodeGQL, GetUserGQL, UpdateUserGQL, User } from '../../../graphql/generated/graphql';
-import jwt_decode from 'jwt-decode';
+import { AuthenticateSessionCodeGQL, GetUserGQL, UpdateUserGQL } from '../../../graphql/generated/graphql';
 import { SessionsService } from '../../sessions/services/sessions.service';
-
-interface JWToken {
-  exp: number;
-  iat: number;
-  sub: number;
-}
-
-class KoalaUserStorage {
-  accessToken?: string;
-}
+import { AccessTokenService } from './access-token.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  storedUser: KoalaUserStorage = new KoalaUserStorage();
-
-  private authenticatedSubject = new BehaviorSubject<boolean>(this.storedUser.accessToken ? true : false);
+  private authenticatedSubject = new BehaviorSubject<boolean>(this.accessTokenService.getAccessToken() ? true : false);
   public isAuthenticated$ = this.authenticatedSubject.asObservable();
 
   constructor(
@@ -33,19 +21,12 @@ export class AuthService {
     private readonly updateMeGQL: UpdateUserGQL,
     private readonly messageService: MessageService,
     private readonly translate: TranslateService,
-    private readonly sessionService: SessionsService
+    private readonly sessionService: SessionsService,
+    private readonly accessTokenService: AccessTokenService
   ) {
-    const savedUser = sessionStorage.getItem('koala-user');
-
-    if (savedUser) {
-      this.storedUser = JSON.parse(savedUser);
-    }
-
-    this.authenticatedSubject.next(this.isAccessTokenValid(this.storedUser.accessToken));
-  }
-
-  public getAccessToken() {
-    return this.storedUser.accessToken;
+    this.authenticatedSubject.next(
+      this.accessTokenService.isAccessTokenValid(this.accessTokenService.getAccessToken())
+    );
   }
 
   public loginViaSaml(accessToken: string) {
@@ -93,8 +74,7 @@ export class AuthService {
   }
 
   public logout() {
-    delete this.storedUser.accessToken;
-    sessionStorage.removeItem('koala-user');
+    this.accessTokenService.removeAccessToken();
 
     this.authenticatedSubject.next(false);
 
@@ -107,40 +87,17 @@ export class AuthService {
     return this.meGQL.fetch({}, { fetchPolicy: 'no-cache' }).pipe(map((data) => data.data.me));
   }
 
-  public getLoggedInUserId() {
-    const decoded: JWToken = jwt_decode(this.storedUser.accessToken || '');
-
-    return decoded.sub;
-  }
-
   public updateUser(displayName: string) {
     return this.updateMeGQL.mutate({
       displayName,
     });
   }
 
-  private storeUser() {
-    sessionStorage.setItem('koala-user', JSON.stringify(this.storedUser));
-  }
-
-  private isAccessTokenValid(accessToken?: string): boolean {
-    if (accessToken === 'ABC') {
-      return true;
-    }
-
-    if (accessToken) {
-      const jwtTokenDecoded: JWToken = jwt_decode(accessToken);
-
-      return new Date(jwtTokenDecoded.exp * 1000) > new Date();
-    } else {
-      return false;
-    }
-  }
-
   private handleLoginSuccess(accessToken: string) {
-    this.storedUser.accessToken = accessToken;
-    this.storeUser();
+    this.accessTokenService.setAccessToken(accessToken);
 
-    this.authenticatedSubject.next(this.isAccessTokenValid(this.storedUser.accessToken));
+    this.authenticatedSubject.next(
+      this.accessTokenService.isAccessTokenValid(this.accessTokenService.getAccessToken())
+    );
   }
 }

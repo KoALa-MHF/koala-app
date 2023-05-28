@@ -8,7 +8,7 @@
         </span>
       </ng-template>
       <koala-sessions-overview-table
-        [sessions]="sessionsOwner"
+        [sessions]="sessions | isOwner:true"
         (sessionDelete)="onSessionDelete($event)"
         (sessionCreate)="onSessionCreateRequested()"
         (sessionExport)="onSessionExport($event)"
@@ -24,7 +24,7 @@
       </ng-template>
 
       <koala-sessions-overview-table
-        [sessions]="sessionsParticipants"
+        [sessions]="sessions | isOwner:false"
         (sessionEnter)="onSessionEnter($event)"
         [supportedActions]="{createSession: false,
         copySession: false,
