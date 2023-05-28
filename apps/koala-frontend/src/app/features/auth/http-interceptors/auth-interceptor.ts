@@ -1,16 +1,15 @@
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
-import { Injectable, Injector } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AuthService } from '../services/auth.service';
+import { AccessTokenService } from '../services/access-token.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private injector: Injector) {}
+  constructor(private readonly accessTokenServce: AccessTokenService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     try {
-      const authService = this.injector.get(AuthService);
-      const accessToken = authService?.getAccessToken();
+      const accessToken = this.accessTokenServce.getAccessToken();
 
       if (accessToken) {
         return next.handle(

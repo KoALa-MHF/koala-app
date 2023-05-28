@@ -15,7 +15,7 @@ import {
   GetOneSessionBySessionCodeGQL,
 } from '../../../graphql/generated/graphql';
 import { Session } from '../types/session.entity';
-import { AuthService } from '../../auth/services/auth.service';
+import { AccessTokenService } from '../../auth/services/access-token.service';
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +29,7 @@ export class SessionsService {
     private readonly deleteSessionGQL: DeleteSessionGQL,
     private readonly onSessionUpdatedGQL: OnSessionUpdatedGQL,
     private readonly getOneSessionBySessionCodeGQL: GetOneSessionBySessionCodeGQL,
-    private readonly authService: AuthService
+    private readonly accessTokenService: AccessTokenService
   ) {}
 
   getAll(): Observable<Session[]> {
@@ -37,7 +37,7 @@ export class SessionsService {
       map((data) => data.data.sessions),
       map((sessions) =>
         sessions.map((session: Session) => {
-          return { ...session, isOwner: this.authService.getLoggedInUserId().toString() === session.owner?.id };
+          return { ...session, isOwner: this.accessTokenService.getLoggedInUserId().toString() === session.owner?.id };
         })
       )
     );
@@ -58,7 +58,7 @@ export class SessionsService {
       .pipe(
         map((data) => data.data.session),
         map((session) => {
-          return { ...session, isOwner: this.authService.getLoggedInUserId().toString() === session.owner?.id };
+          return { ...session, isOwner: this.accessTokenService.getLoggedInUserId().toString() === session.owner?.id };
         })
       );
   }
