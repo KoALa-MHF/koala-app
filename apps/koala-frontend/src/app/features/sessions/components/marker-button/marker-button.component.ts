@@ -14,6 +14,7 @@ import { filter } from 'rxjs';
 export class MarkerButtonComponent implements OnInit {
   MarkerType = MarkerType;
   @Input() marker!: Marker;
+  @Input() enabled = false;
   @Output() event = new EventEmitter<{ marker: Marker; value?: number }>();
   isActive = false;
   range = 0;

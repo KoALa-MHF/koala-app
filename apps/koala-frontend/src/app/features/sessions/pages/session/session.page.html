@@ -17,10 +17,9 @@
             [currentTime]="currentAudioTime"
           ></koala-app-annotation>
           <koala-marker-toolbar
-            [toolbarMode]="ToolbarMode.Session"
+            [toolbarMode]="( session.editable || session.isOwner ) ? ToolbarMode.Session : ToolbarMode.SessionDisabled"
             [markers]="markers"
             (event)="onMarkerButtonEvent($event)"
-            [toolbarMode]="ToolbarMode.Session"
           ></koala-marker-toolbar>
         </div>
       </div>
