@@ -59,6 +59,22 @@ export class SessionsService {
       );
   }
 
+  getOne(id: number): Observable<Session> {
+    return this.getOneSessionGQL
+      .fetch(
+        {
+          sessionId: id,
+        },
+        { fetchPolicy: 'no-cache' }
+      )
+      .pipe(
+        map((data) => data.data.session),
+        map((session) => {
+          return { ...session, isOwner: this.accessTokenService.getLoggedInUserId().toString() === session.owner?.id };
+        })
+      );
+  }
+
   create(session: CreateSessionInput) {
     return this.createSessionGQL.mutate({ session });
   }
