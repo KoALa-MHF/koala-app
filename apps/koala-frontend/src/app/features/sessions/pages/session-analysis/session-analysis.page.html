@@ -7,7 +7,7 @@
     </div>
     <div class="p-toolbar-group-end"></div>
   </p-toolbar>
-  <div *ngFor="let data of userSessionAnnotationData | keyvalue">
+  <div style="height: 100px;" *ngFor="let data of userSessionAnnotationData | keyvalue">
     userSession: {{data.key}}
     <koala-app-annotation
       [annotationData]="data.value.AnnotationData"
