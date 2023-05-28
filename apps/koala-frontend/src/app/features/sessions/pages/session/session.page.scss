@@ -12,6 +12,11 @@
   flex: 1 0 auto;
 }
 
+.content-centered-horizontally {
+  justify-content: center;
+  display: flex;
+}
+
 .sideBar {
   width: 300px;
 }
