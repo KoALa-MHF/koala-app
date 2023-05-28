@@ -134,14 +134,15 @@ export class SessionPage implements OnInit, OnDestroy {
       }
     });
 
-    this.sessionUpdatedSubscription = this.sessionService.subscribeUpdated(this.sessionId).subscribe((response) => {
-      const session = response.data?.sessionUpdated;
-      if (session) {
-        this.session = session;
-        this.setSidePanelFormData(this.session);
-        this.navigationService.setAnalysisNavEnabled(this.session.enableLiveAnalysis || false);
-      }
-    });
+    this.sessionUpdatedSubscription = this.sessionService
+      .subscribeUpdated(this.sessionId)
+      .subscribe((session?: Session) => {
+        if (session) {
+          this.session = { ...session, owner: this.session.owner, isOwner: this.session.isOwner };
+          this.setSidePanelFormData(this.session);
+          this.navigationService.setAnalysisNavEnabled(this.session.enableLiveAnalysis || false);
+        }
+      });
   }
 
   ngOnDestroy(): void {

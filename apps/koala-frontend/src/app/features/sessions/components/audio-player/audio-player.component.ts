@@ -2,7 +2,7 @@ import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { MediaActions, MediaEvent } from '../../services/media-control.service';
 
 @Component({
-  selector: 'koala-app-audio-player',
+  selector: 'koala-audio-player',
   templateUrl: './audio-player.component.html',
   styleUrls: [
     './audio-player.component.scss',
