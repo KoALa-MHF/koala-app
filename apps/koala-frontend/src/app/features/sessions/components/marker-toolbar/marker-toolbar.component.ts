@@ -5,6 +5,7 @@ import { Marker } from '../../types/marker.entity';
 export enum ToolbarMode {
   Maintenance,
   Session,
+  SessionDisabled,
 }
 
 @Component({

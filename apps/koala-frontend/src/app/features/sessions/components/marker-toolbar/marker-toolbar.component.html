@@ -7,7 +7,7 @@
   >
     <div
       cdkDrag
-      [cdkDragDisabled]="toolbarMode === ToolbarMode.Session"
+      [cdkDragDisabled]="toolbarMode !== ToolbarMode.Maintenance"
       (mousedown)="onDragStarted(marker)"
       (cdkDragEnded)="onDragStopped()"
       (mouseup)="onDragStopped()"
@@ -16,13 +16,14 @@
         cdkDragHandle
         *ngIf="marker"
         [marker]="marker"
+        [enabled]="toolbarMode !== ToolbarMode.SessionDisabled"
         (event)="onMarkerButtonEvent($event)"
       ></koala-marker-button>
     </div>
   </span>
 
   <div
-    *ngIf="toolbarMode !== ToolbarMode.Session"
+    *ngIf="toolbarMode === ToolbarMode.Maintenance"
     class="delete-zone"
     [class]="dragActive ? 'delete-zone-visible' : 'delete-zone-hidden'"
     cdkDropList
