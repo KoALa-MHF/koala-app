@@ -35,16 +35,28 @@ export class SessionsService {
   getAll(): Observable<Session[]> {
     return this.getSessionGQL.fetch({}, { fetchPolicy: 'no-cache' }).pipe(
       map((data) => data.data.sessions),
-      map((sessions) =>
-        sessions.map((session: Session) => {
-          return { ...session, isOwner: this.accessTokenService.getLoggedInUserId().toString() === session.owner?.id };
-        })
-      )
+      map((sessions) => sessions.map((session) => this.addIsOwner(session)))
     );
   }
 
-  getOneBySessionCode(code: string) {
-    return this.getOneSessionBySessionCodeGQL.fetch({ code }, { fetchPolicy: 'no-cache' });
+  getSessionIdBySessionCode(code: string): Observable<number> {
+    return this.getOneSessionBySessionCodeGQL
+      .fetch({ code }, { fetchPolicy: 'no-cache' })
+      .pipe(map((response) => parseInt(response.data.sessionByCode.id)));
+  }
+
+  getOne(id: number): Observable<Session> {
+    return this.getOneSessionGQL
+      .fetch(
+        {
+          sessionId: id,
+        },
+        { fetchPolicy: 'no-cache' }
+      )
+      .pipe(
+        map((data) => data.data.session),
+        map((session) => this.addIsOwner(session))
+      );
   }
 
   getOne(id: number): Observable<Session> {
@@ -78,10 +90,21 @@ export class SessionsService {
     return this.deleteSessionGQL.mutate({ id });
   }
 
-  subscribeUpdated(id: number) {
-    return this.onSessionUpdatedGQL.subscribe({
-      sessionId: id.toString(),
-    });
+  subscribeUpdated(id: number): Observable<Session | undefined> {
+    return this.onSessionUpdatedGQL
+      .subscribe({
+        sessionId: id.toString(),
+      })
+      .pipe(
+        map((response) => response.data?.sessionUpdated),
+        map((session?: Session) => {
+          if (session) {
+            return this.addIsOwner(session);
+          } else {
+            return session;
+          }
+        })
+      );
   }
 
   copySession(sessionId: number): Promise<Session | null> {
@@ -112,5 +135,9 @@ export class SessionsService {
         },
       });
     });
+  }
+
+  private addIsOwner(session: Session) {
+    return { ...session, isOwner: this.accessTokenService.getLoggedInUserId().toString() === session.owner?.id };
   }
 }

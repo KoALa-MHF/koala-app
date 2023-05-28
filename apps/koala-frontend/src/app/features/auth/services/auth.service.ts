@@ -44,10 +44,8 @@ export class AuthService {
             if (result.data?.authenticateUserSession.accessToken) {
               this.handleLoginSuccess(result.data?.authenticateUserSession.accessToken);
 
-              this.sessionService.getOneBySessionCode(sessionCode).subscribe({
-                next: (response) => {
-                  const sessionId = response.data.sessionByCode.id;
-
+              this.sessionService.getSessionIdBySessionCode(sessionCode).subscribe({
+                next: (sessionId: number) => {
                   if (sessionId) {
                     this.router.navigate([
                       '/sessions/' + sessionId,
