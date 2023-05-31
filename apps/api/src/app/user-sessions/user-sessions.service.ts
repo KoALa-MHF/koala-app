@@ -9,6 +9,7 @@ import { UsersService } from '../users/users.service';
 import { CreateUserSessionInput } from './dto/create-user-session.input';
 import { UpdateUserSessionInput } from './dto/update-user-session.input';
 import { UserSession } from './entities/user-session.entity';
+import { escapeExpression } from 'handlebars';
 
 const UNIQUE_USER_CONSTRAINT_ERROR = 'UNIQUE constraint failed: user_session.userId';
 
@@ -29,16 +30,21 @@ export class UserSessionsService {
         owner: true,
       },
     });
+
+    message = escapeExpression(message);
+    message = message.replace(/(\r\n|\n|\r)/gm, '<br>');
+
     for (const userSession of userSessions) {
       try {
         await this.mailerService.sendMail({
           to: userSession.owner.email,
           subject: `Einladung zur KoALa Session ${userSession.session.name}`,
-          template: 'session-invite',
+          template: message ? 'session-invite-custom-message' : 'session-invite',
           context: {
             sessionName: userSession.session.name,
-            code: userSession.code,
+            ownerName: userSession.session.owner?.displayName || '',
             message: message,
+            sessionLink: userSession.code,
           },
         });
         userSession.invitedAt = new Date();
