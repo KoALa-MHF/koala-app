@@ -119,15 +119,18 @@ export class SessionPage implements OnInit, OnDestroy {
         });
       }
 
-      if (this.session.media == undefined) {
+      /*if (this.session.media == undefined) {
         this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.NO_AUDIO_FILE', 'SESSION.ERROR_DIALOG.NO_AUDIO_FILE_SUM');
         return;
+      }*/
+
+      if (this.session.isAudioSession && this.session.media) {
+        this.mediaControlService.uuid = this.session.id;
+        this.waveContainer = `waveContainer-${this.session.id}`;
+
+        await this.loadMediaData(this.session.media.id);
       }
 
-      this.mediaControlService.uuid = this.session.id;
-      this.waveContainer = `waveContainer-${this.session.id}`;
-
-      await this.loadMediaData(this.session.media.id);
       const userSessions = this.session.userSessions?.filter((s) => s.id == this.userID);
       if (userSessions) {
         this.loadMarkerData(userSessions);

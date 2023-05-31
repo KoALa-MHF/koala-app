@@ -40,7 +40,8 @@ export class SessionsService {
   getAll(): Observable<Session[]> {
     return this.getSessionGQL.fetch({}, { fetchPolicy: 'no-cache' }).pipe(
       map((data) => data.data.sessions),
-      map((sessions) => sessions.map((session) => this.addIsOwner(session)))
+      map((sessions) => sessions.map((session) => this.addIsOwner(session))),
+      map((sessions) => sessions.map((session) => this.addIsAudioSession(session)))
     );
   }
 
@@ -60,7 +61,8 @@ export class SessionsService {
       )
       .pipe(
         map((data) => data.data.session),
-        map((session) => this.addIsOwner(session))
+        map((session) => this.addIsOwner(session)),
+        map((session) => this.addIsAudioSession(session))
       );
   }
 
@@ -88,6 +90,7 @@ export class SessionsService {
         map((response) => response.data?.sessionUpdated),
         map((session?: Session) => {
           if (session) {
+            session = this.addIsAudioSession(session);
             return this.addIsOwner(session);
           } else {
             return session;
@@ -136,5 +139,9 @@ export class SessionsService {
 
   private addIsOwner(session: Session) {
     return { ...session, isOwner: this.accessTokenService.getLoggedInUserId().toString() === session.owner?.id };
+  }
+
+  private addIsAudioSession(session: Session): Session {
+    return { ...session, isAudioSession: !!session.media?.id };
   }
 }

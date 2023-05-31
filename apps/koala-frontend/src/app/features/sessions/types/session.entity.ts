@@ -25,4 +25,5 @@ export interface Session {
   userSessions?: UserSession[];
   owner?: User;
   isOwner?: boolean;
+  isAudioSession?: boolean;
 }
