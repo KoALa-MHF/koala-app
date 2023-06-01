@@ -1,4 +1,4 @@
-import { ApplicationRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ApplicationRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
 import { MediaControlService, MediaEvent, MediaActions } from '../../services/media-control.service';
@@ -25,7 +25,7 @@ export interface AnnotationData {
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class SessionAnalysisPage implements OnInit {
+export class SessionAnalysisPage implements OnInit, OnDestroy {
   mediaUri: string = environment.production ? 'https://koala-app.de/api/media' : 'http://localhost:4200/api/media';
   sessionId = 0;
   userID = -1;
@@ -90,6 +90,10 @@ export class SessionAnalysisPage implements OnInit {
         }, 100);
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.mediaControlService.stop();
   }
 
   private loadMediaData(id: string): Promise<void> {

@@ -146,6 +146,7 @@ export class SessionPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.mediaControlService.stop();
     this.sessionUpdatedSubscription?.unsubscribe();
     this.toolbarUpdatedSubscription?.unsubscribe();
   }
