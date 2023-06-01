@@ -67,8 +67,8 @@ export class SessionAnalysisPage implements OnInit {
 
     this.sessionService.getOne(this.sessionId).subscribe(async (result) => {
       this.session = {
-        ...result.data?.session,
-        media: result.data?.session.media,
+        ...result,
+        media: result.media,
       };
 
       if (this.session.media == undefined) {
