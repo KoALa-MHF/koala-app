@@ -1,1 +1,22 @@
-<p>session-analysis works!</p>
+<div class="analysis-container">
+  <koala-app-audio-wave [waveContainer]="waveContainer"> </koala-app-audio-wave>
+  <p-toolbar class="analysis">
+    <div class="p-toolbar-group-start"></div>
+    <div class="p-toolbar-group-center">
+      <div *ngIf="( session.enablePlayer || false ) || session.isOwner" class="p-toolbar-group-center">
+        <koala-audio-player (mediaEvent)="onMediaEvent($event)"></koala-audio-player>
+      </div>
+    </div>
+    <div class="p-toolbar-group-end"></div>
+  </p-toolbar>
+  <div style="height: 100px;" *ngFor="let data of userSessionAnnotationData | keyvalue">
+    userSession: {{data.key}}
+    <koala-app-annotation
+      [annotationData]="data.value.AnnotationData"
+      [markers]="markers"
+      [totalTime]="totalAudioTime"
+      [currentTime]="currentAudioTime"
+      [d3ContainerID]="data.key"
+    ></koala-app-annotation>
+  </div>
+</div>

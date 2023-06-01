@@ -1,32 +1,29 @@
 <div class="session-container">
-  <p-tabView *ngIf="session">
-    <p-tabPanel header="{{session.name}}">
-      <div class="container">
-        <div class="content">
-          <p-toolbar>
-            <div class="p-toolbar-group-start"></div>
-            <div *ngIf="( session.enablePlayer || false ) || session.isOwner" class="p-toolbar-group-center">
-              <koala-audio-player (mediaEvent)="onMediaEvent($event)"></koala-audio-player>
-            </div>
-          </p-toolbar>
-          <koala-app-audio-wave [waveContainer]="waveContainer"> </koala-app-audio-wave>
-          <koala-app-annotation
-            [annotationData]="AnnotationData"
-            [markers]="markers"
-            [totalTime]="totalAudioTime"
-            [currentTime]="currentAudioTime"
-          ></koala-app-annotation>
-          <koala-marker-toolbar
-            class="content-centered-horizontally"
-            [toolbarMode]="( session.editable || session.isOwner ) ? ToolbarMode.Session : ToolbarMode.SessionDisabled"
-            [markers]="markers"
-            (event)="onMarkerButtonEvent($event)"
-          ></koala-marker-toolbar>
+  <div class="container">
+    <div class="content">
+      <koala-app-audio-wave [waveContainer]="waveContainer"> </koala-app-audio-wave>
+      <p-toolbar>
+        <div class="p-toolbar-group-start"></div>
+        <div class="p-toolbar-group-center">
+          <div *ngIf="( session.enablePlayer || false ) || session.isOwner" class="p-toolbar-group-center">
+            <koala-audio-player (mediaEvent)="onMediaEvent($event)"></koala-audio-player>
+          </div>
         </div>
-      </div>
-    </p-tabPanel>
-    <p-tabPanel header="{{ 'SESSION.TABS.EVALUATION' | translate }}"> </p-tabPanel>
-  </p-tabView>
+      </p-toolbar>
+      <koala-app-annotation
+        [annotationData]="AnnotationData"
+        [markers]="markers"
+        [totalTime]="totalAudioTime"
+        [currentTime]="currentAudioTime"
+      ></koala-app-annotation>
+      <koala-marker-toolbar
+        class="content-centered-horizontally"
+        [toolbarMode]="( session.editable || session.isOwner ) ? ToolbarMode.Session : ToolbarMode.SessionDisabled"
+        [markers]="markers"
+        (event)="onMarkerButtonEvent($event)"
+      ></koala-marker-toolbar>
+    </div>
+  </div>
 </div>
 
 <p-sidebar [visible]="(sessionSettingsToggled$ | async) || false" (onHide)="onSidebarHide()" position="right">

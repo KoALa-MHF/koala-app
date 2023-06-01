@@ -30,10 +30,11 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   @Input() totalTime = 1;
   @Input() currentTime = 0;
   @Input() markers: Marker[] = [];
+  @Input() d3ContainerID = 0;
 
   private annotationStrength = 5;
-  private containerID = 'd3-container';
-  private labelsID = 'd3-labels';
+  d3Container = 'd3-container-';
+  d3Labels = 'd3-labels-';
 
   constructor(private readonly markerService: MarkerService) {}
 
@@ -68,8 +69,8 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   }
 
   private drawLines() {
-    const svgC = d3.select(`svg#${this.containerID}`);
-    const svgL = d3.select(`svg#${this.labelsID}`);
+    const svgC = d3.select(`svg#${this.d3Container}${this.d3ContainerID}`);
+    const svgL = d3.select(`svg#${this.d3Labels}${this.d3ContainerID}`);
     const text = svgL.selectAll('text,foreignObject').data(this.markers);
     const gRow = svgC.selectAll('g').data(this.markers);
     const line = svgC.selectAll('line.marker').data(this.markers);
@@ -120,7 +121,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   }
 
   private drawAnnotations(row: number, index: number) {
-    const svg = d3.select(`svg#${this.containerID}`);
+    const svg = d3.select(`svg#${this.d3Container}${this.d3ContainerID}`);
     const trans = svg.transition().duration(50);
     const posY = this.getPositionY(index);
     const rowElem = svg.select('g#row_' + row);
@@ -152,7 +153,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   }
 
   private drawTimeline() {
-    const line = d3.select(`svg#${this.containerID}`).selectAll('line#timeline').data<number>([
+    const line = d3.select(`svg#${this.d3Container}${this.d3ContainerID}`).selectAll('line#timeline').data<number>([
       this.currentTime,
     ]);
 
@@ -214,8 +215,8 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   }
 
   public onResize() {
-    const svgC = d3.select(`svg#${this.containerID}`);
-    const svgL = d3.select(`svg#${this.labelsID}`);
+    const svgC = d3.select(`svg#${this.d3Container}${this.d3ContainerID}`);
+    const svgL = d3.select(`svg#${this.d3Labels}${this.d3ContainerID}`);
     svgC.selectAll('rect').remove();
     svgC.selectAll('circle').remove();
     svgC.selectAll('line.marker').remove();
@@ -230,7 +231,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   }
 
   private getContainerWidth() {
-    const container = document.getElementById(this.containerID);
+    const container = document.getElementById(this.d3Container + this.d3ContainerID);
     if (container) {
       return container.getBoundingClientRect().width;
     }
@@ -238,7 +239,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   }
 
   private getContainerHeight() {
-    const container = document.getElementById(this.containerID);
+    const container = document.getElementById(this.d3Container + this.d3ContainerID);
     if (container) {
       return container.getBoundingClientRect().height;
     }
@@ -246,7 +247,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   }
 
   private setContainerHeight() {
-    const container = document.getElementById(this.containerID);
+    const container = document.getElementById(this.d3Container + this.d3ContainerID);
     if (container) {
       container.style.height = this.markers.length * 40 + 'px';
     }
