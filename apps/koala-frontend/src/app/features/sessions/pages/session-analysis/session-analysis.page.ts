@@ -18,7 +18,7 @@ export interface AnnotationData {
 }
 
 @Component({
-  selector: 'koala-app-session-analysis.page',
+  selector: 'koala-session-analysis',
   templateUrl: './session-analysis.page.html',
   styleUrls: [
     './session-analysis.page.scss',
