@@ -1,4 +1,4 @@
-<div class="center" style="height: 100%">
+<div class="center" style="height: 100%" (keyup.enter)="onCodeLogin()">
   <img
     src="../../../../../assets/koala-logo-rund_petrol.png"
     alt="KoALa Logo"
@@ -14,7 +14,8 @@
       <button
         pButton
         pRipple
-        type="submmit"
+        type="submit"
+        (keyup.enter)="onCodeLogin()"
         (click)="onCodeLogin()"
         icon="pi pi-angle-right"
         style="border-radius: 15px"
