@@ -61,4 +61,10 @@ export class Config {
   @Type(() => SamlConfig)
   @ValidateNested()
   public readonly saml: SamlConfig = new SamlConfig();
+
+  @IsString()
+  public readonly koalaFrontendUrl: string;
+
+  @IsString()
+  public readonly koalaAssetsUrl: string;
 }

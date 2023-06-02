@@ -1,33 +1,27 @@
 import { Module } from '@nestjs/common';
 
-import { GraphQLModule, SubscriptionConfig } from '@nestjs/graphql';
+import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { SessionsModule } from './sessions/sessions.module';
-import { Session } from './sessions/entities/session.entity';
 import { MediaModule } from './media/media.module';
-import { Media } from './media/entities/media.entity';
 import { MarkersModule } from './markers/markers.module';
-import { Marker } from './markers/entities/marker.entity';
 import { UserSessionsModule } from './user-sessions/user-sessions.module';
-import { UserSession } from './user-sessions/entities/user-session.entity';
 import { AnnotationsModule } from './annotations/annotations.module';
-import { Annotation } from './annotations/entities/annotation.entity';
 import { formatError } from './core/formatters/grapqhl-error.formatter';
-import { ConfigModule, databaseConfig, mailConfig } from './config/config.module';
+import { ConfigModule, mailConfig } from './config/config.module';
 import { ToolbarsModule } from './toolbars/toolbars.module';
-import { Toolbar } from './toolbars/entities/toolbar.entity';
 
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { User } from './users/entities/user.entity';
 import { DatabaseModule } from './database.module';
+
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
@@ -70,6 +64,9 @@ import { DatabaseModule } from './database.module';
           strict: true,
         },
       },
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: __dirname + '/assets/images',
     }),
     SessionsModule,
     ToolbarsModule,
