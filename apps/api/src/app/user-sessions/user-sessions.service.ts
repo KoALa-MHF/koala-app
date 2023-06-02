@@ -10,6 +10,7 @@ import { CreateUserSessionInput } from './dto/create-user-session.input';
 import { UpdateUserSessionInput } from './dto/update-user-session.input';
 import { UserSession } from './entities/user-session.entity';
 import { escapeExpression } from 'handlebars';
+import { config } from '../config/config.module';
 
 const UNIQUE_USER_CONSTRAINT_ERROR = 'UNIQUE constraint failed: user_session.userId';
 
@@ -31,7 +32,7 @@ export class UserSessionsService {
       },
     });
 
-    message = escapeExpression(message);
+    message = escapeExpression(message || '');
     message = message.replace(/(\r\n|\n|\r)/gm, '<br>');
 
     for (const userSession of userSessions) {
@@ -44,7 +45,7 @@ export class UserSessionsService {
             sessionName: userSession.session.name,
             ownerName: userSession.session.owner?.displayName || '',
             message: message,
-            sessionLink: userSession.code,
+            sessionLink: config.koalaFrontendLink + '?sessionCode=' + userSession.code,
           },
         });
         userSession.invitedAt = new Date();
