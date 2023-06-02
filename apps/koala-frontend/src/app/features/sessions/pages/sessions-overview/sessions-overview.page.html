@@ -46,6 +46,7 @@
   [draggable]="false"
   [resizable]="false"
   (onHide)="onCancel()"
+  (keyup.enter)="onCreateSession()"
 >
   <form style="margin-top: 10px" class="form" [formGroup]="createSessionForm">
     <div>
