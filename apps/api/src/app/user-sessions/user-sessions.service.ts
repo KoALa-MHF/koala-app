@@ -45,7 +45,8 @@ export class UserSessionsService {
             sessionName: userSession.session.name,
             ownerName: userSession.session.owner?.displayName || '',
             message: message,
-            sessionLink: config.koalaFrontendLink + '?sessionCode=' + userSession.code,
+            sessionUrl: config.koalaFrontendUrl + '?sessionCode=' + userSession.code,
+            koalaLogoSrc: config.koalaAssetsUrl + 'koala-logo.png',
           },
         });
         userSession.invitedAt = new Date();

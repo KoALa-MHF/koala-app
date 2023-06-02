@@ -63,5 +63,8 @@ export class Config {
   public readonly saml: SamlConfig = new SamlConfig();
 
   @IsString()
-  public readonly koalaFrontendLink: string;
+  public readonly koalaFrontendUrl: string;
+
+  @IsString()
+  public readonly koalaAssetsUrl: string;
 }
