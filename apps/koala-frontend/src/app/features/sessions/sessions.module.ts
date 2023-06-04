@@ -68,6 +68,7 @@ import { SessionInfoPage } from './pages/session-info/session-info.page';
 import { SessionAnalysisPage } from './pages/session-analysis/session-analysis.page';
 import { VisibleFilterPipe } from './components/marker-toolbar/marker-visible.pipe';
 import { SessionOwnerPipe } from './pipes/session-owner.pipe';
+import { VolumeControlComponent } from './components/volume-control/volume-control.component';
 
 @NgModule({
   declarations: [
@@ -101,6 +102,7 @@ import { SessionOwnerPipe } from './pipes/session-owner.pipe';
     SessionAnalysisPage,
     VisibleFilterPipe,
     SessionOwnerPipe,
+    VolumeControlComponent,
   ],
   imports: [
     SharedModule,

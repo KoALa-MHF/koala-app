@@ -41,7 +41,7 @@ export class MediaControlService {
     responsive: true,
     maxCanvasWidth: 100,
     hideScrollbar: false,
-    height: 200,
+    height: 100,
     closeAudioContext: true,
   };
   waves = new Map<string | HTMLElement, WaveSurfer>();
