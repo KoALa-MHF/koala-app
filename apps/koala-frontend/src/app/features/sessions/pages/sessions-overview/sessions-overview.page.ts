@@ -96,6 +96,8 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
   public onSessionDelete(sessions: Session[]) {
     //confirm deletion first
     this.selectedSessions = sessions;
+    this.selectedSession = sessions[0];
+
     this.showDeleteConfirm = true;
   }
 
