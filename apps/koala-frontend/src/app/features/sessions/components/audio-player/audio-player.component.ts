@@ -14,9 +14,7 @@ export class AudioPlayerComponent {
   @Input() metadata: MediaMetadata | undefined;
   @Output() mediaEvent: EventEmitter<MediaEvent> = new EventEmitter<MediaEvent>();
 
-  muted = 0;
   playing = false;
-  mutedIcon = 'pi pi-volume-up';
   playIcon = 'pi pi-play';
 
   onPlay() {
@@ -48,16 +46,5 @@ export class AudioPlayerComponent {
 
   onVolumeChange(volume: any) {
     this.mediaEvent.emit({ actions: MediaActions.VolumeChange, value: volume });
-  }
-
-  onMute() {
-    if (!this.muted) {
-      this.mutedIcon = 'pi pi-volume-off';
-      this.muted = 1;
-    } else {
-      this.mutedIcon = 'pi pi-volume-up';
-      this.muted = 0;
-    }
-    this.mediaEvent.emit({ actions: MediaActions.Mute, value: this.muted });
   }
 }

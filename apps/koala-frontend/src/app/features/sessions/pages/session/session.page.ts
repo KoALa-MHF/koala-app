@@ -33,7 +33,7 @@ export class SessionPage implements OnInit, OnDestroy {
   waveContainer!: string;
   mediaUri: string = environment.production ? 'https://koala-app.de/api/media' : 'http://localhost:4200/api/media';
   sessionId = 0;
-  session!: Session;
+  session?: Session;
   AnnotationData: Map<number, Array<DataPoint>> = new Map<number, Array<DataPoint>>();
   AnnotationDislay = Display;
   markers: Marker[] = [];
@@ -138,7 +138,7 @@ export class SessionPage implements OnInit, OnDestroy {
       .subscribeUpdated(this.sessionId)
       .subscribe((session?: Session) => {
         if (session) {
-          this.session = { ...session, owner: this.session.owner, isOwner: this.session.isOwner };
+          this.session = { ...session, owner: this.session?.owner, isOwner: this.session?.isOwner };
           this.setSidePanelFormData(this.session);
           this.navigationService.setAnalysisNavEnabled(this.session.enableLiveAnalysis || false);
         }
@@ -216,7 +216,7 @@ export class SessionPage implements OnInit, OnDestroy {
   onMarkerDisplayChange(value: boolean, marker: Marker) {
     this.markers = this.markers.map((m) => (m.id == marker.id ? { ...m, visible: value } : m));
 
-    const toolbars = this.session.toolbars;
+    const toolbars = this.session?.toolbars;
 
     if (toolbars) {
       const toolbar = toolbars[0];
