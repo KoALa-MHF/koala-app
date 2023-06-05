@@ -141,9 +141,34 @@ export class UserSessionsService {
   }
 
   async remove(id: number, user: User) {
-    const userSession = await this.findOne(id, user);
+    const userSession = await this.findOneWithSessionData(id);
+
+    if (userSession.session.ownerId !== user.id && userSession.ownerId !== user.id) {
+      //only the session owner or the userSession owner are allowed to delete the user session
+      throw new ForbiddenException();
+    }
+
     await this.userSessionsRepository.remove(userSession);
     userSession.id = id;
+    return userSession;
+  }
+
+  private async findOneWithSessionData(id: number, user?: User) {
+    const userSession = await this.userSessionsRepository.findOne({
+      where: { id },
+      relations: {
+        session: true,
+      },
+    });
+
+    if (!userSession) {
+      throw new NotFoundException();
+    }
+
+    if (user && userSession.ownerId !== user.id) {
+      throw new ForbiddenException();
+    }
+
     return userSession;
   }
 }
