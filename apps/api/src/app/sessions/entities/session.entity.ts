@@ -146,7 +146,7 @@ export class Session extends BaseEntity {
   )
   userSessions: UserSession[];
 
-  @Field({ defaultValue: PlayMode.PAUSED, description: 'Play Mode', nullable: true })
+  @Field(() => PlayMode, { defaultValue: PlayMode.PAUSED, description: 'Play Mode', nullable: true })
   @Column({ type: 'simple-enum', enum: PlayMode, default: PlayMode.PAUSED, nullable: true })
   playMode: PlayMode;
 

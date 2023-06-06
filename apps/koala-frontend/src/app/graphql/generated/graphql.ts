@@ -193,6 +193,8 @@ export type Mutation = {
   removeSession: Session;
   removeUserSession: UserSession;
   setMarkerVisible: Toolbar;
+  setPlayMode: Session;
+  setPlayPosition: Session;
   updateAnnotation: Annotation;
   updateMarker: Marker;
   updateSession: Session;
@@ -254,6 +256,16 @@ export type MutationSetMarkerVisibleArgs = {
   updateToolbarMarkerVisible: SetToolbarMarkerVisibilityInput;
 };
 
+export type MutationSetPlayModeArgs = {
+  id: Scalars['Int'];
+  setPlayModeInput: SetPlayModeInput;
+};
+
+export type MutationSetPlayPositionArgs = {
+  id: Scalars['Int'];
+  setPlayPositionInput: SetPlayPositionInput;
+};
+
 export type MutationUpdateAnnotationArgs = {
   id: Scalars['Int'];
   updateAnnotationInput: UpdateAnnotationInput;
@@ -282,6 +294,11 @@ export type MutationUpdateUserSessionArgs = {
   id: Scalars['Int'];
   updateUserSessionInput: UpdateUserSessionInput;
 };
+
+export enum PlayMode {
+  Paused = 'PAUSED',
+  Running = 'RUNNING',
+}
 
 export type Query = {
   __typename?: 'Query';
@@ -339,12 +356,16 @@ export type Session = {
   end?: Maybe<Scalars['DateTime']>;
   /** ID for Session */
   id: Scalars['ID'];
+  liveSessionStarted?: Maybe<Scalars['DateTime']>;
   /** Associated Media File */
   media?: Maybe<Media>;
   /** Session Name */
   name: Scalars['String'];
   /** Associated User */
   owner: User;
+  /** Play Mode */
+  playMode?: Maybe<PlayMode>;
+  playPosition?: Maybe<Scalars['Float']>;
   /** Start of Session */
   start?: Maybe<Scalars['DateTime']>;
   /** Session Status */
@@ -361,6 +382,14 @@ export enum SessionStatus {
   Closed = 'CLOSED',
   Open = 'OPEN',
 }
+
+export type SetPlayModeInput = {
+  playMode?: PlayMode;
+};
+
+export type SetPlayPositionInput = {
+  playPosition: Scalars['Float'];
+};
 
 export type SetToolbarMarkerVisibilityInput = {
   markerId: Scalars['ID'];
@@ -434,6 +463,7 @@ export type UpdateSessionInput = {
   enableLiveAnalysis?: InputMaybe<Scalars['Boolean']>;
   enablePlayer?: InputMaybe<Scalars['Boolean']>;
   end?: InputMaybe<Scalars['DateTime']>;
+  liveSessionStarted?: InputMaybe<Scalars['DateTime']>;
   /** Assigned Media */
   mediaId?: InputMaybe<Scalars['Int']>;
   name?: InputMaybe<Scalars['String']>;
@@ -683,6 +713,9 @@ export type GetSessionsQuery = {
     enablePlayer?: boolean | null;
     displaySampleSolution?: boolean | null;
     enableLiveAnalysis?: boolean | null;
+    playMode?: PlayMode | null;
+    playPosition?: number | null;
+    liveSessionStarted?: any | null;
     code: string;
     createdAt: any;
     updatedAt: any;
@@ -717,6 +750,9 @@ export type GetOneSessionQuery = {
     enablePlayer?: boolean | null;
     displaySampleSolution?: boolean | null;
     enableLiveAnalysis?: boolean | null;
+    playMode?: PlayMode | null;
+    playPosition?: number | null;
+    liveSessionStarted?: any | null;
     code: string;
     createdAt: any;
     updatedAt: any;
@@ -1164,6 +1200,9 @@ export const GetSessionsDocument = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      playMode
+      playPosition
+      liveSessionStarted
       code
       userSessions {
         id
@@ -1218,6 +1257,9 @@ export const GetOneSessionDocument = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      playMode
+      playPosition
+      liveSessionStarted
       code
       media {
         id

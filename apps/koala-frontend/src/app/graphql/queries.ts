@@ -13,6 +13,9 @@ const GET_SESSIONS = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      playMode
+      playPosition
+      liveSessionStarted
       code
       userSessions {
         id
@@ -57,6 +60,9 @@ const GET_ONE_SESSION = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      playMode
+      playPosition
+      liveSessionStarted
       code
       media {
         id
