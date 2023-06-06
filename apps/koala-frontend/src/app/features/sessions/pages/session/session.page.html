@@ -6,7 +6,7 @@
   </div>
   <div class="content">
     <koala-session-timer
-      *ngIf="( ( session.enablePlayer || false ) || session.isOwner ) && !session.isAudioSession"
+      *ngIf="( ( session?.enablePlayer || false ) || session?.isOwner ) && ( !session?.isAudioSession )"
     ></koala-session-timer>
     <koala-app-audio-wave [waveContainer]="waveContainer"> </koala-app-audio-wave>
     <koala-app-annotation
