@@ -19,7 +19,7 @@
       (event)="onMarkerButtonEvent($event)"
     ></koala-marker-toolbar>
   </div>
-  <div class="content-right">
+  <div *ngIf="( session?.enablePlayer || false ) || session?.isOwner" class="content-right">
     <koala-volume-control (mediaEvent)="onMediaEvent($event)"></koala-volume-control>
   </div>
 </div>
