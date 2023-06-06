@@ -697,6 +697,26 @@ export type CreateAnnotationMutation = {
   };
 };
 
+export type SetPlayModeMutationVariables = Exact<{
+  sessionId: Scalars['Int'];
+  setPlayModeInput: SetPlayModeInput;
+}>;
+
+export type SetPlayModeMutation = {
+  __typename?: 'Mutation';
+  setPlayMode: { __typename?: 'Session'; id: string; playMode?: PlayMode | null };
+};
+
+export type SetPlayPositionMutationVariables = Exact<{
+  sessionId: Scalars['Int'];
+  setPlayPositionInput: SetPlayPositionInput;
+}>;
+
+export type SetPlayPositionMutation = {
+  __typename?: 'Mutation';
+  setPlayPosition: { __typename?: 'Session'; id: string; playPosition?: number | null };
+};
+
 export type GetSessionsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetSessionsQuery = {
@@ -1182,6 +1202,44 @@ export const CreateAnnotationDocument = gql`
 })
 export class CreateAnnotationGQL extends Apollo.Mutation<CreateAnnotationMutation, CreateAnnotationMutationVariables> {
   override document = CreateAnnotationDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SetPlayModeDocument = gql`
+  mutation setPlayMode($sessionId: Int!, $setPlayModeInput: SetPlayModeInput!) {
+    setPlayMode(id: $sessionId, setPlayModeInput: $setPlayModeInput) {
+      id
+      playMode
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class SetPlayModeGQL extends Apollo.Mutation<SetPlayModeMutation, SetPlayModeMutationVariables> {
+  override document = SetPlayModeDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SetPlayPositionDocument = gql`
+  mutation setPlayPosition($sessionId: Int!, $setPlayPositionInput: SetPlayPositionInput!) {
+    setPlayPosition(id: $sessionId, setPlayPositionInput: $setPlayPositionInput) {
+      id
+      playPosition
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class SetPlayPositionGQL extends Apollo.Mutation<SetPlayPositionMutation, SetPlayPositionMutationVariables> {
+  override document = SetPlayPositionDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

@@ -13,6 +13,9 @@ import {
   OnSessionUpdatedGQL,
   CreateNewSessionMutation,
   GetOneSessionBySessionCodeGQL,
+  PlayMode,
+  SetPlayModeGQL,
+  SetPlayPositionGQL,
 } from '../../../graphql/generated/graphql';
 import { Session } from '../types/session.entity';
 import { AccessTokenService } from '../../auth/services/access-token.service';
@@ -29,6 +32,8 @@ export class SessionsService {
     private readonly deleteSessionGQL: DeleteSessionGQL,
     private readonly onSessionUpdatedGQL: OnSessionUpdatedGQL,
     private readonly getOneSessionBySessionCodeGQL: GetOneSessionBySessionCodeGQL,
+    private readonly setPlayModeGQL: SetPlayModeGQL,
+    private readonly setPlayPositionGQL: SetPlayPositionGQL,
     private readonly accessTokenService: AccessTokenService
   ) {}
 
@@ -119,6 +124,14 @@ export class SessionsService {
         },
       });
     });
+  }
+
+  setPlayMode(sessionId: number, playMode: PlayMode) {
+    return this.setPlayModeGQL.mutate({ sessionId, setPlayModeInput: { playMode } });
+  }
+
+  setPlayPosition(sessionId: number, playPosition: number) {
+    return this.setPlayPositionGQL.mutate({ sessionId, setPlayPositionInput: { playPosition } });
   }
 
   private addIsOwner(session: Session) {
