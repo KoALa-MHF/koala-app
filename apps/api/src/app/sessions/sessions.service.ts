@@ -7,6 +7,8 @@ import { User } from '../users/entities/user.entity';
 import { CreateSessionInput } from './dto/create-session.input';
 import { UpdateSessionInput } from './dto/update-session.input';
 import { Session } from './entities/session.entity';
+import { SetPlayModeInput } from './dto/set-play-mode.input';
+import { SetPlayPositionInput } from './dto/set-play-position.input';
 
 @Injectable()
 export class SessionsService {
@@ -111,7 +113,28 @@ export class SessionsService {
       enablePlayer: updateSessionInput.enablePlayer,
       displaySampleSolution: updateSessionInput.displaySampleSolution,
       enableLiveAnalysis: updateSessionInput.enableLiveAnalysis,
+      liveSessionStarted: updateSessionInput.liveSessionStarted,
       ...(updateSessionInput.mediaId && { media: { id: updateSessionInput.mediaId } }),
+    });
+
+    return this.sessionsRepository.save(session);
+  }
+
+  async setPlayMode(id: number, setPlayModeInput: SetPlayModeInput, owner: User): Promise<Session> {
+    const session = await this.findOneOfOwner(id, owner);
+
+    this.sessionsRepository.merge(session, {
+      playMode: setPlayModeInput.playMode,
+    });
+
+    return this.sessionsRepository.save(session);
+  }
+
+  async setPlayPosition(id: number, setPlayModeInput: SetPlayPositionInput, owner: User): Promise<Session> {
+    const session = await this.findOneOfOwner(id, owner);
+
+    this.sessionsRepository.merge(session, {
+      playPosition: setPlayModeInput.playPosition,
     });
 
     return this.sessionsRepository.save(session);

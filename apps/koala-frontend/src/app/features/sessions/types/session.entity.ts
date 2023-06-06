@@ -1,4 +1,4 @@
-import { SessionStatus, User } from '../../../graphql/generated/graphql';
+import { PlayMode, SessionStatus, User } from '../../../graphql/generated/graphql';
 import { Media } from './media.entity';
 import { Toolbar } from './toolbar.entity';
 import { UserSession } from './user-session.entity';
@@ -14,6 +14,9 @@ export interface Session {
   enablePlayer?: boolean | null;
   displaySampleSolution?: boolean | null;
   enableLiveAnalysis?: boolean | null;
+  playMode?: PlayMode | null;
+  playPosition?: number | null;
+  liveSessionStarted?: Date | null;
   media?: Media | null;
   code?: string;
   toolbars?: Toolbar[] | null;

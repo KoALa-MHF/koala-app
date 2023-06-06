@@ -13,6 +13,8 @@ import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { RegisteredUserGuard } from '../core/guards/registerd-user.guard';
 import { PubSub } from 'graphql-subscriptions';
+import { SetPlayModeInput } from './dto/set-play-mode.input';
+import { SetPlayPositionInput } from './dto/set-play-position.input';
 
 const pubSub = new PubSub();
 
@@ -75,6 +77,28 @@ export class SessionsResolver {
     const session = this.sessionsService.update(id, updateSessionInput, user);
     pubSub.publish('sessionUpdated', { sessionUpdated: session });
     return session;
+  }
+
+  @Mutation(() => Session)
+  @UseGuards(RegisteredUserGuard)
+  @UseGuards(AuthGuard)
+  setPlayMode(
+    @Args('id', { type: () => Int }) id: number,
+    @Args('setPlayModeInput') setPlayModeInput: SetPlayModeInput,
+    @CurrentUser() user: User
+  ) {
+    return this.sessionsService.setPlayMode(id, setPlayModeInput, user);
+  }
+
+  @Mutation(() => Session)
+  @UseGuards(RegisteredUserGuard)
+  @UseGuards(AuthGuard)
+  setPlayPosition(
+    @Args('id', { type: () => Int }) id: number,
+    @Args('setPlayPositionInput') setPlayPositionInput: SetPlayPositionInput,
+    @CurrentUser() user: User
+  ) {
+    return this.sessionsService.setPlayPosition(id, setPlayPositionInput, user);
   }
 
   @Mutation(() => Session)

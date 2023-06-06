@@ -17,8 +17,17 @@ export enum SessionStatus {
   CLOSED = 'closed',
 }
 
+export enum PlayMode {
+  RUNNING = 'running',
+  PAUSED = 'paused',
+}
+
 registerEnumType(SessionStatus, {
   name: 'SessionStatus',
+});
+
+registerEnumType(PlayMode, {
+  name: 'PlayMode',
 });
 
 @ObjectType()
@@ -136,6 +145,18 @@ export class Session extends BaseEntity {
     { description: 'Associated User Sessions' }
   )
   userSessions: UserSession[];
+
+  @Field(() => PlayMode, { defaultValue: PlayMode.PAUSED, description: 'Play Mode', nullable: true })
+  @Column({ type: 'simple-enum', enum: PlayMode, default: PlayMode.PAUSED, nullable: true })
+  playMode: PlayMode;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  playPosition: number;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  liveSessionStarted: Date;
 
   @BeforeInsert()
   async generateCode() {

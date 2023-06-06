@@ -174,3 +174,21 @@ const CREATE_ANNOTATION = gql`
     }
   }
 `;
+
+const SET_PLAY_MODE = gql`
+  mutation setPlayMode($sessionId: Int!, $setPlayModeInput: SetPlayModeInput!) {
+    setPlayMode(id: $sessionId, setPlayModeInput: $setPlayModeInput) {
+      id
+      playMode
+    }
+  }
+`;
+
+const SET_PLAY_POSITION = gql`
+  mutation setPlayPosition($sessionId: Int!, $setPlayPositionInput: SetPlayPositionInput!) {
+    setPlayPosition(id: $sessionId, setPlayPositionInput: $setPlayPositionInput) {
+      id
+      playPosition
+    }
+  }
+`;
