@@ -71,7 +71,15 @@ export class MediaControlService {
             formatTimeCallback: (sec: number, pxPerSec: number) => {
               const minutes = Math.floor(sec / 60);
               const seconds = sec % 60;
-              return minutes + ':' + (seconds === 0 ? '00' : seconds);
+              let secondsLabel;
+
+              if (seconds < 10) {
+                secondsLabel = '0' + seconds;
+              } else {
+                secondsLabel = seconds.toString();
+              }
+
+              return minutes + ':' + secondsLabel;
             },
           }),
           plugin,
