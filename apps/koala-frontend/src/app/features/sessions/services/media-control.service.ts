@@ -68,6 +68,11 @@ export class MediaControlService {
         plugins: [
           TimelinePlugin.create({
             container: `#${this.uuid}-timeline`,
+            formatTimeCallback: (sec: number, pxPerSec: number) => {
+              const minutes = Math.floor(sec / 60);
+              const seconds = sec % 60;
+              return minutes + ':' + (seconds === 0 ? '00' : seconds);
+            },
           }),
           plugin,
         ],
