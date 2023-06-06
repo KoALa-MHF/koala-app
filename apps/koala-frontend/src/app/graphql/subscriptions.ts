@@ -28,6 +28,7 @@ const SUBSCRIBE_SESSION_UPDATED = gql`
       userSessions {
         id
         owner {
+          id
           email
         }
       }

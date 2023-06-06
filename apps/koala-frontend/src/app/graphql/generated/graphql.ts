@@ -914,7 +914,7 @@ export type OnSessionUpdatedSubscription = {
     userSessions: Array<{
       __typename?: 'UserSession';
       id: number;
-      owner: { __typename?: 'User'; email?: string | null };
+      owner: { __typename?: 'User'; id: string; email?: string | null };
     }>;
   };
 };
@@ -1572,6 +1572,7 @@ export const OnSessionUpdatedDocument = gql`
       userSessions {
         id
         owner {
+          id
           email
         }
       }

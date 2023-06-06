@@ -18,6 +18,7 @@ import { filter } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { ToolbarsService } from '../../services/toolbars.service';
 import { NavigationService } from '../../services/navigation.service';
+import { UserSession } from '../../types/user-session.entity';
 
 @Component({
   selector: 'koala-app-session',
@@ -43,6 +44,8 @@ export class SessionPage implements OnInit, OnDestroy {
   audioPaused = true;
   showSideBar = false;
   userID = -1;
+  private clientStartTimestamp?: number;
+  private myUserSession?: UserSession;
 
   sessionUpdatedSubscription?: Subscription;
   toolbarUpdatedSubscription?: Subscription;
@@ -90,46 +93,48 @@ export class SessionPage implements OnInit, OnDestroy {
       },
     });
     this.sessionService.getOne(this.sessionId).subscribe(async (session) => {
-      this.session = {
+      this.setSession({
         ...session,
         media: session.media,
-      };
+      });
 
-      this.setSidePanelFormData(this.session);
-      this.navigationService.setAnalysisNavEnabled(this.session.enableLiveAnalysis || false);
+      if (this.session) {
+        this.setSidePanelFormData(this.session);
+        this.navigationService.setAnalysisNavEnabled(this.session.enableLiveAnalysis || false);
 
-      const toolbars = this.session.toolbars;
+        const toolbars = this.session.toolbars;
 
-      if (toolbars) {
-        const toolbar = toolbars[0];
+        if (toolbars) {
+          const toolbar = toolbars[0];
 
-        this.toolbarUpdatedSubscription = this.toolbarService.subscribeUpdated(parseInt(toolbar.id)).subscribe({
-          next: (data) => {
-            const newMarkers = data.data?.toolbarUpdated.markers;
-            if (newMarkers) {
-              newMarkers.forEach((newMarker) => {
-                const markerIndex = this.markers.findIndex((m) => m.id.toString() == newMarker.markerId);
-                this.markers[markerIndex].visible = newMarker.visible;
-              });
-              //trigger change detection
-              this.markers = [
-                ...this.markers,
-              ];
-            }
-          },
-        });
-      }
+          this.toolbarUpdatedSubscription = this.toolbarService.subscribeUpdated(parseInt(toolbar.id)).subscribe({
+            next: (data) => {
+              const newMarkers = data.data?.toolbarUpdated.markers;
+              if (newMarkers) {
+                newMarkers.forEach((newMarker) => {
+                  const markerIndex = this.markers.findIndex((m) => m.id.toString() == newMarker.markerId);
+                  this.markers[markerIndex].visible = newMarker.visible;
+                });
+                //trigger change detection
+                this.markers = [
+                  ...this.markers,
+                ];
+              }
+            },
+          });
+        }
 
-      if (this.session.isAudioSession && this.session.media) {
-        this.mediaControlService.uuid = this.session.id;
-        this.waveContainer = `waveContainer-${this.session.id}`;
+        if (this.session?.isAudioSession && this.session?.media) {
+          this.mediaControlService.uuid = this.session.id;
+          this.waveContainer = `waveContainer-${this.session.id}`;
 
-        await this.loadMediaData(this.session.media.id);
-      }
+          await this.loadMediaData(this.session.media.id);
+        }
 
-      const userSessions = this.session.userSessions?.filter((s) => s.id == this.userID);
-      if (userSessions) {
-        this.loadMarkerData(userSessions);
+        const userSessions = this.session.userSessions?.filter((s) => s.id == this.userID);
+        if (userSessions) {
+          this.loadMarkerData(userSessions);
+        }
       }
     });
 
@@ -137,9 +142,16 @@ export class SessionPage implements OnInit, OnDestroy {
       .subscribeUpdated(this.sessionId)
       .subscribe((session?: Session) => {
         if (session) {
-          this.session = { ...session, owner: this.session?.owner, isOwner: this.session?.isOwner };
-          this.setSidePanelFormData(this.session);
-          this.navigationService.setAnalysisNavEnabled(this.session.enableLiveAnalysis || false);
+          this.setSession({ ...session, owner: this.session?.owner, isOwner: this.session?.isOwner });
+
+          if (this.session) {
+            this.setSidePanelFormData(this.session);
+            this.navigationService.setAnalysisNavEnabled(this.session.enableLiveAnalysis || false);
+
+            if (this.session.liveSessionStarted && this.session.playMode === PlayMode.Running) {
+              this.clientStartTimestamp = Date.now();
+            }
+          }
         }
       });
   }
@@ -284,12 +296,11 @@ export class SessionPage implements OnInit, OnDestroy {
   }
 
   onMarkerButtonEvent({ marker, value }: { marker: Marker; value?: number }) {
-    if (this.audioPaused) {
+    /*if (this.audioPaused) {
       return;
-    }
+    }*/
     let aData = this.AnnotationData.get(marker.id);
     if (aData == undefined) {
-      // wtf typescript, how is this still undefined...
       aData = this.AnnotationData.set(marker.id, new Array<DataPoint>()).get(marker.id);
     } else {
       if (marker.type === MarkerType.Event) {
@@ -305,7 +316,15 @@ export class SessionPage implements OnInit, OnDestroy {
   }
 
   onMarkerEvent(m: Marker, aData: DataPoint[]) {
-    const t = this.mediaControlService.getCurrentTime();
+    let t: number;
+
+    if (this.session?.isAudioSession) {
+      t = this.mediaControlService.getCurrentTime();
+      t = Math.floor(t * 1000);
+    } else {
+      t = Date.now() - (this.clientStartTimestamp || 0);
+    }
+
     this.AnnotationData.get(m.id)?.push({
       startTime: t,
       endTime: 0,
@@ -316,8 +335,8 @@ export class SessionPage implements OnInit, OnDestroy {
     });
     this.annotationService
       .create({
-        start: Math.floor(t * 1000),
-        userSessionId: this.userID,
+        start: t,
+        userSessionId: this.myUserSession?.id || 0,
         markerId: m.id,
       })
       .subscribe({
@@ -329,16 +348,29 @@ export class SessionPage implements OnInit, OnDestroy {
   }
 
   onMarkerRange(m: Marker, aData: DataPoint[]) {
-    const t = this.mediaControlService.getCurrentTime();
+    let t: number;
+
+    if (this.session?.isAudioSession) {
+      t = this.mediaControlService.getCurrentTime();
+      t = Math.floor(t * 1000);
+    } else {
+      t = Date.now() - (this.clientStartTimestamp || 0);
+    }
+
     if (aData.length > 0) {
       const latest = aData.at(-1);
       if (latest?.endTime == 0) {
-        latest.endTime = this.mediaControlService.getCurrentTime();
+        if (this.session?.isAudioSession) {
+          latest.endTime = this.mediaControlService.getCurrentTime();
+          latest.endTime = Math.floor(t * 1000);
+        } else {
+          latest.endTime = Date.now() - (this.clientStartTimestamp || 0);
+        }
         this.annotationService
           .create({
-            start: Math.floor(latest.startTime * 1000),
-            end: Math.floor(latest.endTime * 1000),
-            userSessionId: this.userID,
+            start: latest.startTime,
+            end: latest.endTime,
+            userSessionId: this.myUserSession?.id || 0,
             markerId: m.id,
           })
           .subscribe({
@@ -515,9 +547,16 @@ export class SessionPage implements OnInit, OnDestroy {
     const liveSessionStarted = this.session?.isAudioSession ? null : Date.now();
     this.sessionService.setPlayMode(parseInt(this.session?.id || '0'), { playMode, liveSessionStarted }).subscribe({
       next: (session: Session) => {
-        this.session = session;
+        this.setSession(session);
       },
     });
+  }
+
+  private setSession(updatedSession: Session) {
+    this.session = updatedSession;
+    this.myUserSession = this.session?.userSessions?.filter(
+      (userSession) => userSession.owner?.id === this.userID.toString()
+    )[0];
   }
 
   get sessionDetailsFormGroup(): FormGroup {
