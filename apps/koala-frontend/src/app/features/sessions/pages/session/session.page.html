@@ -19,10 +19,11 @@
         {{session?.liveSessionStarted ? 'Session beendet' : 'Session noch nicht gestartet'}}
       </span>
 
-      <span *ngIf="session?.playMode === PlayMode.Running"> Session Läuft ... </span>
+      <span *ngIf="session?.playMode === PlayMode.Running"><i class="pi pi-play"></i> {{timer}}</span>
     </div>
-    <koala-app-audio-wave [waveContainer]="waveContainer"> </koala-app-audio-wave>
+    <koala-app-audio-wave *ngIf="session?.isAudioSession" [waveContainer]="waveContainer"> </koala-app-audio-wave>
     <koala-app-annotation
+      *ngIf="session?.isAudioSession"
       [annotationData]="AnnotationData"
       [markers]="markers"
       [totalTime]="totalAudioTime"
@@ -30,7 +31,7 @@
     ></koala-app-annotation>
     <koala-marker-toolbar
       class="content-centered-horizontally"
-      [toolbarMode]="( session?.editable || session?.isOwner ) ? ToolbarMode.Session : ToolbarMode.SessionDisabled"
+      [toolbarMode]="( ( session?.editable && session?.playMode === PlayMode.Running ) || session?.isOwner ) ? ToolbarMode.Session : ToolbarMode.SessionDisabled"
       [markers]="markers"
       (event)="onMarkerButtonEvent($event)"
     ></koala-marker-toolbar>

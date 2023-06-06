@@ -11,7 +11,9 @@
   *ngIf="(marker.type === MarkerType.Event || marker.type === MarkerType.Range) && marker.visible === true"
 >
   <koala-marker-icon [iconCode]="marker.icon"></koala-marker-icon>
-  <span [style.margin-left]="marker.icon && marker.abbreviation ? '10px' : '0px'">{{ marker.abbreviation }}</span>
+  <span [style.margin-left]="marker.icon && marker.abbreviation ? '10px' : '0px'">{{
+    isActive ? 'STOP' : marker.abbreviation
+  }}</span>
 </button>
 
 <div

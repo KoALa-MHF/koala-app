@@ -14,7 +14,7 @@ import { Marker } from '../../types/marker.entity';
 import { MarkerType, PlayMode } from '../../../../graphql/generated/graphql';
 import { ToolbarMode } from '../../components/marker-toolbar/marker-toolbar.component';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
-import { filter } from 'rxjs';
+import { filter, timer } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { ToolbarsService } from '../../services/toolbars.service';
 import { NavigationService } from '../../services/navigation.service';
@@ -44,11 +44,13 @@ export class SessionPage implements OnInit, OnDestroy {
   audioPaused = true;
   showSideBar = false;
   userID = -1;
+  timer = '0:00';
   private clientStartTimestamp?: number;
   private myUserSession?: UserSession;
 
   sessionUpdatedSubscription?: Subscription;
   toolbarUpdatedSubscription?: Subscription;
+  private timerSubscription?: Subscription;
 
   sessionSettingsToggled$ = this.navigationService.sessionSettingsSidePanelToggled$;
 
@@ -150,6 +152,23 @@ export class SessionPage implements OnInit, OnDestroy {
 
             if (this.session.liveSessionStarted && this.session.playMode === PlayMode.Running) {
               this.clientStartTimestamp = Date.now();
+              this.timerSubscription?.unsubscribe();
+              this.timer = '0:00';
+              this.timerSubscription = timer(1000, 1000).subscribe((timerState: number) => {
+                const timeDiff = (Date.now() - (this.clientStartTimestamp || 0)) / 1000;
+
+                const minutes = Math.floor(timeDiff / 60);
+                const seconds = Math.floor(timeDiff % 60);
+                let secondsLabel;
+
+                if (seconds < 10) {
+                  secondsLabel = '0' + seconds;
+                } else {
+                  secondsLabel = seconds.toString();
+                }
+
+                this.timer = minutes + ':' + secondsLabel;
+              });
             }
           }
         }
@@ -162,6 +181,7 @@ export class SessionPage implements OnInit, OnDestroy {
     }
     this.sessionUpdatedSubscription?.unsubscribe();
     this.toolbarUpdatedSubscription?.unsubscribe();
+    this.timerSubscription?.unsubscribe();
   }
 
   private loadMediaData(id: string): Promise<void> {

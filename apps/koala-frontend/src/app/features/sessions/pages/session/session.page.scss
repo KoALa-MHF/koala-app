@@ -5,6 +5,9 @@
 .content {
   margin-right: 30px;
   flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
 .content-left {
