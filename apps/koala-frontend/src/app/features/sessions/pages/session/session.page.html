@@ -1,13 +1,26 @@
 <div class="container">
   <div class="content-left">
-    <div *ngIf="( session?.enablePlayer || false ) || session?.isOwner" class="p-toolbar-group-center">
+    <div
+      *ngIf="( ( session?.enablePlayer || false ) || session?.isOwner ) && ( session?.isAudioSession )"
+      class="p-toolbar-group-center"
+    >
       <koala-audio-player (mediaEvent)="onMediaEvent($event)"></koala-audio-player>
     </div>
   </div>
   <div class="content">
-    <koala-session-timer
-      *ngIf="( ( session?.enablePlayer || false ) || session?.isOwner ) && ( !session?.isAudioSession )"
-    ></koala-session-timer>
+    <div style="display: flex; justify-content: center" *ngIf="session?.isOwner && !session?.isAudioSession">
+      <koala-session-timer
+        [playMode]="session?.playMode || PlayMode.Paused"
+        (playModeChanged)="onPlayModeChange($event)"
+      ></koala-session-timer>
+    </div>
+    <div style="display: flex; justify-content: center" *ngIf="!session?.isOwner && !session?.isAudioSession">
+      <span *ngIf="session?.playMode === PlayMode.Paused">
+        {{session?.liveSessionStarted ? 'Session beendet' : 'Session noch nicht gestartet'}}
+      </span>
+
+      <span *ngIf="session?.playMode === PlayMode.Running"> Session Läuft ... </span>
+    </div>
     <koala-app-audio-wave [waveContainer]="waveContainer"> </koala-app-audio-wave>
     <koala-app-annotation
       [annotationData]="AnnotationData"
@@ -22,7 +35,10 @@
       (event)="onMarkerButtonEvent($event)"
     ></koala-marker-toolbar>
   </div>
-  <div *ngIf="( session?.enablePlayer || false ) || session?.isOwner" class="content-right">
+  <div
+    *ngIf="( ( session?.enablePlayer || false ) || session?.isOwner) && ( session?.isAudioSession )"
+    class="content-right"
+  >
     <koala-volume-control (mediaEvent)="onMediaEvent($event)"></koala-volume-control>
   </div>
 </div>

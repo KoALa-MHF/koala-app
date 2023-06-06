@@ -16,6 +16,7 @@ import {
   PlayMode,
   SetPlayModeGQL,
   SetPlayPositionGQL,
+  SetPlayModeInput,
 } from '../../../graphql/generated/graphql';
 import { Session } from '../types/session.entity';
 import { AccessTokenService } from '../../auth/services/access-token.service';
@@ -129,8 +130,18 @@ export class SessionsService {
     });
   }
 
-  setPlayMode(sessionId: number, playMode: PlayMode) {
-    return this.setPlayModeGQL.mutate({ sessionId, setPlayModeInput: { playMode } });
+  setPlayMode(sessionId: number, playModeInput: SetPlayModeInput) {
+    return this.setPlayModeGQL.mutate({ sessionId, setPlayModeInput: playModeInput }).pipe(
+      map((response) => response.data?.setPlayMode),
+      map((session?: Session): Session => {
+        if (session) {
+          return this.addIsOwner(session);
+        } else {
+          throw new Error('Session Response Empty After SetPlayMode');
+        }
+      }),
+      map((session) => this.addIsAudioSession(session))
+    );
   }
 
   setPlayPosition(sessionId: number, playPosition: number) {

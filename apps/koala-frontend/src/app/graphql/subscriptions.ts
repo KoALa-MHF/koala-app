@@ -13,6 +13,9 @@ const SUBSCRIBE_SESSION_UPDATED = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      playMode
+      playPosition
+      liveSessionStarted
       toolbars {
         id
         markers {

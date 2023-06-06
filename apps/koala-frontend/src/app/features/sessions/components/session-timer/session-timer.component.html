@@ -1,4 +1,4 @@
-<p-speedDial
+<!--<p-speedDial
   [model]="timerActions"
   direction="down"
   [radius]="80"
@@ -6,4 +6,11 @@
   showIcon="pi pi-clock"
   hideIcon="pi pi-times"
 >
-</p-speedDial>
+</p-speedDial>-->
+
+<button
+  pButton
+  icon="pi {{ playMode === PlayMode.Paused ? 'pi-play' : 'pi-stop' }}"
+  class="play-button p-button-lg"
+  (click)="toggleTimer()"
+></button>

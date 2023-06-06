@@ -125,6 +125,7 @@ export class SessionsService {
 
     this.sessionsRepository.merge(session, {
       playMode: setPlayModeInput.playMode,
+      liveSessionStarted: setPlayModeInput.liveSessionStarted,
     });
 
     return this.sessionsRepository.save(session);

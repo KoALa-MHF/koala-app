@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { PlayMode } from '../../../../graphql/generated/graphql';
 import { MenuItem } from 'primeng/api';
 
 @Component({
@@ -9,6 +10,11 @@ import { MenuItem } from 'primeng/api';
   ],
 })
 export class SessionTimerComponent {
+  @Input() playMode: PlayMode = PlayMode.Paused;
+  @Output() playModeChanged = new EventEmitter<PlayMode>();
+
+  PlayMode = PlayMode;
+
   timerActions: MenuItem[] = [
     {
       label: 'Timer starten',
@@ -19,4 +25,12 @@ export class SessionTimerComponent {
       },
     },
   ];
+
+  toggleTimer() {
+    if (this.playMode === PlayMode.Paused) {
+      this.playModeChanged.next(PlayMode.Running);
+    } else {
+      this.playModeChanged.next(PlayMode.Paused);
+    }
+  }
 }

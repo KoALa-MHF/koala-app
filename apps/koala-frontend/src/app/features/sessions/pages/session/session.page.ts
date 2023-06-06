@@ -11,7 +11,7 @@ import { environment } from '../../../../../environments/environment';
 import { Session } from '../../types/session.entity';
 import { DataPoint, Display } from '../../components/annotation/annotation.component';
 import { Marker } from '../../types/marker.entity';
-import { MarkerType } from '../../../../graphql/generated/graphql';
+import { MarkerType, PlayMode } from '../../../../graphql/generated/graphql';
 import { ToolbarMode } from '../../components/marker-toolbar/marker-toolbar.component';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { filter } from 'rxjs';
@@ -29,6 +29,7 @@ import { NavigationService } from '../../services/navigation.service';
 export class SessionPage implements OnInit, OnDestroy {
   sidePanelForm: FormGroup;
   ToolbarMode = ToolbarMode;
+  PlayMode = PlayMode;
 
   waveContainer!: string;
   mediaUri: string = environment.production ? 'https://koala-app.de/api/media' : 'http://localhost:4200/api/media';
@@ -119,11 +120,6 @@ export class SessionPage implements OnInit, OnDestroy {
         });
       }
 
-      /*if (this.session.media == undefined) {
-        this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.NO_AUDIO_FILE', 'SESSION.ERROR_DIALOG.NO_AUDIO_FILE_SUM');
-        return;
-      }*/
-
       if (this.session.isAudioSession && this.session.media) {
         this.mediaControlService.uuid = this.session.id;
         this.waveContainer = `waveContainer-${this.session.id}`;
@@ -149,7 +145,9 @@ export class SessionPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.mediaControlService.stop();
+    if (this.session?.isAudioSession) {
+      this.mediaControlService.stop();
+    }
     this.sessionUpdatedSubscription?.unsubscribe();
     this.toolbarUpdatedSubscription?.unsubscribe();
   }
@@ -511,6 +509,15 @@ export class SessionPage implements OnInit, OnDestroy {
 
   onSidebarHide() {
     this.navigationService.setSessionSettingsSidePanelVisible(false);
+  }
+
+  onPlayModeChange(playMode: PlayMode) {
+    const liveSessionStarted = this.session?.isAudioSession ? null : Date.now();
+    this.sessionService.setPlayMode(parseInt(this.session?.id || '0'), { playMode, liveSessionStarted }).subscribe({
+      next: (session: Session) => {
+        this.session = session;
+      },
+    });
   }
 
   get sessionDetailsFormGroup(): FormGroup {
