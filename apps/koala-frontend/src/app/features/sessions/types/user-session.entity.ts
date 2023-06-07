@@ -3,5 +3,6 @@ export interface UserSession {
   owner?: {
     id?: string | null;
     email?: string | null;
+    displayName?: string | null;
   };
 }

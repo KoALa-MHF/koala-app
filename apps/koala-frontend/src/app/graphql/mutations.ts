@@ -15,7 +15,7 @@ const CREATE_SESSION = gql`
       enableLiveAnalysis
       playMode
       playPosition
-      liveSessionStarted
+      liveSessionStart
       code
       media {
         id
@@ -193,7 +193,7 @@ const SET_PLAY_MODE = gql`
       enableLiveAnalysis
       playMode
       playPosition
-      liveSessionStarted
+      liveSessionStart
       code
       media {
         id

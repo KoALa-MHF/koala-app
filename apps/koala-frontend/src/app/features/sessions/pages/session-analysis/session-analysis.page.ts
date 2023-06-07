@@ -85,6 +85,12 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
         this.waveContainer = `waveContainer-${this.session.id}`;
 
         await this.loadMediaData(this.session.media.id);
+      } else {
+        if (this.session.liveSessionStart && this.session.liveSessionEnd) {
+          this.totalAudioTime =
+            (new Date(this.session.liveSessionEnd).valueOf() - new Date(this.session.liveSessionStart).valueOf()) /
+            1000;
+        }
       }
 
       if (this.session.userSessions && this.session.userSessions.length > 0) {
@@ -132,7 +138,10 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
             .pipe(filter((mediaAction) => mediaAction === MediaActions.Ready))
             .subscribe({
               next: () => {
-                this.totalAudioTime = this.mediaControlService.getDuration();
+                if (this.session.isAudioSession) {
+                  this.totalAudioTime = this.mediaControlService.getDuration();
+                }
+
                 resolve();
               },
             });

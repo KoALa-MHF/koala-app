@@ -113,7 +113,7 @@ export class SessionsService {
       enablePlayer: updateSessionInput.enablePlayer,
       displaySampleSolution: updateSessionInput.displaySampleSolution,
       enableLiveAnalysis: updateSessionInput.enableLiveAnalysis,
-      liveSessionStarted: updateSessionInput.liveSessionStarted,
+      liveSessionStart: updateSessionInput.liveSessionStart,
       ...(updateSessionInput.mediaId && { media: { id: updateSessionInput.mediaId } }),
     });
 
@@ -125,7 +125,8 @@ export class SessionsService {
 
     this.sessionsRepository.merge(session, {
       playMode: setPlayModeInput.playMode,
-      liveSessionStarted: setPlayModeInput.liveSessionStarted,
+      liveSessionStart: setPlayModeInput.liveSessionStart,
+      liveSessionEnd: setPlayModeInput.liveSessionEnd,
     });
 
     return this.sessionsRepository.save(session);

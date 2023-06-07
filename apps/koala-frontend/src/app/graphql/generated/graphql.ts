@@ -356,7 +356,8 @@ export type Session = {
   end?: Maybe<Scalars['DateTime']>;
   /** ID for Session */
   id: Scalars['ID'];
-  liveSessionStarted?: Maybe<Scalars['DateTime']>;
+  liveSessionEnd?: Maybe<Scalars['DateTime']>;
+  liveSessionStart?: Maybe<Scalars['DateTime']>;
   /** Associated Media File */
   media?: Maybe<Media>;
   /** Session Name */
@@ -384,7 +385,8 @@ export enum SessionStatus {
 }
 
 export type SetPlayModeInput = {
-  liveSessionStarted?: InputMaybe<Scalars['DateTime']>;
+  liveSessionEnd?: InputMaybe<Scalars['DateTime']>;
+  liveSessionStart?: InputMaybe<Scalars['DateTime']>;
   playMode?: PlayMode;
 };
 
@@ -464,7 +466,7 @@ export type UpdateSessionInput = {
   enableLiveAnalysis?: InputMaybe<Scalars['Boolean']>;
   enablePlayer?: InputMaybe<Scalars['Boolean']>;
   end?: InputMaybe<Scalars['DateTime']>;
-  liveSessionStarted?: InputMaybe<Scalars['DateTime']>;
+  liveSessionStart?: InputMaybe<Scalars['DateTime']>;
   /** Assigned Media */
   mediaId?: InputMaybe<Scalars['Int']>;
   name?: InputMaybe<Scalars['String']>;
@@ -548,7 +550,7 @@ export type CreateNewSessionMutation = {
     enableLiveAnalysis?: boolean | null;
     playMode?: PlayMode | null;
     playPosition?: number | null;
-    liveSessionStarted?: any | null;
+    liveSessionStart?: any | null;
     code: string;
     createdAt: any;
     updatedAt: any;
@@ -722,7 +724,7 @@ export type SetPlayModeMutation = {
     enableLiveAnalysis?: boolean | null;
     playMode?: PlayMode | null;
     playPosition?: number | null;
-    liveSessionStarted?: any | null;
+    liveSessionStart?: any | null;
     code: string;
     createdAt: any;
     updatedAt: any;
@@ -779,7 +781,8 @@ export type GetSessionsQuery = {
     enableLiveAnalysis?: boolean | null;
     playMode?: PlayMode | null;
     playPosition?: number | null;
-    liveSessionStarted?: any | null;
+    liveSessionStart?: any | null;
+    liveSessionEnd?: any | null;
     code: string;
     createdAt: any;
     updatedAt: any;
@@ -816,7 +819,8 @@ export type GetOneSessionQuery = {
     enableLiveAnalysis?: boolean | null;
     playMode?: PlayMode | null;
     playPosition?: number | null;
-    liveSessionStarted?: any | null;
+    liveSessionStart?: any | null;
+    liveSessionEnd?: any | null;
     code: string;
     createdAt: any;
     updatedAt: any;
@@ -831,7 +835,7 @@ export type GetOneSessionQuery = {
     userSessions: Array<{
       __typename?: 'UserSession';
       id: number;
-      owner: { __typename?: 'User'; id: string; email?: string | null };
+      owner: { __typename?: 'User'; id: string; email?: string | null; displayName?: string | null };
       annotations: Array<{
         __typename?: 'Annotation';
         id: number;
@@ -903,7 +907,8 @@ export type OnSessionUpdatedSubscription = {
     enableLiveAnalysis?: boolean | null;
     playMode?: PlayMode | null;
     playPosition?: number | null;
-    liveSessionStarted?: any | null;
+    liveSessionStart?: any | null;
+    liveSessionEnd?: any | null;
     toolbars: Array<{
       __typename?: 'Toolbar';
       id: string;
@@ -914,7 +919,7 @@ export type OnSessionUpdatedSubscription = {
     userSessions: Array<{
       __typename?: 'UserSession';
       id: number;
-      owner: { __typename?: 'User'; id: string; email?: string | null };
+      owner: { __typename?: 'User'; id: string; email?: string | null; displayName?: string | null };
     }>;
   };
 };
@@ -949,7 +954,7 @@ export const CreateNewSessionDocument = gql`
       enableLiveAnalysis
       playMode
       playPosition
-      liveSessionStarted
+      liveSessionStart
       code
       media {
         id
@@ -1272,7 +1277,7 @@ export const SetPlayModeDocument = gql`
       enableLiveAnalysis
       playMode
       playPosition
-      liveSessionStarted
+      liveSessionStart
       code
       media {
         id
@@ -1362,7 +1367,8 @@ export const GetSessionsDocument = gql`
       enableLiveAnalysis
       playMode
       playPosition
-      liveSessionStarted
+      liveSessionStart
+      liveSessionEnd
       code
       userSessions {
         id
@@ -1419,7 +1425,8 @@ export const GetOneSessionDocument = gql`
       enableLiveAnalysis
       playMode
       playPosition
-      liveSessionStarted
+      liveSessionStart
+      liveSessionEnd
       code
       media {
         id
@@ -1442,6 +1449,7 @@ export const GetOneSessionDocument = gql`
         owner {
           id
           email
+          displayName
         }
         annotations {
           id
@@ -1559,7 +1567,8 @@ export const OnSessionUpdatedDocument = gql`
       enableLiveAnalysis
       playMode
       playPosition
-      liveSessionStarted
+      liveSessionStart
+      liveSessionEnd
       toolbars {
         id
         markers {
@@ -1574,6 +1583,7 @@ export const OnSessionUpdatedDocument = gql`
         owner {
           id
           email
+          displayName
         }
       }
     }

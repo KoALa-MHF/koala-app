@@ -26,7 +26,7 @@ export interface DataPoint {
   ],
 })
 export class AnnotationComponent implements AfterViewInit, OnChanges {
-  @Input() annotationData: Map<number, Array<DataPoint>> = new Map<number, Array<DataPoint>>();
+  @Input() annotationData?: Map<number, Array<DataPoint>> = new Map<number, Array<DataPoint>>();
   @Input() totalTime = 1;
   @Input() currentTime = 0;
   @Input() markers: Marker[] = [];
@@ -51,7 +51,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
       if (changes['currentTime'] || changes['annotationData']) {
         this.drawTimeline();
         let i = 0;
-        this.annotationData.forEach((_, row) => {
+        this.annotationData?.forEach((_, row) => {
           this.drawAnnotations(row, i);
           i++;
         });
@@ -64,7 +64,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   }
 
   public addDataPoint(id: number, value: DataPoint) {
-    const points = this.annotationData.get(id);
+    const points = this.annotationData?.get(id);
     points?.push(value);
   }
 
@@ -128,7 +128,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
     rowElem
       .selectAll<SVGRectElement, DataPoint>('*')
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      .data<DataPoint>(this.annotationData.get(row)!)
+      .data<DataPoint>(this.annotationData!.get(row)!)
       .join(
         (enter) =>
           enter
@@ -187,7 +187,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   }
 
   private getRectHeight(d: DataPoint) {
-    if (d.strength == 0) {
+    if (!d.strength || d.strength == 0) {
       return this.annotationStrength;
     }
     return Math.abs(d.strength) * this.annotationStrength;
@@ -224,7 +224,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
     this.drawLines();
     this.drawTimeline();
     let i = 0;
-    this.annotationData.forEach((_, row) => {
+    this.annotationData?.forEach((_, row) => {
       this.drawAnnotations(row, i);
       i++;
     });

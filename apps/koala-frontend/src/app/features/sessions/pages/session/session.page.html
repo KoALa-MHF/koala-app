@@ -16,7 +16,7 @@
     </div>
     <div style="display: flex; justify-content: center" *ngIf="!session?.isOwner && !session?.isAudioSession">
       <span *ngIf="session?.playMode === PlayMode.Paused">
-        {{session?.liveSessionStarted ? 'Session beendet' : 'Session noch nicht gestartet'}}
+        {{session?.liveSessionStart ? 'Session beendet' : 'Session noch nicht gestartet'}}
       </span>
 
       <span *ngIf="session?.playMode === PlayMode.Running"><i class="pi pi-play"></i> {{timer}}</span>

@@ -16,7 +16,8 @@ export interface Session {
   enableLiveAnalysis?: boolean | null;
   playMode?: PlayMode | null;
   playPosition?: number | null;
-  liveSessionStarted?: Date | null;
+  liveSessionStart?: Date | null;
+  liveSessionEnd?: Date | null;
   media?: Media | null;
   code?: string;
   toolbars?: Toolbar[] | null;

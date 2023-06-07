@@ -154,7 +154,7 @@ export class SessionPage implements OnInit, OnDestroy {
             this.setSidePanelFormData(this.session);
             this.navigationService.setAnalysisNavEnabled(this.session.enableLiveAnalysis || false);
 
-            if (this.session.liveSessionStarted && this.session.playMode === PlayMode.Running) {
+            if (this.session.liveSessionStart && this.session.playMode === PlayMode.Running) {
               this.clientStartTimestamp = Date.now();
               this.timerSubscription?.unsubscribe();
               this.timer = '0:00';
@@ -568,12 +568,19 @@ export class SessionPage implements OnInit, OnDestroy {
   }
 
   onPlayModeChange(playMode: PlayMode) {
-    const liveSessionStarted = this.session?.isAudioSession ? null : Date.now();
-    this.sessionService.setPlayMode(parseInt(this.session?.id || '0'), { playMode, liveSessionStarted }).subscribe({
-      next: (session: Session) => {
-        this.setSession(session);
-      },
-    });
+    const currentTimestamp = this.session?.isAudioSession ? null : Date.now();
+
+    this.sessionService
+      .setPlayMode(parseInt(this.session?.id || '0'), {
+        playMode,
+        liveSessionStart: playMode === PlayMode.Running ? currentTimestamp : undefined,
+        liveSessionEnd: playMode === PlayMode.Paused ? currentTimestamp : undefined,
+      })
+      .subscribe({
+        next: (session: Session) => {
+          this.setSession(session);
+        },
+      });
   }
 
   private setSession(updatedSession: Session) {

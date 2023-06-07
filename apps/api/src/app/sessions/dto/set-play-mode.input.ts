@@ -11,5 +11,9 @@ export class SetPlayModeInput {
 
   @Field({ nullable: true })
   @IsOptional()
-  liveSessionStarted?: Date;
+  liveSessionStart?: Date;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  liveSessionEnd?: Date;
 }
