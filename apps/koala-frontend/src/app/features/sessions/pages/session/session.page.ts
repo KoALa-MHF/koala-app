@@ -144,6 +144,10 @@ export class SessionPage implements OnInit, OnDestroy {
       .subscribeUpdated(this.sessionId)
       .subscribe((session?: Session) => {
         if (session) {
+          if (this.session?.playMode !== session.playMode) {
+            this.sessionService.notifyPlayModeChanged(session.playMode || PlayMode.Paused);
+          }
+
           this.setSession({ ...session, owner: this.session?.owner, isOwner: this.session?.isOwner });
 
           if (this.session) {

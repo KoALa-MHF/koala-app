@@ -1,8 +1,9 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Marker } from '../../types/marker.entity';
-import { MarkerType } from '../../../../graphql/generated/graphql';
+import { MarkerType, PlayMode } from '../../../../graphql/generated/graphql';
 import { MediaActions, MediaControlService } from '../../services/media-control.service';
 import { filter } from 'rxjs';
+import { SessionsService } from '../../services/sessions.service';
 
 @Component({
   selector: 'koala-marker-button',
@@ -24,7 +25,18 @@ export class MarkerButtonComponent implements OnInit {
     this.sliderValue = this.marker.valueRangeFrom || 0;
   }
 
-  constructor(private readonly mediaControlService: MediaControlService) {
+  constructor(
+    private readonly mediaControlService: MediaControlService,
+    private readonly sessionService: SessionsService
+  ) {
+    this.sessionService.playModeChanged$.subscribe({
+      next: (playMode: PlayMode) => {
+        if (this.marker.type === MarkerType.Range && playMode === PlayMode.Paused && this.isActive) {
+          this.rangeButton();
+        }
+      },
+    });
+
     this.mediaControlService.mediaPlayStateChanged$
       .pipe(filter((mediaAction) => mediaAction === MediaActions.Play))
       .subscribe({

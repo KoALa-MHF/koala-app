@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MutationResult } from 'apollo-angular';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
   CreateNewSessionGQL,
@@ -25,6 +25,9 @@ import { AccessTokenService } from '../../auth/services/access-token.service';
   providedIn: 'root',
 })
 export class SessionsService {
+  private playModeChangedSubject = new Subject<PlayMode>();
+  public playModeChanged$ = this.playModeChangedSubject.asObservable();
+
   constructor(
     private readonly getSessionGQL: GetSessionsGQL,
     private readonly getOneSessionGQL: GetOneSessionGQL,
@@ -128,6 +131,10 @@ export class SessionsService {
         },
       });
     });
+  }
+
+  notifyPlayModeChanged(playMode: PlayMode) {
+    this.playModeChangedSubject.next(playMode);
   }
 
   setPlayMode(sessionId: number, playModeInput: SetPlayModeInput) {

@@ -71,15 +71,22 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
         media: result.media,
       };
 
-      if (this.session.media == undefined) {
-        this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.NO_AUDIO_FILE', 'SESSION.ERROR_DIALOG.NO_AUDIO_FILE_SUM');
-        return;
+      if (this.session.isAudioSession) {
+        if (this.session.media == undefined) {
+          this.showErrorMessage(
+            'error',
+            'SESSION.ERROR_DIALOG.NO_AUDIO_FILE',
+            'SESSION.ERROR_DIALOG.NO_AUDIO_FILE_SUM'
+          );
+          return;
+        }
+
+        this.mediaControlService.uuid = this.session.id;
+        this.waveContainer = `waveContainer-${this.session.id}`;
+
+        await this.loadMediaData(this.session.media.id);
       }
 
-      this.mediaControlService.uuid = this.session.id;
-      this.waveContainer = `waveContainer-${this.session.id}`;
-
-      await this.loadMediaData(this.session.media.id);
       if (this.session.userSessions && this.session.userSessions.length > 0) {
         this.loadMarkerData();
         this.loadAnnotations(this.session.userSessions);
