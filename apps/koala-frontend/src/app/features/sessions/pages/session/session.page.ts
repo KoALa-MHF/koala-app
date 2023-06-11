@@ -105,7 +105,6 @@ export class SessionPage implements OnInit, OnDestroy {
 
       if (session) {
         this.setSidePanelFormData(session);
-        this.navigationService.setAnalysisNavEnabled(session.enableLiveAnalysis || false);
 
         const toolbars = session.toolbars;
 
@@ -149,7 +148,6 @@ export class SessionPage implements OnInit, OnDestroy {
         if (session) {
           this.sessionService.setFocusSession(session);
           this.setSidePanelFormData(session);
-          this.navigationService.setAnalysisNavEnabled(session.enableLiveAnalysis || false);
 
           if (session.liveSessionStart && session.playMode === PlayMode.Running) {
             this.timerSubscription?.unsubscribe();
