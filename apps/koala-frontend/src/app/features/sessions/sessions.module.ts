@@ -137,7 +137,6 @@ import { SessionTimerComponent } from './components/session-timer/session-timer.
     SpeedDialModule,
   ],
   providers: [
-    SessionsService,
     MediaService,
     MarkerService,
     MediaControlService,

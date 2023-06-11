@@ -356,8 +356,8 @@ export type Session = {
   end?: Maybe<Scalars['DateTime']>;
   /** ID for Session */
   id: Scalars['ID'];
-  liveSessionEnd?: Maybe<Scalars['DateTime']>;
-  liveSessionStart?: Maybe<Scalars['DateTime']>;
+  liveSessionEnd?: Maybe<Scalars['Float']>;
+  liveSessionStart?: Maybe<Scalars['Float']>;
   /** Associated Media File */
   media?: Maybe<Media>;
   /** Session Name */
@@ -385,8 +385,6 @@ export enum SessionStatus {
 }
 
 export type SetPlayModeInput = {
-  liveSessionEnd?: InputMaybe<Scalars['DateTime']>;
-  liveSessionStart?: InputMaybe<Scalars['DateTime']>;
   playMode?: PlayMode;
 };
 
@@ -466,7 +464,7 @@ export type UpdateSessionInput = {
   enableLiveAnalysis?: InputMaybe<Scalars['Boolean']>;
   enablePlayer?: InputMaybe<Scalars['Boolean']>;
   end?: InputMaybe<Scalars['DateTime']>;
-  liveSessionStart?: InputMaybe<Scalars['DateTime']>;
+  liveSessionStart?: InputMaybe<Scalars['Float']>;
   /** Assigned Media */
   mediaId?: InputMaybe<Scalars['Int']>;
   name?: InputMaybe<Scalars['String']>;
@@ -550,7 +548,7 @@ export type CreateNewSessionMutation = {
     enableLiveAnalysis?: boolean | null;
     playMode?: PlayMode | null;
     playPosition?: number | null;
-    liveSessionStart?: any | null;
+    liveSessionStart?: number | null;
     code: string;
     createdAt: any;
     updatedAt: any;
@@ -724,7 +722,7 @@ export type SetPlayModeMutation = {
     enableLiveAnalysis?: boolean | null;
     playMode?: PlayMode | null;
     playPosition?: number | null;
-    liveSessionStart?: any | null;
+    liveSessionStart?: number | null;
     code: string;
     createdAt: any;
     updatedAt: any;
@@ -781,8 +779,8 @@ export type GetSessionsQuery = {
     enableLiveAnalysis?: boolean | null;
     playMode?: PlayMode | null;
     playPosition?: number | null;
-    liveSessionStart?: any | null;
-    liveSessionEnd?: any | null;
+    liveSessionStart?: number | null;
+    liveSessionEnd?: number | null;
     code: string;
     createdAt: any;
     updatedAt: any;
@@ -819,8 +817,8 @@ export type GetOneSessionQuery = {
     enableLiveAnalysis?: boolean | null;
     playMode?: PlayMode | null;
     playPosition?: number | null;
-    liveSessionStart?: any | null;
-    liveSessionEnd?: any | null;
+    liveSessionStart?: number | null;
+    liveSessionEnd?: number | null;
     code: string;
     createdAt: any;
     updatedAt: any;
@@ -907,8 +905,8 @@ export type OnSessionUpdatedSubscription = {
     enableLiveAnalysis?: boolean | null;
     playMode?: PlayMode | null;
     playPosition?: number | null;
-    liveSessionStart?: any | null;
-    liveSessionEnd?: any | null;
+    liveSessionStart?: number | null;
+    liveSessionEnd?: number | null;
     toolbars: Array<{
       __typename?: 'Toolbar';
       id: string;

@@ -235,33 +235,6 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
           this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
         }
         break;
-      case MediaActions.SkipForward:
-        try {
-          this.mediaControlService.skipForward();
-        } catch (error) {
-          this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
-        }
-        break;
-      case MediaActions.SkipBackward:
-        try {
-          this.mediaControlService.skipBackward();
-        } catch (error) {
-          this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
-        }
-        break;
-      case MediaActions.VolumeChange:
-        if (evt.value != undefined) {
-          try {
-            this.mediaControlService.onVolumeChange(evt.value);
-          } catch (error) {
-            this.showErrorMessage(
-              'error',
-              'SESSION.ERROR_DIALOG.MEDIA_CONTROLS',
-              'SESSION.ERROR_DIALOG.ERRORS.SUMMARY'
-            );
-          }
-        }
-        break;
       case MediaActions.Mute:
         if (evt.value != undefined) {
           try {

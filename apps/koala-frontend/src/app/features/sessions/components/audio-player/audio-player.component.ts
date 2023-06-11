@@ -35,16 +35,4 @@ export class AudioPlayerComponent {
     }
     this.mediaEvent.emit({ actions: MediaActions.Stop });
   }
-
-  onSkipForward() {
-    this.mediaEvent.emit({ actions: MediaActions.SkipForward });
-  }
-
-  onSkipBackward() {
-    this.mediaEvent.emit({ actions: MediaActions.SkipBackward });
-  }
-
-  onVolumeChange(volume: any) {
-    this.mediaEvent.emit({ actions: MediaActions.VolumeChange, value: volume });
-  }
 }

@@ -46,3 +46,5 @@ uploads
 .env.development.json
 .env
 .env.json
+
+*.sql

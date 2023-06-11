@@ -20,13 +20,16 @@ import {
 } from '../../../graphql/generated/graphql';
 import { Session } from '../types/session.entity';
 import { AccessTokenService } from '../../auth/services/access-token.service';
+import { MediaControlService } from './media-control.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SessionsService {
-  private playModeChangedSubject = new Subject<PlayMode>();
-  public playModeChanged$ = this.playModeChangedSubject.asObservable();
+  private focusSession?: Session;
+
+  private focusSessionSubject = new Subject<Session>();
+  public focusSessionChanged$ = this.focusSessionSubject.asObservable();
 
   constructor(
     private readonly getSessionGQL: GetSessionsGQL,
@@ -38,7 +41,8 @@ export class SessionsService {
     private readonly getOneSessionBySessionCodeGQL: GetOneSessionBySessionCodeGQL,
     private readonly setPlayModeGQL: SetPlayModeGQL,
     private readonly setPlayPositionGQL: SetPlayPositionGQL,
-    private readonly accessTokenService: AccessTokenService
+    private readonly accessTokenService: AccessTokenService,
+    private readonly mediaControlService: MediaControlService
   ) {}
 
   getAll(): Observable<Session[]> {
@@ -133,10 +137,6 @@ export class SessionsService {
     });
   }
 
-  notifyPlayModeChanged(playMode: PlayMode) {
-    this.playModeChangedSubject.next(playMode);
-  }
-
   setPlayMode(sessionId: number, playModeInput: SetPlayModeInput) {
     return this.setPlayModeGQL.mutate({ sessionId, setPlayModeInput: playModeInput }).pipe(
       map((response) => response.data?.setPlayMode),
@@ -153,6 +153,21 @@ export class SessionsService {
 
   setPlayPosition(sessionId: number, playPosition: number) {
     return this.setPlayPositionGQL.mutate({ sessionId, setPlayPositionInput: { playPosition } });
+  }
+
+  setFocusSession(session: Session) {
+    if (this.focusSession && this.focusSession.id === session.id) {
+      //take over owner and isAudio information
+      session.isOwner = this.focusSession.isOwner;
+      session.owner = this.focusSession.owner;
+    }
+
+    this.focusSession = session;
+    this.focusSessionSubject.next(this.focusSession);
+  }
+
+  getFocusSession(): Session | undefined {
+    return this.focusSession;
   }
 
   private addIsOwner(session: Session) {

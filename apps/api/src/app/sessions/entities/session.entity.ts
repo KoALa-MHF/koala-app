@@ -156,11 +156,11 @@ export class Session extends BaseEntity {
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  liveSessionStart: Date;
+  liveSessionStart: number;
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  liveSessionEnd: Date;
+  liveSessionEnd: number;
 
   @BeforeInsert()
   async generateCode() {
