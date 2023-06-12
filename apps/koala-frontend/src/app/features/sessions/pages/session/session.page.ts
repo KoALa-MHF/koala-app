@@ -95,7 +95,79 @@ export class SessionPage implements OnInit, OnDestroy {
         console.log(e);
       },
     });
-    this.sessionService.getOne(this.sessionId).subscribe(async (currentSession) => {
+
+    this.session$.subscribe((session?: Session) => {
+      if (session) {
+        this.myUserSession = this.sessionService
+          .getFocusSession()
+          ?.userSessions?.filter((userSession) => userSession.owner?.id === this.userID.toString())[0];
+        this.setSidePanelFormData(session);
+
+        if (session.liveSessionStart && session.playMode === PlayMode.Running) {
+          this.timerSubscription?.unsubscribe();
+          this.timer = '0:00';
+
+          this.timerSubscription = timer(1000, 1000).subscribe(() => {
+            const timeDiff = this.sessionControlService.getCurrentTime() / 1000;
+
+            const minutes = Math.floor(timeDiff / 60);
+            const seconds = Math.floor(timeDiff % 60);
+            let secondsLabel;
+
+            if (seconds < 10) {
+              secondsLabel = '0' + seconds;
+            } else {
+              secondsLabel = seconds.toString();
+            }
+
+            this.timer = minutes + ':' + secondsLabel;
+          });
+        } else {
+          this.timerSubscription?.unsubscribe();
+          this.timer = '0:00';
+        }
+      }
+    });
+
+    this.sessionService.setFocusSession(this.sessionId).subscribe(async (focusSession: Session) => {
+      this.setSidePanelFormData(focusSession);
+
+      const toolbars = focusSession.toolbars;
+
+      if (toolbars) {
+        const toolbar = toolbars[0];
+
+        this.toolbarUpdatedSubscription = this.toolbarService.subscribeUpdated(parseInt(toolbar.id)).subscribe({
+          next: (data) => {
+            const newMarkers = data.data?.toolbarUpdated.markers;
+            if (newMarkers) {
+              newMarkers.forEach((newMarker) => {
+                const markerIndex = this.markers.findIndex((m) => m.id.toString() == newMarker.markerId);
+                this.markers[markerIndex].visible = newMarker.visible;
+              });
+              //trigger change detection
+              this.markers = [
+                ...this.markers,
+              ];
+            }
+          },
+        });
+      }
+
+      if (focusSession.isAudioSession && focusSession.media) {
+        this.mediaControlService.uuid = focusSession.id;
+        this.waveContainer = `waveContainer-${focusSession.id}`;
+
+        await this.loadMediaData(focusSession.media.id);
+      }
+
+      const userSessions = focusSession.userSessions?.filter((s) => s.id == this.userID);
+      if (userSessions) {
+        this.loadMarkerData(userSessions);
+      }
+    });
+
+    /*this.sessionService.getOne(this.sessionId).subscribe(async (currentSession) => {
       this.setSession({
         ...currentSession,
         media: currentSession.media,
@@ -140,40 +212,9 @@ export class SessionPage implements OnInit, OnDestroy {
           this.loadMarkerData(userSessions);
         }
       }
-    });
+    });*/
 
-    this.sessionUpdatedSubscription = this.sessionService
-      .subscribeUpdated(this.sessionId)
-      .subscribe((session?: Session) => {
-        if (session) {
-          this.sessionService.setFocusSession(session);
-          this.setSidePanelFormData(session);
-
-          if (session.liveSessionStart && session.playMode === PlayMode.Running) {
-            this.timerSubscription?.unsubscribe();
-            this.timer = '0:00';
-
-            this.timerSubscription = timer(1000, 1000).subscribe(() => {
-              const timeDiff = this.sessionControlService.getCurrentTime() / 1000;
-
-              const minutes = Math.floor(timeDiff / 60);
-              const seconds = Math.floor(timeDiff % 60);
-              let secondsLabel;
-
-              if (seconds < 10) {
-                secondsLabel = '0' + seconds;
-              } else {
-                secondsLabel = seconds.toString();
-              }
-
-              this.timer = minutes + ':' + secondsLabel;
-            });
-          } else {
-            this.timerSubscription?.unsubscribe();
-            this.timer = '0:00';
-          }
-        }
-      });
+    this.sessionUpdatedSubscription = this.sessionService.subscribeUpdated(this.sessionId);
   }
 
   ngOnDestroy(): void {
@@ -531,13 +572,6 @@ export class SessionPage implements OnInit, OnDestroy {
         },
       });
     }
-  }
-
-  private setSession(updatedSession: Session) {
-    this.sessionService.setFocusSession(updatedSession);
-    this.myUserSession = this.sessionService
-      .getFocusSession()
-      ?.userSessions?.filter((userSession) => userSession.owner?.id === this.userID.toString())[0];
   }
 
   get sessionDetailsFormGroup(): FormGroup {

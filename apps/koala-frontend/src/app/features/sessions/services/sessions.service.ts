@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MutationResult } from 'apollo-angular';
 import { Observable, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import {
   CreateNewSessionGQL,
   DeleteSessionGQL,
@@ -89,7 +89,7 @@ export class SessionsService {
     return this.deleteSessionGQL.mutate({ id });
   }
 
-  subscribeUpdated(id: number): Observable<Session | undefined> {
+  subscribeUpdated(id: number) {
     return this.onSessionUpdatedGQL
       .subscribe({
         sessionId: id.toString(),
@@ -115,7 +115,15 @@ export class SessionsService {
 
           return session;
         })
-      );
+      )
+      .subscribe({
+        next: (session?: Session) => {
+          this.focusSession = session;
+          if (this.focusSession) {
+            this.focusSessionSubject.next(this.focusSession);
+          }
+        },
+      });
   }
 
   copySession(sessionId: number): Promise<Session | null> {
@@ -166,9 +174,13 @@ export class SessionsService {
     return this.setPlayPositionGQL.mutate({ sessionId, setPlayPositionInput: { playPosition } });
   }
 
-  setFocusSession(session: Session) {
-    this.focusSession = session;
-    this.focusSessionSubject.next(this.focusSession);
+  setFocusSession(sessionId: number) {
+    return this.getOne(sessionId).pipe(
+      tap((session: Session) => {
+        this.focusSession = session;
+        this.focusSessionSubject.next(this.focusSession);
+      })
+    );
   }
 
   getFocusSession(): Session | undefined {
