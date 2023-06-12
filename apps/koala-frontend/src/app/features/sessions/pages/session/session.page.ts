@@ -11,13 +11,15 @@ import { environment } from '../../../../../environments/environment';
 import { Session } from '../../types/session.entity';
 import { DataPoint, Display } from '../../components/annotation/annotation.component';
 import { Marker } from '../../types/marker.entity';
-import { MarkerType } from '../../../../graphql/generated/graphql';
+import { MarkerType, PlayMode } from '../../../../graphql/generated/graphql';
 import { ToolbarMode } from '../../components/marker-toolbar/marker-toolbar.component';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
-import { filter } from 'rxjs';
+import { filter, timer } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { ToolbarsService } from '../../services/toolbars.service';
 import { NavigationService } from '../../services/navigation.service';
+import { UserSession } from '../../types/user-session.entity';
+import { SessionControlService } from '../../services/session-control.service';
 
 @Component({
   selector: 'koala-app-session',
@@ -29,11 +31,11 @@ import { NavigationService } from '../../services/navigation.service';
 export class SessionPage implements OnInit, OnDestroy {
   sidePanelForm: FormGroup;
   ToolbarMode = ToolbarMode;
+  PlayMode = PlayMode;
 
   waveContainer!: string;
   mediaUri: string = environment.production ? 'https://koala-app.de/api/media' : 'http://localhost:4200/api/media';
   sessionId = 0;
-  session?: Session;
   AnnotationData: Map<number, Array<DataPoint>> = new Map<number, Array<DataPoint>>();
   AnnotationDislay = Display;
   markers: Marker[] = [];
@@ -42,11 +44,15 @@ export class SessionPage implements OnInit, OnDestroy {
   audioPaused = true;
   showSideBar = false;
   userID = -1;
+  timer = '0:00';
+  private myUserSession?: UserSession;
 
   sessionUpdatedSubscription?: Subscription;
   toolbarUpdatedSubscription?: Subscription;
+  private timerSubscription?: Subscription;
 
   sessionSettingsToggled$ = this.navigationService.sessionSettingsSidePanelToggled$;
+  session$ = this.sessionService.focusSessionChanged$;
 
   constructor(
     private readonly sessionService: SessionsService,
@@ -59,7 +65,8 @@ export class SessionPage implements OnInit, OnDestroy {
     private readonly translateService: TranslateService,
     private readonly formBuilder: FormBuilder,
     private readonly toolbarService: ToolbarsService,
-    private readonly navigationService: NavigationService
+    private readonly navigationService: NavigationService,
+    private readonly sessionControlService: SessionControlService
   ) {
     this.sidePanelForm = this.formBuilder.group({
       details: this.formBuilder.group({
@@ -88,16 +95,44 @@ export class SessionPage implements OnInit, OnDestroy {
         console.log(e);
       },
     });
-    this.sessionService.getOne(this.sessionId).subscribe(async (session) => {
-      this.session = {
-        ...session,
-        media: session.media,
-      };
 
-      this.setSidePanelFormData(this.session);
-      this.navigationService.setAnalysisNavEnabled(this.session.enableLiveAnalysis || false);
+    this.session$.subscribe((session?: Session) => {
+      if (session) {
+        this.myUserSession = this.sessionService
+          .getFocusSession()
+          ?.userSessions?.filter((userSession) => userSession.owner?.id === this.userID.toString())[0];
+        this.setSidePanelFormData(session);
 
-      const toolbars = this.session.toolbars;
+        if (session.liveSessionStart && session.playMode === PlayMode.Running) {
+          this.timerSubscription?.unsubscribe();
+          this.timer = '0:00';
+
+          this.timerSubscription = timer(1000, 1000).subscribe(() => {
+            const timeDiff = this.sessionControlService.getCurrentTime() / 1000;
+
+            const minutes = Math.floor(timeDiff / 60);
+            const seconds = Math.floor(timeDiff % 60);
+            let secondsLabel;
+
+            if (seconds < 10) {
+              secondsLabel = '0' + seconds;
+            } else {
+              secondsLabel = seconds.toString();
+            }
+
+            this.timer = minutes + ':' + secondsLabel;
+          });
+        } else {
+          this.timerSubscription?.unsubscribe();
+          this.timer = '0:00';
+        }
+      }
+    });
+
+    this.sessionService.setFocusSession(this.sessionId).subscribe(async (focusSession: Session) => {
+      this.setSidePanelFormData(focusSession);
+
+      const toolbars = focusSession.toolbars;
 
       if (toolbars) {
         const toolbar = toolbars[0];
@@ -119,36 +154,76 @@ export class SessionPage implements OnInit, OnDestroy {
         });
       }
 
-      if (this.session.media == undefined) {
-        this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.NO_AUDIO_FILE', 'SESSION.ERROR_DIALOG.NO_AUDIO_FILE_SUM');
-        return;
+      if (focusSession.isAudioSession && focusSession.media) {
+        this.mediaControlService.uuid = focusSession.id;
+        this.waveContainer = `waveContainer-${focusSession.id}`;
+
+        await this.loadMediaData(focusSession.media.id);
       }
 
-      this.mediaControlService.uuid = this.session.id;
-      this.waveContainer = `waveContainer-${this.session.id}`;
-
-      await this.loadMediaData(this.session.media.id);
-      const userSessions = this.session.userSessions?.filter((s) => s.id == this.userID);
+      const userSessions = focusSession.userSessions?.filter((s) => s.id == this.userID);
       if (userSessions) {
         this.loadMarkerData(userSessions);
       }
     });
 
-    this.sessionUpdatedSubscription = this.sessionService
-      .subscribeUpdated(this.sessionId)
-      .subscribe((session?: Session) => {
-        if (session) {
-          this.session = { ...session, owner: this.session?.owner, isOwner: this.session?.isOwner };
-          this.setSidePanelFormData(this.session);
-          this.navigationService.setAnalysisNavEnabled(this.session.enableLiveAnalysis || false);
-        }
+    /*this.sessionService.getOne(this.sessionId).subscribe(async (currentSession) => {
+      this.setSession({
+        ...currentSession,
+        media: currentSession.media,
       });
+
+      const session = this.sessionService.getFocusSession();
+
+      if (session) {
+        this.setSidePanelFormData(session);
+
+        const toolbars = session.toolbars;
+
+        if (toolbars) {
+          const toolbar = toolbars[0];
+
+          this.toolbarUpdatedSubscription = this.toolbarService.subscribeUpdated(parseInt(toolbar.id)).subscribe({
+            next: (data) => {
+              const newMarkers = data.data?.toolbarUpdated.markers;
+              if (newMarkers) {
+                newMarkers.forEach((newMarker) => {
+                  const markerIndex = this.markers.findIndex((m) => m.id.toString() == newMarker.markerId);
+                  this.markers[markerIndex].visible = newMarker.visible;
+                });
+                //trigger change detection
+                this.markers = [
+                  ...this.markers,
+                ];
+              }
+            },
+          });
+        }
+
+        if (session.isAudioSession && session.media) {
+          this.mediaControlService.uuid = session.id;
+          this.waveContainer = `waveContainer-${session.id}`;
+
+          await this.loadMediaData(session.media.id);
+        }
+
+        const userSessions = session.userSessions?.filter((s) => s.id == this.userID);
+        if (userSessions) {
+          this.loadMarkerData(userSessions);
+        }
+      }
+    });*/
+
+    this.sessionUpdatedSubscription = this.sessionService.subscribeUpdated(this.sessionId);
   }
 
   ngOnDestroy(): void {
-    this.mediaControlService.stop();
+    if (this.sessionService.getFocusSession()?.isAudioSession) {
+      this.sessionControlService.stopSession();
+    }
     this.sessionUpdatedSubscription?.unsubscribe();
     this.toolbarUpdatedSubscription?.unsubscribe();
+    this.timerSubscription?.unsubscribe();
   }
 
   private loadMediaData(id: string): Promise<void> {
@@ -180,7 +255,7 @@ export class SessionPage implements OnInit, OnDestroy {
             .pipe(filter((mediaAction) => mediaAction === MediaActions.Ready))
             .subscribe({
               next: () => {
-                this.totalAudioTime = this.mediaControlService.getDuration();
+                this.totalAudioTime = this.sessionControlService.getDuration();
                 resolve();
               },
             });
@@ -216,7 +291,7 @@ export class SessionPage implements OnInit, OnDestroy {
   onMarkerDisplayChange(value: boolean, marker: Marker) {
     this.markers = this.markers.map((m) => (m.id == marker.id ? { ...m, visible: value } : m));
 
-    const toolbars = this.session?.toolbars;
+    const toolbars = this.sessionService.getFocusSession()?.toolbars;
 
     if (toolbars) {
       const toolbar = toolbars[0];
@@ -235,7 +310,7 @@ export class SessionPage implements OnInit, OnDestroy {
   }
 
   private loadMarkerData(userSessions: any[]): void {
-    const toolbars = this.session?.toolbars;
+    const toolbars = this.sessionService.getFocusSession()?.toolbars;
     if (toolbars) {
       const toolbar = toolbars[0];
       const toolbarMarkers = toolbar?.markers || [];
@@ -283,12 +358,11 @@ export class SessionPage implements OnInit, OnDestroy {
   }
 
   onMarkerButtonEvent({ marker, value }: { marker: Marker; value?: number }) {
-    if (this.audioPaused) {
+    /*if (this.audioPaused) {
       return;
-    }
+    }*/
     let aData = this.AnnotationData.get(marker.id);
     if (aData == undefined) {
-      // wtf typescript, how is this still undefined...
       aData = this.AnnotationData.set(marker.id, new Array<DataPoint>()).get(marker.id);
     } else {
       if (marker.type === MarkerType.Event) {
@@ -304,7 +378,8 @@ export class SessionPage implements OnInit, OnDestroy {
   }
 
   onMarkerEvent(m: Marker, aData: DataPoint[]) {
-    const t = this.mediaControlService.getCurrentTime();
+    const t = this.sessionControlService.getCurrentTime();
+
     this.AnnotationData.get(m.id)?.push({
       startTime: t,
       endTime: 0,
@@ -315,8 +390,8 @@ export class SessionPage implements OnInit, OnDestroy {
     });
     this.annotationService
       .create({
-        start: Math.floor(t * 1000),
-        userSessionId: this.userID,
+        start: t,
+        userSessionId: this.myUserSession?.id || 0,
         markerId: m.id,
       })
       .subscribe({
@@ -328,16 +403,18 @@ export class SessionPage implements OnInit, OnDestroy {
   }
 
   onMarkerRange(m: Marker, aData: DataPoint[]) {
-    const t = this.mediaControlService.getCurrentTime();
+    const t = this.sessionControlService.getCurrentTime();
+
     if (aData.length > 0) {
       const latest = aData.at(-1);
       if (latest?.endTime == 0) {
-        latest.endTime = this.mediaControlService.getCurrentTime();
+        latest.endTime = this.sessionControlService.getCurrentTime();
+
         this.annotationService
           .create({
-            start: Math.floor(latest.startTime * 1000),
-            end: Math.floor(latest.endTime * 1000),
-            userSessionId: this.userID,
+            start: latest.startTime,
+            end: latest.endTime,
+            userSessionId: this.myUserSession?.id || 0,
             markerId: m.id,
           })
           .subscribe({
@@ -361,10 +438,8 @@ export class SessionPage implements OnInit, OnDestroy {
 
   onMarkerSliderRange(m: Marker, aData: DataPoint[], value: number) {
     const strength = value;
-    if (this.audioPaused) {
-      return;
-    }
-    const t = this.mediaControlService.getCurrentTime();
+
+    const t = this.sessionControlService.getCurrentTime();
     if (aData.length == 0) {
       aData.push({
         startTime: t,
@@ -377,16 +452,16 @@ export class SessionPage implements OnInit, OnDestroy {
       return;
     }
     const latest = aData.at(-1);
-    if (latest && latest.strength != strength) {
+    if (latest) {
       if (latest.endTime == 0) {
         latest.endTime = t;
 
         this.annotationService
           .create({
-            start: Math.floor(latest.startTime * 1000),
-            end: Math.floor(latest.endTime * 1000),
+            start: Math.floor(latest.startTime),
+            end: Math.floor(latest.endTime),
             value: latest.strength,
-            userSessionId: this.userID,
+            userSessionId: this.myUserSession?.id || 0,
             markerId: m.id,
           })
           .subscribe({
@@ -414,43 +489,16 @@ export class SessionPage implements OnInit, OnDestroy {
     switch (evt.actions) {
       case MediaActions.Play:
         try {
-          this.mediaControlService.togglePlay();
+          this.sessionControlService.startSession();
         } catch (error) {
           this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
         }
         break;
       case MediaActions.Stop:
         try {
-          this.mediaControlService.stop();
+          this.sessionControlService.stopSession();
         } catch (error) {
           this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
-        }
-        break;
-      case MediaActions.SkipForward:
-        try {
-          this.mediaControlService.skipForward();
-        } catch (error) {
-          this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
-        }
-        break;
-      case MediaActions.SkipBackward:
-        try {
-          this.mediaControlService.skipBackward();
-        } catch (error) {
-          this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
-        }
-        break;
-      case MediaActions.VolumeChange:
-        if (evt.value != undefined) {
-          try {
-            this.mediaControlService.onVolumeChange(evt.value);
-          } catch (error) {
-            this.showErrorMessage(
-              'error',
-              'SESSION.ERROR_DIALOG.MEDIA_CONTROLS',
-              'SESSION.ERROR_DIALOG.ERRORS.SUMMARY'
-            );
-          }
         }
         break;
       case MediaActions.Mute:
@@ -488,7 +536,7 @@ export class SessionPage implements OnInit, OnDestroy {
     this.sidePanelForm.get('details')?.valueChanges.subscribe((details) => {
       if (this.sidePanelForm.get('details')?.dirty) {
         this.sessionService
-          .update(parseInt(this.session?.id || '0'), {
+          .update(parseInt(this.sessionService.getFocusSession()?.id || '0'), {
             editable: details.editable,
             enablePlayer: details.enablePlayer,
             displaySampleSolution: details.displaySampleSolution,
@@ -508,6 +556,22 @@ export class SessionPage implements OnInit, OnDestroy {
 
   onSidebarHide() {
     this.navigationService.setSessionSettingsSidePanelVisible(false);
+  }
+
+  onPlayModeChange(playMode: PlayMode) {
+    if (playMode === PlayMode.Running) {
+      this.sessionControlService.startSession().subscribe({
+        next: () => {
+          console.log('Session Started');
+        },
+      });
+    } else {
+      this.sessionControlService.stopSession().subscribe({
+        next: () => {
+          console.log('Session Stopped');
+        },
+      });
+    }
   }
 
   get sessionDetailsFormGroup(): FormGroup {

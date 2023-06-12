@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MutationResult } from 'apollo-angular';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { filter, map, tap } from 'rxjs/operators';
 import {
   CreateNewSessionGQL,
   DeleteSessionGQL,
@@ -16,14 +16,21 @@ import {
   PlayMode,
   SetPlayModeGQL,
   SetPlayPositionGQL,
+  SetPlayModeInput,
 } from '../../../graphql/generated/graphql';
 import { Session } from '../types/session.entity';
 import { AccessTokenService } from '../../auth/services/access-token.service';
+import { MediaControlService } from './media-control.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SessionsService {
+  private focusSession?: Session;
+
+  private focusSessionSubject = new Subject<Session>();
+  public focusSessionChanged$ = this.focusSessionSubject.asObservable();
+
   constructor(
     private readonly getSessionGQL: GetSessionsGQL,
     private readonly getOneSessionGQL: GetOneSessionGQL,
@@ -34,13 +41,15 @@ export class SessionsService {
     private readonly getOneSessionBySessionCodeGQL: GetOneSessionBySessionCodeGQL,
     private readonly setPlayModeGQL: SetPlayModeGQL,
     private readonly setPlayPositionGQL: SetPlayPositionGQL,
-    private readonly accessTokenService: AccessTokenService
+    private readonly accessTokenService: AccessTokenService,
+    private readonly mediaControlService: MediaControlService
   ) {}
 
   getAll(): Observable<Session[]> {
     return this.getSessionGQL.fetch({}, { fetchPolicy: 'no-cache' }).pipe(
       map((data) => data.data.sessions),
-      map((sessions) => sessions.map((session) => this.addIsOwner(session)))
+      map((sessions) => sessions.map((session) => this.addIsOwner(session))),
+      map((sessions) => sessions.map((session) => this.addIsAudioSession(session)))
     );
   }
 
@@ -60,7 +69,8 @@ export class SessionsService {
       )
       .pipe(
         map((data) => data.data.session),
-        map((session) => this.addIsOwner(session))
+        map((session) => this.addIsOwner(session)),
+        map((session) => this.addIsAudioSession(session))
       );
   }
 
@@ -79,7 +89,7 @@ export class SessionsService {
     return this.deleteSessionGQL.mutate({ id });
   }
 
-  subscribeUpdated(id: number): Observable<Session | undefined> {
+  subscribeUpdated(id: number) {
     return this.onSessionUpdatedGQL
       .subscribe({
         sessionId: id.toString(),
@@ -88,12 +98,32 @@ export class SessionsService {
         map((response) => response.data?.sessionUpdated),
         map((session?: Session) => {
           if (session) {
+            session = this.addIsAudioSession(session);
             return this.addIsOwner(session);
           } else {
             return session;
           }
+        }),
+        map((session?: Session) => {
+          if (session && this.focusSession && this.focusSession.id === session.id) {
+            //take over owner and isAudio information
+            session.isOwner = this.focusSession.isOwner;
+            session.owner = this.focusSession.owner;
+            session.media = this.focusSession.media;
+            session = this.addIsAudioSession(session);
+          }
+
+          return session;
         })
-      );
+      )
+      .subscribe({
+        next: (session?: Session) => {
+          this.focusSession = session;
+          if (this.focusSession) {
+            this.focusSessionSubject.next(this.focusSession);
+          }
+        },
+      });
   }
 
   copySession(sessionId: number): Promise<Session | null> {
@@ -126,15 +156,42 @@ export class SessionsService {
     });
   }
 
-  setPlayMode(sessionId: number, playMode: PlayMode) {
-    return this.setPlayModeGQL.mutate({ sessionId, setPlayModeInput: { playMode } });
+  setPlayMode(sessionId: number, playModeInput: SetPlayModeInput) {
+    return this.setPlayModeGQL.mutate({ sessionId, setPlayModeInput: playModeInput }).pipe(
+      map((response) => response.data?.setPlayMode),
+      map((session?: Session): Session => {
+        if (session) {
+          return this.addIsOwner(session);
+        } else {
+          throw new Error('Session Response Empty After SetPlayMode');
+        }
+      }),
+      map((session) => this.addIsAudioSession(session))
+    );
   }
 
   setPlayPosition(sessionId: number, playPosition: number) {
     return this.setPlayPositionGQL.mutate({ sessionId, setPlayPositionInput: { playPosition } });
   }
 
+  setFocusSession(sessionId: number) {
+    return this.getOne(sessionId).pipe(
+      tap((session: Session) => {
+        this.focusSession = session;
+        this.focusSessionSubject.next(this.focusSession);
+      })
+    );
+  }
+
+  getFocusSession(): Session | undefined {
+    return this.focusSession;
+  }
+
   private addIsOwner(session: Session) {
     return { ...session, isOwner: this.accessTokenService.getLoggedInUserId().toString() === session.owner?.id };
+  }
+
+  private addIsAudioSession(session: Session): Session {
+    return { ...session, isAudioSession: !!session.media?.id };
   }
 }

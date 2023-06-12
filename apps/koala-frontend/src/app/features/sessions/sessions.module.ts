@@ -27,6 +27,7 @@ import { SidebarModule } from 'primeng/sidebar';
 import { DividerModule } from 'primeng/divider';
 import { ToolbarModule } from 'primeng/toolbar';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { SpeedDialModule } from 'primeng/speeddial';
 
 import { QRCodeModule } from 'angularx-qrcode';
 
@@ -69,6 +70,7 @@ import { SessionAnalysisPage } from './pages/session-analysis/session-analysis.p
 import { VisibleFilterPipe } from './components/marker-toolbar/marker-visible.pipe';
 import { SessionOwnerPipe } from './pipes/session-owner.pipe';
 import { VolumeControlComponent } from './components/volume-control/volume-control.component';
+import { SessionTimerComponent } from './components/session-timer/session-timer.component';
 
 @NgModule({
   declarations: [
@@ -103,6 +105,7 @@ import { VolumeControlComponent } from './components/volume-control/volume-contr
     VisibleFilterPipe,
     SessionOwnerPipe,
     VolumeControlComponent,
+    SessionTimerComponent,
   ],
   imports: [
     SharedModule,
@@ -131,12 +134,11 @@ import { VolumeControlComponent } from './components/volume-control/volume-contr
     DividerModule,
     ToolbarModule,
     InputNumberModule,
+    SpeedDialModule,
   ],
   providers: [
-    SessionsService,
     MediaService,
     MarkerService,
-    MediaControlService,
     ToolbarsService,
     UserSessionService,
     AnnotationService,

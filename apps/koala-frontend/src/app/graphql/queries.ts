@@ -15,7 +15,8 @@ const GET_SESSIONS = gql`
       enableLiveAnalysis
       playMode
       playPosition
-      liveSessionStarted
+      liveSessionStart
+      liveSessionEnd
       code
       userSessions {
         id
@@ -62,7 +63,8 @@ const GET_ONE_SESSION = gql`
       enableLiveAnalysis
       playMode
       playPosition
-      liveSessionStarted
+      liveSessionStart
+      liveSessionEnd
       code
       media {
         id
@@ -85,6 +87,7 @@ const GET_ONE_SESSION = gql`
         owner {
           id
           email
+          displayName
         }
         annotations {
           id

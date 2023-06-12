@@ -11,7 +11,9 @@
   *ngIf="(marker.type === MarkerType.Event || marker.type === MarkerType.Range) && marker.visible === true"
 >
   <koala-marker-icon [iconCode]="marker.icon"></koala-marker-icon>
-  <span [style.margin-left]="marker.icon && marker.abbreviation ? '10px' : '0px'">{{ marker.abbreviation }}</span>
+  <span [style.margin-left]="marker.icon && marker.abbreviation ? '10px' : '0px'">{{
+    isActive ? 'STOP' : marker.abbreviation
+  }}</span>
 </button>
 
 <div
@@ -20,12 +22,13 @@
   [class.marker-button-slider]="marker.type === MarkerType.Slider"
   class="marker-button slider-marker"
 >
-  <p-slider
-    [disabled]="!enabled"
-    style="width: 100%"
-    [(ngModel)]="sliderValue"
-    (onSlideEnd)="onSlideEnd()"
-    [min]="marker.valueRangeFrom!"
-    [max]="marker.valueRangeTo!"
-  ></p-slider>
+  <div style="width: 100%">
+    <p-slider
+      [disabled]="!enabled"
+      [(ngModel)]="sliderValue"
+      (onSlideEnd)="onSlideEnd()"
+      [min]="marker.valueRangeFrom!"
+      [max]="marker.valueRangeTo!"
+    ></p-slider>
+  </div>
 </div>

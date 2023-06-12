@@ -356,7 +356,8 @@ export type Session = {
   end?: Maybe<Scalars['DateTime']>;
   /** ID for Session */
   id: Scalars['ID'];
-  liveSessionStarted?: Maybe<Scalars['DateTime']>;
+  liveSessionEnd?: Maybe<Scalars['Float']>;
+  liveSessionStart?: Maybe<Scalars['Float']>;
   /** Associated Media File */
   media?: Maybe<Media>;
   /** Session Name */
@@ -463,7 +464,7 @@ export type UpdateSessionInput = {
   enableLiveAnalysis?: InputMaybe<Scalars['Boolean']>;
   enablePlayer?: InputMaybe<Scalars['Boolean']>;
   end?: InputMaybe<Scalars['DateTime']>;
-  liveSessionStarted?: InputMaybe<Scalars['DateTime']>;
+  liveSessionStart?: InputMaybe<Scalars['Float']>;
   /** Assigned Media */
   mediaId?: InputMaybe<Scalars['Int']>;
   name?: InputMaybe<Scalars['String']>;
@@ -545,6 +546,9 @@ export type CreateNewSessionMutation = {
     enablePlayer?: boolean | null;
     displaySampleSolution?: boolean | null;
     enableLiveAnalysis?: boolean | null;
+    playMode?: PlayMode | null;
+    playPosition?: number | null;
+    liveSessionStart?: number | null;
     code: string;
     createdAt: any;
     updatedAt: any;
@@ -704,7 +708,47 @@ export type SetPlayModeMutationVariables = Exact<{
 
 export type SetPlayModeMutation = {
   __typename?: 'Mutation';
-  setPlayMode: { __typename?: 'Session'; id: string; playMode?: PlayMode | null };
+  setPlayMode: {
+    __typename?: 'Session';
+    id: string;
+    name: string;
+    description?: string | null;
+    status?: SessionStatus | null;
+    start?: any | null;
+    end?: any | null;
+    editable?: boolean | null;
+    enablePlayer?: boolean | null;
+    displaySampleSolution?: boolean | null;
+    enableLiveAnalysis?: boolean | null;
+    playMode?: PlayMode | null;
+    playPosition?: number | null;
+    liveSessionStart?: number | null;
+    code: string;
+    createdAt: any;
+    updatedAt: any;
+    media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
+    toolbars: Array<{
+      __typename?: 'Toolbar';
+      id: string;
+      createdAt: any;
+      updatedAt: any;
+      markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+    }>;
+    userSessions: Array<{
+      __typename?: 'UserSession';
+      id: number;
+      owner: { __typename?: 'User'; id: string; email?: string | null };
+      annotations: Array<{
+        __typename?: 'Annotation';
+        id: number;
+        end?: number | null;
+        start: number;
+        value?: number | null;
+        marker: { __typename?: 'Marker'; id: number; color: string };
+      }>;
+    }>;
+    owner: { __typename?: 'User'; id: string; createdAt: any; updatedAt: any };
+  };
 };
 
 export type SetPlayPositionMutationVariables = Exact<{
@@ -735,7 +779,8 @@ export type GetSessionsQuery = {
     enableLiveAnalysis?: boolean | null;
     playMode?: PlayMode | null;
     playPosition?: number | null;
-    liveSessionStarted?: any | null;
+    liveSessionStart?: number | null;
+    liveSessionEnd?: number | null;
     code: string;
     createdAt: any;
     updatedAt: any;
@@ -772,7 +817,8 @@ export type GetOneSessionQuery = {
     enableLiveAnalysis?: boolean | null;
     playMode?: PlayMode | null;
     playPosition?: number | null;
-    liveSessionStarted?: any | null;
+    liveSessionStart?: number | null;
+    liveSessionEnd?: number | null;
     code: string;
     createdAt: any;
     updatedAt: any;
@@ -787,7 +833,7 @@ export type GetOneSessionQuery = {
     userSessions: Array<{
       __typename?: 'UserSession';
       id: number;
-      owner: { __typename?: 'User'; id: string; email?: string | null };
+      owner: { __typename?: 'User'; id: string; email?: string | null; displayName?: string | null };
       annotations: Array<{
         __typename?: 'Annotation';
         id: number;
@@ -857,6 +903,10 @@ export type OnSessionUpdatedSubscription = {
     enablePlayer?: boolean | null;
     displaySampleSolution?: boolean | null;
     enableLiveAnalysis?: boolean | null;
+    playMode?: PlayMode | null;
+    playPosition?: number | null;
+    liveSessionStart?: number | null;
+    liveSessionEnd?: number | null;
     toolbars: Array<{
       __typename?: 'Toolbar';
       id: string;
@@ -867,7 +917,7 @@ export type OnSessionUpdatedSubscription = {
     userSessions: Array<{
       __typename?: 'UserSession';
       id: number;
-      owner: { __typename?: 'User'; email?: string | null };
+      owner: { __typename?: 'User'; id: string; email?: string | null; displayName?: string | null };
     }>;
   };
 };
@@ -900,6 +950,9 @@ export const CreateNewSessionDocument = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      playMode
+      playPosition
+      liveSessionStart
       code
       media {
         id
@@ -1211,7 +1264,59 @@ export const SetPlayModeDocument = gql`
   mutation setPlayMode($sessionId: Int!, $setPlayModeInput: SetPlayModeInput!) {
     setPlayMode(id: $sessionId, setPlayModeInput: $setPlayModeInput) {
       id
+      name
+      description
+      status
+      start
+      end
+      editable
+      enablePlayer
+      displaySampleSolution
+      enableLiveAnalysis
       playMode
+      playPosition
+      liveSessionStart
+      code
+      media {
+        id
+        name
+        mimeType
+        createdAt
+        updatedAt
+      }
+      toolbars {
+        id
+        markers {
+          markerId
+          visible
+        }
+        createdAt
+        updatedAt
+      }
+      userSessions {
+        id
+        owner {
+          id
+          email
+        }
+        annotations {
+          id
+          end
+          start
+          value
+          marker {
+            id
+            color
+          }
+        }
+      }
+      owner {
+        id
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -1260,7 +1365,8 @@ export const GetSessionsDocument = gql`
       enableLiveAnalysis
       playMode
       playPosition
-      liveSessionStarted
+      liveSessionStart
+      liveSessionEnd
       code
       userSessions {
         id
@@ -1317,7 +1423,8 @@ export const GetOneSessionDocument = gql`
       enableLiveAnalysis
       playMode
       playPosition
-      liveSessionStarted
+      liveSessionStart
+      liveSessionEnd
       code
       media {
         id
@@ -1340,6 +1447,7 @@ export const GetOneSessionDocument = gql`
         owner {
           id
           email
+          displayName
         }
         annotations {
           id
@@ -1455,6 +1563,10 @@ export const OnSessionUpdatedDocument = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      playMode
+      playPosition
+      liveSessionStart
+      liveSessionEnd
       toolbars {
         id
         markers {
@@ -1467,7 +1579,9 @@ export const OnSessionUpdatedDocument = gql`
       userSessions {
         id
         owner {
+          id
           email
+          displayName
         }
       }
     }

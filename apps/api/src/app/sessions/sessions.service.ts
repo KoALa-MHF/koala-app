@@ -6,7 +6,7 @@ import { User } from '../users/entities/user.entity';
 
 import { CreateSessionInput } from './dto/create-session.input';
 import { UpdateSessionInput } from './dto/update-session.input';
-import { Session } from './entities/session.entity';
+import { PlayMode, Session } from './entities/session.entity';
 import { SetPlayModeInput } from './dto/set-play-mode.input';
 import { SetPlayPositionInput } from './dto/set-play-position.input';
 
@@ -113,7 +113,7 @@ export class SessionsService {
       enablePlayer: updateSessionInput.enablePlayer,
       displaySampleSolution: updateSessionInput.displaySampleSolution,
       enableLiveAnalysis: updateSessionInput.enableLiveAnalysis,
-      liveSessionStarted: updateSessionInput.liveSessionStarted,
+      liveSessionStart: updateSessionInput.liveSessionStart,
       ...(updateSessionInput.mediaId && { media: { id: updateSessionInput.mediaId } }),
     });
 
@@ -122,9 +122,20 @@ export class SessionsService {
 
   async setPlayMode(id: number, setPlayModeInput: SetPlayModeInput, owner: User): Promise<Session> {
     const session = await this.findOneOfOwner(id, owner);
+    let liveSessionStart, liveSessionEnd;
+
+    if (!session.liveSessionStart && setPlayModeInput.playMode === PlayMode.RUNNING) {
+      liveSessionStart = Date.now();
+    }
+
+    if (setPlayModeInput.playMode === PlayMode.PAUSED) {
+      liveSessionEnd = Date.now();
+    }
 
     this.sessionsRepository.merge(session, {
       playMode: setPlayModeInput.playMode,
+      liveSessionStart: liveSessionStart,
+      liveSessionEnd: liveSessionEnd,
     });
 
     return this.sessionsRepository.save(session);

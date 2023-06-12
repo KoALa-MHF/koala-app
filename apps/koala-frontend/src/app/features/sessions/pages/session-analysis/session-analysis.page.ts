@@ -71,15 +71,28 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
         media: result.media,
       };
 
-      if (this.session.media == undefined) {
-        this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.NO_AUDIO_FILE', 'SESSION.ERROR_DIALOG.NO_AUDIO_FILE_SUM');
-        return;
+      if (this.session.isAudioSession) {
+        if (this.session.media == undefined) {
+          this.showErrorMessage(
+            'error',
+            'SESSION.ERROR_DIALOG.NO_AUDIO_FILE',
+            'SESSION.ERROR_DIALOG.NO_AUDIO_FILE_SUM'
+          );
+          return;
+        }
+
+        this.mediaControlService.uuid = this.session.id;
+        this.waveContainer = `waveContainer-${this.session.id}`;
+
+        await this.loadMediaData(this.session.media.id);
+      } else {
+        if (this.session.liveSessionStart && this.session.liveSessionEnd) {
+          this.totalAudioTime =
+            (new Date(this.session.liveSessionEnd).valueOf() - new Date(this.session.liveSessionStart).valueOf()) /
+            1000;
+        }
       }
 
-      this.mediaControlService.uuid = this.session.id;
-      this.waveContainer = `waveContainer-${this.session.id}`;
-
-      await this.loadMediaData(this.session.media.id);
       if (this.session.userSessions && this.session.userSessions.length > 0) {
         this.loadMarkerData();
         this.loadAnnotations(this.session.userSessions);
@@ -93,7 +106,9 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.mediaControlService.stop();
+    if (this.session.isAudioSession) {
+      this.mediaControlService.stop();
+    }
   }
 
   private loadMediaData(id: string): Promise<void> {
@@ -125,7 +140,10 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
             .pipe(filter((mediaAction) => mediaAction === MediaActions.Ready))
             .subscribe({
               next: () => {
-                this.totalAudioTime = this.mediaControlService.getDuration();
+                if (this.session.isAudioSession) {
+                  this.totalAudioTime = this.mediaControlService.getDuration();
+                }
+
                 resolve();
               },
             });
@@ -217,33 +235,6 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
           this.mediaControlService.stop();
         } catch (error) {
           this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
-        }
-        break;
-      case MediaActions.SkipForward:
-        try {
-          this.mediaControlService.skipForward();
-        } catch (error) {
-          this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
-        }
-        break;
-      case MediaActions.SkipBackward:
-        try {
-          this.mediaControlService.skipBackward();
-        } catch (error) {
-          this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
-        }
-        break;
-      case MediaActions.VolumeChange:
-        if (evt.value != undefined) {
-          try {
-            this.mediaControlService.onVolumeChange(evt.value);
-          } catch (error) {
-            this.showErrorMessage(
-              'error',
-              'SESSION.ERROR_DIALOG.MEDIA_CONTROLS',
-              'SESSION.ERROR_DIALOG.ERRORS.SUMMARY'
-            );
-          }
         }
         break;
       case MediaActions.Mute:

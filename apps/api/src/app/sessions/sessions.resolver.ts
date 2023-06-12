@@ -87,7 +87,9 @@ export class SessionsResolver {
     @Args('setPlayModeInput') setPlayModeInput: SetPlayModeInput,
     @CurrentUser() user: User
   ) {
-    return this.sessionsService.setPlayMode(id, setPlayModeInput, user);
+    const session = this.sessionsService.setPlayMode(id, setPlayModeInput, user);
+    pubSub.publish('sessionUpdated', { sessionUpdated: session });
+    return session;
   }
 
   @Mutation(() => Session)

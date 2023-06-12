@@ -13,6 +13,10 @@ const SUBSCRIBE_SESSION_UPDATED = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      playMode
+      playPosition
+      liveSessionStart
+      liveSessionEnd
       toolbars {
         id
         markers {
@@ -25,7 +29,9 @@ const SUBSCRIBE_SESSION_UPDATED = gql`
       userSessions {
         id
         owner {
+          id
           email
+          displayName
         }
       }
     }

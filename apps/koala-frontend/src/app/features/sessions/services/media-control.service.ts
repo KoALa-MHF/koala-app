@@ -12,9 +12,6 @@ import { Subject } from 'rxjs';
 export enum MediaActions {
   Play = 1,
   Stop,
-  SkipForward,
-  SkipBackward,
-  VolumeChange,
   Mute,
   Ready,
 }
@@ -24,10 +21,12 @@ export interface MediaEvent {
   value?: number;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class MediaControlService {
   uuid!: string | HTMLElement;
-  defaultOptions: WaveSurferParams = {
+  private defaultOptions: WaveSurferParams = {
     container: `#${this.uuid}`,
     backgroundColor: 'transparent',
     cursorColor: 'rgba(73,157,255,.95)',
@@ -44,7 +43,7 @@ export class MediaControlService {
     height: 100,
     closeAudioContext: true,
   };
-  waves = new Map<string | HTMLElement, WaveSurfer>();
+  private waves = new Map<string | HTMLElement, WaveSurfer>();
 
   private mediaPlayStateChangedSubject = new Subject<MediaActions>();
   public mediaPlayStateChanged$ = this.mediaPlayStateChangedSubject.asObservable();
