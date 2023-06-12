@@ -329,7 +329,11 @@ export class SessionPage implements OnInit, OnDestroy {
           ...this.markers,
         ];
 
-        this.AnnotationData = new Map(this.AnnotationData);
+        this.AnnotationData = new Map(
+          [
+            ...this.AnnotationData.entries(),
+          ].sort()
+        );
       });
     }
   }

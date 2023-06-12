@@ -204,6 +204,14 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
             });
         }
       }
+      if (this.userSessionAnnotationData.get(userSessoin.id)?.AnnotationData) {
+        // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
+        this.userSessionAnnotationData.get(userSessoin.id)!.AnnotationData = new Map(
+          [
+            ...this.userSessionAnnotationData.get(userSessoin.id)!.AnnotationData.entries(),
+          ].sort()
+        );
+      }
     }
   }
 

@@ -32,7 +32,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   @Input() markers: Marker[] = [];
   @Input() d3ContainerID = 0;
 
-  private annotationStrength = 5;
+  private annotationStrength = 2.5;
   d3Container = 'd3-container-';
   d3Labels = 'd3-labels-';
 
@@ -188,19 +188,19 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
 
   private getRectHeight(d: DataPoint) {
     if (!d.strength || d.strength == 0) {
-      return this.annotationStrength;
+      return 5;
     }
     return Math.abs(d.strength) * this.annotationStrength;
   }
 
   private getRectPositionY(d: DataPoint, posY: number) {
+    if (!d.strength) {
+      return posY - 2.5;
+    }
     if (d.strength < 0) {
       return posY;
     }
-    if (d.strength != 0) {
-      return posY + d.strength * this.annotationStrength * -1;
-    }
-    return posY - 2.5;
+    return posY + d.strength * this.annotationStrength * -1;
   }
 
   private getRectWidth(d: DataPoint) {
