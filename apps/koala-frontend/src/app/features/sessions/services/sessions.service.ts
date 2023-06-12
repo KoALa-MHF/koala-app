@@ -103,6 +103,17 @@ export class SessionsService {
           } else {
             return session;
           }
+        }),
+        map((session?: Session) => {
+          if (session && this.focusSession && this.focusSession.id === session.id) {
+            //take over owner and isAudio information
+            session.isOwner = this.focusSession.isOwner;
+            session.owner = this.focusSession.owner;
+            session.media = this.focusSession.media;
+            session = this.addIsAudioSession(session);
+          }
+
+          return session;
         })
       );
   }
@@ -156,14 +167,6 @@ export class SessionsService {
   }
 
   setFocusSession(session: Session) {
-    if (this.focusSession && this.focusSession.id === session.id) {
-      //take over owner and isAudio information
-      session.isOwner = this.focusSession.isOwner;
-      session.owner = this.focusSession.owner;
-      session.media = this.focusSession.media;
-      session = this.addIsAudioSession(session);
-    }
-
     this.focusSession = session;
     this.focusSessionSubject.next(this.focusSession);
   }
