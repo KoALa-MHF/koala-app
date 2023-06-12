@@ -160,6 +160,8 @@ export class SessionsService {
       //take over owner and isAudio information
       session.isOwner = this.focusSession.isOwner;
       session.owner = this.focusSession.owner;
+      session.media = this.focusSession.media;
+      session = this.addIsAudioSession(session);
     }
 
     this.focusSession = session;

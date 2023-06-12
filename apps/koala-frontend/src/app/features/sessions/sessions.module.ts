@@ -139,7 +139,6 @@ import { SessionTimerComponent } from './components/session-timer/session-timer.
   providers: [
     MediaService,
     MarkerService,
-    MediaControlService,
     ToolbarsService,
     UserSessionService,
     AnnotationService,
