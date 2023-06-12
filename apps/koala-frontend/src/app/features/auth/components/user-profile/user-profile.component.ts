@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -16,7 +16,7 @@ export class UserProfileComponent implements OnInit, OnChanges {
 
   constructor(private readonly authService: AuthService) {
     this.maintainUserProfileForm = new FormGroup({
-      displayName: new FormControl<string>(''),
+      displayName: new FormControl<string>('', Validators.required),
     });
   }
 
