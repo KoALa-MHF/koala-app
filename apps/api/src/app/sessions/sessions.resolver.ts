@@ -5,7 +5,7 @@ import { CreateSessionInput } from './dto/create-session.input';
 import { UpdateSessionInput } from './dto/update-session.input';
 import { MediaService } from '../media/media.service';
 import { ToolbarsService } from '../toolbars/toolbars.service';
-import { forwardRef, Inject, UseGuards } from '@nestjs/common';
+import { forwardRef, Inject, UseGuards, UseInterceptors } from '@nestjs/common';
 import { UserSessionsService } from '../user-sessions/user-sessions.service';
 import { AuthGuard } from '../core/guards/auth.guard';
 import { CurrentUser } from '../core/decorators/user.decorator';
@@ -15,10 +15,12 @@ import { RegisteredUserGuard } from '../core/guards/registerd-user.guard';
 import { PubSub } from 'graphql-subscriptions';
 import { SetPlayModeInput } from './dto/set-play-mode.input';
 import { SetPlayPositionInput } from './dto/set-play-position.input';
+import { ServerTimeInterceptor } from './server-time.interceptor';
 
 const pubSub = new PubSub();
 
 @Resolver(() => Session)
+@UseInterceptors(ServerTimeInterceptor)
 export class SessionsResolver {
   constructor(
     private readonly sessionsService: SessionsService,

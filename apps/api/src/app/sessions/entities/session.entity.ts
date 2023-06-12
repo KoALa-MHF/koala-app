@@ -162,6 +162,9 @@ export class Session extends BaseEntity {
   @Column({ nullable: true })
   liveSessionEnd: number;
 
+  @Field({ nullable: false })
+  currentSessionServerTime: number;
+
   @BeforeInsert()
   async generateCode() {
     this.code = await nanoid();
