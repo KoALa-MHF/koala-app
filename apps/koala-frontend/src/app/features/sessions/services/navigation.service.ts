@@ -6,7 +6,6 @@ import { Subject } from 'rxjs';
 })
 export class NavigationService {
   private sessionSidePanelVisible = false;
-  private sessionAnalysisNavEnabled = false;
 
   private sessionSettingsSidePanelSubject = new Subject<boolean>();
   public sessionSettingsSidePanelToggled$ = this.sessionSettingsSidePanelSubject.asObservable();
