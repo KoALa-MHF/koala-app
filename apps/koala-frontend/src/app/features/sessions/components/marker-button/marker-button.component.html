@@ -22,12 +22,14 @@
   [class.marker-button-slider]="marker.type === MarkerType.Slider"
   class="marker-button slider-marker"
 >
-  <p-slider
-    [disabled]="!enabled"
-    style="width: 100%"
-    [(ngModel)]="sliderValue"
-    (onSlideEnd)="onSlideEnd()"
-    [min]="marker.valueRangeFrom!"
-    [max]="marker.valueRangeTo!"
-  ></p-slider>
+  <div style="width: 100%">
+    <p-slider
+      [disabled]="!enabled"
+      [(ngModel)]="sliderValue"
+      (onSlideEnd)="onSlideEnd()"
+      [class]="color - inverted"
+      [min]="marker.valueRangeFrom!"
+      [max]="marker.valueRangeTo!"
+    ></p-slider>
+  </div>
 </div>
