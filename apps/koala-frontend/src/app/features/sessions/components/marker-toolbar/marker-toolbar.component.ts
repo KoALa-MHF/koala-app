@@ -1,6 +1,8 @@
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Marker } from '../../types/marker.entity';
+import { SessionControlService } from '../../services/session-control.service';
+import { PlayMode } from '../../../../graphql/generated/graphql';
 
 export enum ToolbarMode {
   Maintenance,
@@ -26,6 +28,14 @@ export class MarkerToolbarComponent {
   ToolbarMode = ToolbarMode;
   showDeleteConfirm = false;
 
+  private currentPlayMode: PlayMode = PlayMode.Paused;
+
+  playModeChanged$ = this.sessionControlService.playModeChanged$;
+
+  constructor(private readonly sessionControlService: SessionControlService) {
+    this.playModeChanged$.subscribe((playMode: PlayMode) => (this.currentPlayMode = playMode));
+  }
+
   dropped(event: { previousIndex: number; currentIndex: number }) {
     const tempMarker = [
       ...this.markers,
@@ -37,7 +47,7 @@ export class MarkerToolbarComponent {
   }
 
   onMarkerButtonEvent(event: { marker: Marker; value?: number }) {
-    if (this.toolbarMode === ToolbarMode.Session) {
+    if (this.currentPlayMode === PlayMode.Running) {
       this.event.emit(event);
     }
   }
