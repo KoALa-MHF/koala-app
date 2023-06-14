@@ -2,6 +2,7 @@
   header="{{ 'AUTH.PROFILE_DIALOG_TITLE' | translate }}"
   [visible]="visible"
   [modal]="true"
+  [closable]="maintainUserProfileForm.valid"
   (visibleChange)="onClose()"
 >
   <form [formGroup]="maintainUserProfileForm" class="form dialog-form">
@@ -28,7 +29,7 @@
       pRipple
       class="p-button-raised p-button-primary"
       type="submit"
-      [disabled]="!maintainUserProfileForm.valid || !maintainUserProfileForm.dirty"
+      [disabled]="!maintainUserProfileForm.valid || (!maintainUserProfileForm.dirty && maintainUserProfileForm.valid)"
       (click)="onSave()"
       label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.SAVE_BTN' | translate }}"
       data-cy="session-data-save-btn"

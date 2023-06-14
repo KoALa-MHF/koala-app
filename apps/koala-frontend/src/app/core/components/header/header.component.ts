@@ -59,6 +59,13 @@ export class HeaderComponent {
         const sessionIdInURL = routeUrl.match('[1-9]+');
         if (sessionIdInURL) {
           this.sessionId = parseInt(sessionIdInURL[0]);
+
+          //check for user display name
+          this.authService.me().subscribe((result) => {
+            if (!result.displayName) {
+              this.userProfileEditRequest.emit();
+            }
+          });
         }
 
         const sessionDetailsURL = routeUrl.match('^/sessions/[^a-zA-Z]*/.');
