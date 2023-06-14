@@ -11,6 +11,7 @@ import { MenuItem } from 'primeng/api';
 })
 export class SessionTimerComponent {
   @Input() playMode: PlayMode = PlayMode.Paused;
+  @Input() disabled = false;
   @Output() playModeChanged = new EventEmitter<PlayMode>();
 
   PlayMode = PlayMode;
