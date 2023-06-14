@@ -18,6 +18,7 @@ export interface Session {
   playPosition?: number | null;
   liveSessionStart?: number | null;
   liveSessionEnd?: number | null;
+  currentSessionServerTime?: number | null;
   media?: Media | null;
   code?: string;
   toolbars?: Toolbar[] | null;

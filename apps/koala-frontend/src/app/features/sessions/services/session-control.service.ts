@@ -11,6 +11,7 @@ import { Observable, Subject, Subscription, tap } from 'rxjs';
 export class SessionControlService implements OnDestroy {
   private session?: Session;
   private clientSessionStartTime?: number;
+  private offset = 0;
   private focusSessionChangeSubscription: Subscription;
 
   private playModeChangedSubject = new Subject<PlayMode>();
@@ -82,7 +83,7 @@ export class SessionControlService implements OnDestroy {
     if (this.session?.isAudioSession) {
       return Math.floor(this.mediaControlService.getCurrentTime() * 1000);
     } else {
-      return Date.now() - (this.clientSessionStartTime?.valueOf() || 0);
+      return Date.now() - ((this.clientSessionStartTime?.valueOf() || 0) - this.offset);
     }
   }
 
@@ -100,6 +101,11 @@ export class SessionControlService implements OnDestroy {
 
     if (this.session.liveSessionStart && this.session.playMode === PlayMode.Running) {
       this.clientSessionStartTime = Date.now();
+      if (this.session.currentSessionServerTime) {
+        this.offset = this.session.currentSessionServerTime - this.session.liveSessionStart;
+      } else {
+        this.offset = 0;
+      }
     }
 
     if (playModeChanged) {

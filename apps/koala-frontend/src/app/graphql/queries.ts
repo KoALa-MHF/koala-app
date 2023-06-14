@@ -17,6 +17,7 @@ const GET_SESSIONS = gql`
       playPosition
       liveSessionStart
       liveSessionEnd
+      currentSessionServerTime
       code
       userSessions {
         id
@@ -65,6 +66,7 @@ const GET_ONE_SESSION = gql`
       playPosition
       liveSessionStart
       liveSessionEnd
+      currentSessionServerTime
       code
       media {
         id
