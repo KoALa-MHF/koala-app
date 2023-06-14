@@ -342,6 +342,7 @@ export type Session = {
   code: Scalars['String'];
   /** Creation Date */
   createdAt: Scalars['DateTime'];
+  currentSessionServerTime: Scalars['Float'];
   /** Description */
   description?: Maybe<Scalars['String']>;
   /** Default for Session - Sample Solution Displayed */
@@ -781,6 +782,7 @@ export type GetSessionsQuery = {
     playPosition?: number | null;
     liveSessionStart?: number | null;
     liveSessionEnd?: number | null;
+    currentSessionServerTime: number;
     code: string;
     createdAt: any;
     updatedAt: any;
@@ -819,6 +821,7 @@ export type GetOneSessionQuery = {
     playPosition?: number | null;
     liveSessionStart?: number | null;
     liveSessionEnd?: number | null;
+    currentSessionServerTime: number;
     code: string;
     createdAt: any;
     updatedAt: any;
@@ -907,6 +910,7 @@ export type OnSessionUpdatedSubscription = {
     playPosition?: number | null;
     liveSessionStart?: number | null;
     liveSessionEnd?: number | null;
+    currentSessionServerTime: number;
     toolbars: Array<{
       __typename?: 'Toolbar';
       id: string;
@@ -1367,6 +1371,7 @@ export const GetSessionsDocument = gql`
       playPosition
       liveSessionStart
       liveSessionEnd
+      currentSessionServerTime
       code
       userSessions {
         id
@@ -1425,6 +1430,7 @@ export const GetOneSessionDocument = gql`
       playPosition
       liveSessionStart
       liveSessionEnd
+      currentSessionServerTime
       code
       media {
         id
@@ -1567,6 +1573,7 @@ export const OnSessionUpdatedDocument = gql`
       playPosition
       liveSessionStart
       liveSessionEnd
+      currentSessionServerTime
       toolbars {
         id
         markers {

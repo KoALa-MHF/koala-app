@@ -17,6 +17,7 @@ const SUBSCRIBE_SESSION_UPDATED = gql`
       playPosition
       liveSessionStart
       liveSessionEnd
+      currentSessionServerTime
       toolbars {
         id
         markers {
