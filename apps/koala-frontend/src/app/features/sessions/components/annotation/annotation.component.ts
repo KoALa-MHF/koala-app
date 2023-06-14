@@ -32,7 +32,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   @Input() markers: Marker[] = [];
   @Input() d3ContainerID = 0;
 
-  private annotationStrength = 2.5;
+  private annotationStrength = 4;
   d3Container = 'd3-container-';
   d3Labels = 'd3-labels-';
 
@@ -249,7 +249,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   private setContainerHeight() {
     const container = document.getElementById(this.d3Container + this.d3ContainerID);
     if (container) {
-      container.style.height = this.markers.length * 40 + 'px';
+      container.style.height = this.markers.length * 90 + 'px';
     }
   }
 }
