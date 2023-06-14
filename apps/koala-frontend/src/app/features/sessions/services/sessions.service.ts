@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MutationResult } from 'apollo-angular';
 import { Observable, Subject } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import {
   CreateNewSessionGQL,
   DeleteSessionGQL,
@@ -13,14 +13,14 @@ import {
   OnSessionUpdatedGQL,
   CreateNewSessionMutation,
   GetOneSessionBySessionCodeGQL,
-  PlayMode,
   SetPlayModeGQL,
   SetPlayPositionGQL,
   SetPlayModeInput,
+  ToolbarMarker,
 } from '../../../graphql/generated/graphql';
 import { Session } from '../types/session.entity';
 import { AccessTokenService } from '../../auth/services/access-token.service';
-import { MediaControlService } from './media-control.service';
+import { ToolbarsService } from './toolbars.service';
 
 @Injectable({
   providedIn: 'root',
@@ -42,7 +42,7 @@ export class SessionsService {
     private readonly setPlayModeGQL: SetPlayModeGQL,
     private readonly setPlayPositionGQL: SetPlayPositionGQL,
     private readonly accessTokenService: AccessTokenService,
-    private readonly mediaControlService: MediaControlService
+    private readonly toolbarService: ToolbarsService
   ) {}
 
   getAll(): Observable<Session[]> {
@@ -127,9 +127,14 @@ export class SessionsService {
   }
 
   copySession(sessionId: number): Promise<Session | null> {
+    let sourceMarkers: ToolbarMarker[] | null | undefined;
     return new Promise<Session | null>((resolve, reject) => {
       this.getOne(sessionId).subscribe({
         next: (session: Session) => {
+          if (session.toolbars) {
+            sourceMarkers = session.toolbars[0].markers;
+          }
+
           this.createSessionGQL
             .mutate({
               session: {
@@ -145,7 +150,19 @@ export class SessionsService {
             })
             .subscribe({
               next: (newSessionResult: MutationResult<CreateNewSessionMutation>) => {
-                resolve(newSessionResult.data?.createSession || null);
+                const newToolbar = newSessionResult.data?.createSession.toolbars[0];
+
+                if (newToolbar && sourceMarkers) {
+                  this.toolbarService
+                    .update(parseInt(newToolbar.id), {
+                      markers: sourceMarkers.map((marker) => marker.markerId),
+                    })
+                    .subscribe(() => {
+                      resolve(newSessionResult.data?.createSession || null);
+                    });
+                } else {
+                  resolve(newSessionResult.data?.createSession || null);
+                }
               },
               error: () => {
                 reject();
