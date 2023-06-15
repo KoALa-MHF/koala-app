@@ -759,7 +759,47 @@ export type SetPlayPositionMutationVariables = Exact<{
 
 export type SetPlayPositionMutation = {
   __typename?: 'Mutation';
-  setPlayPosition: { __typename?: 'Session'; id: string; playPosition?: number | null };
+  setPlayPosition: {
+    __typename?: 'Session';
+    id: string;
+    name: string;
+    description?: string | null;
+    status?: SessionStatus | null;
+    start?: any | null;
+    end?: any | null;
+    editable?: boolean | null;
+    enablePlayer?: boolean | null;
+    displaySampleSolution?: boolean | null;
+    enableLiveAnalysis?: boolean | null;
+    playMode?: PlayMode | null;
+    playPosition?: number | null;
+    liveSessionStart?: number | null;
+    code: string;
+    createdAt: any;
+    updatedAt: any;
+    media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
+    toolbars: Array<{
+      __typename?: 'Toolbar';
+      id: string;
+      createdAt: any;
+      updatedAt: any;
+      markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+    }>;
+    userSessions: Array<{
+      __typename?: 'UserSession';
+      id: number;
+      owner: { __typename?: 'User'; id: string; email?: string | null };
+      annotations: Array<{
+        __typename?: 'Annotation';
+        id: number;
+        end?: number | null;
+        start: number;
+        value?: number | null;
+        marker: { __typename?: 'Marker'; id: number; color: string };
+      }>;
+    }>;
+    owner: { __typename?: 'User'; id: string; createdAt: any; updatedAt: any };
+  };
 };
 
 export type GetSessionsQueryVariables = Exact<{ [key: string]: never }>;
@@ -1339,7 +1379,59 @@ export const SetPlayPositionDocument = gql`
   mutation setPlayPosition($sessionId: Int!, $setPlayPositionInput: SetPlayPositionInput!) {
     setPlayPosition(id: $sessionId, setPlayPositionInput: $setPlayPositionInput) {
       id
+      name
+      description
+      status
+      start
+      end
+      editable
+      enablePlayer
+      displaySampleSolution
+      enableLiveAnalysis
+      playMode
       playPosition
+      liveSessionStart
+      code
+      media {
+        id
+        name
+        mimeType
+        createdAt
+        updatedAt
+      }
+      toolbars {
+        id
+        markers {
+          markerId
+          visible
+        }
+        createdAt
+        updatedAt
+      }
+      userSessions {
+        id
+        owner {
+          id
+          email
+        }
+        annotations {
+          id
+          end
+          start
+          value
+          marker {
+            id
+            color
+          }
+        }
+      }
+      owner {
+        id
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
     }
   }
 `;

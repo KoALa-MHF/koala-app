@@ -103,6 +103,10 @@ export class SessionPage implements OnInit, OnDestroy {
           ?.userSessions?.filter((userSession) => userSession.owner?.id === this.userID.toString())[0];
         this.setSidePanelFormData(session);
 
+        if (!session.isOwner) {
+          this.mediaControlService.setPosition(session.playPosition || 0);
+        }
+
         if (session.liveSessionStart && session.playMode === PlayMode.Running) {
           this.timerSubscription?.unsubscribe();
           this.timer = '0:00';

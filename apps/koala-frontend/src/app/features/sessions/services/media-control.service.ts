@@ -8,6 +8,7 @@ import { EventHandler } from 'wavesurfer.js/types/util';
 // @ts-ignore
 import MP3Tag from 'mp3tag.js';
 import { Subject } from 'rxjs';
+import { SessionsService } from './sessions.service';
 
 export enum MediaActions {
   Play = 1,
@@ -47,6 +48,8 @@ export class MediaControlService {
 
   private mediaPlayStateChangedSubject = new Subject<MediaActions>();
   public mediaPlayStateChanged$ = this.mediaPlayStateChangedSubject.asObservable();
+
+  constructor(private readonly sessionService: SessionsService) {}
 
   async load(trackurl: string, uuid: string) {
     this.uuid = uuid;
@@ -97,6 +100,24 @@ export class MediaControlService {
       this.addEventHandler('ready', () => {
         this.mediaPlayStateChangedSubject.next(MediaActions.Ready);
       });
+      this.addEventHandler('audioprocess', (currentTime) => {
+        if (this.sessionService.getFocusSession()?.isOwner) {
+          this.sessionService
+            .setPlayPosition(parseInt(this.sessionService.getFocusSession()?.id || '0'), currentTime)
+            .subscribe(() => {
+              console.log('Success');
+            });
+        }
+      });
+      this.addEventHandler('seek', (newTime) => {
+        if (this.sessionService.getFocusSession()?.isOwner) {
+          this.sessionService
+            .setPlayPosition(parseInt(this.sessionService.getFocusSession()?.id || '0'), w.getDuration() * newTime)
+            .subscribe(() => {
+              console.log('Success');
+            });
+        }
+      });
 
       const audio = new Audio();
       audio.src = URL.createObjectURL(audioBlob);
@@ -104,6 +125,10 @@ export class MediaControlService {
     } catch (e) {
       throw new Error('cannot load audio wave');
     }
+  }
+
+  setPosition(positionInSeconds: number) {
+    this.getWave().setCurrentTime(positionInSeconds);
   }
 
   private async createMediaSessionPlugin(blob: Blob): Promise<any> {
