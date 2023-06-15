@@ -2,6 +2,6 @@
 sidebar_position: 1
 ---
 
-# Ein Fallbeispiel {#guide-beispiele-fall1}
+# Marker {#guide-glossar-marker}
 
-Welcome to Fallbeispiel 1.
+Welcome to Marker.
