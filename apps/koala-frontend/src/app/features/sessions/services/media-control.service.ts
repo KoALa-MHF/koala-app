@@ -9,6 +9,7 @@ import { EventHandler } from 'wavesurfer.js/types/util';
 import MP3Tag from 'mp3tag.js';
 import { Subject } from 'rxjs';
 import { SessionsService } from './sessions.service';
+import { PlayMode } from '../../../graphql/generated/graphql';
 
 export enum MediaActions {
   Play = 1,
@@ -102,11 +103,14 @@ export class MediaControlService {
       });
       this.addEventHandler('audioprocess', (currentTime) => {
         if (this.sessionService.getFocusSession()?.isOwner) {
-          this.sessionService
-            .setPlayPosition(parseInt(this.sessionService.getFocusSession()?.id || '0'), currentTime)
-            .subscribe(() => {
-              console.log('Success');
-            });
+          if (
+            Math.round((this.sessionService.getFocusSession()?.playPosition || 0) * 10) + 3 <
+            Math.round(currentTime * 10)
+          ) {
+            this.sessionService
+              .setPlayPosition(parseInt(this.sessionService.getFocusSession()?.id || '0'), currentTime)
+              .subscribe();
+          }
         }
       });
       this.addEventHandler('seek', (newTime) => {

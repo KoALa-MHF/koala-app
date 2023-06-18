@@ -165,7 +165,7 @@ export class SessionPage implements OnInit, OnDestroy {
         await this.loadMediaData(focusSession.media.id);
       }
 
-      const userSessions = focusSession.userSessions?.filter((s) => s.id == this.userID);
+      const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
       if (userSessions) {
         this.loadMarkerData(userSessions);
       }
@@ -450,14 +450,14 @@ export class SessionPage implements OnInit, OnDestroy {
     switch (evt.actions) {
       case MediaActions.Play:
         try {
-          this.sessionControlService.startSession();
+          this.sessionControlService.startSession().subscribe();
         } catch (error) {
           this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
         }
         break;
       case MediaActions.Stop:
         try {
-          this.sessionControlService.stopSession();
+          this.sessionControlService.stopSession().subscribe();
         } catch (error) {
           this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
         }
