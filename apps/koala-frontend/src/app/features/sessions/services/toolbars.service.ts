@@ -7,7 +7,9 @@ import {
   UpdateToolbarInput,
 } from '../../../graphql/generated/graphql';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ToolbarsService {
   constructor(
     private readonly updateToolbarGQL: UpdateToolbarGQL,
