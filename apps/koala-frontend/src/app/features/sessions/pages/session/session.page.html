@@ -8,13 +8,7 @@
     </div>
   </div>
   <div class="content">
-    <div style="display: flex; justify-content: center" *ngIf="session.isOwner && !session.isAudioSession">
-      <koala-session-timer
-        [playMode]="session.playMode || PlayMode.Paused"
-        (playModeChanged)="onPlayModeChange($event)"
-      ></koala-session-timer>
-    </div>
-    <div style="display: flex; justify-content: center" *ngIf="!session.isOwner && !session.isAudioSession">
+    <div style="display: flex; justify-content: center" *ngIf="!session.isAudioSession">
       <span *ngIf="session.playMode === PlayMode.Paused">
         {{session.liveSessionStart ? ('SESSION.SESSION_CLOSED_INFO'|translate) : (
         'SESSION.SESSION_NOT_YET_STARTED_INFO' | translate )}}
@@ -22,6 +16,18 @@
 
       <span *ngIf="session.playMode === PlayMode.Running"><i class="pi pi-play"></i>{{timer}}</span>
     </div>
+
+    <div
+      style="display: flex; justify-content: center; flex-direction: column; align-items: center"
+      *ngIf="session.isOwner && !session.isAudioSession"
+    >
+      <koala-session-timer
+        [playMode]="session.playMode || PlayMode.Paused"
+        [disabled]="( session.playMode === PlayMode.Paused && session.liveSessionEnd !== null )"
+        (playModeChanged)="onPlayModeChange($event)"
+      ></koala-session-timer>
+    </div>
+
     <koala-app-audio-wave *ngIf="session.isAudioSession" [waveContainer]="waveContainer"> </koala-app-audio-wave>
     <koala-app-annotation
       *ngIf="session.isAudioSession"
@@ -32,7 +38,7 @@
     ></koala-app-annotation>
     <koala-marker-toolbar
       class="content-centered-horizontally"
-      [toolbarMode]="( ( session.editable && session.playMode === PlayMode.Running ) || session.isOwner ) ? ToolbarMode.Session : ToolbarMode.SessionDisabled"
+      [toolbarMode]="( ( session.editable && session.playMode === PlayMode.Running ) || ( session.isOwner && session.liveSessionEnd === null ) ) ? ToolbarMode.Session : ToolbarMode.SessionDisabled"
       [markers]="markers"
       (event)="onMarkerButtonEvent($event)"
     ></koala-marker-toolbar>
