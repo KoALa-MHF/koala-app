@@ -15,3 +15,18 @@
 #wavesurfer-container {
   margin-left: 30px;
 }
+
+.session-name {
+  font: bold;
+  flex: 0;
+  width: 1px;
+  text-align: center;
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  padding-left: 10px;
+}
+
+koala-app-annotation {
+  margin-bottom: 15px;
+  flex: 20;
+}
