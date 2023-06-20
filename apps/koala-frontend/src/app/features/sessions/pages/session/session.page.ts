@@ -167,53 +167,6 @@ export class SessionPage implements OnInit, OnDestroy {
       }
     });
 
-    /*this.sessionService.getOne(this.sessionId).subscribe(async (currentSession) => {
-      this.setSession({
-        ...currentSession,
-        media: currentSession.media,
-      });
-
-      const session = this.sessionService.getFocusSession();
-
-      if (session) {
-        this.setSidePanelFormData(session);
-
-        const toolbars = session.toolbars;
-
-        if (toolbars) {
-          const toolbar = toolbars[0];
-
-          this.toolbarUpdatedSubscription = this.toolbarService.subscribeUpdated(parseInt(toolbar.id)).subscribe({
-            next: (data) => {
-              const newMarkers = data.data?.toolbarUpdated.markers;
-              if (newMarkers) {
-                newMarkers.forEach((newMarker) => {
-                  const markerIndex = this.markers.findIndex((m) => m.id.toString() == newMarker.markerId);
-                  this.markers[markerIndex].visible = newMarker.visible;
-                });
-                //trigger change detection
-                this.markers = [
-                  ...this.markers,
-                ];
-              }
-            },
-          });
-        }
-
-        if (session.isAudioSession && session.media) {
-          this.mediaControlService.uuid = session.id;
-          this.waveContainer = `waveContainer-${session.id}`;
-
-          await this.loadMediaData(session.media.id);
-        }
-
-        const userSessions = session.userSessions?.filter((s) => s.id == this.userID);
-        if (userSessions) {
-          this.loadMarkerData(userSessions);
-        }
-      }
-    });*/
-
     this.sessionUpdatedSubscription = this.sessionService.subscribeUpdated(this.sessionId);
   }
 
@@ -329,7 +282,11 @@ export class SessionPage implements OnInit, OnDestroy {
           ...this.markers,
         ];
 
-        this.AnnotationData = new Map(this.AnnotationData);
+        this.AnnotationData = new Map(
+          [
+            ...this.AnnotationData.entries(),
+          ].sort()
+        );
       });
     }
   }

@@ -13,14 +13,17 @@
     <div class="p-toolbar-group-end"></div>
   </p-toolbar>
   <div *ngFor="let userSession of session.userSessions ">
-    {{userSession.owner?.displayName || userSession.owner?.email || userSession.owner?.id }}
-
-    <koala-app-annotation
-      [annotationData]="userSessionAnnotationData.get(userSession.id)?.AnnotationData"
-      [markers]="markers"
-      [totalTime]="totalAudioTime"
-      [currentTime]="currentAudioTime"
-      [d3ContainerID]="userSession.id"
-    ></koala-app-annotation>
+    <div style="display: flex">
+      <p class="session-name">
+        {{userSession.owner?.displayName || userSession.owner?.email || userSession.owner?.id }}
+      </p>
+      <koala-app-annotation
+        [annotationData]="userSessionAnnotationData.get(userSession.id)?.AnnotationData"
+        [markers]="markers"
+        [totalTime]="totalAudioTime"
+        [currentTime]="currentAudioTime"
+        [d3ContainerID]="userSession.id"
+      ></koala-app-annotation>
+    </div>
   </div>
 </div>
