@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Marker } from '../../types/marker.entity';
 import { MarkerType, PlayMode } from '../../../../graphql/generated/graphql';
 import { filter } from 'rxjs';
+import { SessionsService } from '../../services/sessions.service';
 import { SessionControlService } from '../../services/session-control.service';
 
 @Component({
@@ -24,7 +25,10 @@ export class MarkerButtonComponent implements OnInit {
     this.sliderValue = this.marker.valueRangeFrom || 0;
   }
 
-  constructor(private readonly sessionControlService: SessionControlService) {
+  constructor(
+    private readonly sessionService: SessionsService,
+    private readonly sessionControlService: SessionControlService
+  ) {
     this.sessionControlService.playModeChanged$
       .pipe(filter((playMode: PlayMode) => playMode === PlayMode.Paused))
       .subscribe({
