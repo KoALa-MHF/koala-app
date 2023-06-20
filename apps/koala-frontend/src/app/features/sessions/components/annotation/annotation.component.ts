@@ -32,7 +32,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   @Input() markers: Marker[] = [];
   @Input() d3ContainerID = 0;
 
-  private annotationStrength = 4;
+  private annotationStrength = 2.5;
   d3Container = 'd3-container-';
   d3Labels = 'd3-labels-';
   d3tooltip: any;
@@ -127,7 +127,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
     const posY = this.getPositionY(index);
     const rowElem = svg.select('g#row_' + row);
     const mouseover = (d: any, ev: any) => {
-      this.drawToolTip().style('opacity', 1).style('width', '100px');
+      this.drawToolTip().style('opacity', 1);
       d3.select(ev.target).style('stroke', 'black').style('opacity', 1);
     };
     const mousemove = (d: any, ev: any) => {
@@ -135,11 +135,11 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
       const htmlText = d.endTime ? `${d.startTime}s - ${d.endTime}s` : `${d.startTime}s`;
       this.drawToolTip()
         .html(htmlText)
-        .style('left', d3.pointer(ev, ev.target)[0] + 70 + 'px')
+        .style('left', d3.pointer(ev, ev.target)[0] + 50 + 'px')
         .style('top', d3.pointer(ev, ev.target)[1] + 'px');
     };
     const mouseleave = (d: any, ev: any) => {
-      this.drawToolTip().style('opacity', 0).style('width', '0px').html('');
+      this.drawToolTip().style('opacity', 0).html('');
       d3.select(ev.target).style('stroke', 'none').style('opacity', 1);
     };
     rowElem
