@@ -171,7 +171,9 @@ export class SessionPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.sessionControlService.stopSession();
+    if (this.sessionService.getFocusSession()?.isAudioSession) {
+      this.sessionControlService.stopSession();
+    }
     this.sessionUpdatedSubscription?.unsubscribe();
     this.toolbarUpdatedSubscription?.unsubscribe();
     this.timerSubscription?.unsubscribe();
