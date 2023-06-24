@@ -102,7 +102,9 @@ export class SessionsResolver {
     @Args('setPlayPositionInput') setPlayPositionInput: SetPlayPositionInput,
     @CurrentUser() user: User
   ) {
-    return this.sessionsService.setPlayPosition(id, setPlayPositionInput, user);
+    const session = this.sessionsService.setPlayPosition(id, setPlayPositionInput, user);
+    pubSub.publish('sessionUpdated', { sessionUpdated: session });
+    return session;
   }
 
   @Mutation(() => Session)

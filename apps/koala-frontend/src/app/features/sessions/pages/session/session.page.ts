@@ -103,6 +103,10 @@ export class SessionPage implements OnInit, OnDestroy {
           ?.userSessions?.filter((userSession) => userSession.owner?.id === this.userID.toString())[0];
         this.setSidePanelFormData(session);
 
+        if (!session.isOwner) {
+          this.mediaControlService.setPosition(session.playPosition || 0);
+        }
+
         if (session.liveSessionStart && session.playMode === PlayMode.Running) {
           this.timerSubscription?.unsubscribe();
           this.timer = '0:00';
@@ -161,7 +165,7 @@ export class SessionPage implements OnInit, OnDestroy {
         await this.loadMediaData(focusSession.media.id);
       }
 
-      const userSessions = focusSession.userSessions?.filter((s) => s.id == this.userID);
+      const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
       if (userSessions) {
         this.loadMarkerData(userSessions);
       }
@@ -446,14 +450,14 @@ export class SessionPage implements OnInit, OnDestroy {
     switch (evt.actions) {
       case MediaActions.Play:
         try {
-          this.sessionControlService.startSession();
+          this.sessionControlService.startSession().subscribe();
         } catch (error) {
           this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
         }
         break;
       case MediaActions.Stop:
         try {
-          this.sessionControlService.stopSession();
+          this.sessionControlService.stopSession().subscribe();
         } catch (error) {
           this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
         }
