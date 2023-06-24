@@ -188,7 +188,17 @@ export class SessionsService {
   }
 
   setPlayPosition(sessionId: number, playPosition: number) {
-    return this.setPlayPositionGQL.mutate({ sessionId, setPlayPositionInput: { playPosition } });
+    return this.setPlayPositionGQL.mutate({ sessionId, setPlayPositionInput: { playPosition } }).pipe(
+      map((response) => response.data?.setPlayPosition),
+      map((session?: Session): Session => {
+        if (session) {
+          return this.addIsOwner(session);
+        } else {
+          throw new Error('Session Response Empty After SetPlayPosition');
+        }
+      }),
+      map((session) => this.addIsAudioSession(session))
+    );
   }
 
   setFocusSession(sessionId: number) {

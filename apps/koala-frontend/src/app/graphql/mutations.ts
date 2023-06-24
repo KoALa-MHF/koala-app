@@ -243,7 +243,59 @@ const SET_PLAY_POSITION = gql`
   mutation setPlayPosition($sessionId: Int!, $setPlayPositionInput: SetPlayPositionInput!) {
     setPlayPosition(id: $sessionId, setPlayPositionInput: $setPlayPositionInput) {
       id
+      name
+      description
+      status
+      start
+      end
+      editable
+      enablePlayer
+      displaySampleSolution
+      enableLiveAnalysis
+      playMode
       playPosition
+      liveSessionStart
+      code
+      media {
+        id
+        name
+        mimeType
+        createdAt
+        updatedAt
+      }
+      toolbars {
+        id
+        markers {
+          markerId
+          visible
+        }
+        createdAt
+        updatedAt
+      }
+      userSessions {
+        id
+        owner {
+          id
+          email
+        }
+        annotations {
+          id
+          end
+          start
+          value
+          marker {
+            id
+            color
+          }
+        }
+      }
+      owner {
+        id
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
     }
   }
 `;
