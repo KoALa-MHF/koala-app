@@ -47,6 +47,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
         }
         this.setContainerHeight();
         this.drawTimeline();
+        this.drawLines();
       }
       if (changes['currentTime'] || changes['annotationData']) {
         this.drawTimeline();
