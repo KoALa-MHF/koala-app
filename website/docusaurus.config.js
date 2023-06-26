@@ -68,6 +68,11 @@ const config = {
         },
       },
     ],
+    ['@grnet/docusaurus-terminology', {
+      termsDir: './docs/terms',
+      docsDir: './docs/',
+      glossaryFilepath: './docs/guide/glossary.md'
+    }],
   ],
 
   themes: [
@@ -91,7 +96,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: 'KoALa App',
+        title: '',
         logo: {
           alt: 'KoALa App Logo',
           src: 'img/logo.svg',
@@ -101,7 +106,7 @@ const config = {
             type: 'doc',
             docId: 'guide/intro',
             position: 'left',
-            label: 'Guide',
+            label: 'Handbuch',
           },
           {
             type: 'doc',
