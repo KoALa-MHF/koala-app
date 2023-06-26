@@ -1,130 +1,200 @@
 <p-toolbar class="header-toolbar">
-  <span style="margin-left: 10px" class="clickable" (click)="onToolbarHomePressed()" data-cy="header-home">
-    <p-image src="../../../../assets/koala-logo-schriftzug_petrol.png" alt="KoALa Logo" height="30"></p-image>
-  </span>
+  <div class="p-toolbar-group-start">
+    <span
+      style="margin-left: 10px; margin-right: 10px"
+      class="clickable"
+      (click)="onToolbarHomePressed()"
+      data-cy="header-home"
+    >
+      <p-image src="../../../../assets/koala-logo-schriftzug_petrol.png" alt="KoALa Logo" height="30"></p-image>
+    </span>
 
-  <button
-    pButton
-    pRipple
-    *ngIf="isAuthenticated$ | async"
-    icon="pi pi-home"
-    label="{{ 'SESSION.MY_SESSIONS_NAV_BTN' | translate }}"
-    class="p-button-text"
-    style="margin-left: 50px; margin-right: 50px"
-    (click)="onMySessions()"
-  ></button>
+    <button
+      pButton
+      pRipple
+      *ngIf="isAuthenticated$ | async"
+      icon="pi pi-home"
+      label="{{ 'SESSION.MY_SESSIONS_NAV_BTN' | translate }}"
+      class="p-button-text hidden-xs hidden-sm"
+      (click)="onMySessions()"
+    ></button>
+  </div>
 
-  <button
-    pButton
-    pRipple
-    *ngIf="(isAuthenticated$ | async) && isOnAnySessionPage"
-    class="p-button-text"
-    (click)="onSession()"
-  >
-    <span>&#x266B;</span><span style="margin-left: 8px">Session</span>
-  </button>
+  <div class="p-toolbar-group-center hidden-xs hidden-sm">
+    <button
+      pButton
+      pRipple
+      *ngIf="(isAuthenticated$ | async) && isOnAnySessionPage"
+      class="p-button-text"
+      (click)="onSession()"
+    >
+      <span>&#x266B;</span><span style="margin-left: 8px">Session</span>
+    </button>
 
-  <button
-    pButton
-    pRipple
-    *ngIf="
-      (isAuthenticated$ | async) &&
-      ((focusSessionChanged$ | async)?.enableLiveAnalysis || (focusSessionChanged$ | async)?.isOwner) &&
-      isOnAnySessionPage
-    "
-    icon="pi pi-chart-bar"
-    label="{{ 'SESSION.ANALYSIS_NAV_BTN' | translate }}"
-    class="p-button-text"
-    (click)="onAnalysis()"
-  ></button>
+    <button
+      pButton
+      pRipple
+      *ngIf="
+        (isAuthenticated$ | async) &&
+        ((focusSessionChanged$ | async)?.enableLiveAnalysis || (focusSessionChanged$ | async)?.isOwner) &&
+        isOnAnySessionPage
+      "
+      icon="pi pi-chart-bar"
+      label="{{ 'SESSION.ANALYSIS_NAV_BTN' | translate }}"
+      class="p-button-text"
+      (click)="onAnalysis()"
+    ></button>
 
-  <button
-    pButton
-    pRipple
-    *ngIf="(isAuthenticated$ | async) && isOnAnySessionPage"
-    icon="pi pi-info-circle"
-    label="{{ 'SESSION.INFO_NAV_BTN' | translate }}"
-    class="p-button-text"
-    (click)="onSessionInfo()"
-  ></button>
+    <button
+      pButton
+      pRipple
+      *ngIf="(isAuthenticated$ | async) && isOnAnySessionPage"
+      icon="pi pi-info-circle"
+      label="{{ 'SESSION.INFO_NAV_BTN' | translate }}"
+      class="p-button-text"
+      (click)="onSessionInfo()"
+    ></button>
+  </div>
 
-  <span class="toolbar-spacer"></span>
+  <div class="p-toolbar-group-end">
+    <button
+      pButton
+      pRipple
+      *ngIf="(isAuthenticated$ | async) && isOnSessionPage && (focusSessionChanged$ | async)?.isOwner"
+      icon="pi pi-cog"
+      label="{{ 'SESSION.SESSION_SETTINGS_BTN' | translate }}"
+      class="p-button-text hidden-xs hidden-sm"
+      (click)="onSessionSettings()"
+    ></button>
 
-  <button
-    pButton
-    pRipple
-    *ngIf="(isAuthenticated$ | async) && isOnSessionPage && (focusSessionChanged$ | async)?.isOwner"
-    icon="pi pi-cog"
-    label="{{ 'SESSION.SESSION_SETTINGS_BTN' | translate }}"
-    class="p-button-text"
-    (click)="onSessionSettings()"
-  ></button>
+    <p-divider
+      layout="vertical"
+      *ngIf="
+        (isAuthenticated$ | async) && (isOnAnySessionPage || isOnSessionPage) && (focusSessionChanged$ | async)?.isOwner
+      "
+      class="hidden-xs hidden-sm"
+    ></p-divider>
 
-  <p-divider
-    layout="vertical"
-    *ngIf="
-      (isAuthenticated$ | async) && (isOnAnySessionPage || isOnSessionPage) && (focusSessionChanged$ | async)?.isOwner
-    "
-  ></p-divider>
+    <button
+      pButton
+      pRipple
+      *ngIf="(isAuthenticated$ | async) === false"
+      icon="pi pi-sign-in"
+      label="{{ 'LOGIN_NAV_BTN' | translate }}"
+      class="p-button-text"
+      (click)="onLogin()"
+    ></button>
 
-  <button
-    pButton
-    pRipple
-    *ngIf="(isAuthenticated$ | async) === false"
-    icon="pi pi-sign-in"
-    label="{{ 'LOGIN_NAV_BTN' | translate }}"
-    class="p-button-text"
-    (click)="onLogin()"
-  ></button>
+    <button
+      style="justify-content: center"
+      *ngIf="isAuthenticated$ | async"
+      pButton
+      pRipple
+      label=""
+      class="p-button-text"
+      (click)="accountMenu.toggle($event)"
+    >
+      <span style="font-size: x-large" class="pi pi-user"></span>
+    </button>
 
-  <button
-    style="justify-content: center"
-    *ngIf="isAuthenticated$ | async"
-    pButton
-    pRipple
-    label=""
-    class="p-button-text"
-    (click)="accountMenu.toggle($event)"
-  >
-    <span style="font-size: x-large" class="pi pi-user"></span>
-  </button>
+    <p-overlayPanel #accountMenu>
+      <ng-template pTemplate>
+        <button
+          *ngIf="isAuthenticated$ | async"
+          pButton
+          pRipple
+          (click)="onProfileEdit()"
+          class="p-button-text account-btn"
+        >
+          {{ 'AUTH.MENU_ACTION.PROFILE_EDIT' | translate }}
+        </button>
+        <button *ngIf="isAuthenticated$ | async" pButton pRipple (click)="onLogout()" class="p-button-text account-btn">
+          {{ 'AUTH.MENU_ACTION.LOGOUT' | translate }}
+        </button>
+      </ng-template>
+    </p-overlayPanel>
 
-  <p-overlayPanel #accountMenu>
-    <ng-template pTemplate>
-      <button
-        *ngIf="isAuthenticated$ | async"
-        pButton
-        pRipple
-        (click)="onProfileEdit()"
-        class="p-button-text account-btn"
-      >
-        {{ 'AUTH.MENU_ACTION.PROFILE_EDIT' | translate }}
-      </button>
-      <button *ngIf="isAuthenticated$ | async" pButton pRipple (click)="onLogout()" class="p-button-text account-btn">
-        {{ 'AUTH.MENU_ACTION.LOGOUT' | translate }}
-      </button>
-    </ng-template>
-  </p-overlayPanel>
+    <button pButton pRipple class="p-button-rounded p-button-text" (click)="languageSelector.toggle($event)">
+      <i class="fi fi-{{ language$ | async }}"></i>
+      <i class="pi pi-angle-down"></i>
+    </button>
 
-  <button pButton pRipple class="p-button-rounded p-button-text" (click)="languageSelector.toggle($event)">
-    <i class="fi fi-{{ language$ | async }}"></i>
-    <i class="pi pi-angle-down"></i>
-  </button>
+    <p-overlayPanel #languageSelector>
+      <ng-template pTemplate>
+        <div (click)="onLanguageSelected(LANGUAGE_CODE.GERMAN)" class="clickable language-menu-item">
+          <i class="fi fi-de"></i>
+          <span class="language-label">{{ 'LANGUAGE_SELECTION.LANG_GERMAN_LABEL' | translate }}</span>
+        </div>
+        <div (click)="onLanguageSelected(LANGUAGE_CODE.ENGLISH)" class="clickable language-menu-item">
+          <i class="fi fi-gb"></i>
+          <span class="language-label">{{ 'LANGUAGE_SELECTION.LANG_ENGLISH_LABEL' | translate }}</span>
+        </div>
+        <div (click)="onLanguageSelected(LANGUAGE_CODE.FRENCH)" class="clickable">
+          <i class="fi fi-fr"></i>
+          <span class="language-label">{{ 'LANGUAGE_SELECTION.LANG_FRENCH_LABEL' | translate }}</span>
+        </div>
+      </ng-template>
+    </p-overlayPanel>
 
-  <p-overlayPanel #languageSelector>
-    <ng-template pTemplate>
-      <div (click)="onLanguageSelected(LANGUAGE_CODE.GERMAN)" class="clickable language-menu-item">
-        <i class="fi fi-de"></i>
-        <span class="language-label">{{ 'LANGUAGE_SELECTION.LANG_GERMAN_LABEL' | translate }}</span>
-      </div>
-      <div (click)="onLanguageSelected(LANGUAGE_CODE.ENGLISH)" class="clickable language-menu-item">
-        <i class="fi fi-gb"></i>
-        <span class="language-label">{{ 'LANGUAGE_SELECTION.LANG_ENGLISH_LABEL' | translate }}</span>
-      </div>
-      <div (click)="onLanguageSelected(LANGUAGE_CODE.FRENCH)" class="clickable">
-        <i class="fi fi-fr"></i>
-        <span class="language-label">{{ 'LANGUAGE_SELECTION.LANG_FRENCH_LABEL' | translate }}</span>
-      </div>
-    </ng-template>
-  </p-overlayPanel>
+    <p-button (click)="sidebarVisible = true" icon="pi pi-bars" class="hidden-lg hidden-md"></p-button>
+  </div>
 </p-toolbar>
+
+<p-sidebar [(visible)]="sidebarVisible">
+  <div style="display: flex; flex-direction: column; align-items: center">
+    <button
+      pButton
+      pRipple
+      *ngIf="isAuthenticated$ | async"
+      icon="pi pi-home"
+      label="{{ 'SESSION.MY_SESSIONS_NAV_BTN' | translate }}"
+      class="p-button-text"
+      style="flex: 1"
+      (click)="onMySessions()"
+    ></button>
+
+    <button
+      pButton
+      pRipple
+      *ngIf="(isAuthenticated$ | async) && isOnAnySessionPage"
+      class="p-button-text"
+      (click)="onSession()"
+    >
+      <span>&#x266B;</span><span style="margin-left: 8px">Session</span>
+    </button>
+
+    <button
+      pButton
+      pRipple
+      *ngIf="
+        (isAuthenticated$ | async) &&
+        ((focusSessionChanged$ | async)?.enableLiveAnalysis || (focusSessionChanged$ | async)?.isOwner) &&
+        isOnAnySessionPage
+      "
+      icon="pi pi-chart-bar"
+      label="{{ 'SESSION.ANALYSIS_NAV_BTN' | translate }}"
+      class="p-button-text"
+      (click)="onAnalysis()"
+    ></button>
+
+    <button
+      pButton
+      pRipple
+      *ngIf="(isAuthenticated$ | async) && isOnAnySessionPage"
+      icon="pi pi-info-circle"
+      label="{{ 'SESSION.INFO_NAV_BTN' | translate }}"
+      class="p-button-text"
+      (click)="onSessionInfo()"
+    ></button>
+
+    <button
+      pButton
+      pRipple
+      *ngIf="(isAuthenticated$ | async) && isOnSessionPage && (focusSessionChanged$ | async)?.isOwner"
+      icon="pi pi-cog"
+      label="{{ 'SESSION.SESSION_SETTINGS_BTN' | translate }}"
+      class="p-button-text"
+      (click)="onSessionSettings()"
+    ></button>
+  </div>
+</p-sidebar>
