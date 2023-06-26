@@ -95,17 +95,16 @@ export class SessionsService {
         sessionId: id.toString(),
       })
       .pipe(
-        map((response) => response.data?.sessionUpdated),
-        map((session?: Session) => {
+        map((response) => {
+          const session = response.data?.sessionUpdated;
           if (session) {
-            session = this.addIsAudioSession(session);
-            return this.addIsOwner(session);
+            return this.addIsOwner(this.addIsAudioSession(session));
           } else {
-            return session;
+            throw new Error('Session Response Empty After SessionUpdate');
           }
         }),
-        map((session?: Session) => {
-          if (session && this.focusSession && this.focusSession.id === session.id) {
+        map((session: Session) => {
+          if (this.focusSession && this.focusSession.id === session.id) {
             //take over owner and isAudio information
             session.isOwner = this.focusSession.isOwner;
             session.owner = this.focusSession.owner;
@@ -175,8 +174,8 @@ export class SessionsService {
 
   setPlayMode(sessionId: number, playModeInput: SetPlayModeInput) {
     return this.setPlayModeGQL.mutate({ sessionId, setPlayModeInput: playModeInput }).pipe(
-      map((response) => response.data?.setPlayMode),
-      map((session?: Session): Session => {
+      map((response) => {
+        const session = response.data?.setPlayMode;
         if (session) {
           return this.addIsOwner(session);
         } else {
@@ -189,8 +188,8 @@ export class SessionsService {
 
   setPlayPosition(sessionId: number, playPosition: number) {
     return this.setPlayPositionGQL.mutate({ sessionId, setPlayPositionInput: { playPosition } }).pipe(
-      map((response) => response.data?.setPlayPosition),
-      map((session?: Session): Session => {
+      map((response) => {
+        const session = response.data?.setPlayPosition;
         if (session) {
           return this.addIsOwner(session);
         } else {
@@ -214,7 +213,7 @@ export class SessionsService {
     return this.focusSession;
   }
 
-  private addIsOwner(session: Session) {
+  private addIsOwner(session: Session): Session {
     return { ...session, isOwner: this.accessTokenService.getLoggedInUserId().toString() === session.owner?.id };
   }
 
