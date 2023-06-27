@@ -7,7 +7,10 @@
   (visibleChange)="onClose($event)"
   [style]="{ width: '35vw', minWidth: '300px' }"
 >
-  <h2 class="session-code">{{ session?.code }}</h2>
+  <div class="session-code-url">
+    <h2 class="session-code">{{ session?.code }}</h2>
+    <p-button icon="pi pi-copy" styleClass="p-button-text" (click)="onCopySessionCode()"></p-button>
+  </div>
 
   <div class="qr-code">
     <qrcode
@@ -23,6 +26,6 @@
 
   <div class="session-code-url">
     <h5>{{ url }}</h5>
-    <p-button icon="pi pi-copy" styleClass="p-button-text" (click)="onCopy()"></p-button>
+    <p-button icon="pi pi-copy" styleClass="p-button-text" (click)="onCopySessionUrl()"></p-button>
   </div>
 </p-dialog>
