@@ -436,7 +436,9 @@ export class SessionMaintainPage implements OnInit, OnDestroy {
   public onParticipantsInvite(message: string) {
     this.userSessionService
       .inviteParticpants(
-        this.participants.map((participant) => participant.id.toString()),
+        this.participants
+          .filter((participant: UserSession) => participant.owner?.email)
+          .map((participant) => participant.id.toString()),
         message
       )
       .subscribe({
