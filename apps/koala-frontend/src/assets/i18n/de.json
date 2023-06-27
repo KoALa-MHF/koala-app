@@ -160,7 +160,7 @@
       "PARTICIPANTS": {
         "PARTICIPANT_EXPLANATION": "Sie können Ihrer Session neue Mitglieder hinzufügen, indem Sie Einladungslinks per Email versenden.",
         "ADD_BTN": "+",
-        "EMAIL_COL": "Email-Adresse",
+        "EMAIL_COL": "Email-Adresse / Anzeigename",
         "DELETE_COL": "Entfernen",
         "ADD_DIALOG": {
           "TITLE": "Teilnehmer Hinzufügen",
