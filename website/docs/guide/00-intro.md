@@ -6,7 +6,7 @@ title: Überblick
 
 # Überblick {#guide-overview}
 
-Willkommen zum Nutzerhandbuch der kollaborativen Annotations- und Lernanwendung *koala*! Hier finden detaillierte Informationen und Anleitungen, um die vielfältigen Funktionen der App optimal nutzen zu können. 
+Willkommen zum Nutzerhandbuch der kollaborativen Annotations- und Lernanwendung *koala*! Hier finden Sie detaillierte Informationen und Anleitungen, um die vielfältigen Funktionen der App optimal nutzen zu können. 
 
 
 #### [Kurzanleitung](/docs/guide/01-quickstart.md)
