@@ -35,6 +35,8 @@ export class HeaderComponent {
   isOnSessionPage = false;
   sessionId = -1;
 
+  sidebarVisible = false;
+
   isAuthenticated$ = this.authService.isAuthenticated$;
   language$ = merge(this.translateService.onDefaultLangChange, this.translateService.onLangChange).pipe(
     map((event) => event.lang),
