@@ -40,17 +40,41 @@ export class SessionQrcodeComponent implements OnChanges {
     this.visibleChange.emit(!this.visible);
   }
 
-  onCopy() {
+  onCopySessionUrl() {
     const success = this.clipboard.copy(this.url);
 
     if (success) {
       this.messageService.add({
-        summary: this.translate.instant('SESSION.OVERVIEW.QRCODE.COPY_SUCCESS'),
+        summary: this.translate.instant('SESSION.OVERVIEW.QRCODE.COPY_SUCCESS', {
+          copiedObject: this.translate.instant('SESSION.OVERVIEW.QRCODE.SESSION_URL_COPIED_OBJECT'),
+        }),
         severity: 'success',
       });
     } else {
       this.messageService.add({
-        summary: this.translate.instant('SESSION.OVERVIEW.QRCODE.COPY_ERROR'),
+        summary: this.translate.instant('SESSION.OVERVIEW.QRCODE.COPY_ERROR', {
+          copiedObject: this.translate.instant('SESSION.OVERVIEW.QRCODE.SESSION_URL_COPIED_OBJECT'),
+        }),
+        severity: 'error',
+      });
+    }
+  }
+
+  onCopySessionCode() {
+    const success = this.clipboard.copy(this.session?.code || '');
+
+    if (success) {
+      this.messageService.add({
+        summary: this.translate.instant('SESSION.OVERVIEW.QRCODE.COPY_SUCCESS', {
+          copiedObject: this.translate.instant('SESSION.OVERVIEW.QRCODE.SESSION_CODE_COPIED_OBJECT'),
+        }),
+        severity: 'success',
+      });
+    } else {
+      this.messageService.add({
+        summary: this.translate.instant('SESSION.OVERVIEW.QRCODE.COPY_ERROR', {
+          copiedObject: this.translate.instant('SESSION.OVERVIEW.QRCODE.SESSION_CODE_COPIED_OBJECT'),
+        }),
         severity: 'error',
       });
     }

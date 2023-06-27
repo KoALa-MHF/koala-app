@@ -57,8 +57,10 @@
       },
       "QRCODE": {
         "DIALOG_TITLE": "Session Beitreten",
-        "COPY_SUCCESS": "URL kopiert",
-        "COPY_ERROR": "URL konnte nicht kopiert werden"
+        "COPY_SUCCESS": "{{copiedObject}} kopiert",
+        "COPY_ERROR": "{{copiedObject}} konnte nicht kopiert werden",
+        "SESSION_URL_COPIED_OBJECT": "URL",
+        "SESSION_CODE_COPIED_OBJECT": "Session Code"
       },
       "ACC": {
         "CREATE": "Session Anlegen"
