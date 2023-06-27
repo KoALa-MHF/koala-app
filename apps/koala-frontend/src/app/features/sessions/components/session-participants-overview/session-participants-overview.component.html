@@ -19,7 +19,14 @@
   </ng-template>
   <ng-template pTemplate="body" let-participant>
     <tr>
-      <td>{{ participant.owner.email }}</td>
+      <td>
+        {{
+          participant.owner.email
+            ? participant.owner.email +
+              (participant.owner.displayName ? ' (' + participant.owner.displayName + ')' : '')
+            : participant.owner.displayName
+        }}
+      </td>
       <td>
         <button
           pButton
