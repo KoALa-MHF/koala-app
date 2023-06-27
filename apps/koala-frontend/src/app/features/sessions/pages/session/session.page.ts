@@ -103,7 +103,7 @@ export class SessionPage implements OnInit, OnDestroy {
           ?.userSessions?.filter((userSession) => userSession.owner?.id === this.userID.toString())[0];
         this.setSidePanelFormData(session);
 
-        if (!session.isOwner) {
+        if (!session.isOwner && session.isAudioSession) {
           this.mediaControlService.setPosition(session.playPosition || 0);
         }
 
