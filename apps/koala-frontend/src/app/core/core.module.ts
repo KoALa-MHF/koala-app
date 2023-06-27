@@ -11,6 +11,7 @@ import { SharedModule } from '../shared/shared.module';
 import { ImageModule } from 'primeng/image';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { SidebarModule } from 'primeng/sidebar';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     ImageModule,
     OverlayPanelModule,
     ToggleButtonModule,
+    SidebarModule,
   ],
   exports: [
     HeaderComponent,
