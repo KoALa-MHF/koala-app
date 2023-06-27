@@ -4,6 +4,7 @@
   [modal]="true"
   [closable]="maintainUserProfileForm.valid"
   (visibleChange)="onClose()"
+  (keyup.enter)="onSave()"
 >
   <form [formGroup]="maintainUserProfileForm" class="form dialog-form">
     <div>
