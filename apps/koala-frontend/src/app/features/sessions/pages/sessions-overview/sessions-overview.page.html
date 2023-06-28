@@ -26,6 +26,7 @@
       <koala-sessions-overview-table
         [sessions]="sessions | isOwner:false"
         (sessionEnter)="onSessionEnter($event)"
+        (sessionLeave)="onSessionLeave($event)"
         [supportedActions]="{createSession: false,
         copySession: false,
         enterSession: true,

@@ -148,7 +148,10 @@ export class UserSessionsService {
       throw new ForbiddenException();
     }
 
-    await this.userSessionsRepository.remove(userSession);
+    await this.anonymizeUserSession(id, user);
+
+    await this.userSessionsRepository.softRemove(userSession);
+
     userSession.id = id;
     return userSession;
   }
@@ -170,5 +173,15 @@ export class UserSessionsService {
     }
 
     return userSession;
+  }
+
+  private async anonymizeUserSession(id: number, user: User) {
+    const userSession = await this.findOne(id, user);
+
+    this.userSessionsRepository.merge(userSession, {
+      owner: null,
+    });
+
+    return this.userSessionsRepository.save(userSession);
   }
 }

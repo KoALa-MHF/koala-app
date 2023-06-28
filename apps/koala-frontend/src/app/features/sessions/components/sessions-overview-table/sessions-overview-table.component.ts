@@ -40,6 +40,7 @@ export class SessionsOverviewTableComponent {
   @Output() sessionExport = new EventEmitter<Session[]>();
   @Output() sessionCopy = new EventEmitter<Session>();
   @Output() sessionCodeDisplay = new EventEmitter<Session>();
+  @Output() sessionLeave = new EventEmitter<Session>();
 
   selectedSessions: Session[] = [];
 
@@ -82,5 +83,7 @@ export class SessionsOverviewTableComponent {
     this.sessionCopy.emit(session);
   }
 
-  public onSessionLeave(session: Session) {}
+  public onSessionLeave(session: Session) {
+    this.sessionLeave.emit(session);
+  }
 }

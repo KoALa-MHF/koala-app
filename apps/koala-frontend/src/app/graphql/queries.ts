@@ -21,6 +21,11 @@ const GET_SESSIONS = gql`
       code
       userSessions {
         id
+        owner {
+          id
+          email
+          displayName
+        }
       }
       media {
         id
