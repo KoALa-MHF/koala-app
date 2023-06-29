@@ -105,6 +105,7 @@ export class SessionPage implements OnInit, OnDestroy {
 
         if (!session.isOwner && session.isAudioSession) {
           this.mediaControlService.setPosition(session.playPosition || 0);
+          this.currentAudioTime = session.playPosition || 0;
         }
 
         if (session.liveSessionStart && session.playMode === PlayMode.Running) {
