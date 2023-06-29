@@ -1,5 +1,18 @@
 <div style="display: flex">
   <svg [id]="'d3-labels-' + d3ContainerID" style="width: 30px; margin-top: 0px"></svg>
   <svg (window:resize)="onResize()" [id]="'d3-container-' + d3ContainerID" style="width: 100%"></svg>
+  <svg [id]="'d3-delete-' + d3ContainerID" style="width: 44px; margin-left: 20px">
+    <foreignObject xmlns="http://www.w3.org/2000/svg" x="0" y="0" width="44" height="100%">
+      <div *ngFor="let marker of markers">
+        <button
+          pButton
+          style="margin-bottom: 5px; margin-top: 5px"
+          class="p-button-text menu-button"
+          (click)="onMarkerAnnotationsDelete(marker)"
+          icon="pi pi-times-circle"
+        ></button>
+      </div>
+    </foreignObject>
+  </svg>
   <div [id]="'d3-container-' + d3ContainerID" class="tooltip-container"></div>
 </div>

@@ -35,6 +35,7 @@
       [markers]="markers"
       [totalTime]="totalAudioTime"
       [currentTime]="currentAudioTime"
+      (deleteAnnotations)="onDeleteAnnotations($event)"
     ></koala-app-annotation>
     <koala-marker-toolbar
       class="content-centered-horizontally"

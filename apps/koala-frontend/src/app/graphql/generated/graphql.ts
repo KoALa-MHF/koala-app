@@ -595,6 +595,15 @@ export type DeleteSessionMutationVariables = Exact<{
 
 export type DeleteSessionMutation = { __typename?: 'Mutation'; removeSession: { __typename?: 'Session'; id: string } };
 
+export type DeleteAnnotationMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type DeleteAnnotationMutation = {
+  __typename?: 'Mutation';
+  removeAnnotation: { __typename?: 'Annotation'; id: number };
+};
+
 export type CreateMediaMutationVariables = Exact<{
   media: CreateMediaInput;
 }>;
@@ -1079,6 +1088,24 @@ export const DeleteSessionDocument = gql`
 })
 export class DeleteSessionGQL extends Apollo.Mutation<DeleteSessionMutation, DeleteSessionMutationVariables> {
   override document = DeleteSessionDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const DeleteAnnotationDocument = gql`
+  mutation deleteAnnotation($id: Int!) {
+    removeAnnotation(id: $id) {
+      id
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DeleteAnnotationGQL extends Apollo.Mutation<DeleteAnnotationMutation, DeleteAnnotationMutationVariables> {
+  override document = DeleteAnnotationDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

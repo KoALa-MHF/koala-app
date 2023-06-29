@@ -1,4 +1,4 @@
-import { Component, Input, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, AfterViewInit, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { Marker } from '../../types/marker.entity';
 import { MarkerService } from '../../services/marker.service';
 import * as d3 from 'd3';
@@ -31,6 +31,8 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   @Input() currentTime = 0;
   @Input() markers: Marker[] = [];
   @Input() d3ContainerID = 0;
+
+  @Output() deleteAnnotations = new EventEmitter<Marker>();
 
   private annotationStrength = 2.5;
   d3Container = 'd3-container-';
@@ -288,5 +290,9 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
     if (container) {
       container.style.height = this.markers.length * 55 + 'px';
     }
+  }
+
+  public onMarkerAnnotationsDelete(marker: Marker) {
+    this.deleteAnnotations.emit(marker);
   }
 }

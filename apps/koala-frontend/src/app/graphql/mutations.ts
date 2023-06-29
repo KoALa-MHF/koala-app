@@ -73,6 +73,14 @@ const DELETE_SESSION = gql`
   }
 `;
 
+const DELETE_ANNOTATION = gql`
+  mutation deleteAnnotation($id: Int!) {
+    removeAnnotation(id: $id) {
+      id
+    }
+  }
+`;
+
 const CREATE_MEDIA = gql`
   mutation createMedia($media: CreateMediaInput!) {
     createMedia(createMediaInput: $media) {
