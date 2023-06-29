@@ -536,9 +536,6 @@ export class SessionPage implements OnInit, OnDestroy {
   }
 
   onDeleteAnnotations(marker: Marker) {
-    console.log(this.AnnotationData);
-    console.log(marker.id);
-
     this.AnnotationData.get(marker.id)?.forEach((annotation) => {
       this.annotationService.remove(annotation.id).subscribe();
     });
