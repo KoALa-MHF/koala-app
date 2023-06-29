@@ -536,6 +536,14 @@ export class SessionPage implements OnInit, OnDestroy {
     }
   }
 
+  onDeleteAnnotations(marker: Marker) {
+    this.AnnotationData.get(marker.id)?.forEach((annotation) => {
+      this.annotationService.remove(annotation.id).subscribe();
+    });
+
+    this.AnnotationData.set(marker.id, new Array<DataPoint>());
+  }
+
   get sessionDetailsFormGroup(): FormGroup {
     return this.sidePanelForm.get('details') as FormGroup;
   }
