@@ -25,7 +25,7 @@ Neben einem Namen, können Sie dem Marker auch eine Beschreibung geben und ggf. 
 Im letzten Abschnitt der Session Erstellung können Sie Ihrer Session neue Mitglieder hinzufügen, indem Sie Einladungslinks per Email versenden. Um neue Mitglieder hinzuzufügen, klicken Sie einfach auf den Button mit Plus-Zeichen und geben Sie ggf. eine persönliche Nachricht ein, die Sie mit dem Einladungslink versenden möchten.
 
 #### Schritt 4 – Annotieren
-- Zum Öffnen der Session klicken Sie im Fenster *Meine Sessions* entweder auf den Session Namen oder auf das Icon Beitreten ![Beitreten](../../static/img/arrow-circle-right.svg) ganz rechts in der Zeile der Session.
+- Zum Öffnen der Session klicken Sie im Fenster *Meine Sessions* entweder auf den Session Namen oder auf das Icon Beitreten ![icon](../../static/img/arrow-circle-right.svg) ganz rechts in der Zeile der Session.
 - Sobald Sie den Player starten wird die Audio Datei abgespielt und Sie können beginnen zu annotieren, indem Sie auf die jeweiligen Marker unterhalb das Players klicken bzw. den Slider-Marker verschieben. Möchten Sie z.B. in einer Lehrsituation gemeinsam mit Teilnehmer\*innen annotieren, muss unter Freigaben zunächst ein Haken bei *Bearbeitung* gesetzt werden. Erst dann ist für Teilnehmer\*innen eine Anntotation möglich. 
 
 #### Schritt 5 – Auswerten

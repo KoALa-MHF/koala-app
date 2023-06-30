@@ -36,3 +36,10 @@ img[alt="picture"] {
   display: block;
   border: 1px solid #9f9f9f;
 }
+
+
+img[alt="icon"] {
+  height: 14pt;
+  display: inline;
+  vertical-align: sub;
+}
