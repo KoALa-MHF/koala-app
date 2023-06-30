@@ -544,6 +544,9 @@ export class SessionPage implements OnInit, OnDestroy {
     });
 
     this.AnnotationData.set(marker.id, new Array<DataPoint>());
+    this.AnnotationData = new Map([
+      ...this.AnnotationData.entries(),
+    ]);
   }
 
   get sessionDetailsFormGroup(): FormGroup {
