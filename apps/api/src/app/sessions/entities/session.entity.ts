@@ -137,7 +137,11 @@ export class Session extends BaseEntity {
   )
   toolbars: Toolbar[];
 
-  @OneToMany(() => UserSession, (userSession) => userSession.session)
+  @OneToMany(() => UserSession, (userSession) => userSession.session, {
+    cascade: [
+      'insert',
+    ],
+  })
   @Field(
     (type) => [
       UserSession,

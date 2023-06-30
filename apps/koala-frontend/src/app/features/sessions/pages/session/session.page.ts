@@ -34,7 +34,9 @@ export class SessionPage implements OnInit, OnDestroy {
   PlayMode = PlayMode;
 
   waveContainer!: string;
-  mediaUri: string = environment.production ? 'https://koala-app.de/api/media' : 'http://localhost:4200/api/media';
+  mediaUri: string = environment.production
+    ? 'https://koala.mh-freiburg.de/api/media'
+    : 'http://localhost:4200/api/media';
   sessionId = 0;
   AnnotationData: Map<number, Array<DataPoint>> = new Map<number, Array<DataPoint>>();
   AnnotationDislay = Display;
@@ -105,6 +107,7 @@ export class SessionPage implements OnInit, OnDestroy {
 
         if (!session.isOwner && session.isAudioSession) {
           this.mediaControlService.setPosition(session.playPosition || 0);
+          this.currentAudioTime = session.playPosition || 0;
         }
 
         if (session.liveSessionStart && session.playMode === PlayMode.Running) {
@@ -351,7 +354,7 @@ export class SessionPage implements OnInit, OnDestroy {
     });
     this.annotationService
       .create({
-        start: t,
+        start: Math.floor(t * 1000),
         userSessionId: this.myUserSession?.id || 0,
         markerId: m.id,
       })
@@ -373,8 +376,8 @@ export class SessionPage implements OnInit, OnDestroy {
 
         this.annotationService
           .create({
-            start: latest.startTime,
-            end: latest.endTime,
+            start: Math.floor(latest.startTime * 1000),
+            end: Math.floor(latest.endTime * 1000),
             userSessionId: this.myUserSession?.id || 0,
             markerId: m.id,
           })
@@ -419,8 +422,8 @@ export class SessionPage implements OnInit, OnDestroy {
 
         this.annotationService
           .create({
-            start: Math.floor(latest.startTime),
-            end: Math.floor(latest.endTime),
+            start: Math.floor(latest.startTime * 1000),
+            end: Math.floor(latest.endTime * 1000),
             value: latest.strength,
             userSessionId: this.myUserSession?.id || 0,
             markerId: m.id,
@@ -533,6 +536,17 @@ export class SessionPage implements OnInit, OnDestroy {
         },
       });
     }
+  }
+
+  onDeleteAnnotations(marker: Marker) {
+    this.AnnotationData.get(marker.id)?.forEach((annotation) => {
+      this.annotationService.remove(annotation.id).subscribe();
+    });
+
+    this.AnnotationData.set(marker.id, new Array<DataPoint>());
+    this.AnnotationData = new Map([
+      ...this.AnnotationData.entries(),
+    ]);
   }
 
   get sessionDetailsFormGroup(): FormGroup {
