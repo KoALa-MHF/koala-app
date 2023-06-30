@@ -81,7 +81,7 @@ export class SessionControlService implements OnDestroy {
 
   getCurrentTime(): number {
     if (this.session?.isAudioSession) {
-      return Math.floor(this.mediaControlService.getCurrentTime() * 1000);
+      return this.mediaControlService.getCurrentTime();
     } else {
       return Date.now() - ((this.clientSessionStartTime?.valueOf() || 0) - this.offset);
     }
