@@ -34,7 +34,9 @@ export class SessionPage implements OnInit, OnDestroy {
   PlayMode = PlayMode;
 
   waveContainer!: string;
-  mediaUri: string = environment.production ? 'https://koala-app.de/api/media' : 'http://localhost:4200/api/media';
+  mediaUri: string = environment.production
+    ? 'https://koala.mh-freiburg.de/api/media'
+    : 'http://localhost:4200/api/media';
   sessionId = 0;
   AnnotationData: Map<number, Array<DataPoint>> = new Map<number, Array<DataPoint>>();
   AnnotationDislay = Display;
