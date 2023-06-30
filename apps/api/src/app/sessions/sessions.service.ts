@@ -9,6 +9,7 @@ import { UpdateSessionInput } from './dto/update-session.input';
 import { PlayMode, Session } from './entities/session.entity';
 import { SetPlayModeInput } from './dto/set-play-mode.input';
 import { SetPlayPositionInput } from './dto/set-play-position.input';
+import { UserSession } from '../user-sessions/entities/user-session.entity';
 
 @Injectable()
 export class SessionsService {
@@ -18,6 +19,9 @@ export class SessionsService {
   ) {}
 
   async create(createSessionInput: CreateSessionInput, owner: User): Promise<Session> {
+    const userSession = new UserSession();
+    userSession.owner = owner;
+
     const newSession = this.sessionsRepository.create({
       ...createSessionInput,
       media: {
@@ -25,6 +29,9 @@ export class SessionsService {
       },
       toolbars: [
         new Toolbar(),
+      ],
+      userSessions: [
+        userSession,
       ],
       owner: owner,
     });
