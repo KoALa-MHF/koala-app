@@ -354,7 +354,7 @@ export class SessionPage implements OnInit, OnDestroy {
     });
     this.annotationService
       .create({
-        start: t,
+        start: Math.floor(t * 1000),
         userSessionId: this.myUserSession?.id || 0,
         markerId: m.id,
       })
@@ -376,8 +376,8 @@ export class SessionPage implements OnInit, OnDestroy {
 
         this.annotationService
           .create({
-            start: latest.startTime,
-            end: latest.endTime,
+            start: Math.floor(latest.startTime * 1000),
+            end: Math.floor(latest.endTime * 1000),
             userSessionId: this.myUserSession?.id || 0,
             markerId: m.id,
           })
@@ -422,8 +422,8 @@ export class SessionPage implements OnInit, OnDestroy {
 
         this.annotationService
           .create({
-            start: Math.floor(latest.startTime),
-            end: Math.floor(latest.endTime),
+            start: Math.floor(latest.startTime * 1000),
+            end: Math.floor(latest.endTime * 1000),
             value: latest.strength,
             userSessionId: this.myUserSession?.id || 0,
             markerId: m.id,
