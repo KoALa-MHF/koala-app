@@ -26,7 +26,9 @@ export interface AnnotationData {
   encapsulation: ViewEncapsulation.None,
 })
 export class SessionAnalysisPage implements OnInit, OnDestroy {
-  mediaUri: string = environment.production ? 'https://koala-app.de/api/media' : 'http://localhost:4200/api/media';
+  mediaUri: string = environment.production
+    ? 'https://koala.mh-freiburg.de/api/media'
+    : 'http://localhost:4200/api/media';
   sessionId = 0;
   userID = -1;
   userSessionAnnotationData: Map<number, AnnotationData> = new Map<number, AnnotationData>();
@@ -208,6 +210,7 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
         // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
         this.userSessionAnnotationData.get(userSessoin.id)!.AnnotationData = new Map(
           [
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             ...this.userSessionAnnotationData.get(userSessoin.id)!.AnnotationData.entries(),
           ].sort()
         );
