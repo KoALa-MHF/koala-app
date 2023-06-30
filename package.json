@@ -44,8 +44,6 @@
     "@ngx-translate/http-loader": "^7.0.0",
     "@node-saml/passport-saml": "^4.0.3",
     "@nrwl/angular": "16.3.2",
-    "@types/d3": "^7.4.0",
-    "@types/maildev": "^0.0.4",
     "angular-mixed-cdk-drag-drop": "^2.1.0",
     "angularx-qrcode": "^16.0.0",
     "apollo-angular": "^5.0.0",
