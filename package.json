@@ -84,7 +84,6 @@
     "@angular/cli": "~16.1.0",
     "@angular/compiler-cli": "16.1.2",
     "@angular/language-service": "16.1.2",
-    "@faker-js/faker": "^7.6.0",
     "@graphql-codegen/cli": "4.0.1",
     "@graphql-codegen/typescript": "^4.0.1",
     "@graphql-codegen/typescript-apollo-angular": "^3.5.6",
