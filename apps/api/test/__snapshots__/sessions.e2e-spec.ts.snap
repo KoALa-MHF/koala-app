@@ -1,5 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Sessions (e2e) Create Session SAML Authenticated user can create a new session 1`] = `
+{
+  "createSession": {
+    "description": "",
+    "end": null,
+    "id": "4",
+    "name": "test",
+    "start": null,
+    "status": "OPEN",
+    "toolbars": [
+      {
+        "id": "4",
+      },
+    ],
+  },
+}
+`;
+
 exports[`Sessions (e2e) Query Sessions Owner user should get list of all owned sessions and sessions participating 1`] = `
 {
   "sessions": [
