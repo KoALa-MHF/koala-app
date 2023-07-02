@@ -15,8 +15,8 @@ export class UsersSeeder implements SeederInterface<User> {
   async seed(): Promise<User[]> {
     const users: Partial<User>[] = [];
 
-    users.push(this.usersRepository.create(UsersData.sessionOwner1));
-    users.push(this.usersRepository.create(UsersData.sessionOwner2));
+    users.push(this.usersRepository.create(UsersData.SESSION_OWNER_1));
+    users.push(this.usersRepository.create(UsersData.SESSION_OWNER_2));
 
     return await this.usersRepository.save(users);
   }

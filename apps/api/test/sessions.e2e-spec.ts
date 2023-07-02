@@ -12,7 +12,7 @@ import { SeedModule } from '../src/app/seed/seed.module';
 import { SeedService } from '../src/app/seed/seed.service';
 import { SessionsData } from '../src/app/seed/data/sessions.data';
 import { Session } from '../src/app/sessions/entities/session.entity';
-import { UsersData } from '../src/app/seed/data/users.data';
+import { UserDataKey, UsersData } from '../src/app/seed/data/users.data';
 
 const QUERY_SESSIONS = gql`
   query Sessions {
@@ -77,7 +77,7 @@ describe('Sessions (e2e)', () => {
 
     it('Owner user should get list of all owned sessions and sessions participating', async () => {
       const { data } = await request(app.getHttpServer())
-        .auth('sessionOwner1', { type: 'bearer' })
+        .auth(UserDataKey.sessionOwner1, { type: 'bearer' })
         .query(QUERY_SESSIONS)
         .expectNoErrors();
 
@@ -86,7 +86,7 @@ describe('Sessions (e2e)', () => {
 
     it('Participating user should get list of all sessions participating and see only own user sessions', async () => {
       const { data } = await request(app.getHttpServer())
-        .auth('sessionParticipant1', { type: 'bearer' })
+        .auth(UserDataKey.sessionParticipant1, { type: 'bearer' })
         .query(QUERY_SESSIONS)
         .expectNoErrors();
 
