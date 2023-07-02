@@ -1,9 +1,11 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
-import { AppModule } from '../src/app/app.module';
-import { GraphQLValidationPipe } from '../src/app/core/pipes/graphql-validation.pipe';
 import request from 'supertest-graphql';
 import gql from 'graphql-tag';
+
+import { Test, TestingModule } from '@nestjs/testing';
+import { INestApplication } from '@nestjs/common';
+
+import { AppModule } from '../src/app/app.module';
+import { setupApplication } from '../src/bootstrap';
 import { AuthGuardMock } from './mocks/guards/AuthGuard.mock';
 import { AuthGuard } from '../src/app/core/guards/auth.guard';
 
@@ -52,7 +54,7 @@ describe('Sessions (e2e)', () => {
       .compile();
 
     app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new GraphQLValidationPipe());
+    setupApplication(app);
     await app.init();
   });
 
