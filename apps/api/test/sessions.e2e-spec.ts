@@ -4,6 +4,39 @@ import { AppModule } from '../src/app/app.module';
 import { GraphQLValidationPipe } from '../src/app/core/pipes/graphql-validation.pipe';
 import request from 'supertest-graphql';
 import gql from 'graphql-tag';
+import { AuthGuardMock } from './mocks/guards/AuthGuard.mock';
+import { AuthGuard } from '../src/app/core/guards/auth.guard';
+
+const QUERY_SESSIONS = gql`
+  query Sessions {
+    sessions {
+      id
+      name
+      description
+      media {
+        name
+        mimeType
+      }
+      toolbars {
+        id
+        session {
+          id
+          name
+        }
+      }
+      userSessions {
+        id
+        owner {
+          email
+        }
+        session {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
 
 describe('Sessions (e2e)', () => {
   let app: INestApplication;
@@ -13,7 +46,10 @@ describe('Sessions (e2e)', () => {
       imports: [
         AppModule,
       ],
-    }).compile();
+    })
+      .overrideGuard(AuthGuard)
+      .useValue(new AuthGuardMock())
+      .compile();
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new GraphQLValidationPipe());
@@ -21,37 +57,17 @@ describe('Sessions (e2e)', () => {
   });
 
   it('Not authenticated user should get Unauthorized', async () => {
-    const { errors } = await request(app.getHttpServer()).query(gql`
-      query Sessions {
-        sessions {
-          id
-          name
-          description
-          media {
-            name
-            mimeType
-          }
-          toolbars {
-            id
-            session {
-              id
-              name
-            }
-          }
-          userSessions {
-            id
-            owner {
-              email
-            }
-            session {
-              id
-              name
-            }
-          }
-        }
-      }
-    `);
+    const { errors } = await request(app.getHttpServer()).query(QUERY_SESSIONS);
     expect(errors).toHaveLength(1);
     expect(errors[0].message).toBe('Unauthorized');
+  });
+
+  it('Authenticated user should get Unauthorized', async () => {
+    const { data } = await request(app.getHttpServer())
+      .auth('12323423', { type: 'bearer' })
+      .query(QUERY_SESSIONS)
+      .expectNoErrors();
+
+    console.log(data);
   });
 });
