@@ -8,6 +8,11 @@ import { AppModule } from '../src/app/app.module';
 import { setupApplication } from '../src/bootstrap';
 import { AuthGuardMock } from './mocks/guards/AuthGuard.mock';
 import { AuthGuard } from '../src/app/core/guards/auth.guard';
+import { SeedModule } from '../src/app/seed/seed.module';
+import { SeedService } from '../src/app/seed/seed.service';
+import { SessionsData } from '../src/app/seed/data/sessions.data';
+import { Session } from '../src/app/sessions/entities/session.entity';
+import { UsersData } from '../src/app/seed/data/users.data';
 
 const QUERY_SESSIONS = gql`
   query Sessions {
@@ -15,16 +20,13 @@ const QUERY_SESSIONS = gql`
       id
       name
       description
-      media {
-        name
-        mimeType
+      owner {
+        id
+        email
+        displayName
       }
       toolbars {
         id
-        session {
-          id
-          name
-        }
       }
       userSessions {
         id
@@ -46,6 +48,7 @@ describe('Sessions (e2e)', () => {
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
+        SeedModule,
         AppModule,
       ],
     })
@@ -56,20 +59,38 @@ describe('Sessions (e2e)', () => {
     app = moduleFixture.createNestApplication();
     setupApplication(app);
     await app.init();
+    const seeder = app.get(SeedService);
+    await seeder.seed();
   });
 
-  it('Not authenticated user should get Unauthorized', async () => {
-    const { errors } = await request(app.getHttpServer()).query(QUERY_SESSIONS);
-    expect(errors).toHaveLength(1);
-    expect(errors[0].message).toBe('Unauthorized');
+  afterEach(async () => {
+    await app.close();
   });
 
-  it('Authenticated user should get Unauthorized', async () => {
-    const { data } = await request(app.getHttpServer())
-      .auth('12323423', { type: 'bearer' })
-      .query(QUERY_SESSIONS)
-      .expectNoErrors();
+  describe('Query Sessions', () => {
+    it('Not authenticated user should get "Unauthorized" error', async () => {
+      const { errors } = await request(app.getHttpServer()).query(QUERY_SESSIONS);
 
-    console.log(data);
+      expect(errors).toHaveLength(1);
+      expect(errors[0].message).toBe('Unauthorized');
+    });
+
+    it('Owner user should get list of all owned sessions and sessions participating', async () => {
+      const { data } = await request(app.getHttpServer())
+        .auth('sessionOwner1', { type: 'bearer' })
+        .query(QUERY_SESSIONS)
+        .expectNoErrors();
+
+      expect(data).toMatchSnapshot();
+    });
+
+    it('Participating user should get list of all sessions participating and see only own user sessions', async () => {
+      const { data } = await request(app.getHttpServer())
+        .auth('sessionParticipant1', { type: 'bearer' })
+        .query(QUERY_SESSIONS)
+        .expectNoErrors();
+
+      expect(data).toMatchSnapshot();
+    });
   });
 });
