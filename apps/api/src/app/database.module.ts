@@ -23,7 +23,8 @@ import { User } from './users/entities/user.entity';
         User,
         Toolbar,
       ],
-      synchronize: true,
+      synchronize: databaseConfig.synchronize,
+      dropSchema: databaseConfig.dropSchema,
     } as TypeOrmModuleOptions),
   ],
 })
