@@ -138,7 +138,6 @@ describe('Sessions (e2e)', () => {
         .mutate(CREATE_SESSION)
         .variables(CREATE_SESSION_VARIABLES);
 
-      console.log(errors[0]);
       expect(errors).toHaveLength(1);
       expect(errors[0].message).toBe('Forbidden resource');
     });
