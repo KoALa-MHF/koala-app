@@ -3,19 +3,19 @@ import { SessionsData } from './sessions.data';
 
 export const UserSessionsData = [
   {
-    owner: UsersData.SESSION_PARTICIPANT_1,
+    owner: UsersData.sessionParticipant1,
     session: SessionsData[0],
   },
   {
-    owner: UsersData.SESSION_PARTICIPANT_2,
+    owner: UsersData.sessionParticipant2,
     session: SessionsData[0],
   },
   {
-    owner: UsersData.SESSION_OWNER_1,
+    owner: UsersData.sessionOwner1,
     session: SessionsData[1],
   },
   {
-    owner: UsersData.SESSION_PARTICIPANT_2,
+    owner: UsersData.sessionParticipant2,
     session: SessionsData[2],
   },
 ];

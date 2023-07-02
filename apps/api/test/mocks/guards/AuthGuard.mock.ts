@@ -7,8 +7,11 @@ export class AuthGuardMock extends AuthGuard {
   canActivate(context: ExecutionContext) {
     const req = this.getRequest(context);
     if (req.headers.authorization) {
-      const token = req.headers.authorization.split(' ')[1];
-      req.user = UsersData[token];
+      const userId = req.headers.authorization.split(' ')[1];
+
+      req.user = Object.values(UsersData).find((user) => {
+        return user.id == userId;
+      });
     }
     this.handleRequest(null, req.user, null, context);
     return true;

@@ -1,4 +1,4 @@
-import request from 'supertest-graphql';
+import request, { SuperTestExecutionResult, SuperTestGraphQL } from 'supertest-graphql';
 import gql from 'graphql-tag';
 
 import { Test, TestingModule } from '@nestjs/testing';
@@ -10,9 +10,14 @@ import { AuthGuardMock } from './mocks/guards/AuthGuard.mock';
 import { AuthGuard } from '../src/app/core/guards/auth.guard';
 import { SeedModule } from '../src/app/seed/seed.module';
 import { SeedService } from '../src/app/seed/seed.service';
-import { SessionsData } from '../src/app/seed/data/sessions.data';
-import { Session } from '../src/app/sessions/entities/session.entity';
-import { UserDataKey, UsersData } from '../src/app/seed/data/users.data';
+import { UsersData } from '../src/app/seed/data/users.data';
+import { DocumentNode } from 'graphql';
+
+export type QueryOptions = {
+  query: DocumentNode;
+  variables?: any;
+  userId: number;
+};
 
 const QUERY_SESSIONS = gql`
   query Sessions {
@@ -77,7 +82,7 @@ describe('Sessions (e2e)', () => {
 
     it('Owner user should get list of all owned sessions and sessions participating', async () => {
       const { data } = await request(app.getHttpServer())
-        .auth(UserDataKey.sessionOwner1, { type: 'bearer' })
+        .auth(`${UsersData.sessionOwner1.id}`, { type: 'bearer' })
         .query(QUERY_SESSIONS)
         .expectNoErrors();
 
@@ -86,7 +91,7 @@ describe('Sessions (e2e)', () => {
 
     it('Participating user should get list of all sessions participating and see only own user sessions', async () => {
       const { data } = await request(app.getHttpServer())
-        .auth(UserDataKey.sessionParticipant1, { type: 'bearer' })
+        .auth(`${UsersData.sessionParticipant1.id}`, { type: 'bearer' })
         .query(QUERY_SESSIONS)
         .expectNoErrors();
 
