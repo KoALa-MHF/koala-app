@@ -9,7 +9,7 @@
     "start": "NODE_ENV=development nx serve",
     "start:api": "NODE_ENV=development nx serve api",
     "start:all": "NODE_ENV=development nx run-many --parallel --target=serve --all",
-    "seed": "nx seed api",
+    "seed": "NODE_ENV=development nx seed api",
     "build": "nx build",
     "test": "nx test && nx e2e koala-frontend-e2e",
     "e2e": "nx e2e koala-frontend-e2e",
