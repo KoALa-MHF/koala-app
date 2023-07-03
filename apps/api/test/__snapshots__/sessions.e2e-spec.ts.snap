@@ -178,16 +178,33 @@ exports[`Sessions (e2e) Update Session Session Owner can update a session 1`] = 
     "editable": true,
     "enableLiveAnalysis": true,
     "enablePlayer": true,
-    "end": "2023-07-03T16:15:09.138Z",
+    "end": Any<String>,
     "id": "1",
     "name": "updated name",
-    "start": "2023-07-03T16:15:09.138Z",
+    "start": Any<String>,
     "status": "CLOSED",
     "toolbars": [
       {
         "id": "1",
       },
     ],
+  },
+}
+`;
+
+exports[`Sessions (e2e) Update Session Session Update trickers SessionUpdated Subscription 1`] = `
+{
+  "sessionUpdated": {
+    "description": "updated description",
+    "displaySampleSolution": true,
+    "editable": true,
+    "enableLiveAnalysis": true,
+    "enablePlayer": true,
+    "end": Any<String>,
+    "id": "1",
+    "name": "updated name",
+    "start": Any<String>,
+    "status": "CLOSED",
   },
 }
 `;

@@ -1,4 +1,4 @@
-import request from 'supertest-graphql';
+import request, { LEGACY_WEBSOCKET_PROTOCOL, supertestWs } from 'supertest-graphql';
 import gql from 'graphql-tag';
 
 import { Test, TestingModule } from '@nestjs/testing';
@@ -11,7 +11,6 @@ import { AuthGuard } from '../src/app/core/guards/auth.guard';
 import { SeedModule } from '../src/app/seed/seed.module';
 import { SeedService } from '../src/app/seed/seed.service';
 import { UsersData } from '../src/app/seed/data/users.data';
-import { SessionStatus } from '../src/app/sessions/entities/session.entity';
 
 const QUERY_SESSIONS = gql`
   query Sessions {
@@ -77,6 +76,23 @@ const UPDATE_SESSION = gql`
   }
 `;
 
+const SESSION_UPDATED = gql`
+  subscription onSessionUpdated($id: ID!) {
+    sessionUpdated(id: $id) {
+      id
+      name
+      description
+      status
+      start
+      end
+      editable
+      enablePlayer
+      displaySampleSolution
+      enableLiveAnalysis
+    }
+  }
+`;
+
 const CREATE_SESSION_VARIABLES = {
   createSessionInput: {
     name: 'test',
@@ -96,6 +112,10 @@ const UPDATE_SESSION_VARIABLES = {
     end: new Date(),
     status: 'CLOSED',
   },
+};
+
+const SESSION_UPDATED_VARIABLES = {
+  id: 1,
 };
 
 describe('Sessions (e2e)', () => {
@@ -194,10 +214,15 @@ describe('Sessions (e2e)', () => {
         .variables(UPDATE_SESSION_VARIABLES)
         .expectNoErrors();
 
-      expect(data).toMatchSnapshot();
+      expect(data).toMatchSnapshot({
+        updateSession: {
+          start: expect.any(String),
+          end: expect.any(String),
+        },
+      });
     });
 
-    it('None Session Owner cannot update a session and should get "Not Found" error', async () => {
+    it('Session Owner or another session cannot update a session and should get "Not Found" error', async () => {
       const { errors } = await request(app.getHttpServer())
         .auth(`${UsersData.sessionOwner2.id}`, { type: 'bearer' })
         .mutate(UPDATE_SESSION)
@@ -205,6 +230,39 @@ describe('Sessions (e2e)', () => {
 
       expect(errors).toHaveLength(1);
       expect(errors[0].message).toBe('Not Found');
+    });
+
+    it('Participant (None SAML Authenticated user) cannot update a session and should get "Forbidden resource" error', async () => {
+      const { errors } = await request(app.getHttpServer())
+        .auth(`${UsersData.sessionParticipant1.id}`, { type: 'bearer' })
+        .mutate(UPDATE_SESSION)
+        .variables(UPDATE_SESSION_VARIABLES);
+
+      expect(errors).toHaveLength(1);
+      expect(errors[0].message).toBe('Forbidden resource');
+    });
+
+    it('Session Update trickers SessionUpdated Subscription', async () => {
+      app.getHttpServer().listen().address();
+      const sub = await supertestWs(app.getHttpServer())
+        .protocol(LEGACY_WEBSOCKET_PROTOCOL)
+        .subscribe(SESSION_UPDATED)
+        .variables(SESSION_UPDATED_VARIABLES);
+
+      await request(app.getHttpServer())
+        .auth(`${UsersData.sessionOwner1.id}`, { type: 'bearer' })
+        .mutate(UPDATE_SESSION)
+        .variables(UPDATE_SESSION_VARIABLES)
+        .expectNoErrors();
+
+      const { data } = await sub.next().expectNoErrors();
+
+      expect(data).toMatchSnapshot({
+        sessionUpdated: {
+          start: expect.any(String),
+          end: expect.any(String),
+        },
+      });
     });
   });
 });
