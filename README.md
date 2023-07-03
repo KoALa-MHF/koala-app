@@ -33,6 +33,17 @@ nx serve api
 
 Open the url http://localhost:3333/graphql in a browser
 
+### Run Backend E2E tests
+
+```Bash
+ nx e2e api
+```
+
+To update the test snapshots, when the test data has changed:
+
+```Bash
+ nx e2e api -u
+```
 
 ### Generate GraphQL Angular Types/Requests
 

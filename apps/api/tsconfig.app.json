@@ -12,6 +12,7 @@
   "exclude": [
     "jest.config.ts",
     "**/*.spec.ts",
+    "**/*.e2e-spec.ts",
     "**/*.test.ts"
   ],
   "include": [
