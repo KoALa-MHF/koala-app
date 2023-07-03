@@ -257,6 +257,7 @@ describe('Sessions (e2e)', () => {
     });
 
     it('Session Update trickers SessionUpdated Subscription', async () => {
+      // the server needs to listen to an address. This is required by the WS test.
       app.getHttpServer().listen().address();
       const sub = await supertestWs(app.getHttpServer())
         .protocol(LEGACY_WEBSOCKET_PROTOCOL)
