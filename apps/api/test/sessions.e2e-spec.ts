@@ -93,6 +93,16 @@ const SESSION_UPDATED = gql`
   }
 `;
 
+const REMOVE_SESSION = gql`
+  mutation RemoveSession($id: Int!) {
+    removeSession(id: $id) {
+      id
+      name
+      description
+    }
+  }
+`;
+
 const CREATE_SESSION_VARIABLES = {
   createSessionInput: {
     name: 'test',
@@ -115,6 +125,10 @@ const UPDATE_SESSION_VARIABLES = {
 };
 
 const SESSION_UPDATED_VARIABLES = {
+  id: 1,
+};
+
+const REMOVE_SESSION_VARIABLES = {
   id: 1,
 };
 
@@ -222,7 +236,7 @@ describe('Sessions (e2e)', () => {
       });
     });
 
-    it('Session Owner or another session cannot update a session and should get "Not Found" error', async () => {
+    it('Session Owner of another session cannot update a session and should get "Not Found" error', async () => {
       const { errors } = await request(app.getHttpServer())
         .auth(`${UsersData.sessionOwner2.id}`, { type: 'bearer' })
         .mutate(UPDATE_SESSION)
@@ -263,6 +277,56 @@ describe('Sessions (e2e)', () => {
           end: expect.any(String),
         },
       });
+    });
+  });
+
+  describe('Remove Session', () => {
+    it('Not authenticated user should get "Unauthorized" error', async () => {
+      const { errors } = await request(app.getHttpServer()).mutate(REMOVE_SESSION).variables(REMOVE_SESSION_VARIABLES);
+
+      expect(errors).toHaveLength(1);
+      expect(errors[0].message).toBe('Unauthorized');
+    });
+
+    it('Session Owner can remove a session', async () => {
+      const { data: sessionsBeforeDelete } = await request(app.getHttpServer())
+        .auth(`${UsersData.sessionOwner1.id}`, { type: 'bearer' })
+        .query(QUERY_SESSIONS)
+        .expectNoErrors();
+      expect(sessionsBeforeDelete).toMatchSnapshot();
+
+      const { data } = await request(app.getHttpServer())
+        .auth(`${UsersData.sessionOwner1.id}`, { type: 'bearer' })
+        .mutate(REMOVE_SESSION)
+        .variables(REMOVE_SESSION_VARIABLES)
+        .expectNoErrors();
+      expect(data).toMatchSnapshot();
+
+      const { data: sessionsAfterDelete } = await request(app.getHttpServer())
+        .auth(`${UsersData.sessionOwner1.id}`, { type: 'bearer' })
+        .query(QUERY_SESSIONS)
+        .expectNoErrors();
+      expect(sessionsAfterDelete).toMatchSnapshot();
+    });
+
+    it('Session Owner of another session cannot remove a session and should get "Not Found" error', async () => {
+      const { errors } = await request(app.getHttpServer())
+        .auth(`${UsersData.sessionOwner2.id}`, { type: 'bearer' })
+        .mutate(REMOVE_SESSION)
+        .variables(REMOVE_SESSION_VARIABLES);
+
+      expect(errors).toHaveLength(1);
+      expect(errors[0].message).toBe('Not Found');
+    });
+
+    it('Participant (None SAML Authenticated user) cannot remove a session and should get "Forbidden resource" error', async () => {
+      const { errors } = await request(app.getHttpServer())
+        .auth(`${UsersData.sessionParticipant1.id}`, { type: 'bearer' })
+        .mutate(REMOVE_SESSION)
+        .variables(REMOVE_SESSION_VARIABLES);
+
+      expect(errors).toHaveLength(1);
+      expect(errors[0].message).toBe('Forbidden resource');
     });
   });
 });
