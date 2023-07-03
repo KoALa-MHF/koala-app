@@ -33,8 +33,7 @@ export class SessionsResolver {
   ) {}
 
   @Mutation(() => Session)
-  @UseGuards(RegisteredUserGuard)
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RegisteredUserGuard)
   createSession(@Args('createSessionInput') createSessionInput: CreateSessionInput, @CurrentUser() user: User) {
     return this.sessionsService.create(createSessionInput, user);
   }
@@ -69,8 +68,7 @@ export class SessionsResolver {
   }
 
   @Mutation(() => Session)
-  @UseGuards(RegisteredUserGuard)
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RegisteredUserGuard)
   updateSession(
     @Args('id', { type: () => Int }) id: number,
     @Args('updateSessionInput') updateSessionInput: UpdateSessionInput,
@@ -82,8 +80,7 @@ export class SessionsResolver {
   }
 
   @Mutation(() => Session)
-  @UseGuards(RegisteredUserGuard)
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RegisteredUserGuard)
   setPlayMode(
     @Args('id', { type: () => Int }) id: number,
     @Args('setPlayModeInput') setPlayModeInput: SetPlayModeInput,
@@ -95,8 +92,7 @@ export class SessionsResolver {
   }
 
   @Mutation(() => Session)
-  @UseGuards(RegisteredUserGuard)
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RegisteredUserGuard)
   setPlayPosition(
     @Args('id', { type: () => Int }) id: number,
     @Args('setPlayPositionInput') setPlayPositionInput: SetPlayPositionInput,
@@ -108,8 +104,7 @@ export class SessionsResolver {
   }
 
   @Mutation(() => Session)
-  @UseGuards(RegisteredUserGuard)
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RegisteredUserGuard)
   removeSession(@Args('id', { type: () => Int }) id: number, @CurrentUser() user: User) {
     return this.sessionsService.remove(id, user);
   }

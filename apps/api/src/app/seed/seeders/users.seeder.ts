@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { faker } from '@faker-js/faker';
 import { User } from '../../users/entities/user.entity';
 import { SeederInterface } from '../seeder.interface';
+import { UsersData } from '../data/users.data';
 
 @Injectable()
 export class UsersSeeder implements SeederInterface<User> {
@@ -14,14 +14,11 @@ export class UsersSeeder implements SeederInterface<User> {
 
   async seed(): Promise<User[]> {
     const users: Partial<User>[] = [];
-    for (let i = 0; i < 3; i++) {
-      users.push(
-        this.usersRepository.create({
-          email: faker.internet.email(),
-          displayName: `${faker.name.firstName()} ${faker.name.lastName()}`,
-        })
-      );
-    }
+
+    Object.values(UsersData).forEach((user) => {
+      users.push(this.usersRepository.create(user));
+    });
+
     return await this.usersRepository.save(users);
   }
 }

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserSession } from '../../user-sessions/entities/user-session.entity';
 import { SeederInterface, SeederOptions } from '../seeder.interface';
+import { UserSessionsData } from '../data/user-sessions.data';
 
 @Injectable()
 export class UserSessionsSeeder implements SeederInterface<UserSession> {
@@ -13,14 +14,12 @@ export class UserSessionsSeeder implements SeederInterface<UserSession> {
 
   async seed(options: SeederOptions): Promise<UserSession[]> {
     const userSessions: Partial<UserSession>[] = [];
-    for (let i = 0; i < 3; i++) {
-      userSessions.push(
-        this.userSessionRepository.create({
-          owner: options.users[i],
-          session: options.sessions[2 - i],
-        })
-      );
+
+    for (let i = 0; i < UserSessionsData.length; i++) {
+      const userSessionData = UserSessionsData[i];
+      userSessions.push(this.userSessionRepository.create(userSessionData));
     }
+
     return await this.userSessionRepository.save(userSessions);
   }
 }

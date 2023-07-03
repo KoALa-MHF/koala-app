@@ -23,6 +23,12 @@ export class MailConfig {
 export class DatabaseConfig {
   @IsString()
   public readonly name: string = 'database/koala';
+
+  @IsBoolean()
+  public readonly synchronize: boolean = false;
+
+  @IsBoolean()
+  public readonly dropSchema: boolean = false;
 }
 
 export class SamlConfig {
