@@ -11,6 +11,7 @@ import { AuthGuard } from '../src/app/core/guards/auth.guard';
 import { SeedModule } from '../src/app/seed/seed.module';
 import { SeedService } from '../src/app/seed/seed.service';
 import { UsersData } from '../src/app/seed/data/users.data';
+import { SessionStatus } from '../src/app/sessions/entities/session.entity';
 
 const QUERY_SESSIONS = gql`
   query Sessions {
@@ -56,9 +57,44 @@ const CREATE_SESSION = gql`
   }
 `;
 
+const UPDATE_SESSION = gql`
+  mutation UpdateSession($id: Int!, $updateSessionInput: UpdateSessionInput!) {
+    updateSession(id: $id, updateSessionInput: $updateSessionInput) {
+      id
+      name
+      description
+      status
+      start
+      end
+      editable
+      enablePlayer
+      displaySampleSolution
+      enableLiveAnalysis
+      toolbars {
+        id
+      }
+    }
+  }
+`;
+
 const CREATE_SESSION_VARIABLES = {
   createSessionInput: {
     name: 'test',
+  },
+};
+
+const UPDATE_SESSION_VARIABLES = {
+  id: 1,
+  updateSessionInput: {
+    name: 'updated name',
+    description: 'updated description',
+    editable: true,
+    enablePlayer: true,
+    displaySampleSolution: true,
+    enableLiveAnalysis: true,
+    start: new Date(),
+    end: new Date(),
+    status: 'CLOSED',
   },
 };
 
@@ -140,6 +176,35 @@ describe('Sessions (e2e)', () => {
 
       expect(errors).toHaveLength(1);
       expect(errors[0].message).toBe('Forbidden resource');
+    });
+  });
+
+  describe('Update Session', () => {
+    it('Not authenticated user should get "Unauthorized" error', async () => {
+      const { errors } = await request(app.getHttpServer()).mutate(UPDATE_SESSION).variables(UPDATE_SESSION_VARIABLES);
+
+      expect(errors).toHaveLength(1);
+      expect(errors[0].message).toBe('Unauthorized');
+    });
+
+    it('Session Owner can update a session', async () => {
+      const { data } = await request(app.getHttpServer())
+        .auth(`${UsersData.sessionOwner1.id}`, { type: 'bearer' })
+        .mutate(UPDATE_SESSION)
+        .variables(UPDATE_SESSION_VARIABLES)
+        .expectNoErrors();
+
+      expect(data).toMatchSnapshot();
+    });
+
+    it('None Session Owner cannot update a session and should get "Not Found" error', async () => {
+      const { errors } = await request(app.getHttpServer())
+        .auth(`${UsersData.sessionOwner2.id}`, { type: 'bearer' })
+        .mutate(UPDATE_SESSION)
+        .variables(UPDATE_SESSION_VARIABLES);
+
+      expect(errors).toHaveLength(1);
+      expect(errors[0].message).toBe('Not Found');
     });
   });
 });

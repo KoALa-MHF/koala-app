@@ -169,3 +169,25 @@ exports[`Sessions (e2e) Query Sessions Participating user should get list of all
   ],
 }
 `;
+
+exports[`Sessions (e2e) Update Session Session Owner can update a session 1`] = `
+{
+  "updateSession": {
+    "description": "updated description",
+    "displaySampleSolution": true,
+    "editable": true,
+    "enableLiveAnalysis": true,
+    "enablePlayer": true,
+    "end": "2023-07-03T16:15:09.138Z",
+    "id": "1",
+    "name": "updated name",
+    "start": "2023-07-03T16:15:09.138Z",
+    "status": "CLOSED",
+    "toolbars": [
+      {
+        "id": "1",
+      },
+    ],
+  },
+}
+`;
