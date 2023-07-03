@@ -9,14 +9,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    env:
-      db__name: database/koala.e2e
-      db__synchronize: true
-      db__dropSchema: true
-      mail__host: localhost
-      mail__port : 1025
     strategy:
       matrix:
         node-version: [18.x, 20.x]
@@ -31,3 +24,9 @@ jobs:
     - run: npm ci
     - run: npm run build
     - run: npm run e2e:api
+      env:
+        db__name: database/koala.e2e
+        db__synchronize: true
+        db__dropSchema: true
+        mail__host: localhost
+        mail__port : 1025
