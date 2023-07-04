@@ -33,8 +33,8 @@ jobs:
         mail__host: localhost
         mail__port : 1025
         saml__issuer: not-needed-for-test
-        saml__callbackUrl: not-needed-for-test
+        saml__callbackUrl: https://not-needed-for-test.com
         saml__cert: not-needed-for-test
-        saml__entryPoint: not-needed-for-test
+        saml__entryPoint: https://not-needed-for-test.com
         saml__audience: not-needed-for-test
-        saml__redirectFrontendUrl: not-needed-for-test
+        saml__redirectFrontendUrl: https://not-needed-for-test.com
