@@ -25,8 +25,16 @@ jobs:
     - run: npm run build
     - run: npm run e2e:api
       env:
+        koalaFrontendUrl: http://localhost:4200
+        koalaAssetsUrl: http://localhost:4200/assets
         db__name: database/koala.e2e
         db__synchronize: true
         db__dropSchema: true
         mail__host: localhost
         mail__port : 1025
+        saml__issuer: not-needed-for-test
+        saml__callbackUrl: not-needed-for-test
+        saml__cert: not-needed-for-test
+        saml__entryPoint: not-needed-for-test
+        saml__audience: not-needed-for-test
+        saml__redirectFrontendUrl: not-needed-for-test
