@@ -26,6 +26,8 @@ export const ConfigModule = TypedConfigModule.forRoot({
   },
   normalize(config) {
     config.mail.port = parseInt(config.mail.port, 10);
+    config.database.synchronize = (config.database.synchronize === 'true' || config.database.synchronize === true)
+    config.database.dropSchema = (config.database.dropSchema === 'true' || config.database.dropSchema === true)
     return config;
   },
 });

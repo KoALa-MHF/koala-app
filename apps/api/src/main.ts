@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
-import { setupApplication, setupMailDevelopmentServer } from './bootstrap';
+import { GLOBAL_PREFIX, setupApplication, setupMailDevelopmentServer } from './bootstrap';
 
 async function bootstrap() {
   if (process.env['NODE' + '_ENV'] === 'development') {
@@ -13,7 +13,7 @@ async function bootstrap() {
   setupApplication(app);
   const port = process.env.PORT || 3333;
   await app.listen(port);
-  Logger.log(`🚀 Application is running on: http://localhost:${port}/${globalPrefix}`);
+  Logger.log(`🚀 Application is running on: http://localhost:${port}/${GLOBAL_PREFIX}`);
 }
 
 bootstrap();
