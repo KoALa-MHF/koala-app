@@ -26,10 +26,12 @@ export const ConfigModule = TypedConfigModule.forRoot({
   },
   normalize(config) {
     config.mail.port = parseInt(config.mail.port, 10);
-    config.database.synchronize = config.database.synchronize === 'true' || config.database.synchronize === true;
-    config.database.dropSchema = config.database.dropSchema === 'true' || config.database.dropSchema === true;
-    config.saml.wantAuthnResponseSigned =
-      config.saml.wantAuthnResponseSigned === 'true' || config.saml.wantAuthnResponseSigned === true;
+    const synchronize = config.database.synchronize;
+    config.database.synchronize = synchronize === 'true' || synchronize === true;
+    const dropSchema = config.database.dropSchema;
+    config.database.dropSchema = dropSchema === 'true' || dropSchema === true;
+    const wantAuthnResponseSigned = config.saml.wantAuthnResponseSigned;
+    config.saml.wantAuthnResponseSigned = wantAuthnResponseSigned === 'true' || wantAuthnResponseSigned === true;
     return config;
   },
 });
