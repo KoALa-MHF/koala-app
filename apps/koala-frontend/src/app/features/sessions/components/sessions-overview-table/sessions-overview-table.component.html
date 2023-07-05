@@ -79,8 +79,8 @@
   </ng-template>
 
   <ng-template pTemplate="body" let-session>
-    <tr [pSelectableRow]="session">
-      <td>
+    <tr class="session-table-row" (click)="onSessionEnter(session)">
+      <td (click)="$event.stopPropagation()">
         <p-tableCheckbox [value]="session"></p-tableCheckbox>
       </td>
       <td data-column="sessionName" data-cy="session-overview-name-col">{{ session.name }}</td>
@@ -93,7 +93,7 @@
       <td data-column="updatedAt" data-cy="session-overview-updated-at-col">
         {{ session.updatedAt | localizedDate }}
       </td>
-      <td *ngIf="supportedActions.updateSession">
+      <td *ngIf="supportedActions.updateSession" (click)="$event.stopPropagation()">
         <button
           pButton
           pRipple
@@ -105,7 +105,7 @@
           data-cy="session-overview-settings-btn"
         ></button>
       </td>
-      <td *ngIf="supportedActions.displaySessionCode">
+      <td *ngIf="supportedActions.displaySessionCode" (click)="$event.stopPropagation()">
         <button
           pButton
           pRipple
@@ -117,7 +117,7 @@
           data-cy="session-overview-qrcode-btn"
         ></button>
       </td>
-      <td *ngIf="supportedActions.copySession">
+      <td *ngIf="supportedActions.copySession" (click)="$event.stopPropagation()">
         <button
           icon="pi pi-clone"
           pButton
@@ -127,7 +127,7 @@
           class="p-button-text menu-button"
         ></button>
       </td>
-      <td *ngIf="supportedActions.enterSession">
+      <td *ngIf="supportedActions.enterSession" (click)="$event.stopPropagation()">
         <button
           icon="pi pi-arrow-circle-right"
           pButton
