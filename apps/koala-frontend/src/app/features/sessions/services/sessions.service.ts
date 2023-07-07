@@ -106,7 +106,7 @@ export class SessionsService {
         map((session: Session) => {
           if (this.focusSession && this.focusSession.id === session.id) {
             //take over owner and isAudio information
-            session.isOwner = this.focusSession.isOwner;
+            session.isSessionOwner = this.focusSession.isSessionOwner;
             session.owner = this.focusSession.owner;
             session.media = this.focusSession.media;
             session = this.addIsAudioSession(session);
@@ -214,7 +214,7 @@ export class SessionsService {
   }
 
   private addIsOwner(session: Session): Session {
-    return { ...session, isOwner: this.accessTokenService.getLoggedInUserId().toString() === session.owner?.id };
+    return { ...session, isSessionOwner: this.accessTokenService.getLoggedInUserId().toString() === session.owner?.id };
   }
 
   private addIsAudioSession(session: Session): Session {

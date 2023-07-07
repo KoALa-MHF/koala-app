@@ -22,26 +22,50 @@ import { UsersModule } from './users/users.module';
 import { DatabaseModule } from './database.module';
 
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import { UsersService } from './users/users.service';
 
 @Module({
   imports: [
     ConfigModule,
     AuthModule,
     DatabaseModule,
-    GraphQLModule.forRoot<ApolloDriverConfig>({
+    GraphQLModule.forRootAsync<ApolloDriverConfig>({
+      imports: [
+        JwtModule,
+        UsersModule,
+      ],
       driver: ApolloDriver,
-      playground: true, // TODO: Dislable when production
-      autoSchemaFile: true,
-      installSubscriptionHandlers: true,
-      formatError: formatError,
-      introspection: true,
-      subscriptions: {
-        'subscriptions-transport-ws': {
-          onConnect: (connectionParams) => {
-            console.log(connectionParams);
+      useFactory: async (jwtService: JwtService, userService: UsersService) => ({
+        playground: true, // TODO: Dislable when production
+        autoSchemaFile: true,
+        installSubscriptionHandlers: true,
+        formatError: formatError,
+        introspection: true,
+        context: ({ req }) => {
+          return { req }; // connection ? { req: connection.context } : { req };
+        },
+        subscriptions: {
+          'subscriptions-transport-ws': {
+            onConnect: async (connectionParams) => {
+              const authToken = connectionParams.headers.Authorization;
+              if (!authToken) {
+                return false;
+              }
+
+              const token = authToken.split(' ')[1];
+              const { sub } = jwtService.verify(token, { secret: 'jWTSecret' });
+
+              const user = await userService.findOne(sub);
+              return { user };
+            },
           },
         },
-      },
+      }),
+      inject: [
+        JwtService,
+        UsersService,
+      ],
     }),
     MailerModule.forRoot({
       transport: {

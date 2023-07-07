@@ -18,6 +18,8 @@ const SUBSCRIBE_SESSION_UPDATED = gql`
       liveSessionStart
       liveSessionEnd
       currentSessionServerTime
+      isSessionOwner
+      isAudioSession
       toolbars {
         id
         markers {

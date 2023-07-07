@@ -26,6 +26,6 @@ export interface Session {
   updatedAt?: Date;
   userSessions?: UserSession[];
   owner?: User;
-  isOwner?: boolean;
+  isSessionOwner?: boolean;
   isAudioSession?: boolean;
 }
