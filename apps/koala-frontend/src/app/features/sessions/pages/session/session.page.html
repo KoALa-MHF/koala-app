@@ -39,7 +39,7 @@
     ></koala-app-annotation>
     <koala-marker-toolbar
       class="content-centered-horizontally"
-      [toolbarMode]="( ( session.editable && session.playMode === PlayMode.Running ) || ( session.isSessionOwner && session.liveSessionEnd === null ) ) ? ToolbarMode.Session : ToolbarMode.SessionDisabled"
+      [toolbarMode]="( ( ( session.editable || session.isSessionOwner ) && session.playMode === PlayMode.Running ) || ( session.isSessionOwner && session.liveSessionEnd === null ) ) ? ToolbarMode.Session : ToolbarMode.SessionDisabled"
       [markers]="markers"
       (event)="onMarkerButtonEvent($event)"
     ></koala-marker-toolbar>
