@@ -11,5 +11,9 @@ table {
 }
 
 .table-toolbar > * {
-    margin-left: 10px;
+  margin-left: 10px;
+}
+
+.session-table-row {
+  cursor: pointer;
 }
