@@ -1,7 +1,7 @@
 <div class="container" *ngIf="session$ | async as session">
   <div class="content-left">
     <div
-      *ngIf="( ( session.enablePlayer || false ) || session.isSessionOwner ) && ( session.isAudioSession )"
+      *ngIf="( ( session.enablePlayer ) || session.isSessionOwner ) && ( session.isAudioSession )"
       class="p-toolbar-group-center"
     >
       <koala-audio-player (mediaEvent)="onMediaEvent($event)"></koala-audio-player>
