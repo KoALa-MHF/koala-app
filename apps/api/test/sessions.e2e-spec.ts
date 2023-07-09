@@ -1,15 +1,9 @@
 import request, { LEGACY_WEBSOCKET_PROTOCOL, supertestWs } from 'supertest-graphql';
 import gql from 'graphql-tag';
 
-import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { setupTestApplication } from './mocks/test.util';
 
-import { AppModule } from '../src/app/app.module';
-import { setupApplication } from '../src/bootstrap';
-import { AuthGuardMock } from './mocks/guards/AuthGuard.mock';
-import { AuthGuard } from '../src/app/core/guards/auth.guard';
-import { SeedModule } from '../src/app/seed/seed.module';
-import { SeedService } from '../src/app/seed/seed.service';
 import { UsersData } from '../src/app/seed/data/users.data';
 
 const QUERY_SESSIONS = gql`
@@ -136,21 +130,7 @@ describe('Sessions (e2e)', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [
-        SeedModule,
-        AppModule,
-      ],
-    })
-      .overrideGuard(AuthGuard)
-      .useValue(new AuthGuardMock())
-      .compile();
-
-    app = moduleFixture.createNestApplication();
-    setupApplication(app);
-    await app.init();
-    const seeder = app.get(SeedService);
-    await seeder.seed();
+    app = await setupTestApplication();
   });
 
   afterEach(async () => {

@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Users (e2e) Query Me Authenticated user should get the own user data returned 1`] = `
+{
+  "me": {
+    "displayName": "Session Owner 1",
+    "email": "session-owner-1@koala-app.de",
+    "id": "1",
+  },
+}
+`;
+
+exports[`Users (e2e) Update User Authenticated user can only update the right fields 1`] = `
+{
+  "updateUser": {
+    "displayName": "update displayName",
+    "email": "session-owner-1@koala-app.de",
+    "id": "1",
+  },
+}
+`;
+
+exports[`Users (e2e) Update User Authenticated user can update own user data 1`] = `
+{
+  "updateUser": {
+    "displayName": "update displayName",
+    "email": "session-owner-1@koala-app.de",
+    "id": "1",
+  },
+}
+`;
