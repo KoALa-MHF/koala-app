@@ -74,7 +74,7 @@
     "rxjs": "^7.8.1",
     "tslib": "^2.5.3",
     "typeorm": "^0.3.17",
-    "wavesurfer.js": "^6.6.4",
+    "wavesurfer.js": "^7.0.0-beta.15",
     "zone.js": "~0.13.1"
   },
   "devDependencies": {
