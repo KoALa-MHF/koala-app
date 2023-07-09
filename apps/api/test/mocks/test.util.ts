@@ -7,6 +7,8 @@ import { AuthGuardMock } from './guards/AuthGuard.mock';
 import { AuthGuard } from '../../src/app/core/guards/auth.guard';
 import { SeedModule } from '../../src/app/seed/seed.module';
 import { SeedService } from '../../src/app/seed/seed.service';
+import { JwtService } from '@nestjs/jwt';
+import { JwtServiceMock } from './services/JwtService.mock';
 
 export async function setupTestApplication(): Promise<INestApplication> {
   const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -17,6 +19,8 @@ export async function setupTestApplication(): Promise<INestApplication> {
   })
     .overrideGuard(AuthGuard)
     .useValue(new AuthGuardMock())
+    .overrideProvider(JwtService)
+    .useValue(new JwtServiceMock())
     .compile();
 
   const app: INestApplication = moduleFixture.createNestApplication();

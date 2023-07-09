@@ -48,6 +48,10 @@ import { UsersService } from './users/users.service';
         subscriptions: {
           'subscriptions-transport-ws': {
             onConnect: async (connectionParams) => {
+              if (!connectionParams.headers) {
+                return false;
+              }
+
               const authToken = connectionParams.headers.Authorization;
               if (!authToken) {
                 return false;
