@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import WaveSurfer from 'wavesurfer.js';
-import TimelinePlugin from 'wavesurfer.js/src/plugin/timeline';
-import MediaSessionPlugin from 'wavesurfer.js/src/plugin/mediasession';
+import { WaveSurfer, WaveSurferEvents } from 'wavesurfer.js';
+import TimelinePlugin from 'wavesurfer.js/dist/plugins/timeline.js';
 import { WaveSurferParams } from 'wavesurfer.js/types/params';
 import { EventHandler } from 'wavesurfer.js/types/util';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -9,7 +8,6 @@ import { EventHandler } from 'wavesurfer.js/types/util';
 import MP3Tag from 'mp3tag.js';
 import { Subject } from 'rxjs';
 import { SessionsService } from './sessions.service';
-import { PlayMode } from '../../../graphql/generated/graphql';
 
 export enum MediaActions {
   Play = 1,
@@ -28,23 +26,6 @@ export interface MediaEvent {
 })
 export class MediaControlService {
   uuid!: string | HTMLElement;
-  private defaultOptions: WaveSurferParams = {
-    container: `#${this.uuid}`,
-    backgroundColor: 'transparent',
-    cursorColor: 'rgba(73,157,255,.95)',
-    cursorWidth: 2,
-    progressColor: 'rgba(0,0,0,.9)',
-    waveColor: 'rgba(73,157,158,1)',
-    autoCenter: true,
-    normalize: true,
-    scrollParent: false,
-    backend: 'MediaElementWebAudio',
-    responsive: true,
-    maxCanvasWidth: 100,
-    hideScrollbar: false,
-    height: 100,
-    closeAudioContext: true,
-  };
   private waves = new Map<string | HTMLElement, WaveSurfer>();
 
   private mediaPlayStateChangedSubject = new Subject<MediaActions>();
@@ -54,24 +35,37 @@ export class MediaControlService {
 
   async load(trackurl: string, uuid: string) {
     this.uuid = uuid;
-    let plugin: any = undefined;
     let audioBlob: Blob = new Blob();
 
     try {
       audioBlob = await this.fetchAudioBlob(trackurl);
-      plugin = await this.createMediaSessionPlugin(audioBlob);
     } catch (e) {
       throw new Error('error fetching audio file');
     }
-    this.defaultOptions.container = `#${this.uuid}`;
+    const audio = new Audio();
+    audio.src = URL.createObjectURL(audioBlob);
+    const timelineContainer = document.getElementById(`${this.uuid}-timeline`)!;
+    this.createMediadata(audioBlob);
     this.waves.set(
       this.uuid,
       WaveSurfer.create({
-        ...this.defaultOptions,
+        container: `#${this.uuid}`,
+        cursorColor: 'rgba(73,157,255,.95)',
+        cursorWidth: 2,
+        progressColor: 'rgba(0,0,0,.9)',
+        waveColor: 'rgba(73,157,158,1)',
+        autoCenter: true,
+        normalize: true,
+        hideScrollbar: false,
+        height: 100,
+        media: audio,
         plugins: [
           TimelinePlugin.create({
-            container: `#${this.uuid}-timeline`,
-            formatTimeCallback: (sec: number, pxPerSec: number) => {
+            container: timelineContainer,
+            timeInterval: 5,
+            secondaryLabelInterval: 10,
+            primaryLabelInterval: 10,
+            formatTimeCallback: (sec: number) => {
               const minutes = Math.floor(sec / 60);
               const seconds = sec % 60;
               let secondsLabel;
@@ -85,7 +79,6 @@ export class MediaControlService {
               return minutes + ':' + secondsLabel;
             },
           }),
-          plugin,
         ],
       })
     );
@@ -113,7 +106,7 @@ export class MediaControlService {
           }
         }
       });
-      this.addEventHandler('seek', (newTime) => {
+      this.addEventHandler('seeking', (newTime) => {
         if (this.sessionService.getFocusSession()?.isOwner) {
           this.sessionService
             .setPlayPosition(parseInt(this.sessionService.getFocusSession()?.id || '0'), w.getDuration() * newTime)
@@ -122,20 +115,16 @@ export class MediaControlService {
             });
         }
       });
-
-      const audio = new Audio();
-      audio.src = URL.createObjectURL(audioBlob);
-      w.load(audio);
     } catch (e) {
       throw new Error('cannot load audio wave');
     }
   }
 
   setPosition(positionInSeconds: number) {
-    this.getWave().setCurrentTime(positionInSeconds);
+    this.getWave().setTime(positionInSeconds);
   }
 
-  private async createMediaSessionPlugin(blob: Blob): Promise<any> {
+  private async createMediadata(blob: Blob): Promise<any> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onloadend = function () {
@@ -146,14 +135,12 @@ export class MediaControlService {
           reject('');
         }
         resolve(
-          MediaSessionPlugin.create({
-            metadata: {
-              album: mp3tag.tags.album,
-              artist: mp3tag.tags.artist,
-              title: mp3tag.tags.title,
-              artwork: [],
-            },
-          })
+          (navigator.mediaSession.metadata = new MediaMetadata({
+            album: mp3tag.tags.album,
+            artist: mp3tag.tags.artist,
+            title: mp3tag.tags.title,
+            artwork: [],
+          }))
         );
       };
       reader.readAsArrayBuffer(blob);
@@ -174,8 +161,7 @@ export class MediaControlService {
   }
 
   public getMetadata() {
-    const w = this.getWave();
-    return w.mediasession.metadata;
+    return navigator.mediaSession.metadata;
   }
 
   public getDuration() {
@@ -218,7 +204,7 @@ export class MediaControlService {
     try {
       const w = this.getWave();
       if (w.isPlaying()) {
-        w.skipBackward(1);
+        w.seekTo(1);
       }
     } catch (error) {
       console.error(error);
@@ -230,7 +216,7 @@ export class MediaControlService {
     try {
       const w = this.getWave();
       if (w.isPlaying()) {
-        w.skipForward(1);
+        w.seekTo(1);
       }
     } catch (error) {
       console.error(error);
@@ -251,14 +237,14 @@ export class MediaControlService {
   public onMute(mute: number) {
     try {
       const w = this.getWave();
-      w.setMute(!!mute);
+      w.setMuted(!!mute);
     } catch (error) {
       console.error(error);
       throw new Error(`cannot mute/unmute audio file: ${error}`);
     }
   }
 
-  public addEventHandler(eventName: string, handler: EventHandler) {
+  public addEventHandler(eventName: keyof WaveSurferEvents, handler: EventHandler) {
     try {
       const w = this.getWave();
       return w.on(eventName, handler);

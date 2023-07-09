@@ -22,7 +22,7 @@
 
 <div
   *ngIf="marker.type === MarkerType.Slider && marker.visible === true"
-  [style.background-color]="marker.color"
+  [style.background-color]="enabled ? marker.color : '#0000001f'"
   [class.marker-button-slider]="marker.type === MarkerType.Slider"
   class="marker-button slider-marker"
 >

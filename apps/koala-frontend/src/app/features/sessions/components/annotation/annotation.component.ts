@@ -31,6 +31,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   @Input() currentTime = 0;
   @Input() markers: Marker[] = [];
   @Input() d3ContainerID = 0;
+  @Input() displayMode = false;
 
   @Output() deleteAnnotations = new EventEmitter<Marker>();
 
@@ -94,7 +95,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
       .style('stroke', 'black')
       .attr('class', 'marker')
       .attr('stroke-width', 1)
-      .attr('x1', 5)
+      .attr('x1', 1)
       .attr('x2', this.getContainerWidth())
       .attr('y1', (m: Marker, index: number) => this.getPositionY(index))
       .attr('y2', (m: Marker, index: number) => this.getPositionY(index))
@@ -134,7 +135,6 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
       d3.select(ev.target).style('stroke', 'black').style('opacity', 1);
     };
     const mousemove = (d: any, ev: any) => {
-      console.log(d3.pointer(ev, ev.target)[0], d3.pointer(ev, ev.target)[1]);
       const htmlText = d.endTime ? `${d.startTime}s - ${d.endTime}s` : `${d.startTime}s`;
       this.drawToolTip()
         .html(htmlText)
@@ -179,22 +179,22 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
       this.currentTime,
     ]);
 
-    let time = 2;
+    let time = 1;
     if (this.getPositionXRatio() !== Infinity) {
-      time = this.currentTime * this.getPositionXRatio() < 2 ? 2 : this.currentTime * this.getPositionXRatio();
+      time = this.currentTime * this.getPositionXRatio() < 1 ? 1 : this.currentTime * this.getPositionXRatio();
     }
 
     line.attr('x1', time);
     line.attr('x2', time);
-    line.attr('y1', this.getPositionY(0) - 20);
-    line.attr('y2', this.getPositionY(this.markers.length) + 20);
+    line.attr('y1', this.getPositionY(0) - 100);
+    line.attr('y2', this.getPositionY(this.markers.length));
 
     line
       .enter()
       .append('line')
       .style('stroke', 'rgba(73, 157, 255, 0.95)')
       .attr('id', 'timeline')
-      .attr('stroke-width', 1);
+      .attr('stroke-width', 2);
   }
 
   private drawToolTip() {
