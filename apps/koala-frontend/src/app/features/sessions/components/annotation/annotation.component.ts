@@ -31,6 +31,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   @Input() currentTime = 0;
   @Input() markers: Marker[] = [];
   @Input() d3ContainerID = 0;
+  @Input() displayMode = false;
 
   @Output() deleteAnnotations = new EventEmitter<Marker>();
 
