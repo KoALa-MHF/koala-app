@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input, EventEmitter, Output, OnInit } from '@angular/core';
 import { MediaActions, MediaEvent } from '../../services/media-control.service';
 
 @Component({
@@ -10,12 +10,22 @@ import { MediaActions, MediaEvent } from '../../services/media-control.service';
   ],
   providers: [],
 })
-export class AudioPlayerComponent {
+export class AudioPlayerComponent implements OnInit {
   @Input() metadata: MediaMetadata | undefined;
   @Output() mediaEvent: EventEmitter<MediaEvent> = new EventEmitter<MediaEvent>();
 
   playing = false;
   playIcon = 'pi pi-play';
+
+  ngOnInit() {
+    navigator.mediaSession.setActionHandler('play', () => {
+      this.onPlay();
+    });
+
+    navigator.mediaSession.setActionHandler('pause', () => {
+      this.onPlay();
+    });
+  }
 
   onPlay() {
     if (!this.playing) {
