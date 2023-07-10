@@ -45,6 +45,8 @@
   class="mat-elevation-z8"
   data-cy="session-overview-table"
   [(selection)]="selectedSessions"
+  responsiveLayout="stack"
+  [breakpoint]="'960px'"
 >
   <ng-template pTemplate="header">
     <tr>
@@ -83,17 +85,24 @@
       <td (click)="$event.stopPropagation()">
         <p-tableCheckbox [value]="session"></p-tableCheckbox>
       </td>
-      <td data-column="sessionName" data-cy="session-overview-name-col">{{ session.name }}</td>
+      <td data-column="sessionName" data-cy="session-overview-name-col">
+        <span class="p-column-title">{{ 'SESSION.OVERVIEW.TABLE_HEADER.NAME_COL_LABEL' | translate }}</span
+        >{{ session.name }}
+      </td>
       <td data-column="createdAt" data-cy="session-overview-created-at-col">
-        {{ session.createdAt | localizedDate }}
+        <span class="p-column-title">{{ 'SESSION.OVERVIEW.TABLE_HEADER.CREATION_DATE_COL_LABEL' | translate }}</span
+        >{{ session.createdAt | localizedDate }}
       </td>
       <td data-column="participants" data-cy="session-overview-participants-col">
-        {{ session.userSessions?.length || 0 }}
+        <span class="p-column-title">{{ 'SESSION.OVERVIEW.TABLE_HEADER.PARTICIPANTS_COL_LABEL' | translate }}</span
+        >{{ session.userSessions?.length || 0 }}
       </td>
       <td data-column="updatedAt" data-cy="session-overview-updated-at-col">
-        {{ session.updatedAt | localizedDate }}
+        <span class="p-column-title">{{ 'SESSION.OVERVIEW.TABLE_HEADER.CHANGED_DATE_COL_LABEL' | translate }}</span
+        >{{ session.updatedAt | localizedDate }}
       </td>
       <td *ngIf="supportedActions.updateSession" (click)="$event.stopPropagation()">
+        <span class="p-column-title">{{ 'SESSION.OVERVIEW.TABLE_HEADER.SETTINGS_COL_LABEL' | translate }}</span>
         <button
           pButton
           pRipple
@@ -106,6 +115,7 @@
         ></button>
       </td>
       <td *ngIf="supportedActions.displaySessionCode" (click)="$event.stopPropagation()">
+        <span class="p-column-title">{{ 'SESSION.OVERVIEW.TABLE_HEADER.LINK_COL_LABEL' | translate }}</span>
         <button
           pButton
           pRipple
@@ -118,6 +128,7 @@
         ></button>
       </td>
       <td *ngIf="supportedActions.copySession" (click)="$event.stopPropagation()">
+        <span class="p-column-title">{{ 'SESSION.OVERVIEW.TABLE_HEADER.COPY_COL_LABEL' | translate }}</span>
         <button
           icon="pi pi-clone"
           pButton
@@ -128,6 +139,7 @@
         ></button>
       </td>
       <td *ngIf="supportedActions.enterSession" (click)="$event.stopPropagation()">
+        <span class="p-column-title">{{ 'SESSION.OVERVIEW.TABLE_HEADER.ENTER_COL_LABEL' | translate }}</span>
         <button
           icon="pi pi-arrow-circle-right"
           pButton
