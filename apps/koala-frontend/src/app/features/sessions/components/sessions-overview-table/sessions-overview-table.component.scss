@@ -1,19 +1,7 @@
-table {
-  width: 100%;
-}
-
-.table-toolbar {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 10px;
-}
-
-.table-toolbar > * {
-  margin-left: 10px;
-}
-
 .session-table-row {
   cursor: pointer;
+}
+
+.p-column-title {
+  font-weight: 500;
 }
