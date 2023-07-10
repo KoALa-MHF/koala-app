@@ -1,43 +1,45 @@
-<div class="table-toolbar">
-  <button
-    pButton
-    pRipple
-    *ngIf="supportedActions.createSession"
-    label="{{ 'SESSION.CREATE_SESSION_MENU_LABEL' | translate }}"
-    icon="pi pi-plus-circle"
-    data-cy="session-create-btn"
-    (click)="onSessionCreate()"
-    class="p-button-text menu-button"
-    attr.aria-label="{{ 'SESSION.OVERVIEW.ACC.CREATE' | translate }}"
-  ></button>
+<p-toolbar>
+  <ng-template pTemplate="left">
+    <button
+      pButton
+      pRipple
+      *ngIf="supportedActions.createSession"
+      label="{{ 'SESSION.CREATE_SESSION_MENU_LABEL' | translate }}"
+      icon="pi pi-plus-circle"
+      data-cy="session-create-btn"
+      (click)="onSessionCreate()"
+      class="p-button-text menu-button"
+      attr.aria-label="{{ 'SESSION.OVERVIEW.ACC.CREATE' | translate }}"
+    ></button>
 
-  <button
-    pButton
-    pRipple
-    *ngIf="supportedActions.exportSession"
-    label="{{ 'SESSION.EXPORT_SESSIONS_MENU_LABEL' | translate }}"
-    icon="pi pi-file-export"
-    class="p-button-text menu-button"
-    aria-labelledby="SessionOverviewTableHeaderExportColumn"
-    (click)="onExport()"
-    data-cy="session-overview-export-btn"
-    [disabled]="selectedSessions.length === 0"
-  ></button>
+    <button
+      pButton
+      pRipple
+      *ngIf="supportedActions.exportSession"
+      label="{{ 'SESSION.EXPORT_SESSIONS_MENU_LABEL' | translate }}"
+      icon="pi pi-file-export"
+      class="p-button-text menu-button"
+      aria-labelledby="SessionOverviewTableHeaderExportColumn"
+      (click)="onExport()"
+      data-cy="session-overview-export-btn"
+      [disabled]="selectedSessions.length === 0"
+    ></button>
 
-  <button
-    pButton
-    pRipple
-    *ngIf="supportedActions.deleteSession"
-    label="{{ 'SESSION.DELETE_SESSIONS_MENU_LABEL' | translate }}"
-    name="deleteButton"
-    icon="pi pi-trash"
-    class="p-button-text menu-button"
-    aria-labelledby="SessionOverviewTableHeaderDeleteColumn"
-    (click)="onSessionDelete()"
-    data-cy="session-overview-delete-btn"
-    [disabled]="selectedSessions.length === 0"
-  ></button>
-</div>
+    <button
+      pButton
+      pRipple
+      *ngIf="supportedActions.deleteSession"
+      label="{{ 'SESSION.DELETE_SESSIONS_MENU_LABEL' | translate }}"
+      name="deleteButton"
+      icon="pi pi-trash"
+      class="p-button-text menu-button"
+      aria-labelledby="SessionOverviewTableHeaderDeleteColumn"
+      (click)="onSessionDelete()"
+      data-cy="session-overview-delete-btn"
+      [disabled]="selectedSessions.length === 0"
+    ></button>
+  </ng-template>
+</p-toolbar>
 
 <p-table
   selectionMode="multiple"
