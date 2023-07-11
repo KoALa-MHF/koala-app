@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 
 import { SessionsRoutingModule } from './sessions-routing.module';
 import { SessionsOverviewPage } from './pages/sessions-overview/sessions-overview.page';
-import { SessionsService } from './services/sessions.service';
-import { MediaControlService } from './services/media-control.service';
 import { ToolbarsService } from './services/toolbars.service';
 
 //primeng modules
@@ -27,7 +25,6 @@ import { SidebarModule } from 'primeng/sidebar';
 import { DividerModule } from 'primeng/divider';
 import { ToolbarModule } from 'primeng/toolbar';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { SpeedDialModule } from 'primeng/speeddial';
 
 import { QRCodeModule } from 'angularx-qrcode';
 
@@ -134,7 +131,6 @@ import { SessionTimerComponent } from './components/session-timer/session-timer.
     DividerModule,
     ToolbarModule,
     InputNumberModule,
-    SpeedDialModule,
   ],
   providers: [
     MediaService,

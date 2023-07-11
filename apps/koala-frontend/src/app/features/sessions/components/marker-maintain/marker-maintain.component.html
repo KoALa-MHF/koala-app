@@ -61,7 +61,11 @@
       </label>
     </span>
     <small id="marker-name-help" class="field-explanation">
-      {{ 'SESSION.MAINTAIN.MARKER.MARKER_ABBREVIATION_INPUT_EXPLANATION' | translate }}
+      {{
+        markerType !== MarkerType.Slider
+          ? ('SESSION.MAINTAIN.MARKER.MARKER_ABBREVIATION_INPUT_EXPLANATION' | translate)
+          : ('SESSION.MAINTAIN.MARKER.MARKER_ABBREVIATION_INPUT_EXPLANATION_MANDATORY' | translate)
+      }}
     </small>
   </div>
 

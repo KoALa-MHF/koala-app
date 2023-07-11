@@ -1,7 +1,7 @@
 <div class="container" *ngIf="session$ | async as session">
   <div class="content-left">
     <div
-      *ngIf="( ( session.enablePlayer || false ) || session.isOwner ) && ( session.isAudioSession )"
+      *ngIf="( ( session.enablePlayer ) || session.isSessionOwner ) && ( session.isAudioSession )"
       class="p-toolbar-group-center"
     >
       <koala-audio-player (mediaEvent)="onMediaEvent($event)"></koala-audio-player>
@@ -19,7 +19,7 @@
 
     <div
       style="display: flex; justify-content: center; flex-direction: column; align-items: center"
-      *ngIf="session.isOwner && !session.isAudioSession"
+      *ngIf="session.isSessionOwner && !session.isAudioSession"
     >
       <koala-session-timer
         [playMode]="session.playMode || PlayMode.Paused"
@@ -39,13 +39,13 @@
     ></koala-app-annotation>
     <koala-marker-toolbar
       class="content-centered-horizontally"
-      [toolbarMode]="( ( session.editable && session.playMode === PlayMode.Running ) || ( session.isOwner && session.liveSessionEnd === null ) ) ? ToolbarMode.Session : ToolbarMode.SessionDisabled"
+      [toolbarMode]="( ( ( session.editable || session.isSessionOwner ) && session.playMode === PlayMode.Running ) || ( session.isSessionOwner && session.liveSessionEnd === null ) ) ? ToolbarMode.Session : ToolbarMode.SessionDisabled"
       [markers]="markers"
       (event)="onMarkerButtonEvent($event)"
     ></koala-marker-toolbar>
   </div>
   <div
-    *ngIf="( ( session.enablePlayer || false ) || session.isOwner) && ( session.isAudioSession )"
+    *ngIf="( ( session.enablePlayer || false ) || session.isSessionOwner) && ( session.isAudioSession )"
     class="content-right"
   >
     <koala-volume-control (mediaEvent)="onMediaEvent($event)"></koala-volume-control>

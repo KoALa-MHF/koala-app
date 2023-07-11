@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { WaveSurfer, WaveSurferEvents } from 'wavesurfer.js';
 import TimelinePlugin from 'wavesurfer.js/dist/plugins/timeline.js';
-import { WaveSurferParams } from 'wavesurfer.js/types/params';
 import { EventHandler } from 'wavesurfer.js/types/util';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -95,7 +94,7 @@ export class MediaControlService {
         this.mediaPlayStateChangedSubject.next(MediaActions.Ready);
       });
       this.addEventHandler('audioprocess', (currentTime) => {
-        if (this.sessionService.getFocusSession()?.isOwner) {
+        if (this.sessionService.getFocusSession()?.isSessionOwner) {
           if (
             Math.round((this.sessionService.getFocusSession()?.playPosition || 0) * 10) + 3 <
             Math.round(currentTime * 10)
@@ -106,8 +105,9 @@ export class MediaControlService {
           }
         }
       });
+
       this.addEventHandler('seeking', (newTime) => {
-        if (this.sessionService.getFocusSession()?.isOwner) {
+        if (this.sessionService.getFocusSession()?.isSessionOwner) {
           this.sessionService
             .setPlayPosition(parseInt(this.sessionService.getFocusSession()?.id || '0'), w.getDuration() * newTime)
             .subscribe(() => {
@@ -121,7 +121,9 @@ export class MediaControlService {
   }
 
   setPosition(positionInSeconds: number) {
-    this.getWave().setTime(positionInSeconds);
+    try {
+      this.getWave().setTime(positionInSeconds);
+    } catch {}
   }
 
   private async createMediadata(blob: Blob): Promise<any> {

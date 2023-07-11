@@ -46,11 +46,7 @@ export class SessionsService {
   ) {}
 
   getAll(): Observable<Session[]> {
-    return this.getSessionGQL.fetch({}, { fetchPolicy: 'no-cache' }).pipe(
-      map((data) => data.data.sessions),
-      map((sessions) => sessions.map((session) => this.addIsOwner(session))),
-      map((sessions) => sessions.map((session) => this.addIsAudioSession(session)))
-    );
+    return this.getSessionGQL.fetch({}, { fetchPolicy: 'no-cache' }).pipe(map((data) => data.data.sessions));
   }
 
   getSessionIdBySessionCode(code: string): Observable<number> {
@@ -67,11 +63,7 @@ export class SessionsService {
         },
         { fetchPolicy: 'no-cache' }
       )
-      .pipe(
-        map((data) => data.data.session),
-        map((session) => this.addIsOwner(session)),
-        map((session) => this.addIsAudioSession(session))
-      );
+      .pipe(map((data) => data.data.session));
   }
 
   create(session: CreateSessionInput) {
@@ -96,23 +88,21 @@ export class SessionsService {
       })
       .pipe(
         map((response) => {
-          const session = response.data?.sessionUpdated;
-          if (session) {
-            return this.addIsOwner(this.addIsAudioSession(session));
-          } else {
-            throw new Error('Session Response Empty After SessionUpdate');
-          }
-        }),
-        map((session: Session) => {
-          if (this.focusSession && this.focusSession.id === session.id) {
-            //take over owner and isAudio information
-            session.isOwner = this.focusSession.isOwner;
-            session.owner = this.focusSession.owner;
-            session.media = this.focusSession.media;
-            session = this.addIsAudioSession(session);
-          }
+          if (response.data) {
+            const session: Session = response.data.sessionUpdated;
+            if (session && this.focusSession && this.focusSession.id === session.id && this.focusSession.media) {
+              //take over owner and isAudio information
+              session.media = this.focusSession.media;
+            }
 
-          return session;
+            //keep isSessionOwner information in this case,
+            //because the push comes from the session owner and the flag will be always true otherwise
+            session.isSessionOwner = this.focusSession?.isSessionOwner;
+
+            return session;
+          } else {
+            throw new Error('Session Response Empty After Session Update');
+          }
         })
       )
       .subscribe({
@@ -177,12 +167,11 @@ export class SessionsService {
       map((response) => {
         const session = response.data?.setPlayMode;
         if (session) {
-          return this.addIsOwner(session);
+          return session;
         } else {
           throw new Error('Session Response Empty After SetPlayMode');
         }
-      }),
-      map((session) => this.addIsAudioSession(session))
+      })
     );
   }
 
@@ -191,12 +180,11 @@ export class SessionsService {
       map((response) => {
         const session = response.data?.setPlayPosition;
         if (session) {
-          return this.addIsOwner(session);
+          return session;
         } else {
           throw new Error('Session Response Empty After SetPlayPosition');
         }
-      }),
-      map((session) => this.addIsAudioSession(session))
+      })
     );
   }
 
@@ -211,13 +199,5 @@ export class SessionsService {
 
   getFocusSession(): Session | undefined {
     return this.focusSession;
-  }
-
-  private addIsOwner(session: Session): Session {
-    return { ...session, isOwner: this.accessTokenService.getLoggedInUserId().toString() === session.owner?.id };
-  }
-
-  private addIsAudioSession(session: Session): Session {
-    return { ...session, isAudioSession: !!session.media?.id };
   }
 }

@@ -135,7 +135,8 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
       d3.select(ev.target).style('stroke', 'black').style('opacity', 1);
     };
     const mousemove = (d: any, ev: any) => {
-      const htmlText = d.endTime ? `${d.startTime}s - ${d.endTime}s` : `${d.startTime}s`;
+      const htmlText = d.endTime ? `${d.startTime / 1000}s - ${d.endTime / 1000}s` : `${d.startTime / 1000}s`;
+
       this.drawToolTip()
         .html(htmlText)
         .style('left', d3.pointer(ev, ev.target)[0] + 50 + 'px')
@@ -155,9 +156,9 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
             .append((d: DataPoint) => {
               return document.createElementNS(d3.namespaces['svg'], d.display);
             })
-            .attr('x', (d: DataPoint) => this.getPositionXRatio() * d.startTime)
+            .attr('x', (d: DataPoint) => this.getPositionXRatio() * (d.startTime / 1000))
             .attr('y', (d: DataPoint) => this.getRectPositionY(d, posY))
-            .attr('cx', (d: DataPoint) => this.getPositionXRatio() * d.startTime)
+            .attr('cx', (d: DataPoint) => this.getPositionXRatio() * (d.startTime / 1000))
             .attr('cy', posY)
             .attr('r', 5)
             .attr('width', (d: DataPoint) => this.getRectWidth(d))
@@ -247,10 +248,10 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
       return 0;
     }
     if (d.endTime == 0) {
-      const w = Math.abs(this.currentTime - d.startTime) * this.getPositionXRatio();
+      const w = Math.abs(this.currentTime - d.startTime / 1000) * this.getPositionXRatio();
       return w.toFixed(1);
     }
-    return Math.abs(d.endTime - d.startTime) * this.getPositionXRatio();
+    return Math.abs(d.endTime / 1000 - d.startTime / 1000) * this.getPositionXRatio();
   }
 
   public onResize() {
