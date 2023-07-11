@@ -391,7 +391,7 @@ exports[`Sessions (e2e) Update Session Session Owner can update a session 1`] = 
 }
 `;
 
-exports[`Sessions (e2e) Update Session Session Update trickers SessionUpdated Subscription 1`] = `
+exports[`Sessions (e2e) Update Session Session Update triggers SessionUpdated Subscription 1`] = `
 {
   "sessionUpdated": {
     "description": "updated description",

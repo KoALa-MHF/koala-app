@@ -36,7 +36,7 @@
       pRipple
       *ngIf="
         (isAuthenticated$ | async) &&
-        ((focusSessionChanged$ | async)?.enableLiveAnalysis || (focusSessionChanged$ | async)?.isOwner) &&
+        ((focusSessionChanged$ | async)?.enableLiveAnalysis || (focusSessionChanged$ | async)?.isSessionOwner) &&
         isOnAnySessionPage
       "
       icon="pi pi-chart-bar"
@@ -60,7 +60,7 @@
     <button
       pButton
       pRipple
-      *ngIf="(isAuthenticated$ | async) && isOnSessionPage && (focusSessionChanged$ | async)?.isOwner"
+      *ngIf="(isAuthenticated$ | async) && isOnSessionPage && (focusSessionChanged$ | async)?.isSessionOwner"
       icon="pi pi-cog"
       label="{{ 'SESSION.SESSION_SETTINGS_BTN' | translate }}"
       class="p-button-text hidden-xs hidden-sm"
@@ -70,7 +70,9 @@
     <p-divider
       layout="vertical"
       *ngIf="
-        (isAuthenticated$ | async) && (isOnAnySessionPage || isOnSessionPage) && (focusSessionChanged$ | async)?.isOwner
+        (isAuthenticated$ | async) &&
+        (isOnAnySessionPage || isOnSessionPage) &&
+        (focusSessionChanged$ | async)?.isSessionOwner
       "
       class="hidden-xs hidden-sm"
     ></p-divider>
@@ -168,7 +170,7 @@
       pRipple
       *ngIf="
         (isAuthenticated$ | async) &&
-        ((focusSessionChanged$ | async)?.enableLiveAnalysis || (focusSessionChanged$ | async)?.isOwner) &&
+        ((focusSessionChanged$ | async)?.enableLiveAnalysis || (focusSessionChanged$ | async)?.isSessionOwner) &&
         isOnAnySessionPage
       "
       icon="pi pi-chart-bar"
@@ -190,7 +192,7 @@
     <button
       pButton
       pRipple
-      *ngIf="(isAuthenticated$ | async) && isOnSessionPage && (focusSessionChanged$ | async)?.isOwner"
+      *ngIf="(isAuthenticated$ | async) && isOnSessionPage && (focusSessionChanged$ | async)?.isSessionOwner"
       icon="pi pi-cog"
       label="{{ 'SESSION.SESSION_SETTINGS_BTN' | translate }}"
       class="p-button-text"
