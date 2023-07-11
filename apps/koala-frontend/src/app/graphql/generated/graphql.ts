@@ -6,156 +6,158 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
+  ID: { input: string; output: string };
+  String: { input: string; output: string };
+  Boolean: { input: boolean; output: boolean };
+  Int: { input: number; output: number };
+  Float: { input: number; output: number };
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
-  DateTime: any;
+  DateTime: { input: any; output: any };
   /** The `Upload` scalar type represents a file upload. */
-  Upload: any;
+  Upload: { input: any; output: any };
 };
 
 export type Annotation = {
   __typename?: 'Annotation';
   /** Creation Date */
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTime']['output'];
   /** Annotation End Seconds */
-  end?: Maybe<Scalars['Int']>;
+  end?: Maybe<Scalars['Int']['output']>;
   /** ID for Annotation */
-  id: Scalars['Int'];
+  id: Scalars['Int']['output'];
   /** Associated Marker */
   marker: Marker;
   /** Annotation Note */
-  note?: Maybe<Scalars['String']>;
+  note?: Maybe<Scalars['String']['output']>;
   /** Annotation Start Seconds */
-  start: Scalars['Int'];
+  start: Scalars['Int']['output'];
   /** Date of Last Update */
-  updatedAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime']['output'];
   /** Associated UserSession */
   userSession: UserSession;
   /** Annotation Value */
-  value?: Maybe<Scalars['Int']>;
+  value?: Maybe<Scalars['Int']['output']>;
 };
 
 export type AuthenticateSessionInput = {
   /** Session Code */
-  code: Scalars['String'];
+  code: Scalars['String']['input'];
 };
 
 export type AuthenticateUserSessionInput = {
   /** User Session Code */
-  code: Scalars['String'];
+  code: Scalars['String']['input'];
 };
 
 export type Authentication = {
   __typename?: 'Authentication';
   /** JWT Bearer Token */
-  accessToken: Scalars['String'];
+  accessToken: Scalars['String']['output'];
   /** Authenticated user */
   user: User;
 };
 
 export type CreateAnnotationInput = {
   /** Annotation End Seconds */
-  end?: InputMaybe<Scalars['Int']>;
+  end?: InputMaybe<Scalars['Int']['input']>;
   /** Associated Marker */
-  markerId: Scalars['Int'];
+  markerId: Scalars['Int']['input'];
   /** Annotation Note */
-  note?: Scalars['String'];
+  note?: Scalars['String']['input'];
   /** Annotation Start Seconds */
-  start: Scalars['Int'];
+  start: Scalars['Int']['input'];
   /** Associated User Session */
-  userSessionId: Scalars['Int'];
+  userSessionId: Scalars['Int']['input'];
   /** Annotation Value */
-  value?: InputMaybe<Scalars['Int']>;
+  value?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type CreateMarkerInput = {
   /** Marker Name Abbreviation (e.g. for small screen sizes */
-  abbreviation?: InputMaybe<Scalars['String']>;
+  abbreviation?: InputMaybe<Scalars['String']['input']>;
   /** Marker Color */
-  color?: Scalars['String'];
+  color?: Scalars['String']['input'];
   /** Marker Descritpion */
-  description?: Scalars['String'];
+  description?: Scalars['String']['input'];
   /** Marker Icon */
-  icon?: InputMaybe<Scalars['String']>;
+  icon?: InputMaybe<Scalars['String']['input']>;
   /** Marker Name */
-  name: Scalars['String'];
+  name: Scalars['String']['input'];
   /** Marker Type */
   type: MarkerType;
   /** Marker Value Range From */
-  valueRangeFrom?: InputMaybe<Scalars['Int']>;
+  valueRangeFrom?: InputMaybe<Scalars['Int']['input']>;
   /** Marker Value Range To */
-  valueRangeTo?: InputMaybe<Scalars['Int']>;
+  valueRangeTo?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type CreateMediaInput = {
-  file: Scalars['Upload'];
+  file: Scalars['Upload']['input'];
 };
 
 export type CreateSessionInput = {
-  description?: InputMaybe<Scalars['String']>;
-  displaySampleSolution?: InputMaybe<Scalars['Boolean']>;
-  editable?: InputMaybe<Scalars['Boolean']>;
-  enableLiveAnalysis?: InputMaybe<Scalars['Boolean']>;
-  enablePlayer?: InputMaybe<Scalars['Boolean']>;
-  end?: InputMaybe<Scalars['DateTime']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  displaySampleSolution?: InputMaybe<Scalars['Boolean']['input']>;
+  editable?: InputMaybe<Scalars['Boolean']['input']>;
+  enableLiveAnalysis?: InputMaybe<Scalars['Boolean']['input']>;
+  enablePlayer?: InputMaybe<Scalars['Boolean']['input']>;
+  end?: InputMaybe<Scalars['DateTime']['input']>;
   /** Assigned Media */
-  mediaId?: InputMaybe<Scalars['Int']>;
-  name: Scalars['String'];
-  start?: InputMaybe<Scalars['DateTime']>;
+  mediaId?: InputMaybe<Scalars['Int']['input']>;
+  name: Scalars['String']['input'];
+  start?: InputMaybe<Scalars['DateTime']['input']>;
   status?: SessionStatus;
 };
 
 export type CreateUserInput = {
   /** User Email */
-  email?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateUserSessionInput = {
   /** User Session Note */
-  note?: Scalars['String'];
+  note?: Scalars['String']['input'];
   /** User Assopciated to the User Session */
   owner?: InputMaybe<CreateUserInput>;
   /** Associated Session */
-  sessionId: Scalars['Int'];
+  sessionId: Scalars['Int']['input'];
 };
 
 export type InviteUserSessionInput = {
   /** User Session Email */
-  message?: InputMaybe<Scalars['String']>;
+  message?: InputMaybe<Scalars['String']['input']>;
   /** Associated Session */
-  userSessionIds: Array<Scalars['ID']>;
+  userSessionIds: Array<Scalars['ID']['input']>;
 };
 
 export type Marker = {
   __typename?: 'Marker';
   /** Marker Name Abbreviation (e.g. for small screen sizes */
-  abbreviation?: Maybe<Scalars['String']>;
+  abbreviation?: Maybe<Scalars['String']['output']>;
   /** Marker Color */
-  color: Scalars['String'];
+  color: Scalars['String']['output'];
   /** Creation Date */
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTime']['output'];
   /** Marker Description */
-  description?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']['output']>;
   /** Marker Icon */
-  icon?: Maybe<Scalars['String']>;
+  icon?: Maybe<Scalars['String']['output']>;
   /** ID for Marker */
-  id: Scalars['Int'];
+  id: Scalars['Int']['output'];
   /** Marker Name */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   /** Marker Type */
   type: MarkerType;
   /** Date of Last Update */
-  updatedAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime']['output'];
   /** Marker Value Range From */
-  valueRangeFrom?: Maybe<Scalars['Int']>;
+  valueRangeFrom?: Maybe<Scalars['Int']['output']>;
   /** Marker Value Range To */
-  valueRangeTo?: Maybe<Scalars['Int']>;
+  valueRangeTo?: Maybe<Scalars['Int']['output']>;
 };
 
 export enum MarkerType {
@@ -167,15 +169,15 @@ export enum MarkerType {
 export type Media = {
   __typename?: 'Media';
   /** Creation Date */
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTime']['output'];
   /** ID for Media */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /** Media Mime Type */
-  mimeType: Scalars['String'];
+  mimeType: Scalars['String']['output'];
   /** Media Name */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   /** Date of Last Update */
-  updatedAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type Mutation = {
@@ -236,53 +238,53 @@ export type MutationInviteUserSessionArgs = {
 };
 
 export type MutationRemoveAnnotationArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 export type MutationRemoveMarkerArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 export type MutationRemoveSessionArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 export type MutationRemoveUserSessionArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 export type MutationSetMarkerVisibleArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
   updateToolbarMarkerVisible: SetToolbarMarkerVisibilityInput;
 };
 
 export type MutationSetPlayModeArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
   setPlayModeInput: SetPlayModeInput;
 };
 
 export type MutationSetPlayPositionArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
   setPlayPositionInput: SetPlayPositionInput;
 };
 
 export type MutationUpdateAnnotationArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
   updateAnnotationInput: UpdateAnnotationInput;
 };
 
 export type MutationUpdateMarkerArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
   updateMarkerInput: UpdateMarkerInput;
 };
 
 export type MutationUpdateSessionArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
   updateSessionInput: UpdateSessionInput;
 };
 
 export type MutationUpdateToolbarArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
   updateToolbarInput: UpdateToolbarInput;
 };
 
@@ -291,7 +293,7 @@ export type MutationUpdateUserArgs = {
 };
 
 export type MutationUpdateUserSessionArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
   updateUserSessionInput: UpdateUserSessionInput;
 };
 
@@ -314,68 +316,70 @@ export type Query = {
 };
 
 export type QueryAnnotationArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 export type QueryMarkerArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 export type QueryMarkersArgs = {
-  ids?: InputMaybe<Array<Scalars['Int']>>;
+  ids?: InputMaybe<Array<Scalars['Int']['input']>>;
 };
 
 export type QuerySessionArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 export type QuerySessionByCodeArgs = {
-  code: Scalars['String'];
+  code: Scalars['String']['input'];
 };
 
 export type QueryUserSessionArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 export type Session = {
   __typename?: 'Session';
-  code: Scalars['String'];
+  code: Scalars['String']['output'];
   /** Creation Date */
-  createdAt: Scalars['DateTime'];
-  currentSessionServerTime: Scalars['Float'];
+  createdAt: Scalars['DateTime']['output'];
+  currentSessionServerTime: Scalars['Float']['output'];
   /** Description */
-  description?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']['output']>;
   /** Default for Session - Sample Solution Displayed */
-  displaySampleSolution?: Maybe<Scalars['Boolean']>;
+  displaySampleSolution?: Maybe<Scalars['Boolean']['output']>;
   /** Default for Session - Editable for Participants */
-  editable?: Maybe<Scalars['Boolean']>;
+  editable?: Maybe<Scalars['Boolean']['output']>;
   /** Default for Session - Annotations are Directly Displayed in Analysis */
-  enableLiveAnalysis?: Maybe<Scalars['Boolean']>;
+  enableLiveAnalysis?: Maybe<Scalars['Boolean']['output']>;
   /** Default for Session - Player Enabled for Participants */
-  enablePlayer?: Maybe<Scalars['Boolean']>;
+  enablePlayer?: Maybe<Scalars['Boolean']['output']>;
   /** End of Session */
-  end?: Maybe<Scalars['DateTime']>;
+  end?: Maybe<Scalars['DateTime']['output']>;
   /** ID for Session */
-  id: Scalars['ID'];
-  liveSessionEnd?: Maybe<Scalars['Float']>;
-  liveSessionStart?: Maybe<Scalars['Float']>;
+  id: Scalars['ID']['output'];
+  isAudioSession: Scalars['Boolean']['output'];
+  isSessionOwner: Scalars['Boolean']['output'];
+  liveSessionEnd?: Maybe<Scalars['Float']['output']>;
+  liveSessionStart?: Maybe<Scalars['Float']['output']>;
   /** Associated Media File */
   media?: Maybe<Media>;
   /** Session Name */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   /** Associated User */
   owner: User;
   /** Play Mode */
   playMode?: Maybe<PlayMode>;
-  playPosition?: Maybe<Scalars['Float']>;
+  playPosition?: Maybe<Scalars['Float']['output']>;
   /** Start of Session */
-  start?: Maybe<Scalars['DateTime']>;
+  start?: Maybe<Scalars['DateTime']['output']>;
   /** Session Status */
   status?: Maybe<SessionStatus>;
   /** Associated Toolbars */
   toolbars: Array<Toolbar>;
   /** Date of Last Update */
-  updatedAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime']['output'];
   /** Associated User Sessions */
   userSessions: Array<UserSession>;
 };
@@ -390,12 +394,12 @@ export type SetPlayModeInput = {
 };
 
 export type SetPlayPositionInput = {
-  playPosition: Scalars['Float'];
+  playPosition: Scalars['Float']['input'];
 };
 
 export type SetToolbarMarkerVisibilityInput = {
-  markerId: Scalars['ID'];
-  visible: Scalars['Boolean'];
+  markerId: Scalars['ID']['input'];
+  visible: Scalars['Boolean']['input'];
 };
 
 export type Subscription = {
@@ -405,100 +409,100 @@ export type Subscription = {
 };
 
 export type SubscriptionSessionUpdatedArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 export type SubscriptionToolbarUpdatedArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 export type Toolbar = {
   __typename?: 'Toolbar';
   /** Creation Date */
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTime']['output'];
   /** ID for Media */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   markers?: Maybe<Array<ToolbarMarker>>;
   /** Associated Session */
   session: Session;
   /** Date of Last Update */
-  updatedAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type ToolbarMarker = {
   __typename?: 'ToolbarMarker';
   /** Marker ID */
-  markerId: Scalars['ID'];
-  visible: Scalars['Boolean'];
+  markerId: Scalars['ID']['output'];
+  visible: Scalars['Boolean']['output'];
 };
 
 export type UpdateAnnotationInput = {
   /** Annotation Note */
-  note?: InputMaybe<Scalars['String']>;
+  note?: InputMaybe<Scalars['String']['input']>;
   /** Annotation Value */
-  value?: InputMaybe<Scalars['Int']>;
+  value?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type UpdateMarkerInput = {
   /** Marker Name Abbreviation (e.g. for small screen sizes */
-  abbreviation?: InputMaybe<Scalars['String']>;
+  abbreviation?: InputMaybe<Scalars['String']['input']>;
   /** Marker Color */
-  color?: InputMaybe<Scalars['String']>;
+  color?: InputMaybe<Scalars['String']['input']>;
   /** Marker Descritpion */
-  description?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']['input']>;
   /** Marker Icon */
-  icon?: InputMaybe<Scalars['String']>;
+  icon?: InputMaybe<Scalars['String']['input']>;
   /** Marker Name */
-  name?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']['input']>;
   /** Marker Type */
   type?: InputMaybe<MarkerType>;
   /** Marker Value Range From */
-  valueRangeFrom?: InputMaybe<Scalars['Int']>;
+  valueRangeFrom?: InputMaybe<Scalars['Int']['input']>;
   /** Marker Value Range To */
-  valueRangeTo?: InputMaybe<Scalars['Int']>;
+  valueRangeTo?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type UpdateSessionInput = {
-  description?: InputMaybe<Scalars['String']>;
-  displaySampleSolution?: InputMaybe<Scalars['Boolean']>;
-  editable?: InputMaybe<Scalars['Boolean']>;
-  enableLiveAnalysis?: InputMaybe<Scalars['Boolean']>;
-  enablePlayer?: InputMaybe<Scalars['Boolean']>;
-  end?: InputMaybe<Scalars['DateTime']>;
-  liveSessionStart?: InputMaybe<Scalars['Float']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  displaySampleSolution?: InputMaybe<Scalars['Boolean']['input']>;
+  editable?: InputMaybe<Scalars['Boolean']['input']>;
+  enableLiveAnalysis?: InputMaybe<Scalars['Boolean']['input']>;
+  enablePlayer?: InputMaybe<Scalars['Boolean']['input']>;
+  end?: InputMaybe<Scalars['DateTime']['input']>;
+  liveSessionStart?: InputMaybe<Scalars['Float']['input']>;
   /** Assigned Media */
-  mediaId?: InputMaybe<Scalars['Int']>;
-  name?: InputMaybe<Scalars['String']>;
-  start?: InputMaybe<Scalars['DateTime']>;
+  mediaId?: InputMaybe<Scalars['Int']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  start?: InputMaybe<Scalars['DateTime']['input']>;
   status?: InputMaybe<SessionStatus>;
 };
 
 export type UpdateToolbarInput = {
-  markers?: Array<Scalars['String']>;
+  markers?: Array<Scalars['String']['input']>;
 };
 
 export type UpdateUserInput = {
   /** User Displayname */
-  displayName?: InputMaybe<Scalars['String']>;
+  displayName?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateUserSessionInput = {
   /** User Session Note */
-  note?: InputMaybe<Scalars['String']>;
+  note?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
   __typename?: 'User';
   /** Creation Date */
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTime']['output'];
   /** User Display Name */
-  displayName?: Maybe<Scalars['String']>;
+  displayName?: Maybe<Scalars['String']['output']>;
   /** User Email */
-  email?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']['output']>;
   /** ID for User */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /** Date of Last Update */
-  updatedAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type UserSession = {
@@ -506,13 +510,13 @@ export type UserSession = {
   /** Associated Annotations */
   annotations: Array<Annotation>;
   /** Creation Date */
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTime']['output'];
   /** ID for User Session */
-  id: Scalars['Int'];
+  id: Scalars['Int']['output'];
   /** Invitation Date */
-  invitedAt: Scalars['DateTime'];
+  invitedAt: Scalars['DateTime']['output'];
   /** User Session Note */
-  note?: Maybe<Scalars['String']>;
+  note?: Maybe<Scalars['String']['output']>;
   /** Associated User */
   owner: User;
   /** Associated Session */
@@ -520,7 +524,7 @@ export type UserSession = {
   /** User Session Status */
   status: UserSessionStatus;
   /** Date of Last Update */
-  updatedAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export enum UserSessionStatus {
@@ -565,7 +569,7 @@ export type CreateNewSessionMutation = {
 };
 
 export type UpdateSessionMutationVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
   session: UpdateSessionInput;
 }>;
 
@@ -590,13 +594,13 @@ export type UpdateSessionMutation = {
 };
 
 export type DeleteSessionMutationVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 }>;
 
 export type DeleteSessionMutation = { __typename?: 'Mutation'; removeSession: { __typename?: 'Session'; id: string } };
 
 export type DeleteAnnotationMutationVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 }>;
 
 export type DeleteAnnotationMutation = {
@@ -620,7 +624,7 @@ export type CreateMarkerMutation = {
 };
 
 export type UpdateToolbarMutationVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
   updateToolbarInput: UpdateToolbarInput;
 }>;
 
@@ -634,7 +638,7 @@ export type UpdateToolbarMutation = {
 };
 
 export type SetMarkerVisibilityInToolbarMutationVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
   setToolbarMarkerVisibilityInput: SetToolbarMarkerVisibilityInput;
 }>;
 
@@ -648,7 +652,7 @@ export type SetMarkerVisibilityInToolbarMutation = {
 };
 
 export type AuthenticateSessionCodeMutationVariables = Exact<{
-  sessionCode: Scalars['String'];
+  sessionCode: Scalars['String']['input'];
 }>;
 
 export type AuthenticateSessionCodeMutation = {
@@ -657,8 +661,8 @@ export type AuthenticateSessionCodeMutation = {
 };
 
 export type CreateUserSessionMutationVariables = Exact<{
-  sessionId: Scalars['Int'];
-  email: Scalars['String'];
+  sessionId: Scalars['Int']['input'];
+  email: Scalars['String']['input'];
 }>;
 
 export type CreateUserSessionMutation = {
@@ -667,8 +671,8 @@ export type CreateUserSessionMutation = {
 };
 
 export type InviteParticipantsMutationVariables = Exact<{
-  userSessionIds: Array<Scalars['ID']> | Scalars['ID'];
-  message: Scalars['String'];
+  userSessionIds: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
+  message: Scalars['String']['input'];
 }>;
 
 export type InviteParticipantsMutation = {
@@ -677,7 +681,7 @@ export type InviteParticipantsMutation = {
 };
 
 export type RemoveUserSessionMutationVariables = Exact<{
-  userSessionId: Scalars['Int'];
+  userSessionId: Scalars['Int']['input'];
 }>;
 
 export type RemoveUserSessionMutation = {
@@ -686,7 +690,7 @@ export type RemoveUserSessionMutation = {
 };
 
 export type UpdateUserMutationVariables = Exact<{
-  displayName: Scalars['String'];
+  displayName: Scalars['String']['input'];
 }>;
 
 export type UpdateUserMutation = {
@@ -712,7 +716,7 @@ export type CreateAnnotationMutation = {
 };
 
 export type SetPlayModeMutationVariables = Exact<{
-  sessionId: Scalars['Int'];
+  sessionId: Scalars['Int']['input'];
   setPlayModeInput: SetPlayModeInput;
 }>;
 
@@ -762,7 +766,7 @@ export type SetPlayModeMutation = {
 };
 
 export type SetPlayPositionMutationVariables = Exact<{
-  sessionId: Scalars['Int'];
+  sessionId: Scalars['Int']['input'];
   setPlayPositionInput: SetPlayPositionInput;
 }>;
 
@@ -832,6 +836,8 @@ export type GetSessionsQuery = {
     liveSessionStart?: number | null;
     liveSessionEnd?: number | null;
     currentSessionServerTime: number;
+    isSessionOwner: boolean;
+    isAudioSession: boolean;
     code: string;
     createdAt: any;
     updatedAt: any;
@@ -849,7 +855,7 @@ export type GetSessionsQuery = {
 };
 
 export type GetOneSessionQueryVariables = Exact<{
-  sessionId: Scalars['Int'];
+  sessionId: Scalars['Int']['input'];
 }>;
 
 export type GetOneSessionQuery = {
@@ -871,6 +877,8 @@ export type GetOneSessionQuery = {
     liveSessionStart?: number | null;
     liveSessionEnd?: number | null;
     currentSessionServerTime: number;
+    isSessionOwner: boolean;
+    isAudioSession: boolean;
     code: string;
     createdAt: any;
     updatedAt: any;
@@ -900,7 +908,7 @@ export type GetOneSessionQuery = {
 };
 
 export type GetOneSessionBySessionCodeQueryVariables = Exact<{
-  code: Scalars['String'];
+  code: Scalars['String']['input'];
 }>;
 
 export type GetOneSessionBySessionCodeQuery = {
@@ -909,7 +917,7 @@ export type GetOneSessionBySessionCodeQuery = {
 };
 
 export type GetMarkersQueryVariables = Exact<{
-  ids?: InputMaybe<Array<Scalars['Int']> | Scalars['Int']>;
+  ids?: InputMaybe<Array<Scalars['Int']['input']> | Scalars['Int']['input']>;
 }>;
 
 export type GetMarkersQuery = {
@@ -938,7 +946,7 @@ export type GetUserQuery = {
 };
 
 export type OnSessionUpdatedSubscriptionVariables = Exact<{
-  sessionId: Scalars['ID'];
+  sessionId: Scalars['ID']['input'];
 }>;
 
 export type OnSessionUpdatedSubscription = {
@@ -960,6 +968,8 @@ export type OnSessionUpdatedSubscription = {
     liveSessionStart?: number | null;
     liveSessionEnd?: number | null;
     currentSessionServerTime: number;
+    isSessionOwner: boolean;
+    isAudioSession: boolean;
     toolbars: Array<{
       __typename?: 'Toolbar';
       id: string;
@@ -976,7 +986,7 @@ export type OnSessionUpdatedSubscription = {
 };
 
 export type OnToolbarUpdatedSubscriptionVariables = Exact<{
-  toolbarId: Scalars['ID'];
+  toolbarId: Scalars['ID']['input'];
 }>;
 
 export type OnToolbarUpdatedSubscription = {
@@ -1491,6 +1501,8 @@ export const GetSessionsDocument = gql`
       liveSessionStart
       liveSessionEnd
       currentSessionServerTime
+      isSessionOwner
+      isAudioSession
       code
       userSessions {
         id
@@ -1550,6 +1562,8 @@ export const GetOneSessionDocument = gql`
       liveSessionStart
       liveSessionEnd
       currentSessionServerTime
+      isSessionOwner
+      isAudioSession
       code
       media {
         id
@@ -1693,6 +1707,8 @@ export const OnSessionUpdatedDocument = gql`
       liveSessionStart
       liveSessionEnd
       currentSessionServerTime
+      isSessionOwner
+      isAudioSession
       toolbars {
         id
         markers {

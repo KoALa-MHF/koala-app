@@ -169,6 +169,12 @@ export class Session extends BaseEntity {
   @Field({ nullable: false })
   currentSessionServerTime: number;
 
+  @Field({ nullable: false })
+  isAudioSession: boolean;
+
+  @Field({ nullable: false })
+  isSessionOwner: boolean;
+
   @BeforeInsert()
   async generateCode() {
     this.code = await nanoid();

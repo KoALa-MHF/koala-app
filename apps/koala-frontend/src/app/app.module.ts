@@ -29,6 +29,7 @@ import { AuthInterceptor } from './features/auth/http-interceptors/auth-intercep
 import { getMainDefinition } from '@apollo/client/utilities';
 import { OperationDefinitionNode } from 'graphql';
 import { registerLocaleData } from '@angular/common';
+import { AccessTokenService } from './features/auth/services/access-token.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -63,14 +64,18 @@ export function HttpLoaderFactory(http: HttpClient) {
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     {
       provide: APOLLO_OPTIONS,
-      useFactory(httpLink: HttpLink) {
+      useFactory(httpLink: HttpLink, accessTokenService: AccessTokenService) {
         // Create a WebSocket link:
         const ws = new WebSocketLink({
           uri: environment.wsBaseUrl + '/graphql',
           options: {
             reconnect: true,
             connectionParams: () => {
-              return { param1: 'Param1' };
+              return {
+                headers: {
+                  Authorization: `Bearer ${accessTokenService.getAccessToken()}`,
+                },
+              };
             },
           },
         });
@@ -97,6 +102,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       },
       deps: [
         HttpLink,
+        AccessTokenService,
       ],
     },
     MessageService,

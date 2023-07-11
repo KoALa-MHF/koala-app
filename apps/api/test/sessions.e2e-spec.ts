@@ -1,9 +1,7 @@
 import request, { LEGACY_WEBSOCKET_PROTOCOL, supertestWs } from 'supertest-graphql';
 import gql from 'graphql-tag';
-
 import { INestApplication } from '@nestjs/common';
 import { setupTestApplication } from './mocks/test.util';
-
 import { UsersData } from '../src/app/seed/data/users.data';
 
 const QUERY_SESSIONS = gql`
@@ -236,10 +234,30 @@ describe('Sessions (e2e)', () => {
       expect(errors[0].message).toBe('Forbidden resource');
     });
 
-    it('Session Update trickers SessionUpdated Subscription', async () => {
+    it('Not authenticated user registering for Session Update Subscription should be denied', async () => {
+      // the server needs to listen to an address. This is required by the WS test.
+      app.getHttpServer().listen().address();
+      try {
+        await supertestWs(app.getHttpServer())
+          .protocol(LEGACY_WEBSOCKET_PROTOCOL)
+          .subscribe(SESSION_UPDATED)
+          .variables(SESSION_UPDATED_VARIABLES);
+
+        expect(false).toEqual(true);
+      } catch (error) {
+        expect(error.message).toEqual('Prohibited connection!');
+      }
+    });
+
+    it('Session Update triggers SessionUpdated Subscription', async () => {
       // the server needs to listen to an address. This is required by the WS test.
       app.getHttpServer().listen().address();
       const sub = await supertestWs(app.getHttpServer())
+        .connectionParams({
+          headers: {
+            Authorization: `Bearer ${UsersData.sessionOwner1.id}`,
+          },
+        })
         .protocol(LEGACY_WEBSOCKET_PROTOCOL)
         .subscribe(SESSION_UPDATED)
         .variables(SESSION_UPDATED_VARIABLES);
