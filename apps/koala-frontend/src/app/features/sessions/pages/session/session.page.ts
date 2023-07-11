@@ -105,7 +105,7 @@ export class SessionPage implements OnInit, OnDestroy {
           ?.userSessions?.filter((userSession) => userSession.owner?.id === this.userID.toString())[0];
         this.setSidePanelFormData(session);
 
-        if (!session.isOwner && session.isAudioSession) {
+        if (!session.isSessionOwner && session.isAudioSession) {
           this.mediaControlService.setPosition(session.playPosition || 0);
           this.currentAudioTime = session.playPosition || 0;
         }
@@ -303,8 +303,8 @@ export class SessionPage implements OnInit, OnDestroy {
       for (const annotation of userSessions[0].annotations) {
         this.AnnotationData.get(annotation.marker.id)?.push({
           id: annotation.id,
-          startTime: annotation.start / 1000,
-          endTime: annotation.end != null ? annotation.end / 1000 : 0,
+          startTime: annotation.start,
+          endTime: annotation.end != null ? annotation.end : 0,
           strength: annotation.value,
           display: annotation.end == null ? Display.Circle : Display.Rect,
           color: annotation.marker.color,
@@ -354,7 +354,7 @@ export class SessionPage implements OnInit, OnDestroy {
     });
     this.annotationService
       .create({
-        start: Math.floor(t * 1000),
+        start: t,
         userSessionId: this.myUserSession?.id || 0,
         markerId: m.id,
       })
@@ -376,8 +376,8 @@ export class SessionPage implements OnInit, OnDestroy {
 
         this.annotationService
           .create({
-            start: Math.floor(latest.startTime * 1000),
-            end: Math.floor(latest.endTime * 1000),
+            start: latest.startTime,
+            end: latest.endTime,
             userSessionId: this.myUserSession?.id || 0,
             markerId: m.id,
           })
@@ -422,8 +422,8 @@ export class SessionPage implements OnInit, OnDestroy {
 
         this.annotationService
           .create({
-            start: Math.floor(latest.startTime * 1000),
-            end: Math.floor(latest.endTime * 1000),
+            start: latest.startTime,
+            end: latest.endTime,
             value: latest.strength,
             userSessionId: this.myUserSession?.id || 0,
             markerId: m.id,

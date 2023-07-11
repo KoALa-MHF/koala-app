@@ -5,11 +5,11 @@ import { AccessTokenService } from '../services/access-token.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private readonly accessTokenServce: AccessTokenService) {}
+  constructor(private readonly accessTokenService: AccessTokenService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     try {
-      const accessToken = this.accessTokenServce.getAccessToken();
+      const accessToken = this.accessTokenService.getAccessToken();
 
       if (accessToken) {
         return next.handle(

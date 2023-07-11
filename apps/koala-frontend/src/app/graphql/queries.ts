@@ -18,6 +18,8 @@ const GET_SESSIONS = gql`
       liveSessionStart
       liveSessionEnd
       currentSessionServerTime
+      isSessionOwner
+      isAudioSession
       code
       userSessions {
         id
@@ -72,6 +74,8 @@ const GET_ONE_SESSION = gql`
       liveSessionStart
       liveSessionEnd
       currentSessionServerTime
+      isSessionOwner
+      isAudioSession
       code
       media {
         id

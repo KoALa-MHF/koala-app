@@ -4,7 +4,7 @@
     <div class="p-toolbar-group-start"></div>
     <div class="p-toolbar-group-center">
       <div
-        *ngIf="( ( session.enablePlayer || false ) || session.isOwner ) && session.isAudioSession"
+        *ngIf="( ( session.enablePlayer || false ) || session.isSessionOwner ) && session.isAudioSession"
         class="p-toolbar-group-center"
       >
         <koala-audio-player (mediaEvent)="onMediaEvent($event)"></koala-audio-player>
