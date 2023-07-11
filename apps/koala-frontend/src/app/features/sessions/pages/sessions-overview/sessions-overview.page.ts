@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Session } from '../../types/session.entity';
 import { SessionsService } from '../../services/sessions.service';
 import { Subscription } from 'rxjs';
-import { AuthService } from '../../../auth/services/auth.service';
+import { UserSessionService } from '../../services/user-session.service';
 
 @Component({
   selector: 'koala-sessions-overview',
@@ -28,7 +28,7 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
     private readonly sessionService: SessionsService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly authService: AuthService
+    private readonly userSessionService: UserSessionService
   ) {}
 
   ngOnInit(): void {
@@ -131,5 +131,13 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
   public onSessionCodeDisplay(session: Session) {
     this.qrCodeVisible = true;
     this.selectedSession = session;
+  }
+
+  public onSessionLeave(session: Session) {
+    const userSession = this.userSessionService.getOwnUserSession(session);
+
+    this.userSessionService.removeParticipantFromSession(userSession?.id || 0).subscribe({
+      next: () => this.loadSessions(),
+    });
   }
 }

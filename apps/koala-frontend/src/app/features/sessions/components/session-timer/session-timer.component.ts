@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { PlayMode } from '../../../../graphql/generated/graphql';
-import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'koala-session-timer',
@@ -15,17 +14,6 @@ export class SessionTimerComponent {
   @Output() playModeChanged = new EventEmitter<PlayMode>();
 
   PlayMode = PlayMode;
-
-  timerActions: MenuItem[] = [
-    {
-      label: 'Timer starten',
-
-      icon: 'pi pi-clock',
-      command: () => {
-        console.log('Timer gestartet');
-      },
-    },
-  ];
 
   toggleTimer() {
     if (this.playMode === PlayMode.Paused) {

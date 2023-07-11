@@ -72,10 +72,9 @@ export class UserSession extends BaseEntity {
     ],
   })
   @Field(() => User, { description: 'Associated User' })
-  @IsNotEmpty()
   owner: User;
 
-  @Column()
+  @Column({ nullable: true })
   ownerId: number;
 
   @Column({ nullable: true })

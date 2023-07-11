@@ -121,7 +121,9 @@ export class MediaControlService {
   }
 
   setPosition(positionInSeconds: number) {
-    this.getWave().setTime(positionInSeconds);
+    try {
+      this.getWave().setTime(positionInSeconds);
+    } catch {}
   }
 
   private async createMediadata(blob: Blob): Promise<any> {

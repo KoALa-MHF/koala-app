@@ -26,13 +26,15 @@
       <koala-sessions-overview-table
         [sessions]="sessions | isSessionOwner:false"
         (sessionEnter)="onSessionEnter($event)"
+        (sessionLeave)="onSessionLeave($event)"
         [supportedActions]="{createSession: false,
         copySession: false,
         enterSession: true,
         deleteSession: false,
         exportSession: false,
         updateSession: false,
-        displaySessionCode: false}"
+        displaySessionCode: false,
+        leaveSession: true}"
       ></koala-sessions-overview-table>
     </p-accordionTab>
   </p-accordion>
