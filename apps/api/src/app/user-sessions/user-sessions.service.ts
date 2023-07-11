@@ -152,7 +152,6 @@ export class UserSessionsService {
 
     await this.userSessionsRepository.softRemove(userSession);
 
-    userSession.id = id;
     return userSession;
   }
 
