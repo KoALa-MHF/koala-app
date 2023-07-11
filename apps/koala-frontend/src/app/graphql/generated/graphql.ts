@@ -841,7 +841,11 @@ export type GetSessionsQuery = {
     code: string;
     createdAt: any;
     updatedAt: any;
-    userSessions: Array<{ __typename?: 'UserSession'; id: number }>;
+    userSessions: Array<{
+      __typename?: 'UserSession';
+      id: number;
+      owner: { __typename?: 'User'; id: string; email?: string | null; displayName?: string | null };
+    }>;
     media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
     toolbars: Array<{
       __typename?: 'Toolbar';
@@ -1506,6 +1510,11 @@ export const GetSessionsDocument = gql`
       code
       userSessions {
         id
+        owner {
+          id
+          email
+          displayName
+        }
       }
       media {
         id

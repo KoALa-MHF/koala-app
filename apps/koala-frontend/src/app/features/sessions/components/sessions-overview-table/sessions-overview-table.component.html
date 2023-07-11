@@ -73,11 +73,14 @@
       <th id="SessionOverviewTableHeaderLinkColumn" *ngIf="supportedActions.displaySessionCode">
         {{ 'SESSION.OVERVIEW.TABLE_HEADER.LINK_COL_LABEL' | translate }}
       </th>
-      <th id="SessionOverviewTableHeaderExportColumn" *ngIf="supportedActions.exportSession">
+      <th id="SessionOverviewTableHeaderCopyColumn" *ngIf="supportedActions.copySession">
         {{ 'SESSION.OVERVIEW.TABLE_HEADER.COPY_COL_LABEL' | translate }}
       </th>
-      <th id="SessionOverviewTableHeaderDeleteColumn" *ngIf="supportedActions.deleteSession">
+      <th id="SessionOverviewTableHeaderEnterColumn" *ngIf="supportedActions.enterSession">
         {{ 'SESSION.OVERVIEW.TABLE_HEADER.ENTER_COL_LABEL' | translate }}
+      </th>
+      <th id="SessionOverviewTableHeaderLeaveColumn" *ngIf="supportedActions.leaveSession">
+        {{ 'SESSION.OVERVIEW.TABLE_HEADER.LEAVE_COL_LABEL' | translate }}
       </th>
     </tr>
   </ng-template>
@@ -148,6 +151,17 @@
           pRipple
           data-column="enter"
           (click)="onSessionEnter(session)"
+          class="p-button-text menu-button"
+        ></button>
+      </td>
+      <td *ngIf="supportedActions.leaveSession">
+        <span class="p-column-title">{{ 'SESSION.OVERVIEW.TABLE_HEADER.LEAVE_COL_LABEL' | translate }}</span>
+        <button
+          icon="pi pi-trash"
+          pButton
+          pRipple
+          data-column="leave"
+          (click)="onSessionLeave(session)"
           class="p-button-text menu-button"
         ></button>
       </td>

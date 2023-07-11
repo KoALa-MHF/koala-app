@@ -9,6 +9,7 @@ export interface SessionOverviewActions {
   exportSession: boolean;
   updateSession: boolean;
   displaySessionCode: boolean;
+  leaveSession: boolean;
 }
 
 @Component({
@@ -29,6 +30,7 @@ export class SessionsOverviewTableComponent {
     exportSession: true,
     updateSession: true,
     displaySessionCode: true,
+    leaveSession: false,
   };
 
   @Output() sessionDelete = new EventEmitter<Session[]>();
@@ -38,6 +40,7 @@ export class SessionsOverviewTableComponent {
   @Output() sessionExport = new EventEmitter<Session[]>();
   @Output() sessionCopy = new EventEmitter<Session>();
   @Output() sessionCodeDisplay = new EventEmitter<Session>();
+  @Output() sessionLeave = new EventEmitter<Session>();
 
   selectedSessions: Session[] = [];
 
@@ -78,5 +81,9 @@ export class SessionsOverviewTableComponent {
 
   public onSessionCopy(session: Session) {
     this.sessionCopy.emit(session);
+  }
+
+  public onSessionLeave(session: Session) {
+    this.sessionLeave.emit(session);
   }
 }

@@ -53,7 +53,8 @@
         "SETTINGS_COL_LABEL": "Einstellungen",
         "LINK_COL_LABEL": "Link/QRCode",
         "COPY_COL_LABEL": "Duplizieren",
-        "ENTER_COL_LABEL": "Beitreten"
+        "ENTER_COL_LABEL": "Beitreten",
+        "LEAVE_COL_LABEL": "Austreten"
       },
       "QRCODE": {
         "DIALOG_TITLE": "Session Beitreten",
