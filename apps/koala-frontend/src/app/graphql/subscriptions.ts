@@ -13,6 +13,7 @@ const SUBSCRIBE_SESSION_UPDATED = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      lockAnnotationDelete
       playMode
       playPosition
       liveSessionStart

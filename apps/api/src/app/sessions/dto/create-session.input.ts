@@ -43,7 +43,7 @@ export class CreateSessionInput {
 
   @Field({ nullable: true })
   @IsOptional()
-  enableAnnotationDelete?: boolean;
+  lockAnnotationDelete?: boolean;
 
   @Field(() => Int, { nullable: true, description: 'Assigned Media' })
   @IsOptional()

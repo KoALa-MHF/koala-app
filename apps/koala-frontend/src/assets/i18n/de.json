@@ -103,6 +103,7 @@
         "PLAYER_ENABLED_LABEL": "Player",
         "SAMPLE_SOLUTION_ENABLED_LABEL": "Musterlösung",
         "ANALYSIS_ENABLED_LABEL": "Analyse",
+        "ANNOTATION_DELETE_LOCKED_LABEL": "Annotationen Löschen Sperren",
         "SAVE_BTN": "Speichern",
         "CANCEL_BTN": "Abbrechen",
         "SAVE_ERROR_MESSAGE_TITLE": "Änderungen an der Session konnten nicht gespeichert werden",

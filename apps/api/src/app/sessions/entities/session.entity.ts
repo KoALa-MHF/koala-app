@@ -103,7 +103,7 @@ export class Session extends BaseEntity {
     description: 'Default for Session - Are Participants Allowed to Delete Their Own Annotations',
   })
   @IsOptional()
-  enableAnnotationDelete?: boolean;
+  lockAnnotationDelete?: boolean;
 
   @ManyToOne(() => Media, { nullable: true })
   @Field((type) => Media, {

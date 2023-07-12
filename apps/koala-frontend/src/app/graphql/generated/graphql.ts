@@ -103,6 +103,7 @@ export type CreateSessionInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   displaySampleSolution?: InputMaybe<Scalars['Boolean']['input']>;
   editable?: InputMaybe<Scalars['Boolean']['input']>;
+  lockAnnotationDelete?: InputMaybe<Scalars['Boolean']['input']>;
   enableLiveAnalysis?: InputMaybe<Scalars['Boolean']['input']>;
   enablePlayer?: InputMaybe<Scalars['Boolean']['input']>;
   end?: InputMaybe<Scalars['DateTime']['input']>;
@@ -351,6 +352,8 @@ export type Session = {
   displaySampleSolution?: Maybe<Scalars['Boolean']['output']>;
   /** Default for Session - Editable for Participants */
   editable?: Maybe<Scalars['Boolean']['output']>;
+  /** Default for Session - Are Participants Allowed to Delete Their Own Annotations */
+  lockAnnotationDelete?: Maybe<Scalars['Boolean']['output']>;
   /** Default for Session - Annotations are Directly Displayed in Analysis */
   enableLiveAnalysis?: Maybe<Scalars['Boolean']['output']>;
   /** Default for Session - Player Enabled for Participants */
@@ -466,6 +469,7 @@ export type UpdateSessionInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   displaySampleSolution?: InputMaybe<Scalars['Boolean']['input']>;
   editable?: InputMaybe<Scalars['Boolean']['input']>;
+  lockAnnotationDelete?: InputMaybe<Scalars['Boolean']['input']>;
   enableLiveAnalysis?: InputMaybe<Scalars['Boolean']['input']>;
   enablePlayer?: InputMaybe<Scalars['Boolean']['input']>;
   end?: InputMaybe<Scalars['DateTime']['input']>;
@@ -551,6 +555,7 @@ export type CreateNewSessionMutation = {
     enablePlayer?: boolean | null;
     displaySampleSolution?: boolean | null;
     enableLiveAnalysis?: boolean | null;
+    lockAnnotationDelete?: boolean | null;
     playMode?: PlayMode | null;
     playPosition?: number | null;
     liveSessionStart?: number | null;
@@ -586,6 +591,7 @@ export type UpdateSessionMutation = {
     enablePlayer?: boolean | null;
     displaySampleSolution?: boolean | null;
     enableLiveAnalysis?: boolean | null;
+    lockAnnotationDelete?: boolean | null;
     code: string;
     createdAt: any;
     updatedAt: any;
@@ -734,6 +740,7 @@ export type SetPlayModeMutation = {
     enablePlayer?: boolean | null;
     displaySampleSolution?: boolean | null;
     enableLiveAnalysis?: boolean | null;
+    lockAnnotationDelete?: boolean | null;
     playMode?: PlayMode | null;
     playPosition?: number | null;
     liveSessionStart?: number | null;
@@ -784,6 +791,7 @@ export type SetPlayPositionMutation = {
     enablePlayer?: boolean | null;
     displaySampleSolution?: boolean | null;
     enableLiveAnalysis?: boolean | null;
+    lockAnnotationDelete?: boolean | null;
     playMode?: PlayMode | null;
     playPosition?: number | null;
     liveSessionStart?: number | null;
@@ -831,6 +839,7 @@ export type GetSessionsQuery = {
     enablePlayer?: boolean | null;
     displaySampleSolution?: boolean | null;
     enableLiveAnalysis?: boolean | null;
+    lockAnnotationDelete?: boolean | null;
     playMode?: PlayMode | null;
     playPosition?: number | null;
     liveSessionStart?: number | null;
@@ -876,6 +885,7 @@ export type GetOneSessionQuery = {
     enablePlayer?: boolean | null;
     displaySampleSolution?: boolean | null;
     enableLiveAnalysis?: boolean | null;
+    lockAnnotationDelete?: boolean | null;
     playMode?: PlayMode | null;
     playPosition?: number | null;
     liveSessionStart?: number | null;
@@ -967,6 +977,7 @@ export type OnSessionUpdatedSubscription = {
     enablePlayer?: boolean | null;
     displaySampleSolution?: boolean | null;
     enableLiveAnalysis?: boolean | null;
+    lockAnnotationDelete?: boolean | null;
     playMode?: PlayMode | null;
     playPosition?: number | null;
     liveSessionStart?: number | null;
@@ -1017,6 +1028,7 @@ export const CreateNewSessionDocument = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      lockAnnotationDelete
       playMode
       playPosition
       liveSessionStart
@@ -1065,6 +1077,7 @@ export const UpdateSessionDocument = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      lockAnnotationDelete
       code
       media {
         id
@@ -1358,6 +1371,7 @@ export const SetPlayModeDocument = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      lockAnnotationDelete
       playMode
       playPosition
       liveSessionStart
@@ -1429,6 +1443,7 @@ export const SetPlayPositionDocument = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      lockAnnotationDelete
       playMode
       playPosition
       liveSessionStart
@@ -1500,6 +1515,7 @@ export const GetSessionsDocument = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      lockAnnotationDelete
       playMode
       playPosition
       liveSessionStart
@@ -1566,6 +1582,7 @@ export const GetOneSessionDocument = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      lockAnnotationDelete
       playMode
       playPosition
       liveSessionStart
@@ -1711,6 +1728,7 @@ export const OnSessionUpdatedDocument = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      lockAnnotationDelete
       playMode
       playPosition
       liveSessionStart
