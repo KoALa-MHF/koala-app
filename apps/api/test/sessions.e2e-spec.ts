@@ -61,6 +61,7 @@ const UPDATE_SESSION = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      enableAnnotationDelete
       toolbars {
         id
       }
@@ -81,6 +82,7 @@ const SESSION_UPDATED = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      enableAnnotationDelete
     }
   }
 `;
@@ -110,6 +112,7 @@ const UPDATE_SESSION_VARIABLES = {
     enablePlayer: true,
     displaySampleSolution: true,
     enableLiveAnalysis: true,
+    enableAnnotationDelete: true,
     start: new Date(),
     end: new Date(),
     status: 'CLOSED',

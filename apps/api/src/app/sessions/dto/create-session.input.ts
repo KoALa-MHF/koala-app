@@ -41,6 +41,10 @@ export class CreateSessionInput {
   @IsOptional()
   enableLiveAnalysis?: boolean;
 
+  @Field({ nullable: true })
+  @IsOptional()
+  enableAnnotationDelete?: boolean;
+
   @Field(() => Int, { nullable: true, description: 'Assigned Media' })
   @IsOptional()
   mediaId?: number;
