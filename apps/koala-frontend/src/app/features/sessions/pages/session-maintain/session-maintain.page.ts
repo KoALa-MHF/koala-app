@@ -84,6 +84,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
         enablePlayer: new FormControl<boolean>(false),
         displaySampleSolution: new FormControl<boolean>(false),
         enableLiveAnalysis: new FormControl<boolean>(false),
+        lockAnnotationDelete: new FormControl<boolean>(false),
       }),
       audio: this.formBuilder.group({
         name: new FormControl<string>(''),
@@ -228,6 +229,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
         enablePlayer: this.maintainSessionForm.value.details.enablePlayer,
         displaySampleSolution: this.maintainSessionForm.value.details.displaySampleSolution,
         enableLiveAnalysis: this.maintainSessionForm.value.details.enableLiveAnalysis,
+        lockAnnotationDelete: this.maintainSessionForm.value.details.lockAnnotationDelete,
       })
       .subscribe({
         next: (session: MutationResult<UpdateSessionMutation>) => {
@@ -254,6 +256,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
     this.maintainSessionForm.get('details')?.get('enablePlayer')?.setValue(session.enablePlayer);
     this.maintainSessionForm.get('details')?.get('displaySampleSolution')?.setValue(session.displaySampleSolution);
     this.maintainSessionForm.get('details')?.get('enableLiveAnalysis')?.setValue(session.enableLiveAnalysis);
+    this.maintainSessionForm.get('details')?.get('lockAnnotationDelete')?.setValue(session.lockAnnotationDelete);
 
     if (session.start) {
       this.maintainSessionForm.get('dates')?.get('start')?.setValue(new Date(session.start));
@@ -455,6 +458,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
               displaySampleSolution: this.session?.displaySampleSolution,
               editable: this.session?.editable,
               enableLiveAnalysis: this.session?.enableLiveAnalysis,
+              lockAnnotationDelete: this.session?.lockAnnotationDelete,
               enablePlayer: this.session?.enablePlayer,
               end: this.session?.end,
               name: this.session?.name,

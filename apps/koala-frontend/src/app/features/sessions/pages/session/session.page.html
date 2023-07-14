@@ -35,6 +35,7 @@
       [markers]="markers"
       [totalTime]="totalAudioTime"
       [currentTime]="currentAudioTime"
+      [enableAnnotationDelete]="!session.lockAnnotationDelete"
       (deleteAnnotations)="onDeleteAnnotations($event)"
     ></koala-app-annotation>
     <koala-marker-toolbar
@@ -83,6 +84,13 @@
         formControlName="enableLiveAnalysis"
         [binary]="true"
         label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.ANALYSIS_ENABLED_LABEL' | translate }}"
+      ></p-checkbox>
+    </div>
+    <div>
+      <p-checkbox
+        formControlName="lockAnnotationDelete"
+        [binary]="true"
+        label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.ANNOTATION_DELETE_LOCKED_LABEL' | translate }}"
       ></p-checkbox>
     </div>
   </form>

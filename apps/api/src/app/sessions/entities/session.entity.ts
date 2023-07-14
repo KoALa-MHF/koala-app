@@ -97,6 +97,14 @@ export class Session extends BaseEntity {
   @IsOptional()
   enableLiveAnalysis?: boolean;
 
+  @Column({ nullable: true })
+  @Field({
+    nullable: true,
+    description: 'Default for Session - Are Participants Allowed to Delete Their Own Annotations',
+  })
+  @IsOptional()
+  lockAnnotationDelete?: boolean;
+
   @ManyToOne(() => Media, { nullable: true })
   @Field((type) => Media, {
     nullable: true,
