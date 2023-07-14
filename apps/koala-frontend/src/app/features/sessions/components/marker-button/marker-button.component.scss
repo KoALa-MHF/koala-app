@@ -23,10 +23,18 @@
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
 
-:host span {
-  filter: invert(100%);
+:host ::ng-deep .black-slider .p-slider-handle {
+  background-color: #000000;
 }
 
-:host ::ng-deep .p-slider.p-component.p-slider-horizontal {
-  filter: invert(100%);
+:host ::ng-deep .white-slider .p-slider-handle {
+  background-color: #ffffff;
+}
+
+:host ::ng-deep .black-slider.p-slider {
+  background-color: #000000;
+}
+
+:host ::ng-deep .white-slider.p-slider {
+  background-color: #ffffff;
 }

@@ -20,6 +20,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
 const DEFAULT_ICON_COLOR = '#555bcf';
+const DEFAULT_CONTENT_COLOR = '#FFFFFF';
 const DEFAULT_VALUE_RANGE_FROM = 0;
 const DEFAULT_VALUE_RANGE_TO = 10;
 
@@ -93,6 +94,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy {
         description: new FormControl<string>(''),
         abbreviation: new FormControl<string>(''),
         color: new FormControl<string>(DEFAULT_ICON_COLOR, { nonNullable: true }),
+        contentColor: new FormControl<boolean>(false, { nonNullable: true }),
         icon: new FormControl<string>(''),
         valueRangeFrom: new FormControl<number>(DEFAULT_VALUE_RANGE_FROM),
         valueRangeTo: new FormControl<number>(DEFAULT_VALUE_RANGE_TO),
@@ -266,6 +268,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy {
       type: this.maintainMarkerForm.value.type,
       abbreviation: this.maintainMarkerForm.value.abbreviation,
       color: this.maintainMarkerForm.value.color,
+      contentColor: this.maintainMarkerForm.value.contentColor ? '#000000' : '#FFFFFF',
       icon: this.maintainMarkerForm.value.icon,
       visible: true,
       valueRangeFrom: this.maintainMarkerForm.value.valueRangeFrom,
@@ -278,6 +281,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy {
       valueRangeFrom: DEFAULT_VALUE_RANGE_FROM,
       valueRangeTo: DEFAULT_VALUE_RANGE_TO,
       color: DEFAULT_ICON_COLOR,
+      contentColor: false,
     });
   }
 
@@ -289,6 +293,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy {
         type: this.maintainMarkerForm.value.type,
         abbreviation: this.maintainMarkerForm.value.abbreviation,
         color: this.maintainMarkerForm.value.color,
+        contentColor: this.maintainMarkerForm.value.contentColor ? '#000000' : '#FFFFFF',
         icon: this.maintainMarkerForm.value.icon,
         valueRangeFrom: this.maintainMarkerForm.value.valueRangeFrom,
         valueRangeTo: this.maintainMarkerForm.value.valueRangeTo,
