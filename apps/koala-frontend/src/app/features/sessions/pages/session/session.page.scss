@@ -33,6 +33,7 @@
   width: 300px;
 }
 
-#wavesurfer-container {
+:host ::ng-deep #wavesurfer-container {
   margin-left: 30px;
+  margin-right: 60px;
 }

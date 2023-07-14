@@ -13,7 +13,8 @@
 }
 
 #wavesurfer-container {
-  margin-left: 30px;
+  margin-left: 71px;
+  margin-right: 0px;
 }
 
 .session-name {
@@ -24,9 +25,10 @@
   writing-mode: vertical-lr;
   transform: rotate(180deg);
   padding-left: 10px;
+  margin-bottom: 10px;
 }
 
 koala-app-annotation {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   flex: 20;
 }

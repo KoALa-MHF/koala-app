@@ -35,7 +35,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
 
   @Output() deleteAnnotations = new EventEmitter<Marker>();
 
-  private annotationStrength = 2.5;
+  private sliderHeight = 2.5;
   d3Container = 'd3-container-';
   d3Labels = 'd3-labels-';
   d3tooltip: any;
@@ -56,7 +56,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
         this.drawTimeline();
         let i = 0;
         this.annotationData?.forEach((_, row) => {
-          this.drawAnnotations(row, i);
+          this.drawAnnotations(row, i, this.markers[i]);
           i++;
         });
       }
@@ -125,7 +125,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  private drawAnnotations(row: number, index: number) {
+  private drawAnnotations(row: number, index: number, m: Marker) {
     const svg = d3.select(`svg#${this.d3Container}${this.d3ContainerID}`);
     const trans = svg.transition().duration(50);
     const posY = this.getPositionY(index);
@@ -157,12 +157,12 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
               return document.createElementNS(d3.namespaces['svg'], d.display);
             })
             .attr('x', (d: DataPoint) => this.getPositionXRatio() * (d.startTime / 1000))
-            .attr('y', (d: DataPoint) => this.getRectPositionY(d, posY))
+            .attr('y', (d: DataPoint) => this.getRectPositionY(d, posY, m))
             .attr('cx', (d: DataPoint) => this.getPositionXRatio() * (d.startTime / 1000))
             .attr('cy', posY)
             .attr('r', 5)
             .attr('width', (d: DataPoint) => this.getRectWidth(d))
-            .attr('height', (d: DataPoint) => this.getRectHeight(d))
+            .attr('height', (d: DataPoint) => this.getRectHeight(d, m))
             .attr('id', (d: DataPoint) => `row_${row}_${d.id}`)
             .attr('fill', (d: DataPoint) => d.color)
             .on('mousemove', (ev, d) => mousemove(d, ev))
@@ -226,21 +226,27 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
     return r * id + r / 2;
   }
 
-  private getRectHeight(d: DataPoint) {
+  private getRectHeight(d: DataPoint, m: Marker) {
     if (!d.strength || d.strength == 0) {
       return 2;
     }
-    return Math.abs(d.strength) * this.annotationStrength;
+    if (m.valueRangeTo) {
+      this.sliderHeight = 30 / m.valueRangeTo;
+    }
+    return Math.abs(d.strength) * this.sliderHeight;
   }
 
-  private getRectPositionY(d: DataPoint, posY: number) {
+  private getRectPositionY(d: DataPoint, posY: number, m: Marker) {
     if (!d.strength) {
       return posY - 1;
     }
     if (d.strength < 0) {
       return posY;
     }
-    return posY + d.strength * this.annotationStrength * -1;
+    if (m.valueRangeTo) {
+      this.sliderHeight = 30 / m.valueRangeTo;
+    }
+    return posY + d.strength * this.sliderHeight * -1;
   }
 
   private getRectWidth(d: DataPoint) {
@@ -265,7 +271,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
     this.drawLines();
     let i = 0;
     this.annotationData?.forEach((_, row) => {
-      this.drawAnnotations(row, i);
+      this.drawAnnotations(row, i, this.markers[i]);
       i++;
     });
   }
@@ -283,13 +289,13 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
     if (container) {
       return container.getBoundingClientRect().height;
     }
-    return this.markers.length * 60;
+    return this.markers.length * 65;
   }
 
   private setContainerHeight() {
     const container = document.getElementById(this.d3Container + this.d3ContainerID);
     if (container) {
-      container.style.height = this.markers.length * 55 + 'px';
+      container.style.height = this.markers.length * 65 + 'px';
     }
   }
 
