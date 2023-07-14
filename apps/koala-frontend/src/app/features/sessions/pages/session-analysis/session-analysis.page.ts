@@ -96,8 +96,7 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
       }
 
       if (this.session.userSessions && this.session.userSessions.length > 0) {
-        this.loadMarkerData();
-        this.loadAnnotations(this.session.userSessions);
+        this.loadMarkerData(this.session.userSessions);
         this.appRef.tick();
         setTimeout(() => {
           //TODO: fix using separate component/service
@@ -160,7 +159,7 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
       });
   }
 
-  private loadMarkerData(): void {
+  private loadMarkerData(userSessions: any): void {
     const toolbars = this.session?.toolbars;
     if (toolbars) {
       const toolbar = toolbars[0];
@@ -176,6 +175,7 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
         this.markers = [
           ...this.markers,
         ];
+        this.loadAnnotations(userSessions);
       });
     }
   }
@@ -185,21 +185,18 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
       this.userSessionAnnotationData.set(userSessoin.id, {
         AnnotationData: new Map<number, Array<DataPoint>>(),
       });
+      for (const marker of this.markers) {
+        this.userSessionAnnotationData.get(userSessoin.id)?.AnnotationData.set(marker.id, new Array<DataPoint>());
+      }
       for (const annotation of userSessoin.annotations) {
         if (this.userSessionAnnotationData.get(userSessoin.id)) {
-          // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
-          if (!this.userSessionAnnotationData.get(userSessoin.id)?.AnnotationData.get(annotation.marker.id)) {
-            this.userSessionAnnotationData
-              .get(userSessoin.id)
-              ?.AnnotationData.set(annotation.marker.id, new Array<DataPoint>());
-          }
           this.userSessionAnnotationData
             .get(userSessoin.id)
             ?.AnnotationData.get(annotation.marker.id)
             ?.push({
               id: annotation.id,
-              startTime: annotation.start / 1000,
-              endTime: annotation.end != null ? annotation.end / 1000 : 0,
+              startTime: annotation.start,
+              endTime: annotation.end != null ? annotation.end : 0,
               strength: annotation.value,
               display: annotation.end == null ? Display.Circle : Display.Rect,
               color: annotation.marker.color,
