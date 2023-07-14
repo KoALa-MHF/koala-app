@@ -98,6 +98,7 @@ const CREATE_MARKER = gql`
       type
       name
       color
+      contentColor
     }
   }
 `;
@@ -236,6 +237,7 @@ const SET_PLAY_MODE = gql`
           marker {
             id
             color
+            contentColor
           }
         }
       }
@@ -298,6 +300,7 @@ const SET_PLAY_POSITION = gql`
           marker {
             id
             color
+            contentColor
           }
         }
       }
