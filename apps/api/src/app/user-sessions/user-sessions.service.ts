@@ -2,7 +2,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ValidationError } from 'class-validator';
-import { In, Repository } from 'typeorm';
+import { In, IsNull, Not, Repository } from 'typeorm';
 import { ValidationErrorException } from '../core/exceptions/validation-error.exception';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
@@ -25,7 +25,12 @@ export class UserSessionsService {
 
   async invite(ids: number[], message?: string): Promise<UserSession[]> {
     const userSessions = await this.userSessionsRepository.find({
-      where: { id: In(ids) },
+      where: {
+        id: In(ids),
+        owner: {
+          email: Not(IsNull()),
+        },
+      },
       relations: {
         session: true,
         owner: true,
