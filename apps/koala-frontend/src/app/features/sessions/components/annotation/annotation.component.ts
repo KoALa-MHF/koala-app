@@ -1,4 +1,13 @@
-import { Component, Input, AfterViewInit, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  AfterViewInit,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { Marker } from '../../types/marker.entity';
 import { MarkerService } from '../../services/marker.service';
 import * as d3 from 'd3';
@@ -25,7 +34,7 @@ export interface DataPoint {
     '../../session-common.scss',
   ],
 })
-export class AnnotationComponent implements AfterViewInit, OnChanges {
+export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() annotationData?: Map<number, Array<DataPoint>> = new Map<number, Array<DataPoint>>();
   @Input() totalTime = 1;
   @Input() currentTime = 0;
@@ -66,6 +75,15 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
 
   ngAfterViewInit() {
     this.drawTimeline();
+  }
+
+  ngOnDestroy(): void {
+    const svgC = d3.select(`svg#${this.d3Container}${this.d3ContainerID}`);
+    const svgL = d3.select(`svg#${this.d3Labels}${this.d3ContainerID}`);
+    svgC.selectAll('rect').remove();
+    svgC.selectAll('circle').remove();
+    svgC.selectAll('line.marker').remove();
+    svgL.selectAll('text').remove();
   }
 
   public addDataPoint(id: number, value: DataPoint) {

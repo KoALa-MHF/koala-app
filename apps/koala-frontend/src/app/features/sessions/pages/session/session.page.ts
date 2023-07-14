@@ -185,6 +185,7 @@ export class SessionPage implements OnInit, OnDestroy {
     this.sessionUpdatedSubscription?.unsubscribe();
     this.toolbarUpdatedSubscription?.unsubscribe();
     this.timerSubscription?.unsubscribe();
+    this.mediaControlService.destroy();
   }
 
   private loadMediaData(id: string): Promise<void> {

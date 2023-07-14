@@ -58,27 +58,7 @@ export class MediaControlService {
         hideScrollbar: false,
         height: 100,
         media: audio,
-        plugins: [
-          TimelinePlugin.create({
-            container: timelineContainer,
-            timeInterval: 5,
-            secondaryLabelInterval: 10,
-            primaryLabelInterval: 10,
-            formatTimeCallback: (sec: number) => {
-              const minutes = Math.floor(sec / 60);
-              const seconds = sec % 60;
-              let secondsLabel;
-
-              if (seconds < 10) {
-                secondsLabel = '0' + seconds;
-              } else {
-                secondsLabel = seconds.toString();
-              }
-
-              return minutes + ':' + secondsLabel;
-            },
-          }),
-        ],
+        plugins: [],
       })
     );
     try {
@@ -91,6 +71,7 @@ export class MediaControlService {
         this.mediaPlayStateChangedSubject.next(MediaActions.Play);
       });
       this.addEventHandler('ready', () => {
+        this.createTimelinePlugin();
         this.mediaPlayStateChangedSubject.next(MediaActions.Ready);
       });
       this.addEventHandler('audioprocess', (currentTime) => {
@@ -264,5 +245,38 @@ export class MediaControlService {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  private createTimelinePlugin() {
+    const timelineContainer = document.getElementById(`${this.uuid}-timeline`)!;
+    const w = this.getWave();
+    let interval = 5;
+    const ratio = timelineContainer.getBoundingClientRect().width / (w.getDuration() / 10);
+    console.log(ratio);
+    if (ratio < 30) {
+      interval = 20;
+    }
+    console.log(interval);
+    const pl = TimelinePlugin.create({
+      container: timelineContainer,
+      timeInterval: interval,
+      secondaryLabelInterval: interval * 2,
+      primaryLabelInterval: interval * 2,
+      formatTimeCallback: (sec: number) => {
+        const minutes = Math.floor(sec / 60);
+        const seconds = sec % 60;
+        let secondsLabel;
+
+        if (seconds < 10) {
+          secondsLabel = '0' + seconds;
+        } else {
+          secondsLabel = seconds.toString();
+        }
+        return minutes + ':' + secondsLabel;
+      },
+    });
+    w.registerPlugin(pl);
+    // force rerender
+    w.zoom(0);
   }
 }
