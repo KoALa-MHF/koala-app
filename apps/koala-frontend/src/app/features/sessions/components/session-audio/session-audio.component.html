@@ -17,8 +17,9 @@
       strokeWidth="5"
     ></p-progressSpinner>
     <p-fileUpload
+      #fileUpload
       [customUpload]="true"
-      (uploadHandler)="onFileUpload($event)"
+      (uploadHandler)="onFileUpload($event, fileUpload)"
       accept="audio/mpeg"
       [maxFileSize]="250000000"
       [auto]="true"
