@@ -36,4 +36,12 @@
     label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.ANALYSIS_ENABLED_LABEL' | translate }}"
     data-cy="session-maintain-analysis-check"
   ></p-checkbox>
+
+  <p-checkbox
+    class="form-single-cell"
+    formControlName="lockAnnotationDelete"
+    [binary]="true"
+    label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.ANNOTATION_DELETE_LOCKED_LABEL' | translate }}"
+    data-cy="session-maintain-annotation-delete-check"
+  ></p-checkbox>
 </form>
