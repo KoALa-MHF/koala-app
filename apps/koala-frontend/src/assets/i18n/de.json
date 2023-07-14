@@ -135,6 +135,8 @@
         "MARKER_RANGE_TO_INPUT_LABEL": "Maximal-Wert",
         "MARKER_RANGE_TO_INPUT_EXPLANATION": "Wählen Sie einen Maximal-Wert für den Slider.",
         "MARKER_COLOR_INPUT_LABEL": "Farbe",
+        "MARKER_CONTENT_COLOR_INPUT_LABEL": "Schwarzer Text",
+        "MARKER_CONTENT_COLOR_INPUT_SLIDER_LABEL": "Schwarzer Slider",
         "MARKER_COLOR_INPUT_EXPLANATION": "Wählen Sie eine Farbe für Ihren Marker.",
         "MARKER_ICON_INPUT_LABEL": "Icon",
         "MARKER_ICON_INPUT_EXPLANATION": "Wählen Sie eine Abkürzung und/oder ein Icon für den Marker.",

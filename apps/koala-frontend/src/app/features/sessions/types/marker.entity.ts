@@ -7,6 +7,7 @@ export interface Marker {
   type: MarkerType;
   abbreviation?: string | null;
   color: string;
+  contentColor: string;
   icon?: string | null;
   visible: boolean | true;
   valueRangeFrom?: number | null;

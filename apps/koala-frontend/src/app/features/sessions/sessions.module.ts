@@ -25,6 +25,7 @@ import { SidebarModule } from 'primeng/sidebar';
 import { DividerModule } from 'primeng/divider';
 import { ToolbarModule } from 'primeng/toolbar';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 import { QRCodeModule } from 'angularx-qrcode';
 
@@ -131,6 +132,7 @@ import { SessionTimerComponent } from './components/session-timer/session-timer.
     DividerModule,
     ToolbarModule,
     InputNumberModule,
+    InputSwitchModule,
   ],
   providers: [
     MediaService,
