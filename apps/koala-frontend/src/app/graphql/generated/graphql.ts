@@ -81,6 +81,8 @@ export type CreateMarkerInput = {
   abbreviation?: InputMaybe<Scalars['String']['input']>;
   /** Marker Color */
   color?: Scalars['String']['input'];
+  /** Marker Content Color */
+  contentColor?: Scalars['String']['input'];
   /** Marker Descritpion */
   description?: Scalars['String']['input'];
   /** Marker Icon */
@@ -140,6 +142,8 @@ export type Marker = {
   abbreviation?: Maybe<Scalars['String']['output']>;
   /** Marker Color */
   color: Scalars['String']['output'];
+  /** Marker Content (Text, Icon, Slider Knob) Color */
+  contentColor: Scalars['String']['output'];
   /** Creation Date */
   createdAt: Scalars['DateTime']['output'];
   /** Marker Description */
@@ -448,6 +452,8 @@ export type UpdateMarkerInput = {
   abbreviation?: InputMaybe<Scalars['String']['input']>;
   /** Marker Color */
   color?: InputMaybe<Scalars['String']['input']>;
+  /** Marker Content Color */
+  contentColor?: InputMaybe<Scalars['String']['input']>;
   /** Marker Descritpion */
   description?: InputMaybe<Scalars['String']['input']>;
   /** Marker Icon */
@@ -620,7 +626,14 @@ export type CreateMarkerMutationVariables = Exact<{
 
 export type CreateMarkerMutation = {
   __typename?: 'Mutation';
-  createMarker: { __typename?: 'Marker'; id: number; type: MarkerType; name: string; color: string };
+  createMarker: {
+    __typename?: 'Marker';
+    id: number;
+    type: MarkerType;
+    name: string;
+    color: string;
+    contentColor: string;
+  };
 };
 
 export type UpdateToolbarMutationVariables = Exact<{
@@ -758,7 +771,7 @@ export type SetPlayModeMutation = {
         end?: number | null;
         start: number;
         value?: number | null;
-        marker: { __typename?: 'Marker'; id: number; color: string };
+        marker: { __typename?: 'Marker'; id: number; color: string; contentColor: string };
       }>;
     }>;
     owner: { __typename?: 'User'; id: string; createdAt: any; updatedAt: any };
@@ -808,7 +821,7 @@ export type SetPlayPositionMutation = {
         end?: number | null;
         start: number;
         value?: number | null;
-        marker: { __typename?: 'Marker'; id: number; color: string };
+        marker: { __typename?: 'Marker'; id: number; color: string; contentColor: string };
       }>;
     }>;
     owner: { __typename?: 'User'; id: string; createdAt: any; updatedAt: any };
@@ -904,7 +917,7 @@ export type GetOneSessionQuery = {
         end?: number | null;
         start: number;
         value?: number | null;
-        marker: { __typename?: 'Marker'; id: number; color: string };
+        marker: { __typename?: 'Marker'; id: number; color: string; contentColor: string };
       }>;
     }>;
     owner: { __typename?: 'User'; id: string; createdAt: any; updatedAt: any };
@@ -933,6 +946,7 @@ export type GetMarkersQuery = {
     abbreviation?: string | null;
     description?: string | null;
     color: string;
+    contentColor: string;
     icon?: string | null;
     createdAt: any;
     updatedAt: any;
@@ -1150,6 +1164,7 @@ export const CreateMarkerDocument = gql`
       type
       name
       color
+      contentColor
     }
   }
 `;
@@ -1392,6 +1407,7 @@ export const SetPlayModeDocument = gql`
           marker {
             id
             color
+            contentColor
           }
         }
       }
@@ -1463,6 +1479,7 @@ export const SetPlayPositionDocument = gql`
           marker {
             id
             color
+            contentColor
           }
         }
       }
@@ -1605,6 +1622,7 @@ export const GetOneSessionDocument = gql`
           marker {
             id
             color
+            contentColor
           }
         }
       }
@@ -1658,6 +1676,7 @@ export const GetMarkersDocument = gql`
       abbreviation
       description
       color
+      contentColor
       icon
       createdAt
       updatedAt

@@ -108,6 +108,7 @@ const GET_ONE_SESSION = gql`
           marker {
             id
             color
+            contentColor
           }
         }
       }
@@ -138,6 +139,7 @@ const GET_MARKERS = gql`
       abbreviation
       description
       color
+      contentColor
       icon
       createdAt
       updatedAt

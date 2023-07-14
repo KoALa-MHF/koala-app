@@ -105,6 +105,19 @@
     </small>
   </div>
 
+  <div>
+    <h5 style="display: inline; margin-right: 15px; opacity: 100%">
+      {{
+        markerType !== MarkerType.Slider
+          ? ('SESSION.MAINTAIN.MARKER.MARKER_CONTENT_COLOR_INPUT_LABEL' | translate)
+          : ('SESSION.MAINTAIN.MARKER.MARKER_CONTENT_COLOR_INPUT_SLIDER_LABEL' | translate)
+      }}
+    </h5>
+    <div style="display: inline; margin-right: 15px">
+      <p-inputSwitch inputId="contentColorSwitch" formControlName="contentColor"></p-inputSwitch>
+    </div>
+  </div>
+
   <div *ngIf="markerType !== MarkerType.Slider">
     <p-dropdown
       placeholder="{{ 'SESSION.MAINTAIN.MARKER.MARKER_ICON_INPUT_LABEL' | translate }}"

@@ -19,7 +19,9 @@ export class SessionAudioComponent {
 
   constructor(private readonly mediaService: MediaService) {}
 
-  public onFileUpload(event: any) {
+  public onFileUpload(event: any, fileUploadElement: any) {
     this.fileUpload.emit(event.files[0]);
+
+    fileUploadElement.clear();
   }
 }
