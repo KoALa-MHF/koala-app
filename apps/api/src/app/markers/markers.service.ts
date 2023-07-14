@@ -21,6 +21,7 @@ export class MarkersService {
     newMarker.description = createMarkerInput.description;
     newMarker.type = createMarkerInput.type;
     newMarker.color = createMarkerInput.color;
+    newMarker.contentColor = createMarkerInput.contentColor;
     newMarker.icon = createMarkerInput.icon;
     newMarker.valueRangeFrom = createMarkerInput.valueRangeFrom;
     newMarker.valueRangeTo = createMarkerInput.valueRangeTo;
@@ -51,6 +52,7 @@ export class MarkersService {
         description: updateMarkerInput.description,
         type: updateMarkerInput.type,
         color: updateMarkerInput.color,
+        contentColor: updateMarkerInput.contentColor,
         valueRangeFrom: updateMarkerInput.valueRangeFrom,
         valueRangeTo: updateMarkerInput.valueRangeTo,
       });

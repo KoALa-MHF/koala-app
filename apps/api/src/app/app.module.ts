@@ -43,7 +43,7 @@ import { UsersService } from './users/users.service';
         formatError: formatError,
         introspection: true,
         context: ({ req }) => {
-          return { req }; // connection ? { req: connection.context } : { req };
+          return { req };
         },
         subscriptions: {
           'subscriptions-transport-ws': {

@@ -3,6 +3,7 @@
   pButton
   label=""
   [style.background-color]="marker.color"
+  [style.color]="marker.contentColor"
   class="p-button-raised marker-button"
   [class.marker-button-event]="marker.type === MarkerType.Event"
   [class.marker-button-range]="marker.type === MarkerType.Range"
@@ -10,12 +11,8 @@
   [disabled]="!enabled"
   *ngIf="(marker.type === MarkerType.Event || marker.type === MarkerType.Range) && marker.visible === true"
 >
-  <koala-marker-icon
-    [iconCode]="marker.icon"
-    [style.color]="marker.color"
-    style="filter: invert(100%)"
-  ></koala-marker-icon>
-  <span [style.color]="marker.color" [style.margin-left]="marker.icon && marker.abbreviation ? '10px' : '0px'">{{
+  <koala-marker-icon [iconCode]="marker.icon" [style.color]="marker.contentColor"></koala-marker-icon>
+  <span [style.color]="marker.contentColor" [style.margin-left]="marker.icon && marker.abbreviation ? '10px' : '0px'">{{
     isActive ? 'STOP' : marker.abbreviation
   }}</span>
 </button>
@@ -31,6 +28,7 @@
       [disabled]="!enabled"
       [(ngModel)]="sliderValue"
       (onSlideEnd)="onSlideEnd()"
+      [styleClass]="marker.contentColor === '#000000' ? 'black-slider' : 'white-slider'"
       [min]="marker.valueRangeFrom!"
       [max]="marker.valueRangeTo!"
     ></p-slider>
