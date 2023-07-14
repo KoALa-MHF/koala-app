@@ -9,7 +9,8 @@ export enum MarkerType {
   SLIDER = 'slider',
 }
 
-export const DEFAULT_COLOR = 'black';
+export const DEFAULT_COLOR = '#000000';
+export const DEFAULT_CONTENT_COLOR = '#FFFFFF';
 
 registerEnumType(MarkerType, {
   name: 'MarkerType',
@@ -56,6 +57,10 @@ export class Marker extends BaseEntity {
   @ValidateIf((o) => o.type !== MarkerType.SLIDER && (!o.abbreviation || o.icon))
   @IsNotEmpty()
   icon: string;
+
+  @Column({ default: DEFAULT_CONTENT_COLOR })
+  @Field({ defaultValue: DEFAULT_CONTENT_COLOR, description: 'Marker Content (Text, Icon, Slider Knob) Color' })
+  contentColor: string;
 
   @Column({ nullable: true })
   @Field(() => Int, { nullable: true, description: 'Marker Value Range From' })
