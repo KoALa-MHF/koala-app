@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -17,7 +17,9 @@ import { datesStartEndValidator } from '../../../../shared/dates.validator';
 import { markerRangeValueValidator } from '../../../../shared/greater-than.validator';
 import { UserSessionService } from '../../services/user-session.service';
 import { TranslateService } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
+import { ReplaySubject, Subscription, debounceTime, fromEvent, takeUntil } from 'rxjs';
+import { TabView } from 'primeng/tabview';
+import { DomHandler } from 'primeng/dom';
 
 const DEFAULT_ICON_COLOR = '#555bcf';
 const DEFAULT_CONTENT_COLOR = '#FFFFFF';
@@ -32,7 +34,7 @@ const DEFAULT_VALUE_RANGE_TO = 10;
     '../../session-common.scss',
   ],
 })
-export class SessionMaintainPage implements OnInit, OnDestroy {
+export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
   maintainSessionForm: FormGroup;
   maintainMarkerForm: FormGroup;
 
@@ -41,7 +43,12 @@ export class SessionMaintainPage implements OnInit, OnDestroy {
   participants: UserSession[] = [];
   markers: Array<Marker> = [];
 
+  activeTabViewIndex = 0;
+
+  @ViewChild(TabView) tabViewRef!: TabView;
+
   markerTypeValueChangeSubscription?: Subscription;
+  windowResizeTabViewUpdateSubscription?: Subscription;
 
   constructor(
     private readonly sessionService: SessionsService,
@@ -127,12 +134,84 @@ export class SessionMaintainPage implements OnInit, OnDestroy {
   ngOnInit(): void {
     //TODO: #102 error handling when session does not exist in backend, but this page is being loaded
     const routeSessionId = parseInt(this.route.snapshot.paramMap.get('sessionId') || '0');
-
     this.loadSessionData(routeSessionId);
   }
 
   ngOnDestroy(): void {
     this.markerTypeValueChangeSubscription?.unsubscribe();
+    this.windowResizeTabViewUpdateSubscription?.unsubscribe();
+  }
+
+  ngAfterViewInit() {
+    this.applyFixesForTabViewScrollButtonVisibilty();
+  }
+
+  /**
+   * This fix is to show the scroll button for tab view, see:
+   *
+   * https://github.com/primefaces/primeng/issues/11684#issuecomment-1511075837
+   *
+   * There is still an open bug:
+   *
+   * https://github.com/primefaces/primeng/issues/10674
+   *
+   * Should be fixed with pull request:
+   * https://github.com/primefaces/primeng/pull/12913
+   *
+   * Once fixed, all those methods can be removed.
+   */
+  private applyFixesForTabViewScrollButtonVisibilty() {
+    this.patchTabViewUpdateButtonState();
+    this.calculateTabViewScrollButtonVisibility();
+    this.subscribeToWindowResizeEvent();
+  }
+
+  /**
+   * Subscribe to window resize Event in order to fix tab view scroll button visbility.
+   * See @see applyFixesForTabViewScrollButtonVisibilty for more information on this bug.
+   */
+  private subscribeToWindowResizeEvent(): void {
+    this.windowResizeTabViewUpdateSubscription = fromEvent(window, 'resize')
+      .pipe(debounceTime(500))
+      .subscribe(() => this.calculateTabViewScrollButtonVisibility());
+  }
+
+  /**
+   * Patchting the orginal tab view updateButtonState function, as the scrollLeft sometimes can be float
+   * and so the calculation is wrong leading into showing the buttons.
+   *
+   * See @see applyFixesForTabViewScrollButtonVisibilty for more information on this bug.
+   */
+  private patchTabViewUpdateButtonState() {
+    this.tabViewRef.updateButtonState = function () {
+      const content = (this.content as ElementRef).nativeElement;
+      const { scrollLeft, scrollWidth } = content;
+      const width = DomHandler.getWidth(content);
+
+      this.backwardIsDisabled = scrollLeft === 0;
+      this.forwardIsDisabled = Math.round(scrollLeft) >= scrollWidth - width;
+    };
+  }
+
+  /**
+   * This fix is to recalculate and show the scroll button for tab view if needed.
+   *
+   * See @see applyFixesForTabViewScrollButtonVisibilty for more information on this bug.
+   */
+  private calculateTabViewScrollButtonVisibility() {
+    const prevBackwardIsDisabled = this.tabViewRef.backwardIsDisabled;
+    const prevForwardIsDisabled = this.tabViewRef.forwardIsDisabled;
+
+    this.tabViewRef.updateButtonState();
+    this.tabViewRef.updateScrollBar(this.activeTabViewIndex);
+    this.tabViewRef.updateInkBar();
+
+    if (
+      this.tabViewRef.forwardIsDisabled !== prevForwardIsDisabled ||
+      this.tabViewRef.backwardIsDisabled !== prevBackwardIsDisabled
+    ) {
+      this.tabViewRef.cd.detectChanges();
+    }
   }
 
   /*--------------------------

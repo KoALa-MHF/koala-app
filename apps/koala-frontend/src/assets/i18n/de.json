@@ -102,7 +102,7 @@
         "EDIT_ENABLED_LABEL": "Bearbeitung",
         "PLAYER_ENABLED_LABEL": "Player",
         "SAMPLE_SOLUTION_ENABLED_LABEL": "Musterlösung",
-        "ANALYSIS_ENABLED_LABEL": "Analyse",
+        "ANALYSIS_ENABLED_LABEL": "Auswertung",
         "SAVE_BTN": "Speichern",
         "CANCEL_BTN": "Abbrechen",
         "SAVE_ERROR_MESSAGE_TITLE": "Änderungen an der Session konnten nicht gespeichert werden",
