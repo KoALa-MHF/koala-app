@@ -1,5 +1,5 @@
 <div class="session-container">
-  <p-tabView>
+  <p-tabView [scrollable]="true" [(activeIndex)]="activeTabViewIndex">
     <p-tabPanel header="{{ 'SESSION.MAINTAIN.TABS.SETTINGS' | translate }}">
       <koala-session-data
         [basicDataForm]="basicDataFormGroup"
