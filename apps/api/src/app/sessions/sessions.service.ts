@@ -121,6 +121,7 @@ export class SessionsService {
       displaySampleSolution: updateSessionInput.displaySampleSolution,
       enableLiveAnalysis: updateSessionInput.enableLiveAnalysis,
       liveSessionStart: updateSessionInput.liveSessionStart,
+      lockAnnotationDelete: updateSessionInput.lockAnnotationDelete,
       ...(updateSessionInput.mediaId && { media: { id: updateSessionInput.mediaId } }),
     });
 

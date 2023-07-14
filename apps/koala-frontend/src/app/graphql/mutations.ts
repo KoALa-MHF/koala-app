@@ -13,6 +13,7 @@ const CREATE_SESSION = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      lockAnnotationDelete
       playMode
       playPosition
       liveSessionStart
@@ -51,6 +52,7 @@ const UPDATE_SESSION = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      lockAnnotationDelete
       code
       media {
         id
@@ -200,6 +202,7 @@ const SET_PLAY_MODE = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      lockAnnotationDelete
       playMode
       playPosition
       liveSessionStart
@@ -262,6 +265,7 @@ const SET_PLAY_POSITION = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      lockAnnotationDelete
       playMode
       playPosition
       liveSessionStart

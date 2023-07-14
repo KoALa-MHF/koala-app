@@ -14,6 +14,7 @@ export interface Session {
   enablePlayer?: boolean | null;
   displaySampleSolution?: boolean | null;
   enableLiveAnalysis?: boolean | null;
+  lockAnnotationDelete?: boolean | null;
   playMode?: PlayMode | null;
   playPosition?: number | null;
   liveSessionStart?: number | null;

@@ -102,6 +102,7 @@
         "EDIT_ENABLED_LABEL": "Bearbeitung",
         "PLAYER_ENABLED_LABEL": "Player",
         "SAMPLE_SOLUTION_ENABLED_LABEL": "Musterlösung",
+        "ANNOTATION_DELETE_LOCKED_LABEL": "Annotationen Löschen Sperren",
         "ANALYSIS_ENABLED_LABEL": "Auswertung",
         "SAVE_BTN": "Speichern",
         "CANCEL_BTN": "Abbrechen",

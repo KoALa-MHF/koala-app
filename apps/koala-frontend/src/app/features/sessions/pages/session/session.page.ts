@@ -76,6 +76,7 @@ export class SessionPage implements OnInit, OnDestroy {
         enablePlayer: new FormControl<boolean>(false),
         displaySampleSolution: new FormControl<boolean>(false),
         enableLiveAnalysis: new FormControl<boolean>(false),
+        lockAnnotationDelete: new FormControl<boolean>(false),
       }),
     });
 
@@ -241,6 +242,7 @@ export class SessionPage implements OnInit, OnDestroy {
         enablePlayer: session.enablePlayer || false,
         displaySampleSolution: session.displaySampleSolution || false,
         enableLiveAnalysis: session.enableLiveAnalysis || false,
+        lockAnnotationDelete: session.lockAnnotationDelete || false,
       };
     }
 
@@ -506,6 +508,7 @@ export class SessionPage implements OnInit, OnDestroy {
             enablePlayer: details.enablePlayer,
             displaySampleSolution: details.displaySampleSolution,
             enableLiveAnalysis: details.enableLiveAnalysis,
+            lockAnnotationDelete: details.lockAnnotationDelete,
           })
           .subscribe({
             error: () => {
