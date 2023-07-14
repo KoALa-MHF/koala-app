@@ -344,7 +344,8 @@ export class SessionPage implements OnInit, OnDestroy {
   }
 
   onMarkerEvent(m: Marker, aData: DataPoint[]) {
-    const t = this.sessionControlService.getCurrentTime();
+    let t = this.sessionControlService.getCurrentTime();
+    t = Math.floor(t);
 
     this.AnnotationData.get(m.id)?.push({
       startTime: t,
@@ -369,8 +370,8 @@ export class SessionPage implements OnInit, OnDestroy {
   }
 
   onMarkerRange(m: Marker, aData: DataPoint[]) {
-    const t = this.sessionControlService.getCurrentTime();
-
+    let t = this.sessionControlService.getCurrentTime();
+    t = Math.floor(t);
     if (aData.length > 0) {
       const latest = aData.at(-1);
       if (latest?.endTime == 0) {
@@ -404,8 +405,8 @@ export class SessionPage implements OnInit, OnDestroy {
 
   onMarkerSliderRange(m: Marker, aData: DataPoint[], value: number) {
     const strength = value;
-
-    const t = this.sessionControlService.getCurrentTime();
+    let t = this.sessionControlService.getCurrentTime();
+    t = Math.floor(t);
     if (aData.length == 0) {
       aData.push({
         startTime: t,
