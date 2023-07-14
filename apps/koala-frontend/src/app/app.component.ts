@@ -20,7 +20,6 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.primengConfig.ripple = true;
     this.translateService.setDefaultLang(DEFAULT_LANGUAGE);
-    console.log('this.getBrowserLanguage()', this.getBrowserLanguage());
     this.translateService.use(this.getBrowserLanguage());
   }
 
