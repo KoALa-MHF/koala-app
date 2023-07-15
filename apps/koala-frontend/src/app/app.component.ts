@@ -4,6 +4,7 @@ import { PrimeNGConfig } from 'primeng/api';
 import { LANGUAGE_CODE } from './core/components/header/header.component';
 
 const DEFAULT_LANGUAGE = LANGUAGE_CODE.GERMAN;
+const LANGUAGE_LOCAL_STORAGE_KEY = 'language';
 
 @Component({
   selector: 'koala-root',
@@ -19,19 +20,32 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.primengConfig.ripple = true;
+    this.initTranslateService();
+  }
+
+  private initTranslateService() {
     this.translateService.setDefaultLang(DEFAULT_LANGUAGE);
-    this.translateService.use(this.getBrowserLanguage());
+    const userLanguage = this.getUserLanguageSelection() || this.getBrowserLanguage();
+    this.translateService.use(userLanguage);
   }
 
   onLanguageChange(newLanguage: LANGUAGE_CODE) {
     this.translateService.use(newLanguage).subscribe({
       next: () => {
-        console.log('Language Switch Success');
+        this.setUserLanguageSelection(newLanguage);
       },
       error: () => {
         console.error('Language Switch Error');
       },
     });
+  }
+
+  private getUserLanguageSelection() {
+    return localStorage.getItem(LANGUAGE_LOCAL_STORAGE_KEY);
+  }
+
+  private setUserLanguageSelection(language: string) {
+    return localStorage.setItem(LANGUAGE_LOCAL_STORAGE_KEY, language);
   }
 
   private getBrowserLanguage() {
