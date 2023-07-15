@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 import { INestApplication } from '@nestjs/common';
 import { setupTestApplication } from './mocks/test.util';
 import { UsersData } from '../src/app/seed/data/users.data';
+import { setupMailDevelopmentServer } from '../src/bootstrap';
 
 const QUERY_USER_SESSIONS = gql`
   query UserSessions {
@@ -116,6 +117,18 @@ const CREATE_USER_SESSION = gql`
   }
 `;
 
+const INVITE_USER_SESSION = gql`
+  mutation InviteUserSessions($inviteUserSessionInput: InviteUserSessionInput!) {
+    inviteUserSession(inviteUserSessionInput: $inviteUserSessionInput) {
+      id
+      status
+      session {
+        id
+      }
+    }
+  }
+`;
+
 const QUERY_USER_SESSION_VARIABLES = {
   id: 5,
 };
@@ -136,8 +149,20 @@ const CREATE_USER_SESSION_VARIABLES = {
     sessionId: 1,
     note: test,
     owner: {
-      email: 'test-user@koala-app.de',
+      email: 'create-user-session-user@koala-app.de',
     },
+  },
+};
+
+const INVITE_USER_SESSION_VARIABLES = {
+  inviteUserSessionInput: {
+    userSessionIds: [
+      1,
+      2,
+      3,
+      4,
+    ],
+    message: 'Invite User via E2E test',
   },
 };
 
@@ -318,6 +343,50 @@ describe('User Sessions (e2e)', () => {
         .auth(`${UsersData.sessionOwner2.id}`, { type: 'bearer' })
         .mutate(CREATE_USER_SESSION)
         .variables(CREATE_USER_SESSION_VARIABLES);
+
+      expect(errors).toHaveLength(1);
+      expect(errors[0].message).toBe('Not Found');
+    });
+  });
+
+  describe('Invite User Session', () => {
+    it('Not authenticated user should get "Unauthorized" error', async () => {
+      const { errors } = await request(app.getHttpServer())
+        .mutate(INVITE_USER_SESSION)
+        .variables(INVITE_USER_SESSION_VARIABLES);
+
+      expect(errors).toHaveLength(1);
+      expect(errors[0].message).toBe('Unauthorized');
+    });
+
+    it('Authenticated owner of session can invite users to a session', async () => {
+      const mailDev = await setupMailDevelopmentServer();
+      let mailsBefore;
+      mailDev.getAllEmail((errors, mails) => {
+        mailsBefore = mails;
+        expect(mailsBefore).toHaveLength(0);
+      });
+
+      const { data } = await request(app.getHttpServer())
+        .auth(`${UsersData.sessionOwner1.id}`, { type: 'bearer' })
+        .mutate(INVITE_USER_SESSION)
+        .variables(INVITE_USER_SESSION_VARIABLES)
+        .expectNoErrors();
+
+      expect(data).toMatchSnapshot();
+
+      let mailsAfter;
+      mailDev.getAllEmail((errors, mails) => {
+        mailsAfter = mails;
+        expect(mailsAfter).toHaveLength(3);
+      });
+    });
+
+    it('Authenticated user who is not owner of session cannot invite users to a session', async () => {
+      const { errors } = await request(app.getHttpServer())
+        .auth(`${UsersData.sessionOwner2.id}`, { type: 'bearer' })
+        .mutate(INVITE_USER_SESSION)
+        .variables(INVITE_USER_SESSION_VARIABLES);
 
       expect(errors).toHaveLength(1);
       expect(errors[0].message).toBe('Not Found');

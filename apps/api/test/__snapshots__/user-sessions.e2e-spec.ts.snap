@@ -7,7 +7,7 @@ exports[`User Sessions (e2e) Create User Session Authenticated owner of session 
     "id": 8,
     "note": "",
     "owner": {
-      "email": "test-user@koala-app.de",
+      "email": "create-user-session-user@koala-app.de",
       "id": "5",
     },
     "session": {
@@ -38,7 +38,7 @@ exports[`User Sessions (e2e) Create User Session Authenticated owner of session 
         {
           "id": 8,
           "owner": {
-            "email": "test-user@koala-app.de",
+            "email": "create-user-session-user@koala-app.de",
             "id": "5",
           },
         },
@@ -46,6 +46,41 @@ exports[`User Sessions (e2e) Create User Session Authenticated owner of session 
     },
     "status": "INITIAL",
   },
+}
+`;
+
+exports[`User Sessions (e2e) Invite User Session Authenticated owner of session can invite users to a session 1`] = `
+{
+  "inviteUserSession": [
+    {
+      "id": 1,
+      "session": {
+        "id": "1",
+      },
+      "status": "INITIAL",
+    },
+    {
+      "id": 2,
+      "session": {
+        "id": "2",
+      },
+      "status": "INITIAL",
+    },
+    {
+      "id": 3,
+      "session": {
+        "id": "3",
+      },
+      "status": "INITIAL",
+    },
+    {
+      "id": 4,
+      "session": {
+        "id": "1",
+      },
+      "status": "INITIAL",
+    },
+  ],
 }
 `;
 
