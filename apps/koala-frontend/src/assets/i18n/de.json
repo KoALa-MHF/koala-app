@@ -198,6 +198,13 @@
       "EXPLANATION_MULTI_SESSION": "Wollen Sie die {{sessionCount}} ausgewählten Sessions löschen?",
       "CONFIRM_BTN": "Löschen",
       "CANCEL_BTN": "Abbrechen"
+    },
+    "ANNOTATION": {
+      "DELETE": {
+        "CONFIRM_MESSAGE_TITLE": "Wollen Sie wirklich alle Annotationen des Markers '{{markerName}}' löschen?",
+        "ACCEPT_LABEL": "Ja",
+        "REJECT_LABEL": "Nein"
+      }
     }
   },
   "ICONS": {
