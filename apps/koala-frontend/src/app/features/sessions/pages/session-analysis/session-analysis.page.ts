@@ -109,6 +109,7 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.session.isAudioSession) {
       this.mediaControlService.stop();
+      this.mediaControlService.destroy();
     }
   }
 
