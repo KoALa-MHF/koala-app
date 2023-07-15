@@ -5,14 +5,25 @@ import * as MailDev from 'maildev';
 
 export const GLOBAL_PREFIX = 'api';
 
+interface IMailDev {
+  getAllEmail(done: (error: Error, emails: Array<object>) => void): void;
+}
+
 export function setupApplication(app: INestApplication) {
   app.useGlobalPipes(new GraphQLValidationPipe());
   app.use(graphqlUploadExpress({ maxFileSize: 100000000, maxFiles: 10 }));
   app.setGlobalPrefix(GLOBAL_PREFIX);
 }
 
-export function setupMailDevelopmentServer() {
-  const maildev = new MailDev({});
-  maildev.listen();
-  return maildev;
+export function setupMailDevelopmentServer(): Promise<IMailDev> {
+  return new Promise((resolve, reject) => {
+    const maildev = new MailDev({});
+    maildev.listen((error) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(maildev);
+      }
+    });
+  });
 }
