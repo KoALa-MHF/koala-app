@@ -6,7 +6,7 @@ import { GLOBAL_PREFIX, setupApplication, setupMailDevelopmentServer } from './b
 
 async function bootstrap() {
   if (process.env['NODE' + '_ENV'] === 'development') {
-    setupMailDevelopmentServer();
+    await setupMailDevelopmentServer();
   }
 
   const app = await NestFactory.create(AppModule);
