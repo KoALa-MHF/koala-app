@@ -1,5 +1,54 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`User Sessions (e2e) Create User Session Authenticated owner of session can create a user session 1`] = `
+{
+  "createUserSession": {
+    "annotations": [],
+    "id": 8,
+    "note": "",
+    "owner": {
+      "email": "test-user@koala-app.de",
+      "id": "5",
+    },
+    "session": {
+      "id": "1",
+      "name": "Session 1",
+      "userSessions": [
+        {
+          "id": 1,
+          "owner": {
+            "email": "session-owner-1@koala-app.de",
+            "id": "1",
+          },
+        },
+        {
+          "id": 4,
+          "owner": {
+            "email": "session-participant-1@koala-app.de",
+            "id": "3",
+          },
+        },
+        {
+          "id": 5,
+          "owner": {
+            "email": "session-participant-2@koala-app.de",
+            "id": "4",
+          },
+        },
+        {
+          "id": 8,
+          "owner": {
+            "email": "test-user@koala-app.de",
+            "id": "5",
+          },
+        },
+      ],
+    },
+    "status": "INITIAL",
+  },
+}
+`;
+
 exports[`User Sessions (e2e) Query User Session Authenticated user should get own user session 1`] = `
 {
   "userSession": {

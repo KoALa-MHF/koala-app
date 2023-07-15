@@ -85,6 +85,37 @@ const REMOVE_USER_SESSION = gql`
   }
 `;
 
+const CREATE_USER_SESSION = gql`
+  mutation CreateUserSession($createUserSessionInput: CreateUserSessionInput!) {
+    createUserSession(createUserSessionInput: $createUserSessionInput) {
+      id
+      status
+      note
+      owner {
+        id
+        email
+      }
+      session {
+        id
+        name
+        userSessions {
+          id
+          owner {
+            id
+            email
+          }
+        }
+      }
+      annotations {
+        id
+        marker {
+          id
+        }
+      }
+    }
+  }
+`;
+
 const QUERY_USER_SESSION_VARIABLES = {
   id: 5,
 };
@@ -98,6 +129,16 @@ const UPDATE_USER_SESSION_VARIABLES = {
 
 const REMOVE_USER_SESSION_VARIABLES = {
   id: 5,
+};
+
+const CREATE_USER_SESSION_VARIABLES = {
+  createUserSessionInput: {
+    sessionId: 1,
+    note: test,
+    owner: {
+      email: 'test-user@koala-app.de',
+    },
+  },
 };
 
 describe('User Sessions (e2e)', () => {
@@ -249,6 +290,37 @@ describe('User Sessions (e2e)', () => {
 
       expect(errors).toHaveLength(1);
       expect(errors[0].message).toBe('Forbidden');
+    });
+  });
+
+  describe('Create User Session', () => {
+    it('Not authenticated user should get "Unauthorized" error', async () => {
+      const { errors } = await request(app.getHttpServer())
+        .mutate(CREATE_USER_SESSION)
+        .variables(CREATE_USER_SESSION_VARIABLES);
+
+      expect(errors).toHaveLength(1);
+      expect(errors[0].message).toBe('Unauthorized');
+    });
+
+    it('Authenticated owner of session can create a user session', async () => {
+      const { data } = await request(app.getHttpServer())
+        .auth(`${UsersData.sessionOwner1.id}`, { type: 'bearer' })
+        .mutate(CREATE_USER_SESSION)
+        .variables(CREATE_USER_SESSION_VARIABLES)
+        .expectNoErrors();
+
+      expect(data).toMatchSnapshot();
+    });
+
+    it('Authenticated user who is not owner of session cannot create a user session', async () => {
+      const { errors } = await request(app.getHttpServer())
+        .auth(`${UsersData.sessionOwner2.id}`, { type: 'bearer' })
+        .mutate(CREATE_USER_SESSION)
+        .variables(CREATE_USER_SESSION_VARIABLES);
+
+      expect(errors).toHaveLength(1);
+      expect(errors[0].message).toBe('Not Found');
     });
   });
 });
