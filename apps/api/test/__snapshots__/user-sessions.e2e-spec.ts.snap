@@ -1,0 +1,247 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`User Sessions (e2e) Create User Session Authenticated owner of session can create a user session 1`] = `
+{
+  "createUserSession": {
+    "annotations": [],
+    "id": 8,
+    "note": "",
+    "owner": {
+      "email": "create-user-session-user@koala-app.de",
+      "id": "5",
+    },
+    "session": {
+      "id": "1",
+      "name": "Session 1",
+      "userSessions": [
+        {
+          "id": 1,
+          "owner": {
+            "email": "session-owner-1@koala-app.de",
+            "id": "1",
+          },
+        },
+        {
+          "id": 4,
+          "owner": {
+            "email": "session-participant-1@koala-app.de",
+            "id": "3",
+          },
+        },
+        {
+          "id": 5,
+          "owner": {
+            "email": "session-participant-2@koala-app.de",
+            "id": "4",
+          },
+        },
+        {
+          "id": 8,
+          "owner": {
+            "email": "create-user-session-user@koala-app.de",
+            "id": "5",
+          },
+        },
+      ],
+    },
+    "status": "INITIAL",
+  },
+}
+`;
+
+exports[`User Sessions (e2e) Invite User Session Authenticated owner of session can invite users to a session 1`] = `
+{
+  "inviteUserSession": [
+    {
+      "id": 1,
+      "session": {
+        "id": "1",
+      },
+      "status": "INITIAL",
+    },
+    {
+      "id": 2,
+      "session": {
+        "id": "2",
+      },
+      "status": "INITIAL",
+    },
+    {
+      "id": 3,
+      "session": {
+        "id": "3",
+      },
+      "status": "INITIAL",
+    },
+    {
+      "id": 4,
+      "session": {
+        "id": "1",
+      },
+      "status": "INITIAL",
+    },
+  ],
+}
+`;
+
+exports[`User Sessions (e2e) Query User Session Authenticated user should get own user session 1`] = `
+{
+  "userSession": {
+    "annotations": [],
+    "id": 5,
+    "note": "",
+    "session": {
+      "id": "1",
+      "name": "Session 1",
+    },
+    "status": "INITIAL",
+  },
+}
+`;
+
+exports[`User Sessions (e2e) Query User Sessions Authenticated user should get list of all owned user sessions 1`] = `
+{
+  "userSessions": [
+    {
+      "annotations": [],
+      "id": 5,
+      "note": "",
+      "owner": {
+        "email": "session-participant-2@koala-app.de",
+        "id": "4",
+      },
+      "session": {
+        "id": "1",
+        "name": "Session 1",
+      },
+      "status": "INITIAL",
+    },
+    {
+      "annotations": [],
+      "id": 7,
+      "note": "",
+      "owner": {
+        "email": "session-participant-2@koala-app.de",
+        "id": "4",
+      },
+      "session": {
+        "id": "3",
+        "name": "Session 3",
+      },
+      "status": "INITIAL",
+    },
+  ],
+}
+`;
+
+exports[`User Sessions (e2e) Remove User Session Authenticated user can remove own user session 1`] = `
+{
+  "userSessions": [
+    {
+      "annotations": [],
+      "id": 5,
+      "note": "",
+      "owner": {
+        "email": "session-participant-2@koala-app.de",
+        "id": "4",
+      },
+      "session": {
+        "id": "1",
+        "name": "Session 1",
+      },
+      "status": "INITIAL",
+    },
+    {
+      "annotations": [],
+      "id": 7,
+      "note": "",
+      "owner": {
+        "email": "session-participant-2@koala-app.de",
+        "id": "4",
+      },
+      "session": {
+        "id": "3",
+        "name": "Session 3",
+      },
+      "status": "INITIAL",
+    },
+  ],
+}
+`;
+
+exports[`User Sessions (e2e) Remove User Session Authenticated user can remove own user session 2`] = `
+{
+  "removeUserSession": {
+    "id": 5,
+  },
+}
+`;
+
+exports[`User Sessions (e2e) Remove User Session Authenticated user can remove own user session 3`] = `
+{
+  "userSessions": [
+    {
+      "annotations": [],
+      "id": 7,
+      "note": "",
+      "owner": {
+        "email": "session-participant-2@koala-app.de",
+        "id": "4",
+      },
+      "session": {
+        "id": "3",
+        "name": "Session 3",
+      },
+      "status": "INITIAL",
+    },
+  ],
+}
+`;
+
+exports[`User Sessions (e2e) Update User Session Authenticated user can only update the right fields 1`] = `
+{
+  "updateUserSession": {
+    "annotations": [],
+    "id": 5,
+    "note": "Update Notes",
+    "owner": {
+      "email": "session-participant-2@koala-app.de",
+      "id": "4",
+    },
+    "session": {
+      "id": "1",
+      "name": "Session 1",
+      "toolbars": [
+        {
+          "id": "1",
+        },
+      ],
+    },
+    "status": "INITIAL",
+  },
+}
+`;
+
+exports[`User Sessions (e2e) Update User Session Authenticated user can update own user session 1`] = `
+{
+  "updateUserSession": {
+    "annotations": [],
+    "id": 5,
+    "note": "Update Notes",
+    "owner": {
+      "email": "session-participant-2@koala-app.de",
+      "id": "4",
+    },
+    "session": {
+      "id": "1",
+      "name": "Session 1",
+      "toolbars": [
+        {
+          "id": "1",
+        },
+      ],
+    },
+    "status": "INITIAL",
+  },
+}
+`;
