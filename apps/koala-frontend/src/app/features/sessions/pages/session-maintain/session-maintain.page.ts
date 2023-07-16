@@ -268,7 +268,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private loadSessionData(sessionId: number) {
-    this.sessionService.getOne(sessionId).subscribe((session) => {
+    this.sessionService.setFocusSession(sessionId).subscribe((session) => {
       this.session = { ...session };
       this.session && this.session.userSessions
         ? (this.participants = [
