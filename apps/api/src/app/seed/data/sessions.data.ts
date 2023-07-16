@@ -22,4 +22,18 @@ export const SessionsData = [
     start: Date.now(),
     end: Date.now() + 1000000,
   },
+  {
+    id: 4,
+    name: 'Session 4',
+    owner: UsersData.sessionOwner1,
+    status: SessionStatus.OPEN,
+    start: Date.now() - 2000,
+    end: Date.now() - 1000,
+  },
+  {
+    id: 5,
+    name: 'Session 5',
+    owner: UsersData.sessionOwner1,
+    status: SessionStatus.ARCHIVED,
+  },
 ];

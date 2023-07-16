@@ -5,13 +5,13 @@ exports[`Sessions (e2e) Create Session SAML Authenticated user can create a new 
   "createSession": {
     "description": "",
     "end": null,
-    "id": "4",
+    "id": "6",
     "name": "test",
     "start": null,
     "status": "IN_PREPARATION",
     "toolbars": [
       {
-        "id": "4",
+        "id": "6",
       },
     ],
   },
@@ -48,7 +48,7 @@ exports[`Sessions (e2e) Query Sessions Owner user should get list of all owned s
           },
         },
         {
-          "id": 4,
+          "id": 6,
           "owner": {
             "email": "session-participant-1@koala-app.de",
           },
@@ -58,7 +58,7 @@ exports[`Sessions (e2e) Query Sessions Owner user should get list of all owned s
           },
         },
         {
-          "id": 5,
+          "id": 7,
           "owner": {
             "email": "session-participant-2@koala-app.de",
           },
@@ -86,7 +86,7 @@ exports[`Sessions (e2e) Query Sessions Owner user should get list of all owned s
       ],
       "userSessions": [
         {
-          "id": 6,
+          "id": 8,
           "owner": {
             "email": "session-owner-1@koala-app.de",
           },
@@ -124,13 +124,69 @@ exports[`Sessions (e2e) Query Sessions Owner user should get list of all owned s
           },
         },
         {
-          "id": 7,
+          "id": 9,
           "owner": {
             "email": "session-participant-2@koala-app.de",
           },
           "session": {
             "id": "3",
             "name": "Session 3",
+          },
+        },
+      ],
+    },
+    {
+      "description": "",
+      "id": "4",
+      "name": "Session 4",
+      "owner": {
+        "displayName": "Session Owner 1",
+        "email": "session-owner-1@koala-app.de",
+        "id": "1",
+      },
+      "status": "CLOSED",
+      "toolbars": [
+        {
+          "id": "4",
+        },
+      ],
+      "userSessions": [
+        {
+          "id": 4,
+          "owner": {
+            "email": "session-owner-1@koala-app.de",
+          },
+          "session": {
+            "id": "4",
+            "name": "Session 4",
+          },
+        },
+      ],
+    },
+    {
+      "description": "",
+      "id": "5",
+      "name": "Session 5",
+      "owner": {
+        "displayName": "Session Owner 1",
+        "email": "session-owner-1@koala-app.de",
+        "id": "1",
+      },
+      "status": "ARCHIVED",
+      "toolbars": [
+        {
+          "id": "5",
+        },
+      ],
+      "userSessions": [
+        {
+          "id": 5,
+          "owner": {
+            "email": "session-owner-1@koala-app.de",
+          },
+          "session": {
+            "id": "5",
+            "name": "Session 5",
           },
         },
       ],
@@ -159,7 +215,7 @@ exports[`Sessions (e2e) Query Sessions Participating user should get list of all
       ],
       "userSessions": [
         {
-          "id": 4,
+          "id": 6,
           "owner": {
             "email": "session-participant-1@koala-app.de",
           },
@@ -204,7 +260,7 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 1`] = 
           },
         },
         {
-          "id": 4,
+          "id": 6,
           "owner": {
             "email": "session-participant-1@koala-app.de",
           },
@@ -214,7 +270,7 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 1`] = 
           },
         },
         {
-          "id": 5,
+          "id": 7,
           "owner": {
             "email": "session-participant-2@koala-app.de",
           },
@@ -242,7 +298,7 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 1`] = 
       ],
       "userSessions": [
         {
-          "id": 6,
+          "id": 8,
           "owner": {
             "email": "session-owner-1@koala-app.de",
           },
@@ -280,13 +336,69 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 1`] = 
           },
         },
         {
-          "id": 7,
+          "id": 9,
           "owner": {
             "email": "session-participant-2@koala-app.de",
           },
           "session": {
             "id": "3",
             "name": "Session 3",
+          },
+        },
+      ],
+    },
+    {
+      "description": "",
+      "id": "4",
+      "name": "Session 4",
+      "owner": {
+        "displayName": "Session Owner 1",
+        "email": "session-owner-1@koala-app.de",
+        "id": "1",
+      },
+      "status": "CLOSED",
+      "toolbars": [
+        {
+          "id": "4",
+        },
+      ],
+      "userSessions": [
+        {
+          "id": 4,
+          "owner": {
+            "email": "session-owner-1@koala-app.de",
+          },
+          "session": {
+            "id": "4",
+            "name": "Session 4",
+          },
+        },
+      ],
+    },
+    {
+      "description": "",
+      "id": "5",
+      "name": "Session 5",
+      "owner": {
+        "displayName": "Session Owner 1",
+        "email": "session-owner-1@koala-app.de",
+        "id": "1",
+      },
+      "status": "ARCHIVED",
+      "toolbars": [
+        {
+          "id": "5",
+        },
+      ],
+      "userSessions": [
+        {
+          "id": 5,
+          "owner": {
+            "email": "session-owner-1@koala-app.de",
+          },
+          "session": {
+            "id": "5",
+            "name": "Session 5",
           },
         },
       ],
@@ -326,7 +438,7 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 3`] = 
       ],
       "userSessions": [
         {
-          "id": 6,
+          "id": 8,
           "owner": {
             "email": "session-owner-1@koala-app.de",
           },
@@ -364,13 +476,69 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 3`] = 
           },
         },
         {
-          "id": 7,
+          "id": 9,
           "owner": {
             "email": "session-participant-2@koala-app.de",
           },
           "session": {
             "id": "3",
             "name": "Session 3",
+          },
+        },
+      ],
+    },
+    {
+      "description": "",
+      "id": "4",
+      "name": "Session 4",
+      "owner": {
+        "displayName": "Session Owner 1",
+        "email": "session-owner-1@koala-app.de",
+        "id": "1",
+      },
+      "status": "CLOSED",
+      "toolbars": [
+        {
+          "id": "4",
+        },
+      ],
+      "userSessions": [
+        {
+          "id": 4,
+          "owner": {
+            "email": "session-owner-1@koala-app.de",
+          },
+          "session": {
+            "id": "4",
+            "name": "Session 4",
+          },
+        },
+      ],
+    },
+    {
+      "description": "",
+      "id": "5",
+      "name": "Session 5",
+      "owner": {
+        "displayName": "Session Owner 1",
+        "email": "session-owner-1@koala-app.de",
+        "id": "1",
+      },
+      "status": "ARCHIVED",
+      "toolbars": [
+        {
+          "id": "5",
+        },
+      ],
+      "userSessions": [
+        {
+          "id": 5,
+          "owner": {
+            "email": "session-owner-1@koala-app.de",
+          },
+          "session": {
+            "id": "5",
+            "name": "Session 5",
           },
         },
       ],
