@@ -252,11 +252,9 @@ export class MediaControlService {
     const w = this.getWave();
     let interval = 5;
     const ratio = timelineContainer.getBoundingClientRect().width / (w.getDuration() / 10);
-    console.log(ratio);
     if (ratio < 30) {
       interval = 20;
     }
-    console.log(interval);
     const pl = TimelinePlugin.create({
       container: timelineContainer,
       timeInterval: interval,
