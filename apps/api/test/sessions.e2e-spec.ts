@@ -10,6 +10,7 @@ const QUERY_SESSIONS = gql`
       id
       name
       description
+      status
       owner {
         id
         email
@@ -93,6 +94,7 @@ const REMOVE_SESSION = gql`
       id
       name
       description
+      status
     }
   }
 `;

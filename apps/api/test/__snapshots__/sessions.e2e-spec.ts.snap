@@ -8,7 +8,7 @@ exports[`Sessions (e2e) Create Session SAML Authenticated user can create a new 
     "id": "4",
     "name": "test",
     "start": null,
-    "status": "OPEN",
+    "status": "IN_PREPARATION",
     "toolbars": [
       {
         "id": "4",
@@ -30,6 +30,7 @@ exports[`Sessions (e2e) Query Sessions Owner user should get list of all owned s
         "email": "session-owner-1@koala-app.de",
         "id": "1",
       },
+      "status": "IN_PREPARATION",
       "toolbars": [
         {
           "id": "1",
@@ -77,6 +78,7 @@ exports[`Sessions (e2e) Query Sessions Owner user should get list of all owned s
         "email": "session-owner-2@koala-app.de",
         "id": "2",
       },
+      "status": "CLOSED",
       "toolbars": [
         {
           "id": "2",
@@ -104,6 +106,7 @@ exports[`Sessions (e2e) Query Sessions Owner user should get list of all owned s
         "email": "session-owner-1@koala-app.de",
         "id": "1",
       },
+      "status": "OPEN",
       "toolbars": [
         {
           "id": "3",
@@ -148,6 +151,7 @@ exports[`Sessions (e2e) Query Sessions Participating user should get list of all
         "email": "session-owner-1@koala-app.de",
         "id": "1",
       },
+      "status": "IN_PREPARATION",
       "toolbars": [
         {
           "id": "1",
@@ -182,6 +186,7 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 1`] = 
         "email": "session-owner-1@koala-app.de",
         "id": "1",
       },
+      "status": "IN_PREPARATION",
       "toolbars": [
         {
           "id": "1",
@@ -229,6 +234,7 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 1`] = 
         "email": "session-owner-2@koala-app.de",
         "id": "2",
       },
+      "status": "CLOSED",
       "toolbars": [
         {
           "id": "2",
@@ -256,6 +262,7 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 1`] = 
         "email": "session-owner-1@koala-app.de",
         "id": "1",
       },
+      "status": "OPEN",
       "toolbars": [
         {
           "id": "3",
@@ -294,6 +301,7 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 2`] = 
     "description": "",
     "id": "1",
     "name": "Session 1",
+    "status": "IN_PREPARATION",
   },
 }
 `;
@@ -310,6 +318,7 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 3`] = 
         "email": "session-owner-2@koala-app.de",
         "id": "2",
       },
+      "status": "CLOSED",
       "toolbars": [
         {
           "id": "2",
@@ -337,6 +346,7 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 3`] = 
         "email": "session-owner-1@koala-app.de",
         "id": "1",
       },
+      "status": "OPEN",
       "toolbars": [
         {
           "id": "3",

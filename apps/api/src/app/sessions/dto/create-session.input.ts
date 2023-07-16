@@ -12,7 +12,7 @@ export class CreateSessionInput {
   @IsOptional()
   description?: string;
 
-  @Field(() => SessionStatus, { defaultValue: SessionStatus.OPEN })
+  @Field(() => SessionStatus, { defaultValue: SessionStatus.IN_PREPARATION })
   @IsEnum(SessionStatus)
   @IsOptional()
   status?: SessionStatus;
