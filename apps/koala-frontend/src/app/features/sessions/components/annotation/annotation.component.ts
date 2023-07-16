@@ -10,6 +10,8 @@ import {
 } from '@angular/core';
 import { Marker } from '../../types/marker.entity';
 import { MarkerService } from '../../services/marker.service';
+import { ConfirmationService } from 'primeng/api';
+import { TranslateService } from '@ngx-translate/core';
 import * as d3 from 'd3';
 
 export enum Display {
@@ -50,7 +52,11 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
   d3Labels = 'd3-labels-';
   d3tooltip: any;
 
-  constructor(private readonly markerService: MarkerService) {}
+  constructor(
+    private readonly markerService: MarkerService,
+    private confirmationService: ConfirmationService,
+    private readonly translateService: TranslateService
+  ) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes) {
@@ -319,6 +325,17 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
   }
 
   public onMarkerAnnotationsDelete(marker: Marker) {
-    this.deleteAnnotations.emit(marker);
+    this.confirmationService.confirm({
+      message: this.translateService.instant('SESSION.ANNOTATION.DELETE.CONFIRM_MESSAGE_TITLE', {
+        markerName: marker.name,
+      }),
+      header: this.translateService.instant('SESSION.ANNOTATION.DELETE.HEADER'),
+      icon: 'pi pi-info-circle',
+      rejectLabel: this.translateService.instant('SESSION.ANNOTATION.DELETE.REJECT_LABEL'),
+      acceptLabel: this.translateService.instant('SESSION.ANNOTATION.DELETE.ACCEPT_LABEL'),
+      accept: () => {
+        this.deleteAnnotations.emit(marker);
+      },
+    });
   }
 }
