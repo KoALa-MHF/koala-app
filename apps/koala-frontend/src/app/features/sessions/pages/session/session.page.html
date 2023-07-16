@@ -36,6 +36,7 @@
       [totalTime]="totalAudioTime"
       [currentTime]="currentAudioTime"
       [enableAnnotationDelete]="!session.lockAnnotationDelete"
+      [deactivateAnnotationDelete]="!audioPaused"
       (deleteAnnotations)="onDeleteAnnotations($event)"
     ></koala-app-annotation>
     <koala-marker-toolbar
