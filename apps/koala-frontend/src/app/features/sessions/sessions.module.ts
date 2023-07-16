@@ -26,6 +26,7 @@ import { DividerModule } from 'primeng/divider';
 import { ToolbarModule } from 'primeng/toolbar';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 import { QRCodeModule } from 'angularx-qrcode';
 
@@ -133,6 +134,7 @@ import { SessionTimerComponent } from './components/session-timer/session-timer.
     ToolbarModule,
     InputNumberModule,
     InputSwitchModule,
+    ConfirmDialogModule,
   ],
   providers: [
     MediaService,

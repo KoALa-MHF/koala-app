@@ -1,6 +1,17 @@
-import { Component, Input, AfterViewInit, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  AfterViewInit,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { Marker } from '../../types/marker.entity';
 import { MarkerService } from '../../services/marker.service';
+import { ConfirmationService } from 'primeng/api';
+import { TranslateService } from '@ngx-translate/core';
 import * as d3 from 'd3';
 
 export enum Display {
@@ -25,7 +36,7 @@ export interface DataPoint {
     '../../session-common.scss',
   ],
 })
-export class AnnotationComponent implements AfterViewInit, OnChanges {
+export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() annotationData?: Map<number, Array<DataPoint>> = new Map<number, Array<DataPoint>>();
   @Input() totalTime = 1;
   @Input() currentTime = 0;
@@ -41,7 +52,11 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   d3Labels = 'd3-labels-';
   d3tooltip: any;
 
-  constructor(private readonly markerService: MarkerService) {}
+  constructor(
+    private readonly markerService: MarkerService,
+    private confirmationService: ConfirmationService,
+    private readonly translateService: TranslateService
+  ) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes) {
@@ -66,6 +81,15 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
 
   ngAfterViewInit() {
     this.drawTimeline();
+  }
+
+  ngOnDestroy(): void {
+    const svgC = d3.select(`svg#${this.d3Container}${this.d3ContainerID}`);
+    const svgL = d3.select(`svg#${this.d3Labels}${this.d3ContainerID}`);
+    svgC.selectAll('rect').remove();
+    svgC.selectAll('circle').remove();
+    svgC.selectAll('line.marker').remove();
+    svgL.selectAll('text').remove();
   }
 
   public addDataPoint(id: number, value: DataPoint) {
@@ -301,6 +325,17 @@ export class AnnotationComponent implements AfterViewInit, OnChanges {
   }
 
   public onMarkerAnnotationsDelete(marker: Marker) {
-    this.deleteAnnotations.emit(marker);
+    this.confirmationService.confirm({
+      message: this.translateService.instant('SESSION.ANNOTATION.DELETE.CONFIRM_MESSAGE_TITLE', {
+        markerName: marker.name,
+      }),
+      header: this.translateService.instant('SESSION.ANNOTATION.DELETE.HEADER'),
+      icon: 'pi pi-info-circle',
+      rejectLabel: this.translateService.instant('SESSION.ANNOTATION.DELETE.REJECT_LABEL'),
+      acceptLabel: this.translateService.instant('SESSION.ANNOTATION.DELETE.ACCEPT_LABEL'),
+      accept: () => {
+        this.deleteAnnotations.emit(marker);
+      },
+    });
   }
 }
