@@ -329,7 +329,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
       message: this.translateService.instant('SESSION.ANNOTATION.DELETE.CONFIRM_MESSAGE_TITLE', {
         markerName: marker.name,
       }),
-      header: 'Confirmation',
+      header: this.translateService.instant('SESSION.ANNOTATION.DELETE.HEADER'),
       icon: 'pi pi-info-circle',
       rejectLabel: this.translateService.instant('SESSION.ANNOTATION.DELETE.REJECT_LABEL'),
       acceptLabel: this.translateService.instant('SESSION.ANNOTATION.DELETE.ACCEPT_LABEL'),
