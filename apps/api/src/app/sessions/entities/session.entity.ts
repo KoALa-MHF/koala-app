@@ -1,6 +1,6 @@
 import { ObjectType, Field, registerEnumType, ID } from '@nestjs/graphql';
 import { IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
-import { BeforeInsert, Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { AfterLoad, BeforeInsert, Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '../../core/base.entity';
 import { Media } from '../../media/entities/media.entity';
 import { customAlphabet } from 'nanoid';
@@ -13,8 +13,10 @@ import { User } from '../../users/entities/user.entity';
 const nanoid = customAlphabet(nolookalikes, 7);
 
 export enum SessionStatus {
+  IN_PREPARATION = 'preparation',
   OPEN = 'open',
   CLOSED = 'closed',
+  ARCHIVED = 'archived',
 }
 
 export enum PlayMode {
@@ -50,17 +52,38 @@ export class Session extends BaseEntity {
   @Column({
     type: 'simple-enum',
     enum: SessionStatus,
-    default: SessionStatus.OPEN,
+    default: SessionStatus.IN_PREPARATION,
     nullable: true,
   })
   @Field(() => SessionStatus, {
-    defaultValue: SessionStatus.OPEN,
+    defaultValue: SessionStatus.IN_PREPARATION,
     description: 'Session Status',
     nullable: true,
   })
   @IsEnum(SessionStatus)
   @IsOptional()
   status?: SessionStatus;
+
+  @AfterLoad()
+  updateStatus() {
+    if (this.start && this.end) {
+      const now = Date.now();
+      const start = this.start.valueOf();
+      const end = this.end.valueOf();
+
+      if (this.status === SessionStatus.IN_PREPARATION) {
+        if (start <= now && end >= now) {
+          this.status = SessionStatus.OPEN;
+        } else if (end < now) {
+          this.status = SessionStatus.CLOSED;
+        }
+      } else if (this.status === SessionStatus.OPEN) {
+        if (end < now) {
+          this.status = SessionStatus.CLOSED;
+        }
+      }
+    }
+  }
 
   @Column({
     default: false,

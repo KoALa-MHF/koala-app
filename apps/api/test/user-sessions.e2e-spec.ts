@@ -130,18 +130,18 @@ const INVITE_USER_SESSION = gql`
 `;
 
 const QUERY_USER_SESSION_VARIABLES = {
-  id: 5,
+  id: 7,
 };
 
 const UPDATE_USER_SESSION_VARIABLES = {
-  id: 5,
+  id: 7,
   updateUserSessionInput: {
     note: 'Update Notes',
   },
 };
 
 const REMOVE_USER_SESSION_VARIABLES = {
-  id: 5,
+  id: 7,
 };
 
 const CREATE_USER_SESSION_VARIABLES = {
@@ -160,7 +160,7 @@ const INVITE_USER_SESSION_VARIABLES = {
       1,
       2,
       3,
-      4,
+      7,
     ],
     message: 'Invite User via E2E test',
   },

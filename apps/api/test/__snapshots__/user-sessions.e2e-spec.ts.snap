@@ -4,7 +4,7 @@ exports[`User Sessions (e2e) Create User Session Authenticated owner of session 
 {
   "createUserSession": {
     "annotations": [],
-    "id": 8,
+    "id": 10,
     "note": "",
     "owner": {
       "email": "create-user-session-user@koala-app.de",
@@ -22,21 +22,21 @@ exports[`User Sessions (e2e) Create User Session Authenticated owner of session 
           },
         },
         {
-          "id": 4,
+          "id": 6,
           "owner": {
             "email": "session-participant-1@koala-app.de",
             "id": "3",
           },
         },
         {
-          "id": 5,
+          "id": 7,
           "owner": {
             "email": "session-participant-2@koala-app.de",
             "id": "4",
           },
         },
         {
-          "id": 8,
+          "id": 10,
           "owner": {
             "email": "create-user-session-user@koala-app.de",
             "id": "5",
@@ -74,7 +74,7 @@ exports[`User Sessions (e2e) Invite User Session Authenticated owner of session 
       "status": "INITIAL",
     },
     {
-      "id": 4,
+      "id": 7,
       "session": {
         "id": "1",
       },
@@ -88,7 +88,7 @@ exports[`User Sessions (e2e) Query User Session Authenticated user should get ow
 {
   "userSession": {
     "annotations": [],
-    "id": 5,
+    "id": 7,
     "note": "",
     "session": {
       "id": "1",
@@ -104,7 +104,7 @@ exports[`User Sessions (e2e) Query User Sessions Authenticated user should get l
   "userSessions": [
     {
       "annotations": [],
-      "id": 5,
+      "id": 7,
       "note": "",
       "owner": {
         "email": "session-participant-2@koala-app.de",
@@ -118,7 +118,7 @@ exports[`User Sessions (e2e) Query User Sessions Authenticated user should get l
     },
     {
       "annotations": [],
-      "id": 7,
+      "id": 9,
       "note": "",
       "owner": {
         "email": "session-participant-2@koala-app.de",
@@ -139,7 +139,7 @@ exports[`User Sessions (e2e) Remove User Session Authenticated user can remove o
   "userSessions": [
     {
       "annotations": [],
-      "id": 5,
+      "id": 7,
       "note": "",
       "owner": {
         "email": "session-participant-2@koala-app.de",
@@ -153,7 +153,7 @@ exports[`User Sessions (e2e) Remove User Session Authenticated user can remove o
     },
     {
       "annotations": [],
-      "id": 7,
+      "id": 9,
       "note": "",
       "owner": {
         "email": "session-participant-2@koala-app.de",
@@ -172,7 +172,7 @@ exports[`User Sessions (e2e) Remove User Session Authenticated user can remove o
 exports[`User Sessions (e2e) Remove User Session Authenticated user can remove own user session 2`] = `
 {
   "removeUserSession": {
-    "id": 5,
+    "id": 7,
   },
 }
 `;
@@ -182,7 +182,7 @@ exports[`User Sessions (e2e) Remove User Session Authenticated user can remove o
   "userSessions": [
     {
       "annotations": [],
-      "id": 7,
+      "id": 9,
       "note": "",
       "owner": {
         "email": "session-participant-2@koala-app.de",
@@ -202,7 +202,7 @@ exports[`User Sessions (e2e) Update User Session Authenticated user can only upd
 {
   "updateUserSession": {
     "annotations": [],
-    "id": 5,
+    "id": 7,
     "note": "Update Notes",
     "owner": {
       "email": "session-participant-2@koala-app.de",
@@ -226,7 +226,7 @@ exports[`User Sessions (e2e) Update User Session Authenticated user can update o
 {
   "updateUserSession": {
     "annotations": [],
-    "id": 5,
+    "id": 7,
     "note": "Update Notes",
     "owner": {
       "email": "session-participant-2@koala-app.de",
