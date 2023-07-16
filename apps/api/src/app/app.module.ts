@@ -86,7 +86,7 @@ import { UsersService } from './users/users.service';
         from: mailConfig.from,
       },
       template: {
-        dir: __dirname + '/assets/templates',
+        dir: __dirname + '/templates',
         adapter: new HandlebarsAdapter(),
         options: {
           strict: true,
