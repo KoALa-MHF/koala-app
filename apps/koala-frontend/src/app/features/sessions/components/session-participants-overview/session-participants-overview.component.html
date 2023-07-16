@@ -31,6 +31,7 @@
         <button
           pButton
           pRipple
+          *ngIf="participant.owner.id !== sessionOwnerId"
           data-column="delete"
           icon="pi pi-trash"
           class="p-button-text"
@@ -99,7 +100,7 @@
   title="{{ 'SESSION.MAINTAIN.PARTICIPANTS.DELETE_CONFIRM_DIALOG.TITLE' | translate }}"
   confirmText="{{
     'SESSION.MAINTAIN.PARTICIPANTS.DELETE_CONFIRM_DIALOG.EXPLANATION'
-      | translate: { email: selectedParticipant?.owner?.email }
+      | translate : { email: selectedParticipant?.owner?.email }
   }}"
   (cancel)="onDeleteCancel()"
   (confirm)="onDelete($event)"

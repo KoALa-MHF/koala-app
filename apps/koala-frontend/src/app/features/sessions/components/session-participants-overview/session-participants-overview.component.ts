@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserSession } from '../../types/user-session.entity';
+import { SessionsService } from '../../services/sessions.service';
+import { Session } from '../../types/session.entity';
 
 @Component({
   selector: 'koala-session-participants-overview',
@@ -10,7 +12,7 @@ import { UserSession } from '../../types/user-session.entity';
     '../../session-common.scss',
   ],
 })
-export class SessionParticipantsOverviewComponent implements OnInit {
+export class SessionParticipantsOverviewComponent implements OnInit, OnDestroy {
   @Input() participants: UserSession[] = [];
 
   @Output() participantRemove = new EventEmitter<UserSession>();
@@ -21,8 +23,13 @@ export class SessionParticipantsOverviewComponent implements OnInit {
   selectedParticipant?: UserSession;
 
   participantForm!: FormGroup;
+  sessionOwnerId = '0';
 
-  constructor(private readonly formBuilder: FormBuilder) {}
+  focusSession$ = this.sessionService.focusSessionChanged$.subscribe(
+    (session: Session) => (this.sessionOwnerId = session.owner?.id || '0')
+  );
+
+  constructor(private readonly formBuilder: FormBuilder, private readonly sessionService: SessionsService) {}
 
   ngOnInit(): void {
     this.participantForm = this.formBuilder.group({
@@ -30,6 +37,10 @@ export class SessionParticipantsOverviewComponent implements OnInit {
         Validators.required,
       ]),
     });
+  }
+
+  ngOnDestroy(): void {
+    this.focusSession$.unsubscribe();
   }
 
   onDeleteRequested(particpant: UserSession) {
