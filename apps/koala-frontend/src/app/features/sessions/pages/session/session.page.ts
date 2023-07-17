@@ -376,7 +376,7 @@ export class SessionPage implements OnInit, OnDestroy {
     if (aData.length > 0) {
       const latest = aData.at(-1);
       if (latest?.endTime == 0) {
-        latest.endTime = this.sessionControlService.getCurrentTime();
+        latest.endTime = Math.floor(this.sessionControlService.getCurrentTime());
 
         this.annotationService
           .create({
