@@ -95,7 +95,7 @@
         "SESSION_DESCRIPTION_INPUT_LABEL": "Beschreibung",
         "SESSION_DESCRIPTION_INPUT_EXPLANATION": "Fügen Sie der Session ggf. eine Beschreibung oder eine Aufgabenstellung hinzu.",
         "SESSION_AVAILABILITY_EXPLANATION": "Nur wenn die Session online geschaltet ist, können Benutzer diese zugreifen. Wenn nicht, ist die Session nur für Sie als Administrator verfügbar.",
-        "SESSION_ONLINE_LABEL": "Online",
+        "SESSION_STATUS_LABEL": "Status",
         "SESSION_START_DATE_INPUT_LABEL": "Start",
         "SESSION_END_DATE_INPUT_LABEL": "Ende",
         "SESSION_DETAILS_EXPLANATION": "Hier legen Sie vorab fest, welche Funktionen für die Benutzer verfügbar / sichtbar sein werden. Diese Einstellungen lassen sich später innerhalb der Session flexibel ändern.",
@@ -107,7 +107,13 @@
         "SAVE_BTN": "Speichern",
         "CANCEL_BTN": "Abbrechen",
         "SAVE_ERROR_MESSAGE_TITLE": "Änderungen an der Session konnten nicht gespeichert werden",
-        "SAVE_SUCCESS_MESSAGE_TITLE": "Änderungen an Session '{{sessionName}}' wurden gespeichert"
+        "SAVE_SUCCESS_MESSAGE_TITLE": "Änderungen an Session '{{sessionName}}' wurden gespeichert",
+        "STATUS": {
+          "IN_PREPARATION_LABEL": "In Bearbeitung",
+          "OPEN_LABEL": "Online",
+          "CLOSED_LABEL": "Geschlossen",
+          "ARCHIVED_LABEL": "Archiviert"
+        }
       },
       "AUDIO": {
         "AUDIO_UPLOAD_EXPLANATION": "Hier können Sie eine Audio-Datei wählen und hochladen. Wenn Sie keine Datei hochladen, können Sie eine Live-Annotation innerhalb der Session starten.",

@@ -1,5 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
+import { SessionStatus } from '../../../../graphql/generated/graphql';
+
+interface SessionStatusOption {
+  name: string;
+  code: string;
+}
 
 @Component({
   selector: 'koala-session-dates',
@@ -12,15 +19,24 @@ import { FormGroup } from '@angular/forms';
 export class SessionDatesComponent {
   @Input() sessionDatesForm!: FormGroup;
 
-  get start() {
-    return this.sessionDatesForm.get('start')?.value;
-  }
+  sessionStatus: SessionStatusOption[] = [
+    {
+      name: this.translateSession.instant('SESSION.MAINTAIN.SESSION_SETTINGS.STATUS.IN_PREPARATION_LABEL'),
+      code: SessionStatus.InPreparation,
+    },
+    {
+      name: this.translateSession.instant('SESSION.MAINTAIN.SESSION_SETTINGS.STATUS.OPEN_LABEL'),
+      code: SessionStatus.Open,
+    },
+    {
+      name: this.translateSession.instant('SESSION.MAINTAIN.SESSION_SETTINGS.STATUS.CLOSED_LABEL'),
+      code: SessionStatus.Closed,
+    },
+    {
+      name: this.translateSession.instant('SESSION.MAINTAIN.SESSION_SETTINGS.STATUS.ARCHIVED_LABEL'),
+      code: SessionStatus.Archived,
+    },
+  ];
 
-  get end() {
-    return this.sessionDatesForm.get('end')?.value;
-  }
-
-  get online(): boolean {
-    return this.sessionDatesForm.get('online')?.value;
-  }
+  constructor(private readonly translateSession: TranslateService) {}
 }

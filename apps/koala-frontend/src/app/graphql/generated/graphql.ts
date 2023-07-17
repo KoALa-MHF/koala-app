@@ -83,8 +83,8 @@ export type CreateMarkerInput = {
   color?: Scalars['String']['input'];
   /** Marker Content Color */
   contentColor?: Scalars['String']['input'];
-  /** Marker Descritpion */
-  description?: Scalars['String']['input'];
+  /** Marker Description */
+  description?: InputMaybe<Scalars['String']['input']>;
   /** Marker Icon */
   icon?: InputMaybe<Scalars['String']['input']>;
   /** Marker Name */
@@ -105,10 +105,10 @@ export type CreateSessionInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   displaySampleSolution?: InputMaybe<Scalars['Boolean']['input']>;
   editable?: InputMaybe<Scalars['Boolean']['input']>;
-  lockAnnotationDelete?: InputMaybe<Scalars['Boolean']['input']>;
   enableLiveAnalysis?: InputMaybe<Scalars['Boolean']['input']>;
   enablePlayer?: InputMaybe<Scalars['Boolean']['input']>;
   end?: InputMaybe<Scalars['DateTime']['input']>;
+  lockAnnotationDelete?: InputMaybe<Scalars['Boolean']['input']>;
   /** Assigned Media */
   mediaId?: InputMaybe<Scalars['Int']['input']>;
   name: Scalars['String']['input'];
@@ -356,8 +356,6 @@ export type Session = {
   displaySampleSolution?: Maybe<Scalars['Boolean']['output']>;
   /** Default for Session - Editable for Participants */
   editable?: Maybe<Scalars['Boolean']['output']>;
-  /** Default for Session - Are Participants Allowed to Delete Their Own Annotations */
-  lockAnnotationDelete?: Maybe<Scalars['Boolean']['output']>;
   /** Default for Session - Annotations are Directly Displayed in Analysis */
   enableLiveAnalysis?: Maybe<Scalars['Boolean']['output']>;
   /** Default for Session - Player Enabled for Participants */
@@ -370,6 +368,8 @@ export type Session = {
   isSessionOwner: Scalars['Boolean']['output'];
   liveSessionEnd?: Maybe<Scalars['Float']['output']>;
   liveSessionStart?: Maybe<Scalars['Float']['output']>;
+  /** Default for Session - Are Participants Allowed to Delete Their Own Annotations */
+  lockAnnotationDelete?: Maybe<Scalars['Boolean']['output']>;
   /** Associated Media File */
   media?: Maybe<Media>;
   /** Session Name */
@@ -392,7 +392,9 @@ export type Session = {
 };
 
 export enum SessionStatus {
+  Archived = 'ARCHIVED',
   Closed = 'CLOSED',
+  InPreparation = 'IN_PREPARATION',
   Open = 'OPEN',
 }
 
@@ -457,7 +459,7 @@ export type UpdateMarkerInput = {
   color?: InputMaybe<Scalars['String']['input']>;
   /** Marker Content Color */
   contentColor?: InputMaybe<Scalars['String']['input']>;
-  /** Marker Descritpion */
+  /** Marker Description */
   description?: InputMaybe<Scalars['String']['input']>;
   /** Marker Icon */
   icon?: InputMaybe<Scalars['String']['input']>;
@@ -475,11 +477,11 @@ export type UpdateSessionInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   displaySampleSolution?: InputMaybe<Scalars['Boolean']['input']>;
   editable?: InputMaybe<Scalars['Boolean']['input']>;
-  lockAnnotationDelete?: InputMaybe<Scalars['Boolean']['input']>;
   enableLiveAnalysis?: InputMaybe<Scalars['Boolean']['input']>;
   enablePlayer?: InputMaybe<Scalars['Boolean']['input']>;
   end?: InputMaybe<Scalars['DateTime']['input']>;
   liveSessionStart?: InputMaybe<Scalars['Float']['input']>;
+  lockAnnotationDelete?: InputMaybe<Scalars['Boolean']['input']>;
   /** Assigned Media */
   mediaId?: InputMaybe<Scalars['Int']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -1387,7 +1389,6 @@ export const SetPlayModeDocument = gql`
       displaySampleSolution
       enableLiveAnalysis
       lockAnnotationDelete
-      isAudioSession
       playMode
       playPosition
       liveSessionStart
@@ -1461,7 +1462,6 @@ export const SetPlayPositionDocument = gql`
       displaySampleSolution
       enableLiveAnalysis
       lockAnnotationDelete
-      isAudioSession
       playMode
       playPosition
       liveSessionStart

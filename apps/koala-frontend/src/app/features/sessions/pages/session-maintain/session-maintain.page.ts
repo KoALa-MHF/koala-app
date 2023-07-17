@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { MutationResult } from 'apollo-angular';
 import { MessageService } from 'primeng/api';
-import { MarkerType, UpdateSessionMutation } from '../../../../graphql/generated/graphql';
+import { MarkerType, SessionStatus, UpdateSessionMutation } from '../../../../graphql/generated/graphql';
 import { UserSession } from '../../types/user-session.entity';
 import { MarkerService } from '../../services/marker.service';
 import { MediaService } from '../../services/media.service';
@@ -71,7 +71,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
       }),
       dates: this.formBuilder.group(
         {
-          online: new FormControl<boolean>(false),
+          status: new FormControl<SessionStatus | null>(null),
           start: new FormControl<Date | null>(null),
           end: new FormControl<Date | null>(null),
         },
@@ -225,6 +225,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
         description: this.maintainSessionForm.value.basicData.description,
         start: this.maintainSessionForm.value.dates.start,
         end: this.maintainSessionForm.value.dates.end,
+        status: this.maintainSessionForm.value.dates.status,
         editable: this.maintainSessionForm.value.details.editable,
         enablePlayer: this.maintainSessionForm.value.details.enablePlayer,
         displaySampleSolution: this.maintainSessionForm.value.details.displaySampleSolution,
@@ -257,6 +258,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
     this.maintainSessionForm.get('details')?.get('displaySampleSolution')?.setValue(session.displaySampleSolution);
     this.maintainSessionForm.get('details')?.get('enableLiveAnalysis')?.setValue(session.enableLiveAnalysis);
     this.maintainSessionForm.get('details')?.get('lockAnnotationDelete')?.setValue(session.lockAnnotationDelete);
+    this.maintainSessionForm.get('dates')?.get('status')?.setValue(session.status);
 
     if (session.start) {
       this.maintainSessionForm.get('dates')?.get('start')?.setValue(new Date(session.start));
