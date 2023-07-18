@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   baseUrl: 'http://localhost:4200',
   wsBaseUrl: 'ws://localhost:3333',
-  samlUrl: 'https://koala-dev.onelogin.com/trust/saml2/http-post/sso/7e9b5a55-398b-4ebe-b55e-4e22e1aa749f',
+  samlUrl: 'http://localhost:3333/api/auth/sso/saml/login',
 };
 
 /*
