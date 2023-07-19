@@ -2,8 +2,8 @@
   <p-divider></p-divider>
   <div class="footer-container">
     <p-button label="Copyright KoALa 2023" styleClass="p-button-link"></p-button>
-    <p-button label="Impressum & Datenschutz" styleClass="p-button-link"></p-button>
-    <p-button label="Über KoALa" styleClass="p-button-link"></p-button>
-    <p-button label="Handbuch" styleClass="p-button-link"></p-button>
+    <p-button label="Impressum & Datenschutz" styleClass="p-button-link" [routerLink]="['imprint']"></p-button>
+    <p-button label="Über KoALa" styleClass="p-button-link" [routerLink]="['about']"></p-button>
+    <p-button label="Handbuch" styleClass="p-button-link" (click)="onHelpPressed()"></p-button>
   </div>
 </footer>

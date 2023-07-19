@@ -12,11 +12,16 @@ import { ImageModule } from 'primeng/image';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { SidebarModule } from 'primeng/sidebar';
+import { AboutPage } from './pages/about/about.page';
+import { ImprintPage } from './pages/imprint/imprint.page';
+import { CoreRoutingModule } from './core-routing.module';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
+    AboutPage,
+    ImprintPage,
   ],
   imports: [
     CommonModule,
@@ -29,6 +34,7 @@ import { SidebarModule } from 'primeng/sidebar';
     OverlayPanelModule,
     ToggleButtonModule,
     SidebarModule,
+    CoreRoutingModule,
   ],
   exports: [
     HeaderComponent,
