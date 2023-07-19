@@ -1,4 +1,4 @@
-import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -17,7 +17,7 @@ import { datesStartEndValidator } from '../../../../shared/dates.validator';
 import { markerRangeValueValidator } from '../../../../shared/greater-than.validator';
 import { UserSessionService } from '../../services/user-session.service';
 import { TranslateService } from '@ngx-translate/core';
-import { ReplaySubject, Subscription, debounceTime, fromEvent, takeUntil } from 'rxjs';
+import { Subscription, debounceTime, fromEvent } from 'rxjs';
 import { TabView } from 'primeng/tabview';
 import { DomHandler } from 'primeng/dom';
 
@@ -504,7 +504,6 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
           this.loadSessionData(sessionId);
         },
         error: (error) => {
-          //TODO: #103 Error Message for Participant Assignment
           this.messageService.add({
             severity: 'error',
             summary: this.translateService.instant('SESSION.MAINTAIN.PARTICIPANTS.ADD_ERROR_MESSAGE_TITLE'),
@@ -523,7 +522,6 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
         this.loadSessionData(parseInt(this.session?.id || '0'));
       },
       error: () => {
-        //TODO: #104 Error Message for Participant Unassignment
         this.messageService.add({
           severity: 'error',
           summary: this.translateService.instant('SESSION.MAINTAIN.PARTICIPANTS.REMOVE_ERROR_MESSAGE_TITLE'),
