@@ -505,6 +505,12 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
         },
         error: (error) => {
           //TODO: #103 Error Message for Participant Assignment
+          this.messageService.add({
+            severity: 'error',
+            summary: this.translateService.instant('SESSION.MAINTAIN.PARTICIPANTS.ADD_ERROR_MESSAGE_TITLE'),
+            detail: this.translateService.instant('SESSION.MAINTAIN.PARTICIPANTS.ADD_ERROR_MESSAGE'),
+          });
+
           console.log(error);
         },
       });
@@ -518,6 +524,12 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
       },
       error: () => {
         //TODO: #104 Error Message for Participant Unassignment
+        this.messageService.add({
+          severity: 'error',
+          summary: this.translateService.instant('SESSION.MAINTAIN.PARTICIPANTS.REMOVE_ERROR_MESSAGE_TITLE'),
+          detail: this.translateService.instant('SESSION.MAINTAIN.PARTICIPANTS.REMOVE_ERROR_MESSAGE'),
+        });
+
         console.log('Error');
       },
     });
