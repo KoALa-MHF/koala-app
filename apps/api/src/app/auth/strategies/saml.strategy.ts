@@ -21,6 +21,7 @@ export class SamlStrategy extends PassportStrategy(Strategy) {
 
   async validate(profile: Profile) {
     try {
+      console.log(profile);
       return this.usersService.upsertBySamlProfile(profile);
     } catch (error) {
       throw new UnauthorizedException();
