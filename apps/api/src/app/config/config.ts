@@ -51,6 +51,9 @@ export class SamlConfig {
   @IsBoolean()
   public readonly wantAuthnResponseSigned: boolean = false;
 
+  @IsBoolean()
+  public readonly wantAssertionsSigned: boolean = false;
+
   @IsString()
   public readonly redirectFrontendUrl: string;
 
