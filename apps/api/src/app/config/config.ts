@@ -53,6 +53,10 @@ export class SamlConfig {
 
   @IsString()
   public readonly redirectFrontendUrl: string;
+
+  @IsString()
+  @IsOptional()
+  public readonly privateKeyPath: string;
 }
 
 export class Config {
