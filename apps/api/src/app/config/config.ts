@@ -60,6 +60,10 @@ export class SamlConfig {
   @IsString()
   @IsOptional()
   public readonly privateKeyPath: string;
+
+  @IsString()
+  @IsOptional()
+  public readonly identifierFormat: string | null;
 }
 
 export class Config {
