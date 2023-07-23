@@ -32,6 +32,8 @@ export const ConfigModule = TypedConfigModule.forRoot({
     config.database.dropSchema = dropSchema === 'true' || dropSchema === true;
     const wantAuthnResponseSigned = config.saml.wantAuthnResponseSigned;
     config.saml.wantAuthnResponseSigned = wantAuthnResponseSigned === 'true' || wantAuthnResponseSigned === true;
+    const wantAssertionsSigned = config.saml.wantAssertionsSigned;
+    config.saml.wantAssertionsSigned = wantAssertionsSigned === 'true' || wantAssertionsSigned === true;
     return config;
   },
 });
