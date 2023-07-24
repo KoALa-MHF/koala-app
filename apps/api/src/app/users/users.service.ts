@@ -25,9 +25,12 @@ export class UsersService {
   }
 
   async upsertBySamlProfile(profile: Profile): Promise<User> {
-    const displayName = `${profile.firstName} ${profile.lastName}`;
-    const samlId = profile.id as string;
-    const email = profile.email;
+    let displayName = profile.displayName as string;
+    if (!displayName) {
+      displayName = `${profile.givenName} ${profile.sn}`;
+    }
+    const samlId = profile.uid as string;
+    const email = profile.mail.split(';')[0];
 
     let user = await this.findBySamlId(samlId);
     if (!user) {

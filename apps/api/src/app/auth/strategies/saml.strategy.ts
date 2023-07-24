@@ -16,11 +16,13 @@ export class SamlStrategy extends PassportStrategy(Strategy) {
       entryPoint: config.saml.entryPoint,
       audience: config.saml.audience,
       wantAuthnResponseSigned: config.saml.wantAuthnResponseSigned,
+      identifierFormat: config.saml.identifierFormat,
     } as SamlOptions);
   }
 
   async validate(profile: Profile) {
     try {
+      console.log(profile);
       return this.usersService.upsertBySamlProfile(profile);
     } catch (error) {
       throw new UnauthorizedException();
