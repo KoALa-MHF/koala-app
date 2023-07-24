@@ -457,7 +457,11 @@ export class SessionPage implements OnInit, OnDestroy {
     switch (evt.actions) {
       case MediaActions.Play:
         try {
-          this.sessionControlService.startSession().subscribe();
+          if (this.audioPaused) {
+            this.sessionControlService.startSession().subscribe();
+          } else {
+            this.sessionControlService.pauseSession().subscribe();
+          }
         } catch (error) {
           this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
         }

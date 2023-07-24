@@ -16,6 +16,7 @@ export class SamlStrategy extends PassportStrategy(Strategy) {
       entryPoint: config.saml.entryPoint,
       audience: config.saml.audience,
       wantAuthnResponseSigned: config.saml.wantAuthnResponseSigned,
+      identifierFormat: config.saml.identifierFormat,
     } as SamlOptions);
   }
 
