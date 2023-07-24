@@ -193,9 +193,14 @@
         "DELETE_CONFIRM_DIALOG": {
           "TITLE": "Teilnehmer Entfernen",
           "EXPLANATION": "Wollen Sie wirklich den Teilnehmer mit der Email-Adresse '{{email}}' aus der Session entfernen?",
+          "EXPLANATION_NAME": "Wollen Sie wirklich den Teilnehmer '{{participantName}}' aus der Session entfernen?",
           "CONFIRM_BTN": "Entfernen",
           "CANCEL_BTN": "Abbrechen"
-        }
+        },
+        "ADD_ERROR_MESSAGE_TITLE": "Fehler - Teilnehmer Hinzufügen",
+        "ADD_ERROR_MESSAGE": "Der Teilnehmer konnte leider nicht hinzugefügt werden. Bitte versuchen Sie es noch einmal.",
+        "REMOVE_ERROR_MESSAGE_TITLE": "Fehler - Teilnehmer Entfernen",
+        "REMOVE_ERROR_MESSAGE": "Der Teilnehmer konnte leider nicht aus der Session entfernt werden. Bitte versuchen Sie es noch einmal."
       }
     },
     "DELETE_CONFIRM_DIALOG": {
