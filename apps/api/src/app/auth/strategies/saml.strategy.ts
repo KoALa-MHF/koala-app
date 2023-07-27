@@ -9,6 +9,7 @@ import * as fs from 'fs';
 export class SamlStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly usersService: UsersService, private readonly config: Config) {
     const privateKey = config.saml.privateKeyPath ? fs.readFileSync(config.saml.privateKeyPath, 'utf-8') : undefined;
+    console.log('privateKey', privateKey);
 
     super({
       issuer: config.saml.issuer,
