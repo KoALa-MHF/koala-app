@@ -8,11 +8,14 @@ import * as fs from 'fs';
 @Injectable()
 export class SamlStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly usersService: UsersService, private readonly config: Config) {
+    const privateKey = config.saml.privateKeyPath ? fs.readFileSync(config.saml.privateKeyPath, 'utf-8') : undefined;
+
     super({
       issuer: config.saml.issuer,
       callbackUrl: config.saml.callbackUrl,
       cert: config.saml.cert,
-      privateKey: config.saml.privateKeyPath ? fs.readFileSync(config.saml.privateKeyPath, 'utf-8') : undefined,
+      privateKey: privateKey,
+      decryptionPvk: privateKey,
       entryPoint: config.saml.entryPoint,
       audience: config.saml.audience,
       wantAuthnResponseSigned: config.saml.wantAuthnResponseSigned,

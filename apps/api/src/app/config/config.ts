@@ -46,6 +46,7 @@ export class SamlConfig {
   public readonly entryPoint: string;
 
   @IsString()
+  @IsOptional()
   public readonly audience: string;
 
   @IsBoolean()
