@@ -70,6 +70,10 @@ export class SamlConfig {
   @IsOptional()
   public readonly signatureAlgorithm: string;
 
+  @IsNumber()
+  @IsOptional()
+  public readonly acceptedClockSkewMs: number;
+
   @IsString()
   @IsOptional()
   public readonly identifierFormat: string | null;

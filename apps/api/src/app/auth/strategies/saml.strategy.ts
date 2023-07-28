@@ -21,6 +21,7 @@ export class SamlStrategy extends PassportStrategy(Strategy) {
       wantAuthnResponseSigned: config.saml.wantAuthnResponseSigned,
       signatureAlgorithm: config.saml.signatureAlgorithm,
       identifierFormat: config.saml.identifierFormat,
+      acceptedClockSkewMs: config.saml.acceptedClockSkewMs,
     } as SamlOptions);
   }
 
