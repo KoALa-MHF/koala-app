@@ -64,6 +64,18 @@ export class SamlConfig {
 
   @IsString()
   @IsOptional()
+  public readonly decryptionPvkPath: string;
+
+  @IsString()
+  @IsOptional()
+  public readonly signatureAlgorithm: string;
+
+  @IsNumber()
+  @IsOptional()
+  public readonly acceptedClockSkewMs: number;
+
+  @IsString()
+  @IsOptional()
   public readonly identifierFormat: string | null;
 }
 
