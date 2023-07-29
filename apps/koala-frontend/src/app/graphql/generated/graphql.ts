@@ -1497,6 +1497,7 @@ export const SetPlayModeDocument = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
+      isAudioSession
       lockAnnotationDelete
       playMode
       playPosition
@@ -1571,6 +1572,7 @@ export const SetPlayPositionDocument = gql`
       displaySampleSolution
       enableLiveAnalysis
       lockAnnotationDelete
+      isAudioSession
       playMode
       playPosition
       liveSessionStart
