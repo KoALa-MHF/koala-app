@@ -95,6 +95,12 @@ export class HeaderComponent {
     ]);
   }
 
+  public onMarkersOverview() {
+    this.router.navigate([
+      '/markers',
+    ]);
+  }
+
   public onSession() {
     this.router.navigate([
       '/sessions/' + this.sessionId,
