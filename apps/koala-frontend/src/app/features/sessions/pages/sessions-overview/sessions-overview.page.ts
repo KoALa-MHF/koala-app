@@ -5,6 +5,9 @@ import { Session } from '../../types/session.entity';
 import { SessionsService } from '../../services/sessions.service';
 import { Subscription } from 'rxjs';
 import { UserSessionService } from '../../services/user-session.service';
+import { saveAs } from 'file-saver';
+import { MessageService } from 'primeng/api';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'koala-sessions-overview',
@@ -28,7 +31,9 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
     private readonly sessionService: SessionsService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly userSessionService: UserSessionService
+    private readonly userSessionService: UserSessionService,
+    private readonly messageService: MessageService,
+    private readonly translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -90,7 +95,28 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
   }
 
   public onSessionExport(sessions: Session[]) {
-    console.log('Session Export Pressed for Sessions: ' + sessions);
+    sessions.forEach((session) => {
+      this.sessionService.createSessionJSON(parseInt(session.id)).subscribe({
+        next: (result) => {
+          const blob = new Blob(
+            [
+              JSON.stringify(result),
+            ],
+            { type: 'text/plain;charset=utf-8' }
+          );
+          saveAs(blob, `${result.name}.json`);
+        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: this.translateService.instant('SESSION.EXPORT_SESSION_ERROR_TITLE'),
+            detail: this.translateService.instant('SESSION.EXPORT_SESSION_ERROR_MESSAGE', {
+              sessionName: session.name,
+            }),
+          });
+        },
+      });
+    });
   }
 
   public onSessionDelete(sessions: Session[]) {

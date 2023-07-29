@@ -43,6 +43,22 @@ export type Annotation = {
   value?: Maybe<Scalars['Int']['output']>;
 };
 
+export type AnnotationJson = {
+  __typename?: 'AnnotationJSON';
+  /** Annotation End Seconds */
+  end?: Maybe<Scalars['Int']['output']>;
+  /** ID for Annotation */
+  id: Scalars['Int']['output'];
+  /** Associated Marker */
+  marker: MarkerJson;
+  /** Annotation Note */
+  note?: Maybe<Scalars['String']['output']>;
+  /** Annotation Start Seconds */
+  start: Scalars['Int']['output'];
+  /** Annotation Value */
+  value?: Maybe<Scalars['Int']['output']>;
+};
+
 export type AuthenticateSessionInput = {
   /** Session Code */
   code: Scalars['String']['input'];
@@ -159,6 +175,28 @@ export type Marker = {
   type: MarkerType;
   /** Date of Last Update */
   updatedAt: Scalars['DateTime']['output'];
+  /** Marker Value Range From */
+  valueRangeFrom?: Maybe<Scalars['Int']['output']>;
+  /** Marker Value Range To */
+  valueRangeTo?: Maybe<Scalars['Int']['output']>;
+};
+
+export type MarkerJson = {
+  __typename?: 'MarkerJSON';
+  /** Marker Name Abbreviation (e.g. for small screen sizes */
+  abbreviation?: Maybe<Scalars['String']['output']>;
+  /** Marker Color */
+  color: Scalars['String']['output'];
+  /** Marker Description */
+  description?: Maybe<Scalars['String']['output']>;
+  /** Marker Icon */
+  icon?: Maybe<Scalars['String']['output']>;
+  /** ID for Marker */
+  id: Scalars['Int']['output'];
+  /** Marker Name */
+  name: Scalars['String']['output'];
+  /** Marker Type */
+  type: MarkerType;
   /** Marker Value Range From */
   valueRangeFrom?: Maybe<Scalars['Int']['output']>;
   /** Marker Value Range To */
@@ -310,6 +348,7 @@ export enum PlayMode {
 export type Query = {
   __typename?: 'Query';
   annotation: Annotation;
+  exportSessionAsJSON: SessionJson;
   marker: Marker;
   markers: Array<Marker>;
   me: User;
@@ -321,6 +360,10 @@ export type Query = {
 };
 
 export type QueryAnnotationArgs = {
+  id: Scalars['Int']['input'];
+};
+
+export type QueryExportSessionAsJsonArgs = {
   id: Scalars['Int']['input'];
 };
 
@@ -389,6 +432,17 @@ export type Session = {
   updatedAt: Scalars['DateTime']['output'];
   /** Associated User Sessions */
   userSessions: Array<UserSession>;
+};
+
+export type SessionJson = {
+  __typename?: 'SessionJSON';
+  description?: Maybe<Scalars['String']['output']>;
+  end?: Maybe<Scalars['DateTime']['output']>;
+  isAudioSession: Scalars['Boolean']['output'];
+  name: Scalars['String']['output'];
+  start?: Maybe<Scalars['DateTime']['output']>;
+  status: SessionStatus;
+  userSessions: Array<UserSessionJson>;
 };
 
 export enum SessionStatus {
@@ -537,6 +591,18 @@ export type UserSession = {
   status: UserSessionStatus;
   /** Date of Last Update */
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type UserSessionJson = {
+  __typename?: 'UserSessionJSON';
+  /** Associated Annotations */
+  annotations: Array<AnnotationJson>;
+  /** ID for User Session */
+  id: Scalars['Int']['output'];
+  /** User Session Note */
+  note?: Maybe<Scalars['String']['output']>;
+  /** User Session Status */
+  status: UserSessionStatus;
 };
 
 export enum UserSessionStatus {
@@ -973,6 +1039,49 @@ export type GetUserQueryVariables = Exact<{ [key: string]: never }>;
 export type GetUserQuery = {
   __typename?: 'Query';
   me: { __typename?: 'User'; id: string; displayName?: string | null; email?: string | null };
+};
+
+export type ExportSessionAsJsonQueryVariables = Exact<{
+  sessionId: Scalars['Int']['input'];
+}>;
+
+export type ExportSessionAsJsonQuery = {
+  __typename?: 'Query';
+  exportSessionAsJSON: {
+    __typename?: 'SessionJSON';
+    start?: any | null;
+    end?: any | null;
+    name: string;
+    description?: string | null;
+    status: SessionStatus;
+    isAudioSession: boolean;
+    userSessions: Array<{
+      __typename?: 'UserSessionJSON';
+      id: number;
+      status: UserSessionStatus;
+      note?: string | null;
+      annotations: Array<{
+        __typename?: 'AnnotationJSON';
+        id: number;
+        start: number;
+        end?: number | null;
+        value?: number | null;
+        note?: string | null;
+        marker: {
+          __typename?: 'MarkerJSON';
+          id: number;
+          type: MarkerType;
+          name: string;
+          abbreviation?: string | null;
+          description?: string | null;
+          color: string;
+          icon?: string | null;
+          valueRangeFrom?: number | null;
+          valueRangeTo?: number | null;
+        };
+      }>;
+    }>;
+  };
 };
 
 export type OnSessionUpdatedSubscriptionVariables = Exact<{
@@ -1731,6 +1840,52 @@ export const GetUserDocument = gql`
 })
 export class GetUserGQL extends Apollo.Query<GetUserQuery, GetUserQueryVariables> {
   override document = GetUserDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const ExportSessionAsJsonDocument = gql`
+  query exportSessionAsJSON($sessionId: Int!) {
+    exportSessionAsJSON(id: $sessionId) {
+      start
+      end
+      name
+      description
+      status
+      isAudioSession
+      userSessions {
+        id
+        status
+        note
+        annotations {
+          id
+          start
+          end
+          value
+          note
+          marker {
+            id
+            type
+            name
+            abbreviation
+            description
+            color
+            icon
+            valueRangeFrom
+            valueRangeTo
+          }
+        }
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ExportSessionAsJsonGQL extends Apollo.Query<ExportSessionAsJsonQuery, ExportSessionAsJsonQueryVariables> {
+  override document = ExportSessionAsJsonDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

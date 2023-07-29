@@ -132,7 +132,9 @@ export class UserSessionsService {
         },
       ],
       relations: {
-        annotations: true,
+        annotations: {
+          marker: true,
+        },
       },
     });
   }

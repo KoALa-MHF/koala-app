@@ -81,7 +81,6 @@ export class SessionsResolver {
     const userSessions = await this.userSessionsService.findAllBySessionWithAnnotations(id, user);
 
     const userSessionsJSON = userSessions.map((userSession) => {
-      console.log(userSession.annotations);
       const annotations = userSession.annotations
         ? userSession.annotations.map((annotation) => {
             return { ...annotation, marker: annotation.marker } as AnnotationJSON;
