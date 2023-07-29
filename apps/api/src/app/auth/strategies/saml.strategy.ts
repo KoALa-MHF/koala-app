@@ -13,9 +13,15 @@ export class SamlStrategy extends PassportStrategy(Strategy) {
       callbackUrl: config.saml.callbackUrl,
       cert: config.saml.cert,
       privateKey: config.saml.privateKeyPath ? fs.readFileSync(config.saml.privateKeyPath, 'utf-8') : undefined,
+      decryptionPvk: config.saml.decryptionPvkPath
+        ? fs.readFileSync(config.saml.decryptionPvkPath, 'utf-8')
+        : undefined,
       entryPoint: config.saml.entryPoint,
       audience: config.saml.audience,
       wantAuthnResponseSigned: config.saml.wantAuthnResponseSigned,
+      signatureAlgorithm: config.saml.signatureAlgorithm,
+      identifierFormat: config.saml.identifierFormat,
+      acceptedClockSkewMs: config.saml.acceptedClockSkewMs,
     } as SamlOptions);
   }
 

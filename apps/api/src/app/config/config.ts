@@ -46,6 +46,7 @@ export class SamlConfig {
   public readonly entryPoint: string;
 
   @IsString()
+  @IsOptional()
   public readonly audience: string;
 
   @IsBoolean()
@@ -60,6 +61,22 @@ export class SamlConfig {
   @IsString()
   @IsOptional()
   public readonly privateKeyPath: string;
+
+  @IsString()
+  @IsOptional()
+  public readonly decryptionPvkPath: string;
+
+  @IsString()
+  @IsOptional()
+  public readonly signatureAlgorithm: string;
+
+  @IsNumber()
+  @IsOptional()
+  public readonly acceptedClockSkewMs: number;
+
+  @IsString()
+  @IsOptional()
+  public readonly identifierFormat: string | null;
 }
 
 export class Config {

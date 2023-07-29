@@ -34,6 +34,8 @@ export const ConfigModule = TypedConfigModule.forRoot({
     config.saml.wantAuthnResponseSigned = wantAuthnResponseSigned === 'true' || wantAuthnResponseSigned === true;
     const wantAssertionsSigned = config.saml.wantAssertionsSigned;
     config.saml.wantAssertionsSigned = wantAssertionsSigned === 'true' || wantAssertionsSigned === true;
+    const identifierFormat = config.saml.identifierFormat;
+    config.saml.identifierFormat = identifierFormat === 'null' ? null : identifierFormat;
     return config;
   },
 });
