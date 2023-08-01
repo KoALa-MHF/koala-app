@@ -38,7 +38,7 @@ export const ConfigModule = TypedConfigModule.forRoot({
     config.saml.identifierFormat = identifierFormat === 'null' ? null : identifierFormat;
     const acceptedClockSkewMs = config.saml.acceptedClockSkewMs;
     config.saml.acceptedClockSkewMs =
-      typeof acceptedClockSkewMs !== undefined ? parseInt(acceptedClockSkewMs, 10) : undefined;
+      typeof acceptedClockSkewMs !== 'undefined' ? parseInt(acceptedClockSkewMs, 10) : undefined;
     return config;
   },
 });
