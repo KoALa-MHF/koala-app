@@ -36,8 +36,8 @@ export const ConfigModule = TypedConfigModule.forRoot({
     config.saml.wantAssertionsSigned = wantAssertionsSigned === 'true' || wantAssertionsSigned === true;
     const identifierFormat = config.saml.identifierFormat;
     config.saml.identifierFormat = identifierFormat === 'null' ? null : identifierFormat;
-    const acceptedClockSkewMs = config.mail.acceptedClockSkewMs;
-    config.mail.acceptedClockSkewMs =
+    const acceptedClockSkewMs = config.saml.acceptedClockSkewMs;
+    config.saml.acceptedClockSkewMs =
       typeof acceptedClockSkewMs !== undefined ? parseInt(acceptedClockSkewMs, 10) : undefined;
     return config;
   },
