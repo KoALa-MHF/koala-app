@@ -168,7 +168,8 @@
         "LOAD_MARKER_DIALOG": {
           "LOAD_MARKER_DIALOG_TITLE": "Marker Bibliothek",
           "SEARCH_CLEAR_BTN": "Reset",
-          "SEARCH_INPUT_PLACEHOLDER": "Suchbegriff"
+          "SEARCH_INPUT_PLACEHOLDER": "Suchbegriff",
+          "ADD_MARKER": "Marker Hinzufügen"
         }
       },
       "PARTICIPANTS": {
@@ -345,5 +346,24 @@
       "SESSION_CODE_PLACEHOLDER": "Session Code",
       "SESSION_CODE_LOGIN_ERROR_MESSAGE": "Anmeldung mit Session Code nicht erfolgreich"
     }
+  },
+  "MARKER": {
+    "TYPE": {
+      "EVENT": "Event",
+      "RANGE": "Range",
+      "SLIDER": "Slider"
+    },
+    "OVERVIEW": {
+      "TYPE_FILTER_PLACEHOLDER": "Markertyp",
+      "FILTER_CLEAR_BTN": "",
+      "SEARCH_INPUT_PLACEHOLDER": "",
+      "COLUMN_TITLE": {
+        "NAME": "Name",
+        "ABBREVIATION": "Abkürzung/Icon",
+        "DESCRIPTION": "Beschreibung",
+        "TYPE": "Markertyp"
+      }
+    },
+    "MAINTAIN": {}
   }
 }

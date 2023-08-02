@@ -2,25 +2,24 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Marker } from '../../types/marker.entity';
 
 @Component({
-  selector: 'koala-marker-preview',
-  templateUrl: './marker-preview.component.html',
+  selector: 'koala-session-marker-preview',
+  templateUrl: './session-marker-preview.component.html',
   styleUrls: [
-    './marker-preview.component.scss',
-    '../../session-common.scss',
+    './session-marker-preview.component.css',
   ],
 })
-export class MarkerPreviewComponent {
+export class SessionMarkerPreviewComponent {
   @Input() marker!: Marker;
   @Input() createEnabled = false;
 
   @Output() resetMarkerData = new EventEmitter();
   @Output() markerAdd = new EventEmitter();
 
-  public onReset() {
-    this.resetMarkerData.emit();
+  onAddMarker() {
+    this.markerAdd.emit();
   }
 
-  public onAddMarker() {
-    this.markerAdd.emit();
+  onReset() {
+    this.resetMarkerData.emit();
   }
 }
