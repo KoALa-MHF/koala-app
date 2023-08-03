@@ -5,12 +5,12 @@
   </div>
 
   <div style="width: 33%">
-    <koala-marker-preview
+    <koala-session-marker-preview
       [marker]="previewMarker"
       [createEnabled]="markerDataForm.valid"
       (resetMarkerData)="onReset()"
       (markerAdd)="onAddMarker()"
-    ></koala-marker-preview>
+    ></koala-session-marker-preview>
     <koala-session-marker-library (markerAdd)="onAddMultipleMarkers($event)"></koala-session-marker-library>
   </div>
 

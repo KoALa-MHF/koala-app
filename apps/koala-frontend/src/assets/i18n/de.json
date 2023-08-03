@@ -14,6 +14,7 @@
     "ENTER_SESSION_MENU_LABEL": "Session Beitreten",
     "SESSION_SETTINGS_BTN": "Freigaben",
     "MY_SESSIONS_NAV_BTN": "Meine Sessions",
+    "MARKERS_OVERVIEW_NAV_BTN": "Marker",
     "ANALYSIS_NAV_BTN": "Auswertung",
     "INFO_NAV_BTN": "Sessioninfo",
     "SESSION_NOT_YET_STARTED_INFO": "Die Session ist noch nicht gestartet",
@@ -167,7 +168,8 @@
         "LOAD_MARKER_DIALOG": {
           "LOAD_MARKER_DIALOG_TITLE": "Marker Bibliothek",
           "SEARCH_CLEAR_BTN": "Reset",
-          "SEARCH_INPUT_PLACEHOLDER": "Suchbegriff"
+          "SEARCH_INPUT_PLACEHOLDER": "Suchbegriff",
+          "ADD_MARKER": "Marker Hinzufügen"
         }
       },
       "PARTICIPANTS": {
@@ -344,5 +346,24 @@
       "SESSION_CODE_PLACEHOLDER": "Session Code",
       "SESSION_CODE_LOGIN_ERROR_MESSAGE": "Anmeldung mit Session Code nicht erfolgreich"
     }
+  },
+  "MARKER": {
+    "TYPE": {
+      "EVENT": "Event",
+      "RANGE": "Range",
+      "SLIDER": "Slider"
+    },
+    "OVERVIEW": {
+      "TYPE_FILTER_PLACEHOLDER": "Markertyp",
+      "FILTER_CLEAR_BTN": "",
+      "SEARCH_INPUT_PLACEHOLDER": "",
+      "COLUMN_TITLE": {
+        "NAME": "Name",
+        "ABBREVIATION": "Abkürzung/Icon",
+        "DESCRIPTION": "Beschreibung",
+        "TYPE": "Markertyp"
+      }
+    },
+    "MAINTAIN": {}
   }
 }
