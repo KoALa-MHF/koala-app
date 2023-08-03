@@ -162,9 +162,10 @@ const GET_USER = gql`
   }
 `;
 
-const EXPORT_SESSION_AS_JSON = gql`
-  query exportSessionAsJSON($sessionId: Int!) {
-    exportSessionAsJSON(id: $sessionId) {
+const GET_SESSION_FOR_EXPORT = gql`
+  query sessionExport($sessionId: Int!) {
+    session(id: $sessionId) {
+      id
       start
       end
       name

@@ -102,7 +102,7 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
             [
               JSON.stringify(result),
             ],
-            { type: 'text/plain;charset=utf-8' }
+            { type: 'application/json;charset=utf-8' }
           );
           saveAs(blob, `${result.name}.json`);
         },

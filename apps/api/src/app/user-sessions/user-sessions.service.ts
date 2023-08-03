@@ -117,28 +117,6 @@ export class UserSessionsService {
     });
   }
 
-  findAllBySessionWithAnnotations(sessionId: number, user?: User): Promise<UserSession[]> {
-    return this.userSessionsRepository.find({
-      where: [
-        {
-          sessionId: sessionId,
-          ownerId: user?.id,
-        },
-        {
-          sessionId: sessionId,
-          session: {
-            ownerId: user?.id,
-          },
-        },
-      ],
-      relations: {
-        annotations: {
-          marker: true,
-        },
-      },
-    });
-  }
-
   async findOne(id: number, user?: User): Promise<UserSession> {
     const userSession = await this.userSessionsRepository.findOneBy({ id });
 

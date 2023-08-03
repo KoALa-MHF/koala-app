@@ -18,7 +18,6 @@ import { SetPlayPositionInput } from './dto/set-play-position.input';
 import { ServerTimeInterceptor } from './server-time.interceptor';
 import { SessionOwnerInterceptor } from './session-owner.interceptor';
 import { AudioSessionInterceptor } from './audio-session.interceptor';
-import { AnnotationJSON, SessionJSON, UserSessionJSON } from './dto/export-session-json.output';
 
 const pubSub = new PubSub();
 
@@ -71,26 +70,6 @@ export class SessionsResolver {
     }
 
     return session;
-  }
-
-  @Query(() => SessionJSON)
-  @UseGuards(AuthGuard, RegisteredUserGuard)
-  @UseInterceptors(AudioSessionInterceptor)
-  async exportSessionAsJSON(@Args('id', { type: () => Int }) id: number, @CurrentUser() user: User) {
-    const session = await this.sessionsService.findOne(id, user);
-    const userSessions = await this.userSessionsService.findAllBySessionWithAnnotations(id, user);
-
-    const userSessionsJSON = userSessions.map((userSession) => {
-      const annotations = userSession.annotations
-        ? userSession.annotations.map((annotation) => {
-            return { ...annotation, marker: annotation.marker } as AnnotationJSON;
-          })
-        : [];
-
-      return { ...userSession, annotations: annotations } as UserSessionJSON;
-    });
-
-    return { ...session, userSessions: userSessionsJSON };
   }
 
   @Mutation(() => Session)

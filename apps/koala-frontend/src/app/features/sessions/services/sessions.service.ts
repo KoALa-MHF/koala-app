@@ -17,8 +17,7 @@ import {
   SetPlayPositionGQL,
   SetPlayModeInput,
   ToolbarMarker,
-  ExportSessionAsJsonGQL,
-  SessionJson,
+  SessionExportGQL,
 } from '../../../graphql/generated/graphql';
 import { Session } from '../types/session.entity';
 import { AccessTokenService } from '../../auth/services/access-token.service';
@@ -45,7 +44,7 @@ export class SessionsService {
     private readonly setPlayPositionGQL: SetPlayPositionGQL,
     private readonly accessTokenService: AccessTokenService,
     private readonly toolbarService: ToolbarsService,
-    private readonly exportSessionAsJSONGQL: ExportSessionAsJsonGQL
+    private readonly sessionExportGQL: SessionExportGQL
   ) {}
 
   getAll(): Observable<Session[]> {
@@ -204,9 +203,9 @@ export class SessionsService {
     return this.focusSession;
   }
 
-  createSessionJSON(sessionId: number): Observable<SessionJson> {
-    return this.exportSessionAsJSONGQL
+  createSessionJSON(sessionId: number): Observable<Session> {
+    return this.sessionExportGQL
       .fetch({ sessionId }, { fetchPolicy: 'no-cache' })
-      .pipe(map((data) => data.data.exportSessionAsJSON));
+      .pipe(map((data) => data.data.session));
   }
 }
