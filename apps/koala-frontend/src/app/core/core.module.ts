@@ -4,7 +4,6 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 
 import { ToolbarModule } from 'primeng/toolbar';
-import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { MenuModule } from 'primeng/menu';
 import { SharedModule } from '../shared/shared.module';
@@ -21,7 +20,6 @@ import { SidebarModule } from 'primeng/sidebar';
   imports: [
     CommonModule,
     ToolbarModule,
-    ButtonModule,
     DividerModule,
     MenuModule,
     SharedModule,

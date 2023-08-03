@@ -5,7 +5,6 @@ import { SessionsOverviewPage } from './pages/sessions-overview/sessions-overvie
 import { ToolbarsService } from './services/toolbars.service';
 
 //primeng modules
-import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -18,7 +17,6 @@ import { RippleModule } from 'primeng/ripple';
 import { FileUploadModule } from 'primeng/fileupload';
 import { TabViewModule } from 'primeng/tabview';
 import { DialogModule } from 'primeng/dialog';
-import { SliderModule } from 'primeng/slider';
 import { AccordionModule } from 'primeng/accordion';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { SidebarModule } from 'primeng/sidebar';
@@ -47,7 +45,6 @@ import { MediaService } from './services/media.service';
 import { SessionDataComponent } from './components/session-data/session-data.component';
 import { SessionMarkerDataComponent } from './components/session-marker-data/session-marker-data.component';
 import { MarkerMaintainComponent } from './components/marker-maintain/marker-maintain.component';
-import { MarkerPreviewComponent } from './components/marker-preview/marker-preview.component';
 import { MarkerPlacementComponent } from './components/marker-placement/marker-placement.component';
 import { SkeletonModule } from 'primeng/skeleton';
 import { SessionParticipantsComponent } from './components/session-participants/session-participants.component';
@@ -55,21 +52,20 @@ import { SessionParticipantsOverviewComponent } from './components/session-parti
 import { SessionParticipantsInvitationComponent } from './components/session-participants-invitation/session-participants-invitation.component';
 import { MarkerService } from './services/marker.service';
 import { AnnotationService } from './services/annotation.service';
-import { MarkerButtonComponent } from './components/marker-button/marker-button.component';
 import { MarkerToolbarComponent } from './components/marker-toolbar/marker-toolbar.component';
 import { DeleteConfirmDialogComponent } from './components/delete-confirm-dialog/delete-confirm-dialog.component';
 import { UserSessionService } from './services/user-session.service';
-import { MarkerIconComponent } from './components/marker-icon/marker-icon.component';
 import { AnnotationComponent } from './components/annotation/annotation.component';
 import { SessionQrcodeComponent } from './components/session-qrcode/session-qrcode.component';
 import { SessionMarkerLibraryComponent } from './components/session-marker-library/session-marker-library.component';
-import { MarkerOverviewListComponent } from './components/marker-overview-list/marker-overview-list.component';
 import { SessionInfoPage } from './pages/session-info/session-info.page';
 import { SessionAnalysisPage } from './pages/session-analysis/session-analysis.page';
 import { VisibleFilterPipe } from './components/marker-toolbar/marker-visible.pipe';
 import { SessionOwnerPipe } from './pipes/session-owner.pipe';
 import { VolumeControlComponent } from './components/volume-control/volume-control.component';
 import { SessionTimerComponent } from './components/session-timer/session-timer.component';
+import { MarkersModule } from '../markers/markers.module';
+import { SessionMarkerPreviewComponent } from './components/session-marker-preview/session-marker-preview.component';
 
 @NgModule({
   declarations: [
@@ -84,32 +80,28 @@ import { SessionTimerComponent } from './components/session-timer/session-timer.
     SessionDataComponent,
     SessionMarkerDataComponent,
     MarkerMaintainComponent,
-    MarkerPreviewComponent,
     MarkerPlacementComponent,
     AudioWaveComponent,
     AudioPlayerComponent,
     SessionParticipantsComponent,
     SessionParticipantsOverviewComponent,
     SessionParticipantsInvitationComponent,
-    MarkerButtonComponent,
     MarkerToolbarComponent,
     DeleteConfirmDialogComponent,
-    MarkerIconComponent,
     AnnotationComponent,
     SessionQrcodeComponent,
     SessionMarkerLibraryComponent,
-    MarkerOverviewListComponent,
     SessionInfoPage,
     SessionAnalysisPage,
     VisibleFilterPipe,
     SessionOwnerPipe,
     VolumeControlComponent,
     SessionTimerComponent,
+    SessionMarkerPreviewComponent,
   ],
   imports: [
     SharedModule,
     SessionsRoutingModule,
-    ButtonModule,
     InputTextModule,
     RadioButtonModule,
     CalendarModule,
@@ -124,7 +116,6 @@ import { SessionTimerComponent } from './components/session-timer/session-timer.
     DragDropModule,
     TabViewModule,
     DialogModule,
-    SliderModule,
     MixedCdkDragDropModule,
     AccordionModule,
     OverlayPanelModule,
@@ -135,6 +126,7 @@ import { SessionTimerComponent } from './components/session-timer/session-timer.
     InputNumberModule,
     InputSwitchModule,
     ConfirmDialogModule,
+    MarkersModule,
   ],
   providers: [
     MediaService,

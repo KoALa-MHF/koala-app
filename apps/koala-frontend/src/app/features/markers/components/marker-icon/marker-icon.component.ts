@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { MarkerService } from '../../services/marker.service';
-import { MarkerIcon } from '../../types/marker-icon.type';
+import { MarkerService } from '../../../sessions/services/marker.service';
+import { MarkerIcon } from '../../../sessions/types/marker-icon.type';
 
 @Component({
   selector: 'koala-marker-icon',
