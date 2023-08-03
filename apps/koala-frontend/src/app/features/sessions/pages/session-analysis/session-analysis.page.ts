@@ -67,7 +67,7 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
       },
     });
 
-    this.sessionService.getOne(this.sessionId).subscribe(async (result) => {
+    this.sessionService.setFocusSession(this.sessionId).subscribe(async (result) => {
       this.session = {
         ...result,
         media: result.media,
