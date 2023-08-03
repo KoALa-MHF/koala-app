@@ -161,3 +161,40 @@ const GET_USER = gql`
     }
   }
 `;
+
+const GET_SESSION_FOR_EXPORT = gql`
+  query sessionExport($sessionId: Int!) {
+    session(id: $sessionId) {
+      id
+      start
+      end
+      name
+      description
+      status
+      isAudioSession
+      userSessions {
+        id
+        status
+        note
+        annotations {
+          id
+          start
+          end
+          value
+          note
+          marker {
+            id
+            type
+            name
+            abbreviation
+            description
+            color
+            icon
+            valueRangeFrom
+            valueRangeTo
+          }
+        }
+      }
+    }
+  }
+`;

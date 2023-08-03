@@ -9,6 +9,8 @@
   "SESSION": {
     "CREATE_SESSION_MENU_LABEL": "Neue Session",
     "EXPORT_SESSIONS_MENU_LABEL": "Session Exportieren",
+    "EXPORT_SESSION_ERROR_TITLE": "Export Nicht Erfolgreich",
+    "EXPORT_SESSION_ERROR_MESSAGE": "Export von Session '{{sessionName}}' konnte nicht durchgeführt werden",
     "DELETE_SESSIONS_MENU_LABEL": "Session Löschen",
     "DUPLICATE_SESSION_MENU_LABEL": "Session Duplizieren",
     "ENTER_SESSION_MENU_LABEL": "Session Beitreten",

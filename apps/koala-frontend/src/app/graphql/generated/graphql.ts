@@ -975,6 +975,50 @@ export type GetUserQuery = {
   me: { __typename?: 'User'; id: string; displayName?: string | null; email?: string | null };
 };
 
+export type SessionExportQueryVariables = Exact<{
+  sessionId: Scalars['Int']['input'];
+}>;
+
+export type SessionExportQuery = {
+  __typename?: 'Query';
+  session: {
+    __typename?: 'Session';
+    id: string;
+    start?: any | null;
+    end?: any | null;
+    name: string;
+    description?: string | null;
+    status?: SessionStatus | null;
+    isAudioSession: boolean;
+    userSessions: Array<{
+      __typename?: 'UserSession';
+      id: number;
+      status: UserSessionStatus;
+      note?: string | null;
+      annotations: Array<{
+        __typename?: 'Annotation';
+        id: number;
+        start: number;
+        end?: number | null;
+        value?: number | null;
+        note?: string | null;
+        marker: {
+          __typename?: 'Marker';
+          id: number;
+          type: MarkerType;
+          name: string;
+          abbreviation?: string | null;
+          description?: string | null;
+          color: string;
+          icon?: string | null;
+          valueRangeFrom?: number | null;
+          valueRangeTo?: number | null;
+        };
+      }>;
+    }>;
+  };
+};
+
 export type OnSessionUpdatedSubscriptionVariables = Exact<{
   sessionId: Scalars['ID']['input'];
 }>;
@@ -1388,7 +1432,6 @@ export const SetPlayModeDocument = gql`
       enablePlayer
       displaySampleSolution
       enableLiveAnalysis
-      isAudioSession
       lockAnnotationDelete
       playMode
       playPosition
@@ -1463,7 +1506,6 @@ export const SetPlayPositionDocument = gql`
       displaySampleSolution
       enableLiveAnalysis
       lockAnnotationDelete
-      isAudioSession
       playMode
       playPosition
       liveSessionStart
@@ -1733,6 +1775,53 @@ export const GetUserDocument = gql`
 })
 export class GetUserGQL extends Apollo.Query<GetUserQuery, GetUserQueryVariables> {
   override document = GetUserDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SessionExportDocument = gql`
+  query sessionExport($sessionId: Int!) {
+    session(id: $sessionId) {
+      id
+      start
+      end
+      name
+      description
+      status
+      isAudioSession
+      userSessions {
+        id
+        status
+        note
+        annotations {
+          id
+          start
+          end
+          value
+          note
+          marker {
+            id
+            type
+            name
+            abbreviation
+            description
+            color
+            icon
+            valueRangeFrom
+            valueRangeTo
+          }
+        }
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class SessionExportGQL extends Apollo.Query<SessionExportQuery, SessionExportQueryVariables> {
+  override document = SessionExportDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
