@@ -14,6 +14,7 @@ export class SessionMarkerLibraryComponent implements OnInit {
   @Output() markerAdd = new EventEmitter<Marker[]>();
   showMarkerList = false;
   markers: Marker[] = [];
+  selectedMarkers: Marker[] = [];
 
   constructor(private readonly markerService: MarkerService) {}
 
@@ -21,13 +22,14 @@ export class SessionMarkerLibraryComponent implements OnInit {
     this.loadAllMarker();
   }
 
-  onMarkerAdd(markers: Marker[]) {
+  onMarkerAdd() {
     this.showMarkerList = false;
-    this.markerAdd.emit(markers);
+    this.markerAdd.emit(this.selectedMarkers);
   }
 
   showMarkerListHelp() {
     this.loadAllMarker();
+    this.selectedMarkers = [];
     this.showMarkerList = true;
   }
 

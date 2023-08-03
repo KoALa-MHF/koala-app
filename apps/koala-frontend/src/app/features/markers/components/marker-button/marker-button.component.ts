@@ -1,9 +1,9 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { Marker } from '../../types/marker.entity';
+import { Marker } from '../../../sessions/types/marker.entity';
 import { MarkerType, PlayMode } from '../../../../graphql/generated/graphql';
 import { filter } from 'rxjs';
-import { SessionsService } from '../../services/sessions.service';
-import { SessionControlService } from '../../services/session-control.service';
+import { SessionsService } from '../../../sessions/services/sessions.service';
+import { SessionControlService } from '../../../sessions/services/session-control.service';
 
 @Component({
   selector: 'koala-marker-button',

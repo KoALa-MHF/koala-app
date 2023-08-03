@@ -94,6 +94,12 @@ export class HeaderComponent implements OnInit {
     ]);
   }
 
+  public onMarkersOverview() {
+    this.router.navigate([
+      '/markers',
+    ]);
+  }
+
   public onSession() {
     this.router.navigate([
       '/sessions/' + this.sessionService.getFocusSession()?.id,

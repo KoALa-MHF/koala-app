@@ -1,0 +1,17 @@
+<div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px">
+  <div
+    style="
+      width: 75%;
+      background-color: rgba(155, 155, 158, 0.3);
+      position: relative;
+      border-radius: 25px;
+      aspect-ratio: 2/1;
+    "
+  >
+    <div
+      style="display: flex; align-items: center; justify-content: center; position: absolute; height: 100%; width: 100%"
+    >
+      <koala-marker-button *ngIf="marker.type" [marker]="marker" [enabled]="true"></koala-marker-button>
+    </div>
+  </div>
+</div>

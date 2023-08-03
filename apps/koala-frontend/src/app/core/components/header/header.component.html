@@ -18,6 +18,16 @@
       class="p-button-text hidden-xs hidden-sm"
       (click)="onMySessions()"
     ></button>
+
+    <button
+      pButton
+      pRipple
+      *ngIf="isAuthenticated$ | async"
+      icon="pi pi-bookmark"
+      label="{{ 'SESSION.MARKERS_OVERVIEW_NAV_BTN' | translate }}"
+      class="p-button-text hidden-xs hidden-sm"
+      (click)="onMarkersOverview()"
+    ></button>
   </div>
 
   <div class="p-toolbar-group-center hidden-xs hidden-sm">
