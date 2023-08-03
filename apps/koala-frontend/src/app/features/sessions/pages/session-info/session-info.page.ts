@@ -24,7 +24,7 @@ export class SessionInfoPage implements OnInit {
 
   ngOnInit() {
     const sessionId = parseInt(this.route.snapshot.paramMap.get('sessionId') || '0');
-    this.sessionService.getOne(sessionId).subscribe((session) => {
+    this.sessionService.setFocusSession(sessionId).subscribe((session) => {
       this.session = session;
 
       const toolbars = this.session.toolbars;
