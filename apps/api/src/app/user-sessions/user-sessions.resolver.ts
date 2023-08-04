@@ -37,9 +37,10 @@ export class UserSessionsResolver {
   ])
   inviteUserSession(
     @Args('inviteUserSessionInput')
-    inviteUserSessionInput: InviteUserSessionInput
+    inviteUserSessionInput: InviteUserSessionInput,
+    @CurrentUser() user: User
   ) {
-    return this.userSessionsService.invite(inviteUserSessionInput.userSessionIds, inviteUserSessionInput.message);
+    return this.userSessionsService.invite(inviteUserSessionInput, user);
   }
 
   @Query(

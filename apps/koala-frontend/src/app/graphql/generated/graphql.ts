@@ -134,6 +134,8 @@ export type InviteUserSessionInput = {
   /** User Session Email */
   message?: InputMaybe<Scalars['String']['input']>;
   /** Associated Session */
+  sessionId: Scalars['Int']['input'];
+  /** Associated Session */
   userSessionIds: Array<Scalars['ID']['input']>;
 };
 
@@ -692,6 +694,7 @@ export type CreateUserSessionMutation = {
 };
 
 export type InviteParticipantsMutationVariables = Exact<{
+  sessionId: Scalars['Int']['input'];
   userSessionIds: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
   message: Scalars['String']['input'];
 }>;
@@ -1331,8 +1334,10 @@ export class CreateUserSessionGQL extends Apollo.Mutation<
   }
 }
 export const InviteParticipantsDocument = gql`
-  mutation inviteParticipants($userSessionIds: [ID!]!, $message: String!) {
-    inviteUserSession(inviteUserSessionInput: { userSessionIds: $userSessionIds, message: $message }) {
+  mutation inviteParticipants($sessionId: Int!, $userSessionIds: [ID!]!, $message: String!) {
+    inviteUserSession(
+      inviteUserSessionInput: { sessionId: $sessionId, userSessionIds: $userSessionIds, message: $message }
+    ) {
       status
       invitedAt
     }
