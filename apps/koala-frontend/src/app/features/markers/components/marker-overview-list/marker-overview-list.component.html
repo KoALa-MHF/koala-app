@@ -83,8 +83,9 @@
       </td>
       <td>{{ marker.name }}</td>
       <td>
-        <span *ngIf="marker.abbreviation">{{ marker.abbreviation }}</span>
         <koala-marker-icon *ngIf="marker.icon" [iconCode]="marker.icon"></koala-marker-icon>
+        <span *ngIf="marker.icon && marker.abbreviation" style="margin-left: 10px"></span>
+        <span *ngIf="marker.abbreviation">{{ marker.abbreviation }}</span>
       </td>
       <td>{{ marker.description }}</td>
       <td [ngSwitch]="marker.type">
