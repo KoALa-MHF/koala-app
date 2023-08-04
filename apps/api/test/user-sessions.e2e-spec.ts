@@ -156,11 +156,12 @@ const CREATE_USER_SESSION_VARIABLES = {
 
 const INVITE_USER_SESSION_VARIABLES = {
   inviteUserSessionInput: {
+    sessionId: 1,
     userSessionIds: [
       1,
-      2,
-      3,
+      6,
       7,
+      10, // not in session 1
     ],
     message: 'Invite User via E2E test',
   },
@@ -361,9 +362,7 @@ describe('User Sessions (e2e)', () => {
 
     it('Authenticated owner of session can invite users to a session', async () => {
       const mailDev = await setupMailDevelopmentServer();
-      let mailsBefore;
-      mailDev.getAllEmail((errors, mails) => {
-        mailsBefore = mails;
+      mailDev.getAllEmail((errors, mailsBefore) => {
         expect(mailsBefore).toHaveLength(0);
       });
 
@@ -375,10 +374,13 @@ describe('User Sessions (e2e)', () => {
 
       expect(data).toMatchSnapshot();
 
-      let mailsAfter;
-      mailDev.getAllEmail((errors, mails) => {
-        mailsAfter = mails;
-        expect(mailsAfter).toHaveLength(3);
+      return new Promise((resolve) => {
+        mailDev.on('new', function () {
+          mailDev.getAllEmail((errors, mailsAfter) => {
+            expect(mailsAfter).toHaveLength(3);
+            resolve(true);
+          });
+        });
       });
     });
 

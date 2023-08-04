@@ -1,8 +1,12 @@
-import { InputType, Field, ID } from '@nestjs/graphql';
+import { InputType, Field, ID, Int } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
 
 @InputType()
 export class InviteUserSessionInput {
+  @Field(() => Int, { description: 'Associated Session' })
+  @IsNotEmpty()
+  sessionId: number;
+
   @Field(
     () => [
       ID,

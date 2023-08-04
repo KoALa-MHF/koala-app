@@ -147,8 +147,10 @@ const CREATE_USERSESSION = gql`
 `;
 
 const INVITE_PARTICIPANTS = gql`
-  mutation inviteParticipants($userSessionIds: [ID!]!, $message: String!) {
-    inviteUserSession(inviteUserSessionInput: { userSessionIds: $userSessionIds, message: $message }) {
+  mutation inviteParticipants($sessionId: Int!, $userSessionIds: [ID!]!, $message: String!) {
+    inviteUserSession(
+      inviteUserSessionInput: { sessionId: $sessionId, userSessionIds: $userSessionIds, message: $message }
+    ) {
       status
       invitedAt
     }

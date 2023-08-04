@@ -1,5 +1,5 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ValidationError } from 'class-validator';
 import { In, IsNull, Not, Repository } from 'typeorm';
@@ -11,6 +11,8 @@ import { UpdateUserSessionInput } from './dto/update-user-session.input';
 import { UserSession } from './entities/user-session.entity';
 import { escapeExpression } from 'handlebars';
 import { config } from '../config/config.module';
+import { SessionsService } from '../sessions/sessions.service';
+import { InviteUserSessionInput } from './dto/invite-user-session.input';
 
 const UNIQUE_USER_CONSTRAINT_ERROR = 'UNIQUE constraint failed: user_session.userId';
 
@@ -20,47 +22,60 @@ export class UserSessionsService {
     @InjectRepository(UserSession)
     private userSessionsRepository: Repository<UserSession>,
     private readonly mailerService: MailerService,
-    private readonly usersService: UsersService
+    private readonly usersService: UsersService,
+    @Inject(forwardRef(() => SessionsService))
+    private readonly sessionsService: SessionsService
   ) {}
 
-  async invite(ids: number[], message?: string): Promise<UserSession[]> {
-    const userSessions = await this.userSessionsRepository.find({
-      where: {
-        id: In(ids),
-        owner: {
-          email: Not(IsNull()),
-        },
-      },
-      relations: {
-        session: true,
-        owner: true,
-      },
-    });
+  async invite(inviteUserSessionInput: InviteUserSessionInput, sessionOwner: User) {
+    const sessionId = inviteUserSessionInput.sessionId;
+    const ids = inviteUserSessionInput.userSessionIds;
 
-    message = escapeExpression(message || '');
-    message = message.replace(/(\r\n|\n|\r)/gm, '<br>');
-
-    for (const userSession of userSessions) {
-      try {
-        await this.mailerService.sendMail({
-          to: userSession.owner.email,
-          subject: `Einladung zur KoALa Session ${userSession.session.name}`,
-          template: message ? 'session-invite-custom-message' : 'session-invite',
-          context: {
-            sessionName: userSession.session.name,
-            ownerName: userSession.session.owner?.displayName || '',
-            message: message,
-            sessionUrl: config.koalaFrontendUrl + '?sessionCode=' + userSession.code,
-            koalaLogoSrc: config.koalaAssetsUrl + 'koala-logo.png',
+    const session = await this.sessionsService.findOneOfOwner(sessionId, sessionOwner);
+    if (session) {
+      const userSessions = await this.userSessionsRepository.find({
+        where: {
+          id: In(ids),
+          session: {
+            id: sessionId,
+            ownerId: sessionOwner?.id,
           },
-        });
-        userSession.invitedAt = new Date();
-      } catch (error) {
-        console.log("Invite User Session: Couldn't sent mail");
-      }
-    }
+          owner: {
+            email: Not(IsNull()),
+          },
+        },
+        relations: {
+          session: true,
+          owner: true,
+        },
+      });
 
-    return this.userSessionsRepository.save(userSessions);
+      let message = inviteUserSessionInput.message;
+      message = escapeExpression(message || '');
+      message = message.replace(/(\r\n|\n|\r)/gm, '<br>');
+
+      for (const userSession of userSessions) {
+        try {
+          await this.mailerService.sendMail({
+            to: userSession.owner.email,
+            subject: `Einladung zur KoALa Session ${userSession.session.name}`,
+            template: message ? 'session-invite-custom-message' : 'session-invite',
+            context: {
+              sessionName: userSession.session.name,
+              ownerName: userSession.session.owner?.displayName || '',
+              message: message,
+              sessionUrl: config.koalaFrontendUrl + '?sessionCode=' + userSession.code,
+              koalaLogoSrc: config.koalaAssetsUrl + 'koala-logo.png',
+            },
+          });
+          userSession.invitedAt = new Date();
+        } catch (error) {
+          console.log("Invite User Session: Couldn't sent mail");
+        }
+      }
+
+      return this.userSessionsRepository.save(userSessions);
+    }
   }
 
   async create(createUserSessionInput: CreateUserSessionInput): Promise<UserSession> {

@@ -534,8 +534,10 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public onParticipantsInvite(message: string) {
+    const sessionId = parseInt(this.session?.id || '0');
     this.userSessionService
       .inviteParticpants(
+        sessionId,
         this.participants.map((participant) => participant.id.toString()),
         message
       )

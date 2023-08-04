@@ -36,8 +36,9 @@ export class UserSessionService {
     });
   }
 
-  inviteParticpants(userSessionIds: string[], invitationMessage: string) {
+  inviteParticpants(sessionId: number, userSessionIds: string[], invitationMessage: string) {
     return this.inviteParticipantsGQL.mutate({
+      sessionId,
       userSessionIds,
       message: invitationMessage,
     });
