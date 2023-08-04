@@ -35,11 +35,17 @@
       <th style="width: 4rem">
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
-      <th>{{ 'MARKER.OVERVIEW.COLUMN_TITLE.NAME' | translate }}</th>
-      <th>{{ 'MARKER.OVERVIEW.COLUMN_TITLE.ABBREVIATION' | translate }}</th>
-      <th>{{ 'MARKER.OVERVIEW.COLUMN_TITLE.DESCRIPTION' | translate }}</th>
-      <th>
-        {{ 'MARKER.OVERVIEW.COLUMN_TITLE.TYPE' | translate }}
+      <th pSortableColumn="name">
+        {{ 'MARKER.OVERVIEW.COLUMN_TITLE.NAME' | translate }} <p-sortIcon field="name"></p-sortIcon>
+      </th>
+      <th pSortableColumn="abbreviation">
+        {{ 'MARKER.OVERVIEW.COLUMN_TITLE.ABBREVIATION' | translate }} <p-sortIcon field="abbreviation"></p-sortIcon>
+      </th>
+      <th pSortableColumn="description">
+        {{ 'MARKER.OVERVIEW.COLUMN_TITLE.DESCRIPTION' | translate }} <p-sortIcon field="description"></p-sortIcon>
+      </th>
+      <th pSortableColumn="type">
+        {{ 'MARKER.OVERVIEW.COLUMN_TITLE.TYPE' | translate }} <p-sortIcon field="type"></p-sortIcon>
       </th>
     </tr>
     <tr>
@@ -77,8 +83,9 @@
       </td>
       <td>{{ marker.name }}</td>
       <td>
-        <span *ngIf="marker.abbreviation">{{ marker.abbreviation }}</span>
         <koala-marker-icon *ngIf="marker.icon" [iconCode]="marker.icon"></koala-marker-icon>
+        <span *ngIf="marker.icon && marker.abbreviation" style="margin-left: 10px"></span>
+        <span *ngIf="marker.abbreviation">{{ marker.abbreviation }}</span>
       </td>
       <td>{{ marker.description }}</td>
       <td [ngSwitch]="marker.type">
