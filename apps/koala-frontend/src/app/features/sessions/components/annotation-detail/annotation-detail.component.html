@@ -1,0 +1,63 @@
+<div>
+  <div>{{ annotation?.startTime }} - {{ annotation?.endTime }}</div>
+  <div>
+    <textarea
+      *ngIf="mode === Mode.EDIT"
+      rows="5"
+      cols="30"
+      pInputTextarea
+      [value]="annotation?.note"
+      (change)="onNoteChange($event)"
+    ></textarea>
+    <span *ngIf="mode === Mode.DISPLAY">{{ annotation?.note }}</span>
+  </div>
+  <div>
+    <button
+      pButton
+      pRipple
+      *ngIf="mode === Mode.EDIT"
+      label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.CANCEL_BTN' | translate }}"
+      icon="pi pi-times"
+      data-cy="annotation-detail-cancel-btn"
+      (click)="onAnnotationDetailCancel()"
+      class="p-button-text menu-button p-button-danger"
+      attr.aria-label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.CANCEL_BTN' | translate }}"
+    ></button>
+
+    <button
+      pButton
+      pRipple
+      *ngIf="mode === Mode.EDIT"
+      label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.SAVE_BTN' | translate }}"
+      icon="pi pi-check"
+      data-cy="annotation-detail-save-btn"
+      (click)="onAnnotationDetailSave()"
+      class="p-button-text menu-button p-button-success"
+      attr.aria-label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.SAVE_BTN' | translate }}"
+    ></button>
+
+    <button
+      pButton
+      pRipple
+      *ngIf="mode === Mode.DISPLAY"
+      label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.DELETE_BTN' | translate }}"
+      icon="pi pi-times"
+      data-cy="annotation-detail-delete-btn"
+      (click)="onAnnotationDetailDelete()"
+      class="p-button-text menu-button p-button-danger"
+      attr.aria-label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.EDIT_BTN' | translate }}"
+    ></button>
+
+    <button
+      pButton
+      pRipple
+      *ngIf="mode === Mode.DISPLAY"
+      label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.EDIT_BTN' | translate }}"
+      icon="pi pi-check"
+      data-cy="annotation-detail-edit-btn"
+      (click)="onAnnotationDetailEdit()"
+      class="p-button-text menu-button"
+      attr.aria-label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.EDIT_BTN' | translate }}"
+    ></button>
+  </div>
+</div>

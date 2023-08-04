@@ -20,6 +20,7 @@ import { ToolbarsService } from '../../services/toolbars.service';
 import { NavigationService } from '../../services/navigation.service';
 import { UserSession } from '../../types/user-session.entity';
 import { SessionControlService } from '../../services/session-control.service';
+import { AnnotationDetail } from '../../components/annotation-detail/annotation-detail.component';
 
 @Component({
   selector: 'koala-app-session',
@@ -105,6 +106,10 @@ export class SessionPage implements OnInit, OnDestroy {
           .getFocusSession()
           ?.userSessions?.filter((userSession) => userSession.owner?.id === this.userID.toString())[0];
         this.setSidePanelFormData(session);
+
+        this.loadAnnotations([
+          this.myUserSession,
+        ]);
 
         if (!session.isSessionOwner && session.isAudioSession && !session.enablePlayer) {
           this.mediaControlService.setPosition(session.playPosition || 0);
@@ -303,9 +308,20 @@ export class SessionPage implements OnInit, OnDestroy {
 
   private loadAnnotations(userSessions: any[]): void {
     if (userSessions.length > 0 && userSessions[0].annotations) {
+      this.AnnotationData = new Map(
+        [
+          ...this.AnnotationData.entries(),
+        ].sort()
+      );
+
+      this.AnnotationData.forEach((data, key) => {
+        this.AnnotationData.set(key, new Array<DataPoint>());
+      });
+
       for (const annotation of userSessions[0].annotations) {
         this.AnnotationData.get(annotation.marker.id)?.push({
           id: annotation.id,
+          note: annotation.note,
           startTime: annotation.start,
           endTime: annotation.end != null ? annotation.end : 0,
           strength: annotation.value,
@@ -556,6 +572,17 @@ export class SessionPage implements OnInit, OnDestroy {
     this.AnnotationData = new Map([
       ...this.AnnotationData.entries(),
     ]);
+  }
+
+  onAnnotationComment(annotationDetail: AnnotationDetail) {
+    this.annotationService.updateNote(annotationDetail.id, annotationDetail.note).subscribe({
+      next: () => {
+        this.sessionService.setFocusSession(parseInt(this.sessionService.getFocusSession()?.id || '0')).subscribe();
+      },
+      error: () => {
+        console.log('Error');
+      },
+    });
   }
 
   get sessionDetailsFormGroup(): FormGroup {

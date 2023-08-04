@@ -66,6 +66,7 @@ import { VolumeControlComponent } from './components/volume-control/volume-contr
 import { SessionTimerComponent } from './components/session-timer/session-timer.component';
 import { MarkersModule } from '../markers/markers.module';
 import { SessionMarkerPreviewComponent } from './components/session-marker-preview/session-marker-preview.component';
+import { AnnotationDetailComponent } from './components/annotation-detail/annotation-detail.component';
 
 @NgModule({
   declarations: [
@@ -98,6 +99,7 @@ import { SessionMarkerPreviewComponent } from './components/session-marker-previ
     VolumeControlComponent,
     SessionTimerComponent,
     SessionMarkerPreviewComponent,
+    AnnotationDetailComponent,
   ],
   imports: [
     SharedModule,

@@ -22,4 +22,11 @@
   <div [id]="'d3-container-' + d3ContainerID" class="tooltip-container"></div>
 </div>
 
+<p-overlayPanel #annotationDetailOverlay [style]="annotationDetailOverlayStyle" [showCloseIcon]="true">
+  <koala-annotation-detail
+    [annotation]="selectedDataPoint"
+    (save)="onAnnotationDetailSave($event)"
+  ></koala-annotation-detail>
+</p-overlayPanel>
+
 <p-confirmDialog [style]="{ width: '50vw' }" rejectButtonStyleClass="p-button-outlined"></p-confirmDialog>
