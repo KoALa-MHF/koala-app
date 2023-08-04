@@ -7,6 +7,7 @@ export const GLOBAL_PREFIX = 'api';
 
 interface IMailDev {
   getAllEmail(done: (error: Error, emails: Array<object>) => void): void;
+  on(eventName: string, callback: (email: object) => void): void;
 }
 
 export function setupApplication(app: INestApplication) {

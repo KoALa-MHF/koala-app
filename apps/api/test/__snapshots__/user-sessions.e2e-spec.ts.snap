@@ -60,16 +60,9 @@ exports[`User Sessions (e2e) Invite User Session Authenticated owner of session 
       "status": "INITIAL",
     },
     {
-      "id": 2,
+      "id": 6,
       "session": {
-        "id": "2",
-      },
-      "status": "INITIAL",
-    },
-    {
-      "id": 3,
-      "session": {
-        "id": "3",
+        "id": "1",
       },
       "status": "INITIAL",
     },

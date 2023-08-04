@@ -3,7 +3,7 @@ import { CreateMarkerGQL, CreateMarkerInput, GetMarkersGQL } from '../../../grap
 import { MarkerIcon } from '../types/marker-icon.type';
 import MarkerIcons from './marker-icons.json';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class MarkerService {
   icons: MarkerIcon[] = MarkerIcons;
 

@@ -24,6 +24,14 @@ const routes: Routes = [
     ],
   },
   {
+    path: 'markers',
+    component: LayoutComponent,
+    loadChildren: () => import('./features/markers/markers.module').then((m) => m.MarkersModule),
+    canActivate: [
+      AuthGuard,
+    ],
+  },
+  {
     path: 'auth',
     loadChildren: () => import('./features/auth/auth.module').then((m) => m.AuthModule),
   },

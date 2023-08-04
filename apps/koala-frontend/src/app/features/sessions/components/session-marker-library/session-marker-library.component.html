@@ -12,5 +12,10 @@
   [modal]="true"
   [style]="{ width: '50vw' }"
 >
-  <koala-marker-overview-list [markers]="markers" (markerAdd)="onMarkerAdd($event)"></koala-marker-overview-list>
+  <koala-marker-overview-list [markers]="markers" [(selectedMarkers)]="selectedMarkers"></koala-marker-overview-list>
+  <p-button
+    (click)="onMarkerAdd()"
+    [style]="{ 'margin-top': '2vw' }"
+    label="{{ 'SESSION.MAINTAIN.MARKER.LOAD_MARKER_DIALOG.ADD_MARKER' | translate }}"
+  ></p-button>
 </p-dialog>
