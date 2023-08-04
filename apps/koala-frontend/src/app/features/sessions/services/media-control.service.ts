@@ -7,6 +7,7 @@ import { EventHandler } from 'wavesurfer.js/types/util';
 import MP3Tag from 'mp3tag.js';
 import { Subject } from 'rxjs';
 import { SessionsService } from './sessions.service';
+import { AccessTokenService } from '../../auth/services/access-token.service';
 
 export enum MediaActions {
   Play = 1,
@@ -30,7 +31,10 @@ export class MediaControlService {
   private mediaPlayStateChangedSubject = new Subject<MediaActions>();
   public mediaPlayStateChanged$ = this.mediaPlayStateChangedSubject.asObservable();
 
-  constructor(private readonly sessionService: SessionsService) {}
+  constructor(
+    private readonly sessionService: SessionsService,
+    private readonly accessTokenService: AccessTokenService
+  ) {}
 
   async load(trackurl: string, uuid: string) {
     this.uuid = uuid;
@@ -131,7 +135,11 @@ export class MediaControlService {
   }
 
   private async fetchAudioBlob(url: string) {
-    const resp = await fetch(url);
+    const resp = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${this.accessTokenService.getAccessToken()}`,
+      },
+    });
     return resp.blob();
   }
 
