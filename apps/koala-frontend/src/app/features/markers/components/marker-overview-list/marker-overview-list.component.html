@@ -18,7 +18,7 @@
           label="{{ 'MARKER.OVERVIEW.ACTIONS.CREATE' | translate }}"
           icon="pi pi-plus-circle"
           data-cy="marker-overview-create-btn"
-          (click)="onMarkerCreate()"
+          (click)="onMarkerCreateRequested()"
           class="p-button-text menu-button"
           attr.aria-label="{{ 'MARKER.OVERVIEW.ACTIONS.CREATE' | translate }}"
         ></button
@@ -134,7 +134,7 @@
       pButton
       pRipple
       class="p-button-raised"
-      (click)="onAddMarker()"
+      (click)="onCreateMarker()"
       [disabled]="!markerDataForm.valid || (!markerDataForm.dirty && markerDataForm.valid)"
     >
       {{ 'MARKER.OVERVIEW.CREATE.CREATE_BTN' | translate }}

@@ -81,7 +81,7 @@ export class MarkersOverviewPage implements OnInit {
     });
   }
 
-  public onAddMarker() {
+  public onCreateMarker() {
     this.markerService
       .create({
         description: this.maintainMarkerForm.value.description,

@@ -18,7 +18,7 @@ export class MarkerOverviewListComponent implements OnInit {
   @Input() createEnabled = false;
 
   @Output() selectedMarkersChange = new EventEmitter();
-  @Output() markerAdd = new EventEmitter();
+  @Output() markerCreate = new EventEmitter();
   @Output() resetMarkerData = new EventEmitter();
 
   @ViewChild('markerOverviewTable') markerOverviewTable: Table | undefined;
@@ -53,7 +53,7 @@ export class MarkerOverviewListComponent implements OnInit {
     ];
   }
 
-  onMarkerCreate() {
+  onMarkerCreateRequested() {
     this.createDialogVisible = true;
   }
 
@@ -65,8 +65,8 @@ export class MarkerOverviewListComponent implements OnInit {
     this.resetMarkerData.emit();
   }
 
-  onAddMarker() {
-    this.markerAdd.emit();
+  onCreateMarker() {
+    this.markerCreate.emit();
     this.createDialogVisible = false;
   }
 
