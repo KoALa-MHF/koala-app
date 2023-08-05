@@ -11,7 +11,7 @@ sidebar_position: 1
 
 #### Schritt 2 – Session anlegen
 - Nach der Anmeldung öffnet sich das Fenster *Meine Sessions*. Klicken Sie hier auf *Neue Session*, um eine Session anzulegen.
-- In den [Session Einstellungen](/docs/guide/02-Handbuch/02-Session anlegen/01-Sessioneinstellungen.md) geben Sie zunächst Namen und Beschreibung ein und definieren Freigaben und Verfügbarkeit der Session.
+- In den [Session Einstellungen](/docs/guide/02-Handbuch/02-Session_anlegen/01-Sessioneinstellungen.md) geben Sie zunächst Namen und Beschreibung ein und definieren Freigaben und Verfügbarkeit der Session.
 - Unter dem Reiter [Audio](/docs/terms/Audio.md) können Sie eine Audio-Datei wählen und hochladen. Wenn Sie keine Datei hochladen, können Sie eine [Live-Annotation](/docs/terms/Live-Annotation.md) innerhalb der Session starten.
 - Anschließend erstellen Sie die Marker für Ihre Session:
 Wählen Sie zunächst den gewünschten Markertyp:
