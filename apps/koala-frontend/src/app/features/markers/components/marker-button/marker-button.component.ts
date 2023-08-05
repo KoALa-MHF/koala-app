@@ -1,9 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Marker } from '../../../sessions/types/marker.entity';
-import { MarkerType, PlayMode } from '../../../../graphql/generated/graphql';
-import { filter } from 'rxjs';
-import { SessionsService } from '../../../sessions/services/sessions.service';
-import { SessionControlService } from '../../../sessions/services/session-control.service';
+import { MarkerType } from '../../../../graphql/generated/graphql';
 
 @Component({
   selector: 'koala-marker-button',
@@ -23,33 +20,6 @@ export class MarkerButtonComponent implements OnInit {
 
   ngOnInit(): void {
     this.sliderValue = this.marker.valueRangeFrom || 0;
-  }
-
-  constructor(
-    private readonly sessionService: SessionsService,
-    private readonly sessionControlService: SessionControlService
-  ) {
-    this.sessionControlService.playModeChanged$
-      .pipe(filter((playMode: PlayMode) => playMode === PlayMode.Paused))
-      .subscribe({
-        next: () => {
-          if (this.marker.type === MarkerType.Range && this.isActive) {
-            this.rangeButton();
-          } else if (this.marker.type === MarkerType.Slider) {
-            this.sliderButton();
-          }
-        },
-      });
-
-    this.sessionControlService.playModeChanged$
-      .pipe(filter((playMode: PlayMode) => playMode === PlayMode.Running))
-      .subscribe({
-        next: () => {
-          if (this.marker.type === MarkerType.Slider) {
-            this.sliderButton();
-          }
-        },
-      });
   }
 
   onClick() {
