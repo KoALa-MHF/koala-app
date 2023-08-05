@@ -4,7 +4,6 @@ sidebar_position: 1
 
 # Sessioneinstellungen {#guide-erste-schritte-sessioneinstellungen}
 
-Sessioneinstellungen
 
 
 Bei den Session Einstellungen finden Sie zunächst die allgemeinen Informationen. Hier können Sie den Namen der Session und die Sessionbeschreibung ändern. Die Beschreibung ist eine zusätzliche Angabe und kann beispielsweise eine Aufgabenstellung beinhalten. 
