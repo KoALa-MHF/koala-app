@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
-import { MarkerService } from '../../services/marker.service';
+import { MarkerService } from '../../../markers/services/marker.service';
 import { MessageService } from 'primeng/api';
 import { MediaControlService, MediaEvent, MediaActions } from '../../services/media-control.service';
 import { SessionsService } from '../../services/sessions.service';

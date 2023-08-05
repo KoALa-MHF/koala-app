@@ -1,9 +1,7 @@
-<h4 class="section-heading">{{ 'SESSION.MAINTAIN.SECTION_HEADINGS.CREATE_MARKER' | translate }}</h4>
-
 <form [formGroup]="markerDataForm" class="form">
   <div>
     <p-dropdown
-      placeholder="{{ 'SESSION.MAINTAIN.MARKER.MARKER_TYPE_LABEL' | translate }}"
+      placeholder="{{ 'MARKER.MAINTAIN.MARKER_TYPE_LABEL' | translate }}"
       [options]="markerTypes"
       optionLabel="name"
       optionValue="type"
@@ -11,17 +9,17 @@
       formControlName="type"
     ></p-dropdown>
     <small id="marker-name-help" class="field-explanation"
-      >{{ 'SESSION.MAINTAIN.MARKER.MARKER_TYPE_EXPLANATION' | translate }}
+      >{{ 'MARKER.MAINTAIN.MARKER_TYPE_EXPLANATION' | translate }}
     </small>
   </div>
 
   <div>
     <span class="p-float-label">
       <input id="marker-name-input" type="text" pInputText aria-describedby="marker-name-help" formControlName="name" />
-      <label for="marker-name-input">{{ 'SESSION.MAINTAIN.MARKER.MARKER_NAME_INPUT_LABEL' | translate }}</label>
+      <label for="marker-name-input">{{ 'MARKER.MAINTAIN.MARKER_NAME_INPUT_LABEL' | translate }}</label>
     </span>
     <small id="marker-name-help" class="field-explanation">
-      {{ 'SESSION.MAINTAIN.MARKER.MARKER_NAME_INPUT_EXPLANATION' | translate }}
+      {{ 'MARKER.MAINTAIN.MARKER_NAME_INPUT_EXPLANATION' | translate }}
     </small>
   </div>
 
@@ -35,11 +33,11 @@
         formControlName="description"
       ></textarea>
       <label for="marker-description-textarea">
-        {{ 'SESSION.MAINTAIN.MARKER.MARKER_DESCRIPTION_INPUT_LABEL' | translate }}
+        {{ 'MARKER.MAINTAIN.MARKER_DESCRIPTION_INPUT_LABEL' | translate }}
       </label>
     </span>
     <small id="marker-name-help" class="field-explanation">
-      {{ 'SESSION.MAINTAIN.MARKER.MARKER_DESCRIPTION_INPUT_EXPLANATION' | translate }}
+      {{ 'MARKER.MAINTAIN.MARKER_DESCRIPTION_INPUT_EXPLANATION' | translate }}
     </small>
   </div>
 
@@ -55,16 +53,16 @@
       <label for="marker-abbreviation-input">
         {{
           markerType !== MarkerType.Slider
-            ? ('SESSION.MAINTAIN.MARKER.MARKER_ABBREVIATION_INPUT_LABEL' | translate)
-            : ('SESSION.MAINTAIN.MARKER.MARKER_ABBREVIATION_INPUT_LABEL_MANDATORY' | translate)
+            ? ('MARKER.MAINTAIN.MARKER_ABBREVIATION_INPUT_LABEL' | translate)
+            : ('MARKER.MAINTAIN.MARKER_ABBREVIATION_INPUT_LABEL_MANDATORY' | translate)
         }}
       </label>
     </span>
     <small id="marker-name-help" class="field-explanation">
       {{
         markerType !== MarkerType.Slider
-          ? ('SESSION.MAINTAIN.MARKER.MARKER_ABBREVIATION_INPUT_EXPLANATION' | translate)
-          : ('SESSION.MAINTAIN.MARKER.MARKER_ABBREVIATION_INPUT_EXPLANATION_MANDATORY' | translate)
+          ? ('MARKER.MAINTAIN.MARKER_ABBREVIATION_INPUT_EXPLANATION' | translate)
+          : ('MARKER.MAINTAIN.MARKER_ABBREVIATION_INPUT_EXPLANATION_MANDATORY' | translate)
       }}
     </small>
   </div>
@@ -73,11 +71,11 @@
     <span class="p-float-label">
       <p-inputNumber id="marker-value-range-from-input" type="number" formControlName="valueRangeFrom"></p-inputNumber>
       <label for="marker-value-range-from-input">
-        {{ 'SESSION.MAINTAIN.MARKER.MARKER_RANGE_FROM_INPUT_LABEL' | translate }}
+        {{ 'MARKER.MAINTAIN.MARKER_RANGE_FROM_INPUT_LABEL' | translate }}
       </label>
     </span>
     <small id="marker-value-range-from-help" class="field-explanation">
-      {{ 'SESSION.MAINTAIN.MARKER.MARKER_RANGE_FROM_INPUT_EXPLANATION' | translate }}
+      {{ 'MARKER.MAINTAIN.MARKER_RANGE_FROM_INPUT_EXPLANATION' | translate }}
     </small>
   </div>
 
@@ -85,23 +83,23 @@
     <span class="p-float-label">
       <p-inputNumber id="marker-value-range-to-input" type="number" formControlName="valueRangeTo"></p-inputNumber>
       <label for="marker-value-range-to-input">
-        {{ 'SESSION.MAINTAIN.MARKER.MARKER_RANGE_TO_INPUT_LABEL' | translate }}
+        {{ 'MARKER.MAINTAIN.MARKER_RANGE_TO_INPUT_LABEL' | translate }}
       </label>
     </span>
     <small id="marker-value-range-to-help" class="field-explanation">
-      {{ 'SESSION.MAINTAIN.MARKER.MARKER_RANGE_TO_INPUT_EXPLANATION' | translate }}
+      {{ 'MARKER.MAINTAIN.MARKER_RANGE_TO_INPUT_EXPLANATION' | translate }}
     </small>
   </div>
 
   <div>
     <h5 style="display: inline; margin-right: 15px; opacity: 100%">
-      {{ 'SESSION.MAINTAIN.MARKER.MARKER_COLOR_INPUT_LABEL' | translate }}
+      {{ 'MARKER.MAINTAIN.MARKER_COLOR_INPUT_LABEL' | translate }}
     </h5>
     <div style="display: inline; margin-right: 15px">
       <p-colorPicker formControlName="color"></p-colorPicker>
     </div>
     <small style="display: inline" id="marker-name-help" class="field-explanation">
-      {{ 'SESSION.MAINTAIN.MARKER.MARKER_COLOR_INPUT_EXPLANATION' | translate }}
+      {{ 'MARKER.MAINTAIN.MARKER_COLOR_INPUT_EXPLANATION' | translate }}
     </small>
   </div>
 
@@ -109,8 +107,8 @@
     <h5 style="display: inline; margin-right: 15px; opacity: 100%">
       {{
         markerType !== MarkerType.Slider
-          ? ('SESSION.MAINTAIN.MARKER.MARKER_CONTENT_COLOR_INPUT_LABEL' | translate)
-          : ('SESSION.MAINTAIN.MARKER.MARKER_CONTENT_COLOR_INPUT_SLIDER_LABEL' | translate)
+          ? ('MARKER.MAINTAIN.MARKER_CONTENT_COLOR_INPUT_LABEL' | translate)
+          : ('MARKER.MAINTAIN.MARKER_CONTENT_COLOR_INPUT_SLIDER_LABEL' | translate)
       }}
     </h5>
     <div style="display: inline; margin-right: 15px">
@@ -120,7 +118,7 @@
 
   <div *ngIf="markerType !== MarkerType.Slider">
     <p-dropdown
-      placeholder="{{ 'SESSION.MAINTAIN.MARKER.MARKER_ICON_INPUT_LABEL' | translate }}"
+      placeholder="{{ 'MARKER.MAINTAIN.MARKER_ICON_INPUT_LABEL' | translate }}"
       [options]="icons"
       optionValue="code"
       [style]="{ minWidth: '100%' }"
@@ -141,7 +139,7 @@
       </ng-template>
     </p-dropdown>
     <small id="marker-name-help" class="field-explanation">
-      {{ 'SESSION.MAINTAIN.MARKER.MARKER_ICON_INPUT_EXPLANATION' | translate }}
+      {{ 'MARKER.MAINTAIN.MARKER_ICON_INPUT_EXPLANATION' | translate }}
     </small>
   </div>
 </form>

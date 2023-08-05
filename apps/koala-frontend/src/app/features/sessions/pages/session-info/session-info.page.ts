@@ -3,7 +3,7 @@ import { Session } from '../../types/session.entity';
 import { Marker } from '../../types/marker.entity';
 import { SessionsService } from '../../services/sessions.service';
 import { ActivatedRoute } from '@angular/router';
-import { MarkerService } from '../../services/marker.service';
+import { MarkerService } from '../../../markers/services/marker.service';
 
 @Component({
   selector: 'koala-session-info',
