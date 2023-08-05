@@ -67,6 +67,7 @@ import { SessionTimerComponent } from './components/session-timer/session-timer.
 import { MarkersModule } from '../markers/markers.module';
 import { SessionMarkerPreviewComponent } from './components/session-marker-preview/session-marker-preview.component';
 import { AnnotationDetailComponent } from './components/annotation-detail/annotation-detail.component';
+import { TimePipe } from './pipes/time.pipe';
 
 @NgModule({
   declarations: [
@@ -96,6 +97,7 @@ import { AnnotationDetailComponent } from './components/annotation-detail/annota
     SessionAnalysisPage,
     VisibleFilterPipe,
     SessionOwnerPipe,
+    TimePipe,
     VolumeControlComponent,
     SessionTimerComponent,
     SessionMarkerPreviewComponent,

@@ -225,7 +225,8 @@
         "SAVE_BTN": "Speichern",
         "CANCEL_BTN": "Verwerfen",
         "EDIT_BTN": "Editieren",
-        "DELETE_BTN": "Kommentar löschen"
+        "DELETE_BTN": "Kommentar löschen",
+        "ANNOTATION_TIME_LABEL": "Zeit:"
       }
     }
   },

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DataPoint } from '../annotation/annotation.component';
 
 export interface AnnotationDetail {
@@ -30,11 +30,12 @@ export class AnnotationDetailComponent {
     }
   }
 
-  get annotation(): DataPoint {
+  get annotation(): DataPoint | null {
     return this._annotation;
   }
 
-  private _annotation!: DataPoint;
+  private _annotation!: DataPoint | null;
+
   @Output() save = new EventEmitter<AnnotationDetail>();
 
   note = '';
@@ -48,13 +49,13 @@ export class AnnotationDetailComponent {
   }
 
   onAnnotationDetailSave() {
-    this.save.emit({ id: this._annotation.id, note: this.note });
+    this.save.emit({ id: this.annotation?.id || 0, note: this.note });
     this.mode = Mode.DISPLAY;
   }
 
   onAnnotationDetailDelete() {
     this.note = '';
-    this.save.emit({ id: this._annotation.id, note: '' });
+    this.save.emit({ id: this.annotation?.id || 0, note: '' });
     this.mode = Mode.DISPLAY;
   }
 

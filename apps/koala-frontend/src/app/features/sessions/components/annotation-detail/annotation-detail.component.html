@@ -1,5 +1,15 @@
 <div>
-  <div>{{ annotation?.startTime }} - {{ annotation?.endTime }}</div>
+  <div>
+    <h3>
+      {{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.ANNOTATION_TIME_LABEL' | translate }}
+      <span *ngIf="!annotation?.endTime">{{ (annotation?.startTime || 0) / 1000 | time }}</span>
+      <span *ngIf="annotation?.endTime">
+        {{ (annotation?.startTime || 0) / 1000 | time }} - {{ (annotation?.endTime || 0) / 1000 | time }}
+      </span>
+    </h3>
+  </div>
+
+  <p-divider></p-divider>
   <div>
     <textarea
       *ngIf="mode === Mode.EDIT"
@@ -11,7 +21,8 @@
     ></textarea>
     <span *ngIf="mode === Mode.DISPLAY">{{ annotation?.note }}</span>
   </div>
-  <div>
+
+  <div style="margin-top: 20px; display: flex; justify-content: center">
     <button
       pButton
       pRipple
