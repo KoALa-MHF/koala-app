@@ -36,29 +36,29 @@
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
       <th pSortableColumn="name">
-        {{ 'MARKER.OVERVIEW.COLUMN_TITLE.NAME' | translate }} <p-sortIcon field="name"></p-sortIcon>
+        {{ 'MARKER.OVERVIEW.COLUMN_TITLE.NAME' | translate }}
+        <p-sortIcon field="name"></p-sortIcon>
+        <p-columnFilter type="text" field="name" display="menu"></p-columnFilter>
       </th>
       <th pSortableColumn="abbreviation">
         {{ 'MARKER.OVERVIEW.COLUMN_TITLE.ABBREVIATION' | translate }} <p-sortIcon field="abbreviation"></p-sortIcon>
       </th>
       <th pSortableColumn="description">
-        {{ 'MARKER.OVERVIEW.COLUMN_TITLE.DESCRIPTION' | translate }} <p-sortIcon field="description"></p-sortIcon>
+        {{ 'MARKER.OVERVIEW.COLUMN_TITLE.DESCRIPTION' | translate }}
+        <p-sortIcon field="description"></p-sortIcon>
+        <p-columnFilter type="text" field="description" display="menu"></p-columnFilter>
       </th>
       <th pSortableColumn="type">
-        {{ 'MARKER.OVERVIEW.COLUMN_TITLE.TYPE' | translate }} <p-sortIcon field="type"></p-sortIcon>
-      </th>
-    </tr>
-    <tr>
-      <th></th>
-      <th>
-        <p-columnFilter type="text" field="name"></p-columnFilter>
-      </th>
-      <th></th>
-      <th>
-        <p-columnFilter type="text" field="description"></p-columnFilter>
-      </th>
-      <th>
-        <p-columnFilter field="type" matchMode="equals" [showMenu]="false">
+        {{ 'MARKER.OVERVIEW.COLUMN_TITLE.TYPE' | translate }}
+        <p-sortIcon field="type"></p-sortIcon>
+        <p-columnFilter
+          matchMode="equals"
+          display="menu"
+          field="type"
+          [showMatchModes]="false"
+          [showOperator]="false"
+          [showAddButton]="false"
+        >
           <ng-template pTemplate="filter" let-value let-filter="filterCallback">
             <p-dropdown
               [ngModel]="value"
