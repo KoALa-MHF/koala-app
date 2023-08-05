@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { MarkerService } from '../../services/marker.service';
+import { MarkerService } from '../../../markers/services/marker.service';
 import { Marker } from '../../types/marker.entity';
 
 @Component({

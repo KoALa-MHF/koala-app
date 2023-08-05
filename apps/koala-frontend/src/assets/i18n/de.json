@@ -128,26 +128,6 @@
         "TITLE_UPLOAD_AREA": "Ausgewählte Audio-Datei:"
       },
       "MARKER": {
-        "MARKER_TYPE_LABEL": "Markertyp*",
-        "MARKER_TYPE_EXPLANATION": "Wählen Sie den gewünschten Markertyp.",
-        "MARKER_NAME_INPUT_LABEL": "Name des Markers*",
-        "MARKER_NAME_INPUT_EXPLANATION": "Geben Sie dem Marker einen Namen.",
-        "MARKER_DESCRIPTION_INPUT_LABEL": "Beschreibung",
-        "MARKER_DESCRIPTION_INPUT_EXPLANATION": "Fügen Sie dem Marker ggf. eine Beschreibung hinzu.",
-        "MARKER_ABBREVIATION_INPUT_LABEL": "Abkürzung",
-        "MARKER_ABBREVIATION_INPUT_LABEL_MANDATORY": "Abkürzung*",
-        "MARKER_ABBREVIATION_INPUT_EXPLANATION": "Wählen Sie eine Abkürzung und/oder ein Icon für den Marker.",
-        "MARKER_ABBREVIATION_INPUT_EXPLANATION_MANDATORY": "Wählen Sie eine Abkürzung für den Marker.",
-        "MARKER_RANGE_FROM_INPUT_LABEL": "Minimum-Wert",
-        "MARKER_RANGE_FROM_INPUT_EXPLANATION": "Wählen Sie einen Minimum-Wert für den Slider.",
-        "MARKER_RANGE_TO_INPUT_LABEL": "Maximal-Wert",
-        "MARKER_RANGE_TO_INPUT_EXPLANATION": "Wählen Sie einen Maximal-Wert für den Slider.",
-        "MARKER_COLOR_INPUT_LABEL": "Farbe",
-        "MARKER_CONTENT_COLOR_INPUT_LABEL": "Schwarzer Text",
-        "MARKER_CONTENT_COLOR_INPUT_SLIDER_LABEL": "Schwarzer Slider",
-        "MARKER_COLOR_INPUT_EXPLANATION": "Wählen Sie eine Farbe für Ihren Marker.",
-        "MARKER_ICON_INPUT_LABEL": "Icon",
-        "MARKER_ICON_INPUT_EXPLANATION": "Wählen Sie eine Abkürzung und/oder ein Icon für den Marker.",
         "MARKER_PREVIEW_EXPLANATION": "Hier sehen Sie eine Vorschau Ihres Markers.",
         "MARKER_ADD_BTN": "Marker Hinzufügen",
         "MARKER_RESET_BTN": "Zurücksetzen",
@@ -362,8 +342,38 @@
         "ABBREVIATION": "Abkürzung/Icon",
         "DESCRIPTION": "Beschreibung",
         "TYPE": "Markertyp"
+      },
+      "ACTIONS": {
+        "CREATE": "Marker Anlegen",
+        "CHANGE": "Marker Ändern"
+      },
+      "CREATE": {
+        "DIALOG_TITLE": "Marker Anlegen",
+        "CREATE_BTN": "Anlegen",
+        "RESET_BTN": "Zurücksetzen"
       }
     },
-    "MAINTAIN": {}
+    "MAINTAIN": {
+      "MARKER_TYPE_LABEL": "Markertyp*",
+      "MARKER_TYPE_EXPLANATION": "Wählen Sie den gewünschten Markertyp.",
+      "MARKER_NAME_INPUT_LABEL": "Name des Markers*",
+      "MARKER_NAME_INPUT_EXPLANATION": "Geben Sie dem Marker einen Namen.",
+      "MARKER_DESCRIPTION_INPUT_LABEL": "Beschreibung",
+      "MARKER_DESCRIPTION_INPUT_EXPLANATION": "Fügen Sie dem Marker ggf. eine Beschreibung hinzu.",
+      "MARKER_ABBREVIATION_INPUT_LABEL": "Abkürzung",
+      "MARKER_ABBREVIATION_INPUT_LABEL_MANDATORY": "Abkürzung*",
+      "MARKER_ABBREVIATION_INPUT_EXPLANATION": "Wählen Sie eine Abkürzung und/oder ein Icon für den Marker.",
+      "MARKER_ABBREVIATION_INPUT_EXPLANATION_MANDATORY": "Wählen Sie eine Abkürzung für den Marker.",
+      "MARKER_RANGE_FROM_INPUT_LABEL": "Minimum-Wert",
+      "MARKER_RANGE_FROM_INPUT_EXPLANATION": "Wählen Sie einen Minimum-Wert für den Slider.",
+      "MARKER_RANGE_TO_INPUT_LABEL": "Maximal-Wert",
+      "MARKER_RANGE_TO_INPUT_EXPLANATION": "Wählen Sie einen Maximal-Wert für den Slider.",
+      "MARKER_COLOR_INPUT_LABEL": "Farbe",
+      "MARKER_CONTENT_COLOR_INPUT_LABEL": "Schwarzer Text",
+      "MARKER_CONTENT_COLOR_INPUT_SLIDER_LABEL": "Schwarzer Slider",
+      "MARKER_COLOR_INPUT_EXPLANATION": "Wählen Sie eine Farbe für Ihren Marker.",
+      "MARKER_ICON_INPUT_LABEL": "Icon",
+      "MARKER_ICON_INPUT_EXPLANATION": "Wählen Sie eine Abkürzung und/oder ein Icon für den Marker."
+    }
   }
 }

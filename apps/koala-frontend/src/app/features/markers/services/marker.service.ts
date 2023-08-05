@@ -1,9 +1,15 @@
 import { Injectable } from '@angular/core';
-import { CreateMarkerGQL, CreateMarkerInput, GetMarkersGQL } from '../../../graphql/generated/graphql';
-import { MarkerIcon } from '../types/marker-icon.type';
+import { CreateMarkerGQL, CreateMarkerInput, GetMarkersGQL, GetMarkersQuery } from '../../../graphql/generated/graphql';
+import { MarkerIcon } from '../../sessions/types/marker-icon.type';
 import MarkerIcons from './marker-icons.json';
+import { Observable } from 'rxjs';
+import { ApolloQueryResult } from '@apollo/client/core';
 
-@Injectable()
+export const DEFAULT_ICON_COLOR = '#555bcf';
+export const DEFAULT_VALUE_RANGE_FROM = 0;
+export const DEFAULT_VALUE_RANGE_TO = 10;
+
+@Injectable({ providedIn: 'root' })
 export class MarkerService {
   icons: MarkerIcon[] = MarkerIcons;
 
@@ -13,7 +19,7 @@ export class MarkerService {
     return this.createMarkerGQL.mutate({ createMarker: marker });
   }
 
-  getAll(ids?: Array<number>) {
+  getAll(ids?: Array<number>): Observable<ApolloQueryResult<GetMarkersQuery>> {
     return this.getMarkersGQL.fetch({ ids }, { fetchPolicy: 'no-cache' });
   }
 
