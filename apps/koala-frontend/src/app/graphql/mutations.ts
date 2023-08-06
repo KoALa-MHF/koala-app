@@ -317,6 +317,25 @@ const SET_PLAY_POSITION = gql`
   }
 `;
 
+
+const UPDATE_MARKER = gql`
+  mutation updateMarker($markerId: Int!, $updateMarkerInput: UpdateMarkerInput!) {
+    updateMarker(id: $markerId, updateMarkerInput: $updateMarkerInput) {
+      id
+      type
+      name
+      abbreviation
+      description
+      color
+      icon
+      contentColor
+      valueRangeFrom
+      valueRangeTo
+      createdAt
+      updatedAt
+}}`;
+
+
 const UPDATE_ANNOTATION_NOTE = gql`
   mutation updateAnnotationNote($id: Int!, $note: String!) {
     updateAnnotation(id: $id, updateAnnotationInput: { note: $note }) {
