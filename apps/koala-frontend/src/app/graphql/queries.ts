@@ -104,6 +104,7 @@ const GET_ONE_SESSION = gql`
         }
         annotations {
           id
+          note
           end
           start
           value
