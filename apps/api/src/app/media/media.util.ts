@@ -1,8 +1,10 @@
 import { join } from 'path';
 import { stat } from 'fs/promises';
 import { ensureDir } from 'fs-extra';
+import { config } from '../config/config.module';
 
-const UPLOAD_MEDIA_FOLDER = join(process.cwd(), './uploads/media');
+const MEDIA_FOLDER = '/media';
+const UPLOAD_MEDIA_FOLDER = join(process.cwd(), config.uploadFolderPath + MEDIA_FOLDER);
 
 export function getFilePath(id: number, fileName: string): string {
   const mediaFolderPath = getMediaFolderPath(id);
