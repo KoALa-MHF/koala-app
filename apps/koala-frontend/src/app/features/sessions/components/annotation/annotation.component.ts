@@ -10,7 +10,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Marker } from '../../types/marker.entity';
-import { MarkerService } from '../../services/marker.service';
+import { MarkerService } from '../../../markers/services/marker.service';
 import { ConfirmationService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 import * as d3 from 'd3';

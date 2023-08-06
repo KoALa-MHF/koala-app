@@ -44,13 +44,11 @@ import { AudioPlayerComponent } from './components/audio-player/audio-player.com
 import { MediaService } from './services/media.service';
 import { SessionDataComponent } from './components/session-data/session-data.component';
 import { SessionMarkerDataComponent } from './components/session-marker-data/session-marker-data.component';
-import { MarkerMaintainComponent } from './components/marker-maintain/marker-maintain.component';
 import { MarkerPlacementComponent } from './components/marker-placement/marker-placement.component';
 import { SkeletonModule } from 'primeng/skeleton';
 import { SessionParticipantsComponent } from './components/session-participants/session-participants.component';
 import { SessionParticipantsOverviewComponent } from './components/session-participants-overview/session-participants-overview.component';
 import { SessionParticipantsInvitationComponent } from './components/session-participants-invitation/session-participants-invitation.component';
-import { MarkerService } from './services/marker.service';
 import { AnnotationService } from './services/annotation.service';
 import { MarkerToolbarComponent } from './components/marker-toolbar/marker-toolbar.component';
 import { DeleteConfirmDialogComponent } from './components/delete-confirm-dialog/delete-confirm-dialog.component';
@@ -66,6 +64,7 @@ import { VolumeControlComponent } from './components/volume-control/volume-contr
 import { SessionTimerComponent } from './components/session-timer/session-timer.component';
 import { MarkersModule } from '../markers/markers.module';
 import { SessionMarkerPreviewComponent } from './components/session-marker-preview/session-marker-preview.component';
+import { SessionMarkerMaintainComponent } from './components/session-marker-maintain/session-marker-maintain.component';
 import { AnnotationDetailComponent } from './components/annotation-detail/annotation-detail.component';
 import { TimePipe } from './pipes/time.pipe';
 
@@ -81,7 +80,6 @@ import { TimePipe } from './pipes/time.pipe';
     SessionAudioComponent,
     SessionDataComponent,
     SessionMarkerDataComponent,
-    MarkerMaintainComponent,
     MarkerPlacementComponent,
     AudioWaveComponent,
     AudioPlayerComponent,
@@ -101,6 +99,7 @@ import { TimePipe } from './pipes/time.pipe';
     VolumeControlComponent,
     SessionTimerComponent,
     SessionMarkerPreviewComponent,
+    SessionMarkerMaintainComponent,
     AnnotationDetailComponent,
   ],
   imports: [
@@ -134,7 +133,6 @@ import { TimePipe } from './pipes/time.pipe';
   ],
   providers: [
     MediaService,
-    MarkerService,
     ToolbarsService,
     UserSessionService,
     AnnotationService,

@@ -5,7 +5,7 @@ import { MediaControlService, MediaEvent, MediaActions } from '../../services/me
 import { MessageService } from 'primeng/api';
 import { SessionsService } from '../../services/sessions.service';
 import { AnnotationService } from '../../services/annotation.service';
-import { MarkerService } from '../../services/marker.service';
+import { MarkerService } from '../../../markers/services/marker.service';
 import { TranslateService } from '@ngx-translate/core';
 import { DataPoint, Display } from '../../components/annotation/annotation.component';
 import { Session } from '../../types/session.entity';
