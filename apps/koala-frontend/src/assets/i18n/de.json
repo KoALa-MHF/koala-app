@@ -97,7 +97,7 @@
         "SESSION_NAME_INPUT_EXPLANATION": "Geben Sie der Session bitte einen Namen.",
         "SESSION_DESCRIPTION_INPUT_LABEL": "Beschreibung",
         "SESSION_DESCRIPTION_INPUT_EXPLANATION": "Fügen Sie der Session ggf. eine Beschreibung oder eine Aufgabenstellung hinzu.",
-        "SESSION_AVAILABILITY_EXPLANATION": "Nur wenn die Session online geschaltet ist, können Benutzer diese zugreifen. Wenn nicht, ist die Session nur für Sie als Administrator verfügbar.",
+        "SESSION_AVAILABILITY_EXPLANATION": "Nur wenn die Session online geschaltet ist, können Benutzer auf diese zugreifen. Wenn nicht, ist die Session nur für Sie als Administrator verfügbar.",
         "SESSION_STATUS_LABEL": "Status",
         "SESSION_START_DATE_INPUT_LABEL": "Start",
         "SESSION_END_DATE_INPUT_LABEL": "Ende",
@@ -348,9 +348,12 @@
       "SEARCH_INPUT_PLACEHOLDER": "",
       "COLUMN_TITLE": {
         "NAME": "Name",
-        "ABBREVIATION": "Abkürzung/Icon",
+        "ABBREVIATION": "Abkürzung",
+        "ICON": "Icon",
         "DESCRIPTION": "Beschreibung",
-        "TYPE": "Markertyp"
+        "TYPE": "Markertyp",
+        "CONTENT_COLOR": "Schwarzer Text",
+        "COLOR": "Farbe"
       },
       "ACTIONS": {
         "CREATE": "Marker Anlegen",
@@ -382,7 +385,11 @@
       "MARKER_CONTENT_COLOR_INPUT_SLIDER_LABEL": "Schwarzer Slider",
       "MARKER_COLOR_INPUT_EXPLANATION": "Wählen Sie eine Farbe für Ihren Marker.",
       "MARKER_ICON_INPUT_LABEL": "Icon",
-      "MARKER_ICON_INPUT_EXPLANATION": "Wählen Sie eine Abkürzung und/oder ein Icon für den Marker."
+      "MARKER_ICON_INPUT_EXPLANATION": "Wählen Sie eine Abkürzung und/oder ein Icon für den Marker.",
+      "ABBREVIATION_ICON_ERROR_MESSAGE_TITLE": "Änderungen können nicht gespeichert werden",
+      "ABBREVIATION_ICON_ERROR_MESSAGE": "Die Abkürzung oder ein Icon müssen gepflegt sein.",
+      "NAME_ERROR_MESSAGE_TITLE": "Änderungen können nicht gespeichert werden",
+      "NAME_ERROR_MESSAGE": "Der Markername darf nicht leer sein"
     }
   }
 }
