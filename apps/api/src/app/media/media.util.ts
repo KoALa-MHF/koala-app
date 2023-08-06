@@ -1,6 +1,6 @@
 import { join } from 'path';
 import { stat } from 'fs/promises';
-import { ensureDir } from 'fs-extra';
+import { emptyDir, ensureDir, exists } from 'fs-extra';
 import { config } from '../config/config.module';
 
 const MEDIA_FOLDER = '/media';
@@ -22,4 +22,11 @@ export function getMediaFolderPath(id: number): string {
 
 export async function ensureMediaFolder(id: number): Promise<void> {
   await ensureDir(getMediaFolderPath(id));
+}
+
+export async function clearMediaFolder(): Promise<void> {
+  const mediaFolderExists = await exists(UPLOAD_MEDIA_FOLDER);
+  if (mediaFolderExists) {
+    await emptyDir(UPLOAD_MEDIA_FOLDER);
+  }
 }

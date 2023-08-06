@@ -15,9 +15,8 @@ export class UserSessionsSeeder implements SeederInterface<UserSession> {
   async seed(options: SeederOptions): Promise<UserSession[]> {
     const userSessions: Partial<UserSession>[] = [];
 
-    for (let i = 0; i < UserSessionsData.length; i++) {
-      const userSessionData = UserSessionsData[i];
-      userSessions.push(this.userSessionRepository.create(userSessionData));
+    for (const userSession of UserSessionsData) {
+      userSessions.push(this.userSessionRepository.create(userSession));
     }
 
     return await this.userSessionRepository.save(userSessions);
