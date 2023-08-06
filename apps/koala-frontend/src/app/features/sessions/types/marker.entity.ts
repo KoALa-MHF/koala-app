@@ -9,7 +9,7 @@ export interface Marker {
   color: string;
   contentColor: string;
   icon?: string | null;
-  visible: boolean | true;
+  visible?: boolean | true;
   valueRangeFrom?: number | null;
   valueRangeTo?: number | null;
 }

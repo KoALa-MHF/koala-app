@@ -103,4 +103,18 @@ export class MarkersOverviewPage implements OnInit {
         },
       });
   }
+
+  onEditMarker(marker: Marker) {
+    this.markerService.update(marker.id, marker).subscribe({
+      next: (updatedMarker: Marker) => this.mergeUpdateResult(updatedMarker),
+      error: () => console.log('Error Edit Marker'),
+    });
+  }
+
+  private mergeUpdateResult(updatedMarker: Marker) {
+    this.markers = this.markers.map((marker) => {
+      const mappedMarker = marker.id === updatedMarker.id ? updatedMarker : marker;
+      return mappedMarker;
+    });
+  }
 }
