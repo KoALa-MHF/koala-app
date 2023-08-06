@@ -1,5 +1,4 @@
-import { ObjectType, Field, Int, registerEnumType, ID } from '@nestjs/graphql';
-import { IsEnum, IsNotEmpty } from 'class-validator';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '../../core/base.entity';
 
