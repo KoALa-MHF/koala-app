@@ -108,6 +108,14 @@ export class MarkerOverviewListComponent implements OnInit {
     this.clonedMarkers[marker.id].name = event.target.value;
   }
 
+  onMarkerContentColorChange(contentColor: string, marker: Marker) {
+    this.clonedMarkers[marker.id].contentColor = contentColor;
+  }
+
+  onMarkerColorChange(color: string, marker: Marker) {
+    this.clonedMarkers[marker.id].color = color;
+  }
+
   onRowEditInit(marker: Marker) {
     this.clonedMarkers[marker.id] = { ...marker };
   }

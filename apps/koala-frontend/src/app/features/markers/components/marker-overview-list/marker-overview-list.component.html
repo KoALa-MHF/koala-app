@@ -138,8 +138,41 @@
         <span *ngSwitchCase="'RANGE'">{{ 'MARKER.TYPE.RANGE' | translate }}</span>
         <span *ngSwitchCase="'SLIDER'">{{ 'MARKER.TYPE.SLIDER' | translate }}</span>
       </td>
-      <td *ngIf="displayedColumns.color">{{ marker.color }}</td>
-      <td *ngIf="displayedColumns.contentColor">{{ marker.contentColor }}</td>
+      <td *ngIf="displayedColumns.color">
+        <p-cellEditor>
+          <ng-template pTemplate="input"
+            ><p-colorPicker
+              [ngModel]="marker.color"
+              (ngModelChange)="onMarkerColorChange($event, marker)"
+              [disabled]="false"
+            ></p-colorPicker
+          ></ng-template>
+          <ng-template pTemplate="output">
+            <p-colorPicker [ngModel]="marker.color" [disabled]="true"></p-colorPicker>
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td *ngIf="displayedColumns.contentColor">
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <p-inputSwitch
+              [trueValue]="'#000000'"
+              [falseValue]="'#FFFFFF'"
+              [ngModel]="marker.contentColor"
+              (ngModelChange)="onMarkerContentColorChange($event, marker)"
+              [disabled]="false"
+            ></p-inputSwitch>
+          </ng-template>
+          <ng-template pTemplate="output">
+            <p-inputSwitch
+              [trueValue]="'#000000'"
+              [falseValue]="'#FFFFFF'"
+              [ngModel]="marker.contentColor"
+              [disabled]="true"
+            ></p-inputSwitch>
+          </ng-template>
+        </p-cellEditor>
+      </td>
       <td *ngIf="editEnabled">
         <div class="flex align-items-center justify-content-center gap-2">
           <button
