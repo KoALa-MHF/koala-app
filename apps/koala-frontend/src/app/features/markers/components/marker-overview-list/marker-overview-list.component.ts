@@ -146,19 +146,21 @@ export class MarkerOverviewListComponent implements OnInit {
     if (!changedMarker.icon && !changedMarker.abbreviation) {
       //no save possible
       this.messageService.add({
-        severity: 'success',
+        severity: 'error',
         summary: this.translateService.instant('MARKER.MAINTAIN.ABBREVIATION_ICON_ERROR_MESSAGE_TITLE'),
         detail: this.translateService.instant('MARKER.MAINTAIN.ABBREVIATION_ICON_ERROR_MESSAGE'),
       });
+      return;
     }
 
     if (!changedMarker.name) {
       //no save possible
       this.messageService.add({
-        severity: 'success',
+        severity: 'error',
         summary: this.translateService.instant('SESSION.MAINTAIN.NAME_ERROR_MESSAGE_TITLE'),
         detail: this.translateService.instant('SESSION.MAINTAIN.NAME_ERROR_MESSAGE'),
       });
+      return;
     }
 
     this.markerEdit.emit(this.clonedMarkers[marker.id]);

@@ -345,7 +345,7 @@
         "ICON": "Icon",
         "DESCRIPTION": "Beschreibung",
         "TYPE": "Markertyp",
-        "CONTENT_COLOR": "Scharzer Text",
+        "CONTENT_COLOR": "Schwarzer Text",
         "COLOR": "Farbe"
       },
       "ACTIONS": {
