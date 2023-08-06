@@ -7,6 +7,7 @@
   [scrollable]="true"
   [globalFilterFields]="['name', 'abbreviation', 'description']"
   [style]="{ height: '100%' }"
+  editMode="row"
 >
   <ng-template pTemplate="caption">
     <div class="marker-search-area">
@@ -88,10 +89,11 @@
           </ng-template>
         </p-columnFilter>
       </th>
+      <th *ngIf="editEnabled"></th>
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-marker>
-    <tr>
+  <ng-template pTemplate="body" let-marker let-editing="editing">
+    <tr [pEditableRow]="marker">
       <td>
         <p-tableCheckbox [value]="marker"></p-tableCheckbox>
       </td>
@@ -101,11 +103,59 @@
         <span *ngIf="marker.icon && marker.abbreviation" style="margin-left: 10px"></span>
         <span *ngIf="marker.abbreviation">{{ marker.abbreviation }}</span>
       </td>
-      <td>{{ marker.description }}</td>
+      <td>
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input
+              pInputText
+              type="text"
+              [value]="marker.description"
+              (change)="onMarkerDescriptionChange($event, marker)"
+            />
+          </ng-template>
+          <ng-template pTemplate="output">
+            {{ marker.description }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
       <td [ngSwitch]="marker.type">
         <span *ngSwitchCase="'EVENT'">{{ 'MARKER.TYPE.EVENT' | translate }}</span>
         <span *ngSwitchCase="'RANGE'">{{ 'MARKER.TYPE.RANGE' | translate }}</span>
         <span *ngSwitchCase="'SLIDER'">{{ 'MARKER.TYPE.SLIDER' | translate }}</span>
+      </td>
+      <td *ngIf="editEnabled">
+        <div class="flex align-items-center justify-content-center gap-2">
+          <button
+            *ngIf="!editing"
+            pButton
+            pRipple
+            type="button"
+            pInitEditableRow
+            icon="pi pi-pencil"
+            (click)="onRowEditInit(marker)"
+            class="p-button-rounded p-button-text"
+          ></button>
+          <button
+            *ngIf="editing"
+            pButton
+            pRipple
+            type="button"
+            pSaveEditableRow
+            icon="pi pi-check"
+            (click)="onRowEditSave(marker)"
+            class="p-button-rounded p-button-text p-button-success mr-2"
+          ></button>
+          <button
+            *ngIf="editing"
+            pButton
+            pRipple
+            type="button"
+            pCancelEditableRow
+            icon="pi pi-times"
+            (click)="onRowEditCancel(marker)"
+            class="p-button-rounded p-button-text p-button-danger"
+          ></button>
+        </div>
       </td>
     </tr>
   </ng-template>

@@ -2,6 +2,8 @@
   [markers]="markers"
   [markerDataForm]="maintainMarkerForm"
   [createEnabled]="true"
+  [editEnabled]="true"
   (markerCreate)="onCreateMarker()"
+  (markerEdit)="onEditMarker($event)"
   (resetMarkerData)="onResetMarkerData()"
 ></koala-marker-overview-list>

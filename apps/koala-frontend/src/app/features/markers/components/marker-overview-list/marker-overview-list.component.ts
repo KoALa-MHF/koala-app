@@ -16,9 +16,11 @@ export class MarkerOverviewListComponent implements OnInit {
   @Input() selectedMarkers: Marker[] = [];
   @Input() markerDataForm: FormGroup = new FormGroup([]);
   @Input() createEnabled = false;
+  @Input() editEnabled = false;
 
   @Output() selectedMarkersChange = new EventEmitter();
   @Output() markerCreate = new EventEmitter();
+  @Output() markerEdit = new EventEmitter<Marker>();
   @Output() resetMarkerData = new EventEmitter();
 
   @ViewChild('markerOverviewTable') markerOverviewTable: Table | undefined;
@@ -26,6 +28,8 @@ export class MarkerOverviewListComponent implements OnInit {
   types!: any[];
 
   createDialogVisible = false;
+
+  clonedMarkers: { [n: number]: Marker } = {};
 
   get previewMarker(): Marker {
     return {
@@ -77,5 +81,24 @@ export class MarkerOverviewListComponent implements OnInit {
 
   applyFilterGlobal(event: any, stringVal: string) {
     this.markerOverviewTable?.filterGlobal((event.target as HTMLInputElement).value, stringVal);
+  }
+
+  onMarkerDescriptionChange(event: any, marker: Marker) {
+    this.clonedMarkers[marker.id].description = event.target.value;
+  }
+
+  onRowEditInit(marker: Marker) {
+    this.clonedMarkers[marker.id] = { ...marker };
+  }
+
+  onRowEditSave(marker: Marker) {
+    //trigger save in host page
+    this.markerEdit.emit(this.clonedMarkers[marker.id]);
+    delete this.clonedMarkers[marker.id];
+  }
+
+  onRowEditCancel(marker: Marker) {
+    //no changes, nothing to communicate to the host component
+    delete this.clonedMarkers[marker.id];
   }
 }
