@@ -316,3 +316,12 @@ const SET_PLAY_POSITION = gql`
     }
   }
 `;
+
+const UPDATE_ANNOTATION_NOTE = gql`
+  mutation updateAnnotationNote($id: Int!, $note: String!) {
+    updateAnnotation(id: $id, updateAnnotationInput: { note: $note }) {
+      id
+      note
+    }
+  }
+`;

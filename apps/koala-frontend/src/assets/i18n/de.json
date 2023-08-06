@@ -220,6 +220,13 @@
         "HEADER": "Annotationen löschen",
         "ACCEPT_LABEL": "Ja",
         "REJECT_LABEL": "Nein"
+      },
+      "DETAIL_OVERLAY": {
+        "SAVE_BTN": "Speichern",
+        "CANCEL_BTN": "Verwerfen",
+        "EDIT_BTN": "Editieren",
+        "DELETE_BTN": "Kommentar löschen",
+        "ANNOTATION_TIME_LABEL": "Zeit:"
       }
     }
   },
