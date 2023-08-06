@@ -6,7 +6,12 @@ import { MutationResult } from 'apollo-angular';
 import { MessageService } from 'primeng/api';
 import { MarkerType, SessionStatus, UpdateSessionMutation } from '../../../../graphql/generated/graphql';
 import { UserSession } from '../../types/user-session.entity';
-import { MarkerService } from '../../services/marker.service';
+import {
+  DEFAULT_ICON_COLOR,
+  DEFAULT_VALUE_RANGE_FROM,
+  DEFAULT_VALUE_RANGE_TO,
+  MarkerService,
+} from '../../../markers/services/marker.service';
 import { MediaService } from '../../services/media.service';
 import { SessionsService } from '../../services/sessions.service';
 import { ToolbarsService } from '../../services/toolbars.service';
@@ -20,11 +25,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subscription, debounceTime, fromEvent } from 'rxjs';
 import { TabView } from 'primeng/tabview';
 import { DomHandler } from 'primeng/dom';
-
-const DEFAULT_ICON_COLOR = '#555bcf';
-const DEFAULT_CONTENT_COLOR = '#FFFFFF';
-const DEFAULT_VALUE_RANGE_FROM = 0;
-const DEFAULT_VALUE_RANGE_TO = 10;
 
 @Component({
   selector: 'koala-session-maintain',
@@ -93,7 +93,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
 
     this.maintainMarkerForm = this.formBuilder.group(
       {
-        type: new FormControl<string>('', [
+        type: new FormControl<MarkerType | null>(null, [
           Validators.required,
         ]),
         name: new FormControl<string>('', [

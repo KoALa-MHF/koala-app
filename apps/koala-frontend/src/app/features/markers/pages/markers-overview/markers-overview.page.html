@@ -1,1 +1,7 @@
-<koala-marker-overview-list [markers]="markers"></koala-marker-overview-list>
+<koala-marker-overview-list
+  [markers]="markers"
+  [markerDataForm]="maintainMarkerForm"
+  [createEnabled]="true"
+  (markerCreate)="onCreateMarker()"
+  (resetMarkerData)="onResetMarkerData()"
+></koala-marker-overview-list>

@@ -1,15 +1,14 @@
 import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MarkerType } from '../../../../graphql/generated/graphql';
-import { MarkerService } from '../../services/marker.service';
 import { TranslateService } from '@ngx-translate/core';
+import { MarkerService } from '../../services/marker.service';
 
 @Component({
   selector: 'koala-marker-maintain',
   templateUrl: './marker-maintain.component.html',
   styleUrls: [
     './marker-maintain.component.scss',
-    '../../session-common.scss',
   ],
 })
 export class MarkerMaintainComponent {
@@ -30,7 +29,7 @@ export class MarkerMaintainComponent {
     },
   ];
 
-  icons = this.markerService.getAllIcons();
+  icons = this.markersService.getAllIcons();
   selectedIcon = 0;
   selectedMarkerType = 0;
   color = '';
@@ -42,5 +41,5 @@ export class MarkerMaintainComponent {
     return this.markerDataForm.get('type')?.value;
   }
 
-  constructor(private readonly markerService: MarkerService, private readonly translateService: TranslateService) {}
+  constructor(private readonly markersService: MarkerService, private readonly translateService: TranslateService) {}
 }

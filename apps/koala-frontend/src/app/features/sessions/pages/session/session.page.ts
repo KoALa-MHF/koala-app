@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
-import { MarkerService } from '../../services/marker.service';
+import { MarkerService } from '../../../markers/services/marker.service';
 import { MessageService } from 'primeng/api';
 import { MediaControlService, MediaEvent, MediaActions } from '../../services/media-control.service';
 import { SessionsService } from '../../services/sessions.service';
@@ -20,6 +20,7 @@ import { ToolbarsService } from '../../services/toolbars.service';
 import { NavigationService } from '../../services/navigation.service';
 import { UserSession } from '../../types/user-session.entity';
 import { SessionControlService } from '../../services/session-control.service';
+import { AnnotationDetail } from '../../components/annotation-detail/annotation-detail.component';
 
 @Component({
   selector: 'koala-app-session',
@@ -47,6 +48,7 @@ export class SessionPage implements OnInit, OnDestroy {
   showSideBar = false;
   userID = -1;
   timer = '0:00';
+  seeked = false;
   private myUserSession?: UserSession;
 
   sessionUpdatedSubscription?: Subscription;
@@ -105,6 +107,10 @@ export class SessionPage implements OnInit, OnDestroy {
           .getFocusSession()
           ?.userSessions?.filter((userSession) => userSession.owner?.id === this.userID.toString())[0];
         this.setSidePanelFormData(session);
+
+        this.loadAnnotations([
+          this.myUserSession,
+        ]);
 
         if (!session.isSessionOwner && session.isAudioSession && !session.enablePlayer) {
           this.mediaControlService.setPosition(session.playPosition || 0);
@@ -195,6 +201,10 @@ export class SessionPage implements OnInit, OnDestroy {
         this.mediaControlService.addEventHandler('audioprocess', (time) => {
           // to reduce update frequency
           this.currentAudioTime = time.toFixed(2);
+        });
+
+        this.mediaControlService.addEventHandler('seeking', (time) => {
+          this.onSeeking(time);
         });
 
         this.mediaControlService.mediaPlayStateChanged$
@@ -303,9 +313,20 @@ export class SessionPage implements OnInit, OnDestroy {
 
   private loadAnnotations(userSessions: any[]): void {
     if (userSessions.length > 0 && userSessions[0].annotations) {
+      this.AnnotationData = new Map(
+        [
+          ...this.AnnotationData.entries(),
+        ].sort()
+      );
+
+      this.AnnotationData.forEach((data, key) => {
+        this.AnnotationData.set(key, new Array<DataPoint>());
+      });
+
       for (const annotation of userSessions[0].annotations) {
         this.AnnotationData.get(annotation.marker.id)?.push({
           id: annotation.id,
+          note: annotation.note,
           startTime: annotation.start,
           endTime: annotation.end != null ? annotation.end : 0,
           strength: annotation.value,
@@ -339,7 +360,9 @@ export class SessionPage implements OnInit, OnDestroy {
         this.onMarkerRange(marker, aData);
       }
       if (marker.type === MarkerType.Slider) {
-        this.onMarkerSliderRange(marker, aData, value || 0);
+        const filteredData = this.updateAnnotations(this.currentAudioTime, aData);
+        this.onMarkerSliderRange(marker, filteredData, value || 0);
+        this.AnnotationData.set(marker.id, filteredData);
       }
     }
   }
@@ -433,6 +456,9 @@ export class SessionPage implements OnInit, OnDestroy {
             markerId: m.id,
           })
           .subscribe({
+            next: (result) => {
+              latest.id = result.data?.createAnnotation.id || 1;
+            },
             error: (error) => {
               this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.ANNOTATION_ERROR', '');
               console.log(error);
@@ -558,11 +584,70 @@ export class SessionPage implements OnInit, OnDestroy {
     ]);
   }
 
+  onAnnotationComment(annotationDetail: AnnotationDetail) {
+    this.annotationService.updateNote(annotationDetail.id, annotationDetail.note).subscribe({
+      next: () => {
+        this.sessionService.setFocusSession(parseInt(this.sessionService.getFocusSession()?.id || '0')).subscribe();
+      },
+      error: () => {
+        console.log('Error');
+      },
+    });
+  }
+
   get sessionDetailsFormGroup(): FormGroup {
     return this.sidePanelForm.get('details') as FormGroup;
   }
 
   get markersFormGroup(): FormGroup {
     return this.sidePanelForm.get('markersArray') as FormGroup;
+  }
+
+  onSeeking(time: number) {
+    time = time * 1000;
+    this.AnnotationData.forEach((marker, id) => {
+      this.AnnotationData.get(id)?.forEach((annotation, i) => {
+        if (annotation.display == Display.Circle) {
+          return;
+        }
+        if (annotation.endTime == 0 && annotation.startTime > time) {
+          // delete unfinished annotation
+          this.AnnotationData.get(id)?.splice(i, 1);
+        }
+        return;
+      });
+    });
+  }
+
+  updateAnnotations(time: number, aData: DataPoint[]) {
+    time = time * 1000;
+    aData.forEach((dp, i) => {
+      if (dp.startTime < time && dp.endTime > time) {
+        dp.endTime = 0;
+        this.annotationService.remove(dp.id).subscribe({
+          error: (error) => {
+            this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.ANNOTATION_ERROR', '');
+            console.log(error);
+          },
+        });
+      }
+    });
+    aData = aData.filter((dp: DataPoint) => {
+      if (dp.endTime < time || dp.endTime == 0) {
+        return true;
+      }
+      //delete annotation via api
+      this.annotationService.remove(dp.id).subscribe({
+        error: (error) => {
+          this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.ANNOTATION_ERROR', '');
+          console.log(error);
+        },
+      });
+      return false;
+    });
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 100);
+    return aData;
   }
 }

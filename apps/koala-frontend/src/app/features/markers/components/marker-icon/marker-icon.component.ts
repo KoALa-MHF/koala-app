@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { MarkerService } from '../../../sessions/services/marker.service';
 import { MarkerIcon } from '../../../sessions/types/marker-icon.type';
+import { MarkerService } from '../../services/marker.service';
 
 @Component({
   selector: 'koala-marker-icon',
@@ -12,12 +12,12 @@ import { MarkerIcon } from '../../../sessions/types/marker-icon.type';
 export class MarkerIconComponent {
   @Input() set iconCode(value: string | null | undefined) {
     if (value) {
-      this.marker = this.markerService.getIconByCode(value);
+      this.marker = this.markersService.getIconByCode(value);
     } else {
       this.marker = null;
     }
   }
   marker: MarkerIcon | null | undefined;
 
-  constructor(private readonly markerService: MarkerService) {}
+  constructor(private readonly markersService: MarkerService) {}
 }
