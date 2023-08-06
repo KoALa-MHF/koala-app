@@ -841,7 +841,6 @@ export type SetPlayPositionMutation = {
   };
 };
 
-
 export type UpdateMarkerMutationVariables = Exact<{
   markerId: Scalars['Int']['input'];
   updateMarkerInput: UpdateMarkerInput;
@@ -863,7 +862,7 @@ export type UpdateMarkerMutation = {
     valueRangeTo?: number | null;
     createdAt: any;
     updatedAt: any;
-  }
+  };
 };
 
 export type UpdateAnnotationNoteMutationVariables = Exact<{
@@ -874,7 +873,6 @@ export type UpdateAnnotationNoteMutationVariables = Exact<{
 export type UpdateAnnotationNoteMutation = {
   __typename?: 'Mutation';
   updateAnnotation: { __typename?: 'Annotation'; id: number; note?: string | null };
-
 };
 
 export type GetSessionsQueryVariables = Exact<{ [key: string]: never }>;
@@ -1607,7 +1605,6 @@ export class SetPlayPositionGQL extends Apollo.Mutation<SetPlayPositionMutation,
     super(apollo);
   }
 }
-
 export const UpdateMarkerDocument = gql`
   mutation updateMarker($markerId: Int!, $updateMarkerInput: UpdateMarkerInput!) {
     updateMarker(id: $markerId, updateMarkerInput: $updateMarkerInput) {
@@ -1623,8 +1620,20 @@ export const UpdateMarkerDocument = gql`
       valueRangeTo
       createdAt
       updatedAt
-      }}`;
+    }
+  }
+`;
 
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateMarkerGQL extends Apollo.Mutation<UpdateMarkerMutation, UpdateMarkerMutationVariables> {
+  override document = UpdateMarkerDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const UpdateAnnotationNoteDocument = gql`
   mutation updateAnnotationNote($id: Int!, $note: String!) {
     updateAnnotation(id: $id, updateAnnotationInput: { note: $note }) {
@@ -1637,16 +1646,11 @@ export const UpdateAnnotationNoteDocument = gql`
 @Injectable({
   providedIn: 'root',
 })
-
-export class UpdateMarkerGQL extends Apollo.Mutation<UpdateMarkerMutation, UpdateMarkerMutationVariables> {
-  override document = UpdateMarkerDocument;
-
 export class UpdateAnnotationNoteGQL extends Apollo.Mutation<
   UpdateAnnotationNoteMutation,
   UpdateAnnotationNoteMutationVariables
 > {
   override document = UpdateAnnotationNoteDocument;
-
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
