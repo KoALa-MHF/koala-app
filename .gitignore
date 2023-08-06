@@ -43,7 +43,7 @@ koala-shm
 koala-wal
 database/koala.e2e
 uploads
-uploads-*
+uploads-e2e
 .env.development.json
 .env.*.json
 .env
