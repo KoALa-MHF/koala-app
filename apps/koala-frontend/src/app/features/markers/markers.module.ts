@@ -9,9 +9,17 @@ import { MarkerIconComponent } from './components/marker-icon/marker-icon.compon
 import { SliderModule } from 'primeng/slider';
 import { TableModule } from 'primeng/table';
 import { MarkerPreviewComponent } from './components/marker-preview/marker-preview.component';
-import { MarkersService } from './services/markers.service';
+import { MarkerService } from './services/marker.service';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
+import { ToolbarModule } from 'primeng/toolbar';
+import { DialogModule } from 'primeng/dialog';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { ColorPickerModule } from 'primeng/colorpicker';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { MarkerMaintainComponent } from './components/marker-maintain/marker-maintain.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +28,7 @@ import { DropdownModule } from 'primeng/dropdown';
     MarkerButtonComponent,
     MarkerIconComponent,
     MarkerPreviewComponent,
+    MarkerMaintainComponent,
   ],
   imports: [
     CommonModule,
@@ -29,15 +38,20 @@ import { DropdownModule } from 'primeng/dropdown';
     TableModule,
     InputTextModule,
     DropdownModule,
+    ToolbarModule,
+    DialogModule,
+    CheckboxModule,
+    InputTextareaModule,
+    InputNumberModule,
+    ColorPickerModule,
+    InputSwitchModule,
   ],
   exports: [
     MarkerOverviewListComponent,
     MarkerButtonComponent,
     MarkerIconComponent,
     MarkerPreviewComponent,
-  ],
-  providers: [
-    MarkersService,
+    MarkerMaintainComponent,
   ],
 })
 export class MarkersModule {}
