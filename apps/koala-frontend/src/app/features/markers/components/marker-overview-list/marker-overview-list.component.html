@@ -7,6 +7,7 @@
   [scrollable]="true"
   [globalFilterFields]="['name', 'abbreviation', 'description']"
   [style]="{ height: '100%' }"
+  editMode="row"
 >
   <ng-template pTemplate="caption">
     <div class="marker-search-area">
@@ -49,20 +50,23 @@
       <th style="width: 4rem">
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
-      <th pSortableColumn="name">
+      <th pSortableColumn="name" *ngIf="displayedColumns.name">
         {{ 'MARKER.OVERVIEW.COLUMN_TITLE.NAME' | translate }}
         <p-sortIcon field="name"></p-sortIcon>
         <p-columnFilter type="text" field="name" display="menu"></p-columnFilter>
       </th>
-      <th pSortableColumn="abbreviation">
+      <th pSortableColumn="abbreviation" *ngIf="displayedColumns.abbreviation">
         {{ 'MARKER.OVERVIEW.COLUMN_TITLE.ABBREVIATION' | translate }} <p-sortIcon field="abbreviation"></p-sortIcon>
       </th>
-      <th pSortableColumn="description">
+      <th *ngIf="displayedColumns.icon">
+        {{ 'MARKER.OVERVIEW.COLUMN_TITLE.ICON' | translate }}
+      </th>
+      <th pSortableColumn="description" *ngIf="displayedColumns.description">
         {{ 'MARKER.OVERVIEW.COLUMN_TITLE.DESCRIPTION' | translate }}
         <p-sortIcon field="description"></p-sortIcon>
         <p-columnFilter type="text" field="description" display="menu"></p-columnFilter>
       </th>
-      <th pSortableColumn="type">
+      <th pSortableColumn="type" *ngIf="displayedColumns.type">
         {{ 'MARKER.OVERVIEW.COLUMN_TITLE.TYPE' | translate }}
         <p-sortIcon field="type"></p-sortIcon>
         <p-columnFilter
@@ -88,24 +92,161 @@
           </ng-template>
         </p-columnFilter>
       </th>
+      <th pSortableColumn="type" *ngIf="displayedColumns.color">
+        {{ 'MARKER.OVERVIEW.COLUMN_TITLE.COLOR' | translate }}
+      </th>
+      <th pSortableColumn="type" *ngIf="displayedColumns.contentColor">
+        {{ 'MARKER.OVERVIEW.COLUMN_TITLE.CONTENT_COLOR' | translate }}
+      </th>
+      <th *ngIf="editEnabled"></th>
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-marker>
-    <tr>
+  <ng-template pTemplate="body" let-marker let-editing="editing">
+    <tr [pEditableRow]="marker">
       <td>
         <p-tableCheckbox [value]="marker"></p-tableCheckbox>
       </td>
-      <td>{{ marker.name }}</td>
-      <td>
-        <koala-marker-icon *ngIf="marker.icon" [iconCode]="marker.icon"></koala-marker-icon>
-        <span *ngIf="marker.icon && marker.abbreviation" style="margin-left: 10px"></span>
-        <span *ngIf="marker.abbreviation">{{ marker.abbreviation }}</span>
+      <td *ngIf="displayedColumns.name">
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input pInputText type="text" [value]="marker.name" (change)="onMarkerNameChange($event, marker)" />
+          </ng-template>
+          <ng-template pTemplate="output">
+            {{ marker.name }}
+          </ng-template>
+        </p-cellEditor>
       </td>
-      <td>{{ marker.description }}</td>
-      <td [ngSwitch]="marker.type">
+      <td *ngIf="displayedColumns.abbreviation">
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input
+              [attr.maxlength]="marker.type !== MarkerType.Event ? 6 : 2"
+              [value]="marker.abbreviation"
+              type="text"
+              (change)="onMarkerAbbreviationChange($event, marker)"
+              pInputText
+            />
+          </ng-template>
+          <ng-template pTemplate="output">{{ marker.abbreviation }}</ng-template>
+        </p-cellEditor>
+      </td>
+      <td *ngIf="displayedColumns.icon">
+        <p-cellEditor>
+          <ng-template pTemplate="input"
+            ><p-dropdown
+              placeholder="{{ 'MARKER.MAINTAIN.MARKER_ICON_INPUT_LABEL' | translate }}"
+              [options]="icons"
+              optionValue="code"
+              [style]="{ minWidth: '100%' }"
+              [ngModel]="marker.icon"
+              (onChange)="onMarkerIconChange($event, marker)"
+              [showClear]="true"
+            >
+              <ng-template let-item pTemplate="selectedItem">
+                <span>
+                  <koala-marker-icon [iconCode]="item.code"></koala-marker-icon>
+                  <span style="margin-left: 10px">{{ 'ICONS.' + item.name | translate }}</span>
+                </span>
+              </ng-template>
+              <ng-template let-object pTemplate="item">
+                <span>
+                  <koala-marker-icon [iconCode]="object.code"></koala-marker-icon>
+                  <span style="margin-left: 10px">{{ 'ICONS.' + object.name | translate }}</span>
+                </span>
+              </ng-template>
+            </p-dropdown></ng-template
+          >
+          <ng-template pTemplate="output"><koala-marker-icon [iconCode]="marker.icon"></koala-marker-icon></ng-template>
+        </p-cellEditor>
+      </td>
+      <td *ngIf="displayedColumns.description">
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input
+              pInputText
+              type="text"
+              [value]="marker.description"
+              (change)="onMarkerDescriptionChange($event, marker)"
+            />
+          </ng-template>
+          <ng-template pTemplate="output">
+            {{ marker.description }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td [ngSwitch]="marker.type" *ngIf="displayedColumns.type">
         <span *ngSwitchCase="'EVENT'">{{ 'MARKER.TYPE.EVENT' | translate }}</span>
         <span *ngSwitchCase="'RANGE'">{{ 'MARKER.TYPE.RANGE' | translate }}</span>
         <span *ngSwitchCase="'SLIDER'">{{ 'MARKER.TYPE.SLIDER' | translate }}</span>
+      </td>
+      <td *ngIf="displayedColumns.color">
+        <p-cellEditor>
+          <ng-template pTemplate="input"
+            ><p-colorPicker
+              [ngModel]="marker.color"
+              (ngModelChange)="onMarkerColorChange($event, marker)"
+              [disabled]="false"
+            ></p-colorPicker
+          ></ng-template>
+          <ng-template pTemplate="output">
+            <p-colorPicker [ngModel]="marker.color" [disabled]="true"></p-colorPicker>
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td *ngIf="displayedColumns.contentColor">
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <p-inputSwitch
+              [trueValue]="'#000000'"
+              [falseValue]="'#FFFFFF'"
+              [ngModel]="marker.contentColor"
+              (ngModelChange)="onMarkerContentColorChange($event, marker)"
+              [disabled]="false"
+            ></p-inputSwitch>
+          </ng-template>
+          <ng-template pTemplate="output">
+            <p-inputSwitch
+              [trueValue]="'#000000'"
+              [falseValue]="'#FFFFFF'"
+              [ngModel]="marker.contentColor"
+              [disabled]="true"
+            ></p-inputSwitch>
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td *ngIf="editEnabled">
+        <div class="flex align-items-center justify-content-center gap-2">
+          <button
+            *ngIf="!editing"
+            pButton
+            pRipple
+            type="button"
+            pInitEditableRow
+            icon="pi pi-pencil"
+            (click)="onRowEditInit(marker)"
+            class="p-button-rounded p-button-text"
+          ></button>
+          <button
+            *ngIf="editing"
+            pButton
+            pRipple
+            type="button"
+            pSaveEditableRow
+            icon="pi pi-check"
+            (click)="onRowEditSave(marker)"
+            class="p-button-rounded p-button-text p-button-success mr-2"
+          ></button>
+          <button
+            *ngIf="editing"
+            pButton
+            pRipple
+            type="button"
+            pCancelEditableRow
+            icon="pi pi-times"
+            (click)="onRowEditCancel(marker)"
+            class="p-button-rounded p-button-text p-button-danger"
+          ></button>
+        </div>
       </td>
     </tr>
   </ng-template>

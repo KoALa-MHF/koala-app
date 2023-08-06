@@ -49,6 +49,7 @@ export class MarkersService {
       await this.markersRepository.update(id, {
         name: updateMarkerInput.name,
         abbreviation: updateMarkerInput.abbreviation,
+        icon: updateMarkerInput.icon,
         description: updateMarkerInput.description,
         type: updateMarkerInput.type,
         color: updateMarkerInput.color,
