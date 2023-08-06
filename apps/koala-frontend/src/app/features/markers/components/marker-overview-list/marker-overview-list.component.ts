@@ -3,6 +3,9 @@ import { Table } from 'primeng/table';
 import { Marker } from '../../../sessions/types/marker.entity';
 import { TranslateService } from '@ngx-translate/core';
 import { FormGroup } from '@angular/forms';
+import { MessageService } from 'primeng/api';
+import { MarkerType } from '../../../../graphql/generated/graphql';
+import { MarkerService } from '../../services/marker.service';
 
 export interface DisplayedColumns {
   name: boolean;
@@ -10,7 +13,8 @@ export interface DisplayedColumns {
   color: boolean;
   contentColor: boolean;
   type: boolean;
-  abbreviation_icon: boolean;
+  abbreviation: boolean;
+  icon: boolean;
 }
 
 @Component({
@@ -32,7 +36,8 @@ export class MarkerOverviewListComponent implements OnInit {
     color: false,
     contentColor: false,
     type: false,
-    abbreviation_icon: false,
+    abbreviation: false,
+    icon: false,
   };
 
   @Output() selectedMarkersChange = new EventEmitter();
@@ -47,6 +52,9 @@ export class MarkerOverviewListComponent implements OnInit {
   createDialogVisible = false;
 
   clonedMarkers: { [n: number]: Marker } = {};
+  MarkerType = MarkerType;
+
+  icons = this.markerService.getAllIcons();
 
   get previewMarker(): Marker {
     return {
@@ -64,7 +72,11 @@ export class MarkerOverviewListComponent implements OnInit {
     };
   }
 
-  constructor(private readonly translateService: TranslateService) {}
+  constructor(
+    private readonly translateService: TranslateService,
+    private readonly messageService: MessageService,
+    private readonly markerService: MarkerService
+  ) {}
 
   ngOnInit(): void {
     this.types = [
@@ -104,6 +116,14 @@ export class MarkerOverviewListComponent implements OnInit {
     this.clonedMarkers[marker.id].description = event.target.value;
   }
 
+  onMarkerAbbreviationChange(event: any, marker: Marker) {
+    this.clonedMarkers[marker.id].abbreviation = event.target.value;
+  }
+
+  onMarkerIconChange(event: any, marker: Marker) {
+    this.clonedMarkers[marker.id].icon = event.value;
+  }
+
   onMarkerNameChange(event: any, marker: Marker) {
     this.clonedMarkers[marker.id].name = event.target.value;
   }
@@ -122,6 +142,25 @@ export class MarkerOverviewListComponent implements OnInit {
 
   onRowEditSave(marker: Marker) {
     //trigger save in host page
+    const changedMarker = this.clonedMarkers[marker.id];
+    if (!changedMarker.icon && !changedMarker.abbreviation) {
+      //no save possible
+      this.messageService.add({
+        severity: 'success',
+        summary: this.translateService.instant('MARKER.MAINTAIN.ABBREVIATION_ICON_ERROR_MESSAGE_TITLE'),
+        detail: this.translateService.instant('MARKER.MAINTAIN.ABBREVIATION_ICON_ERROR_MESSAGE'),
+      });
+    }
+
+    if (!changedMarker.name) {
+      //no save possible
+      this.messageService.add({
+        severity: 'success',
+        summary: this.translateService.instant('SESSION.MAINTAIN.NAME_ERROR_MESSAGE_TITLE'),
+        detail: this.translateService.instant('SESSION.MAINTAIN.NAME_ERROR_MESSAGE'),
+      });
+    }
+
     this.markerEdit.emit(this.clonedMarkers[marker.id]);
     delete this.clonedMarkers[marker.id];
   }
