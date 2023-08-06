@@ -4,6 +4,15 @@ import { Marker } from '../../../sessions/types/marker.entity';
 import { TranslateService } from '@ngx-translate/core';
 import { FormGroup } from '@angular/forms';
 
+export interface DisplayedColumns {
+  name: boolean;
+  description: boolean;
+  color: boolean;
+  contentColor: boolean;
+  type: boolean;
+  abbreviation_icon: boolean;
+}
+
 @Component({
   selector: 'koala-marker-overview-list',
   templateUrl: './marker-overview-list.component.html',
@@ -17,6 +26,14 @@ export class MarkerOverviewListComponent implements OnInit {
   @Input() markerDataForm: FormGroup = new FormGroup([]);
   @Input() createEnabled = false;
   @Input() editEnabled = false;
+  @Input() displayedColumns: DisplayedColumns = {
+    name: false,
+    description: false,
+    color: false,
+    contentColor: false,
+    type: false,
+    abbreviation_icon: false,
+  };
 
   @Output() selectedMarkersChange = new EventEmitter();
   @Output() markerCreate = new EventEmitter();
@@ -85,6 +102,10 @@ export class MarkerOverviewListComponent implements OnInit {
 
   onMarkerDescriptionChange(event: any, marker: Marker) {
     this.clonedMarkers[marker.id].description = event.target.value;
+  }
+
+  onMarkerNameChange(event: any, marker: Marker) {
+    this.clonedMarkers[marker.id].name = event.target.value;
   }
 
   onRowEditInit(marker: Marker) {

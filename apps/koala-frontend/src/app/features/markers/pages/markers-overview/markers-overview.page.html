@@ -3,6 +3,14 @@
   [markerDataForm]="maintainMarkerForm"
   [createEnabled]="true"
   [editEnabled]="true"
+  [displayedColumns]="{
+    name: true,
+    description: true,
+    color: true,
+    contentColor: true,
+    type: true,
+    abbreviation_icon: true,
+  }"
   (markerCreate)="onCreateMarker()"
   (markerEdit)="onEditMarker($event)"
   (resetMarkerData)="onResetMarkerData()"

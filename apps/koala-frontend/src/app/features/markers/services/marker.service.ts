@@ -48,6 +48,7 @@ export class MarkerService {
       .mutate({
         markerId: id,
         updateMarkerInput: {
+          name: marker.name,
           description: marker.description,
           color: marker.color,
           contentColor: marker.contentColor,

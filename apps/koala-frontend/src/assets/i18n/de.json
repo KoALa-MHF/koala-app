@@ -343,7 +343,9 @@
         "NAME": "Name",
         "ABBREVIATION": "Abkürzung/Icon",
         "DESCRIPTION": "Beschreibung",
-        "TYPE": "Markertyp"
+        "TYPE": "Markertyp",
+        "CONTENT_COLOR": "Scharzer Text",
+        "COLOR": "Farbe"
       },
       "ACTIONS": {
         "CREATE": "Marker Anlegen",

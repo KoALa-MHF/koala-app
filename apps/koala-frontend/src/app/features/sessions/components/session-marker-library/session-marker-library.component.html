@@ -12,7 +12,18 @@
   [modal]="true"
   [style]="{ width: '70vw' }"
 >
-  <koala-marker-overview-list [markers]="markers" [(selectedMarkers)]="selectedMarkers"></koala-marker-overview-list>
+  <koala-marker-overview-list
+    [markers]="markers"
+    [(selectedMarkers)]="selectedMarkers"
+    [displayedColumns]="{
+    name: true,
+    description: true,
+    color: false,
+    contentColor: false,
+    type: true,
+    abbreviation_icon: true,
+  }"
+  ></koala-marker-overview-list>
   <p-button
     (click)="onMarkerAdd()"
     [style]="{ 'margin-top': '2vw' }"

@@ -50,20 +50,20 @@
       <th style="width: 4rem">
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
-      <th pSortableColumn="name">
+      <th pSortableColumn="name" *ngIf="displayedColumns.name">
         {{ 'MARKER.OVERVIEW.COLUMN_TITLE.NAME' | translate }}
         <p-sortIcon field="name"></p-sortIcon>
         <p-columnFilter type="text" field="name" display="menu"></p-columnFilter>
       </th>
-      <th pSortableColumn="abbreviation">
+      <th pSortableColumn="abbreviation" *ngIf="displayedColumns.abbreviation_icon">
         {{ 'MARKER.OVERVIEW.COLUMN_TITLE.ABBREVIATION' | translate }} <p-sortIcon field="abbreviation"></p-sortIcon>
       </th>
-      <th pSortableColumn="description">
+      <th pSortableColumn="description" *ngIf="displayedColumns.description">
         {{ 'MARKER.OVERVIEW.COLUMN_TITLE.DESCRIPTION' | translate }}
         <p-sortIcon field="description"></p-sortIcon>
         <p-columnFilter type="text" field="description" display="menu"></p-columnFilter>
       </th>
-      <th pSortableColumn="type">
+      <th pSortableColumn="type" *ngIf="displayedColumns.type">
         {{ 'MARKER.OVERVIEW.COLUMN_TITLE.TYPE' | translate }}
         <p-sortIcon field="type"></p-sortIcon>
         <p-columnFilter
@@ -89,6 +89,12 @@
           </ng-template>
         </p-columnFilter>
       </th>
+      <th pSortableColumn="type" *ngIf="displayedColumns.color">
+        {{ 'MARKER.OVERVIEW.COLUMN_TITLE.COLOR' | translate }}
+      </th>
+      <th pSortableColumn="type" *ngIf="displayedColumns.contentColor">
+        {{ 'MARKER.OVERVIEW.COLUMN_TITLE.CONTENT_COLOR' | translate }}
+      </th>
       <th *ngIf="editEnabled"></th>
     </tr>
   </ng-template>
@@ -97,13 +103,22 @@
       <td>
         <p-tableCheckbox [value]="marker"></p-tableCheckbox>
       </td>
-      <td>{{ marker.name }}</td>
-      <td>
+      <td *ngIf="displayedColumns.name">
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input pInputText type="text" [value]="marker.name" (change)="onMarkerNameChange($event, marker)" />
+          </ng-template>
+          <ng-template pTemplate="output">
+            {{ marker.name }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td *ngIf="displayedColumns.abbreviation_icon">
         <koala-marker-icon *ngIf="marker.icon" [iconCode]="marker.icon"></koala-marker-icon>
         <span *ngIf="marker.icon && marker.abbreviation" style="margin-left: 10px"></span>
         <span *ngIf="marker.abbreviation">{{ marker.abbreviation }}</span>
       </td>
-      <td>
+      <td *ngIf="displayedColumns.description">
         <p-cellEditor>
           <ng-template pTemplate="input">
             <input
@@ -118,11 +133,13 @@
           </ng-template>
         </p-cellEditor>
       </td>
-      <td [ngSwitch]="marker.type">
+      <td [ngSwitch]="marker.type" *ngIf="displayedColumns.type">
         <span *ngSwitchCase="'EVENT'">{{ 'MARKER.TYPE.EVENT' | translate }}</span>
         <span *ngSwitchCase="'RANGE'">{{ 'MARKER.TYPE.RANGE' | translate }}</span>
         <span *ngSwitchCase="'SLIDER'">{{ 'MARKER.TYPE.SLIDER' | translate }}</span>
       </td>
+      <td *ngIf="displayedColumns.color">{{ marker.color }}</td>
+      <td *ngIf="displayedColumns.contentColor">{{ marker.contentColor }}</td>
       <td *ngIf="editEnabled">
         <div class="flex align-items-center justify-content-center gap-2">
           <button
