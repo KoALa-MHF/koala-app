@@ -841,6 +841,16 @@ export type SetPlayPositionMutation = {
   };
 };
 
+export type UpdateAnnotationNoteMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  note: Scalars['String']['input'];
+}>;
+
+export type UpdateAnnotationNoteMutation = {
+  __typename?: 'Mutation';
+  updateAnnotation: { __typename?: 'Annotation'; id: number; note?: string | null };
+};
+
 export type GetSessionsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetSessionsQuery = {
@@ -929,6 +939,7 @@ export type GetOneSessionQuery = {
       annotations: Array<{
         __typename?: 'Annotation';
         id: number;
+        note?: string | null;
         end?: number | null;
         start: number;
         value?: number | null;
@@ -1571,6 +1582,28 @@ export class SetPlayPositionGQL extends Apollo.Mutation<SetPlayPositionMutation,
     super(apollo);
   }
 }
+export const UpdateAnnotationNoteDocument = gql`
+  mutation updateAnnotationNote($id: Int!, $note: String!) {
+    updateAnnotation(id: $id, updateAnnotationInput: { note: $note }) {
+      id
+      note
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateAnnotationNoteGQL extends Apollo.Mutation<
+  UpdateAnnotationNoteMutation,
+  UpdateAnnotationNoteMutationVariables
+> {
+  override document = UpdateAnnotationNoteDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const GetSessionsDocument = gql`
   query GetSessions {
     sessions {
@@ -1685,6 +1718,7 @@ export const GetOneSessionDocument = gql`
         }
         annotations {
           id
+          note
           end
           start
           value

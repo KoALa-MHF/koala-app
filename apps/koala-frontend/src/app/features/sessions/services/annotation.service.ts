@@ -1,11 +1,17 @@
 import { Injectable } from '@angular/core';
-import { CreateAnnotationGQL, CreateAnnotationInput, DeleteAnnotationGQL } from '../../../graphql/generated/graphql';
+import {
+  CreateAnnotationGQL,
+  CreateAnnotationInput,
+  DeleteAnnotationGQL,
+  UpdateAnnotationNoteGQL,
+} from '../../../graphql/generated/graphql';
 
 @Injectable()
 export class AnnotationService {
   constructor(
     private readonly createAnnotationGQL: CreateAnnotationGQL,
-    private readonly deleteAnnotationGQL: DeleteAnnotationGQL
+    private readonly deleteAnnotationGQL: DeleteAnnotationGQL,
+    private readonly updateAnnotationNoteGQL: UpdateAnnotationNoteGQL
   ) {}
 
   create(annotation: CreateAnnotationInput) {
@@ -14,5 +20,9 @@ export class AnnotationService {
 
   remove(id: number) {
     return this.deleteAnnotationGQL.mutate({ id });
+  }
+
+  updateNote(id: number, note: string) {
+    return this.updateAnnotationNoteGQL.mutate({ id, note });
   }
 }

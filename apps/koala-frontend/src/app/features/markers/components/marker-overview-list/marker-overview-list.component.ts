@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angu
 import { Table } from 'primeng/table';
 import { Marker } from '../../../sessions/types/marker.entity';
 import { TranslateService } from '@ngx-translate/core';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'koala-marker-overview-list',
@@ -13,11 +14,34 @@ import { TranslateService } from '@ngx-translate/core';
 export class MarkerOverviewListComponent implements OnInit {
   @Input() markers!: Marker[];
   @Input() selectedMarkers: Marker[] = [];
+  @Input() markerDataForm: FormGroup = new FormGroup([]);
+  @Input() createEnabled = false;
+
   @Output() selectedMarkersChange = new EventEmitter();
+  @Output() markerCreate = new EventEmitter();
+  @Output() resetMarkerData = new EventEmitter();
 
   @ViewChild('markerOverviewTable') markerOverviewTable: Table | undefined;
 
   types!: any[];
+
+  createDialogVisible = false;
+
+  get previewMarker(): Marker {
+    return {
+      id: 0,
+      description: this.markerDataForm?.value.description,
+      name: this.markerDataForm?.value.name,
+      type: this.markerDataForm?.value.type,
+      abbreviation: this.markerDataForm?.value.abbreviation,
+      color: this.markerDataForm?.value.color,
+      contentColor: this.markerDataForm?.value.contentColor ? '#000000' : '#FFFFFF',
+      icon: this.markerDataForm?.value.icon,
+      visible: true,
+      valueRangeFrom: this.markerDataForm?.value.valueRangeFrom,
+      valueRangeTo: this.markerDataForm?.value.valueRangeTo,
+    };
+  }
 
   constructor(private readonly translateService: TranslateService) {}
 
@@ -29,8 +53,21 @@ export class MarkerOverviewListComponent implements OnInit {
     ];
   }
 
+  onMarkerCreateRequested() {
+    this.createDialogVisible = true;
+  }
+
   onSelectionChanged(selectedMarkers: Marker[]) {
     this.selectedMarkersChange.emit(selectedMarkers);
+  }
+
+  onFormReset() {
+    this.resetMarkerData.emit();
+  }
+
+  onCreateMarker() {
+    this.markerCreate.emit();
+    this.createDialogVisible = false;
   }
 
   clear(table: Table, inputField: any) {

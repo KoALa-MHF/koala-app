@@ -7,12 +7,14 @@ import {
   SimpleChanges,
   Output,
   EventEmitter,
+  ViewChild,
 } from '@angular/core';
 import { Marker } from '../../types/marker.entity';
-import { MarkerService } from '../../services/marker.service';
+import { MarkerService } from '../../../markers/services/marker.service';
 import { ConfirmationService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 import * as d3 from 'd3';
+import { AnnotationDetail } from '../annotation-detail/annotation-detail.component';
 
 export enum Display {
   Rect = 'rect',
@@ -21,6 +23,7 @@ export enum Display {
 
 export interface DataPoint {
   id: number;
+  note?: string;
   strength: number;
   display: Display;
   startTime: number;
@@ -47,11 +50,16 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input() deactivateAnnotationDelete = false;
 
   @Output() deleteAnnotations = new EventEmitter<Marker>();
+  @Output() annotationComment = new EventEmitter<AnnotationDetail>();
 
   private sliderHeight = 2.5;
   d3Container = 'd3-container-';
   d3Labels = 'd3-labels-';
   d3tooltip: any;
+
+  @ViewChild('annotationDetailOverlay') annotationDetailOverlay: any;
+  annotationDetailOverlayStyle = { top: '0px', left: '0px' };
+  selectedDataPoint: DataPoint | null = null;
 
   constructor(
     private readonly markerService: MarkerService,
@@ -75,6 +83,14 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
         this.annotationData?.forEach((_, row) => {
           this.drawAnnotations(row, i, this.markers[i]);
           i++;
+        });
+
+        this.annotationData?.forEach((data) => {
+          data.forEach((annotation) => {
+            if (this.selectedDataPoint && annotation.id === this.selectedDataPoint.id) {
+              this.selectedDataPoint = annotation;
+            }
+          });
         });
       }
     }
@@ -157,21 +173,19 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
     const posY = this.getPositionY(index);
     const rowElem = svg.select('g#row_' + row);
     const mouseover = (d: any, ev: any) => {
-      this.drawToolTip().style('opacity', 1);
       d3.select(ev.target).style('stroke', 'black').style('opacity', 1);
     };
-    const mousemove = (d: any, ev: any) => {
-      const htmlText = d.endTime ? `${d.startTime / 1000}s - ${d.endTime / 1000}s` : `${d.startTime / 1000}s`;
+    const click = (d: any, ev: any) => {
+      this.annotationDetailOverlay.show(null, ev.target);
+      this.annotationDetailOverlayStyle.top = ev.target.getBoundingClientRect().y + 10 + 'px';
+      this.annotationDetailOverlayStyle.left = ev.target.getBoundingClientRect().x + 'px';
 
-      this.drawToolTip()
-        .html(htmlText)
-        .style('left', d3.pointer(ev, ev.target)[0] + 50 + 'px')
-        .style('top', d3.pointer(ev, ev.target)[1] + 'px');
+      this.selectedDataPoint = d;
     };
     const mouseleave = (d: any, ev: any) => {
-      this.drawToolTip().style('opacity', 0).html('');
       d3.select(ev.target).style('stroke', 'none').style('opacity', 1);
     };
+
     rowElem
       .selectAll<SVGRectElement, DataPoint>('*')
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -191,9 +205,9 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
             .attr('height', (d: DataPoint) => this.getRectHeight(d, m))
             .attr('id', (d: DataPoint) => `row_${row}_${d.id}`)
             .attr('fill', (d: DataPoint) => d.color)
-            .on('mousemove', (ev, d) => mousemove(d, ev))
             .on('mouseleave', (ev, d) => mouseleave(d, ev))
-            .on('mouseover', (ev, d) => mouseover(d, ev)),
+            .on('mouseover', (ev, d) => mouseover(d, ev))
+            .on('click', (ev, d) => click(d, ev)),
         (update) =>
           update.call((update) => update.transition(trans).attr('width', (d: DataPoint) => this.getRectWidth(d))),
         (exit) => exit.call((update) => update.transition(trans).attr('width', 0).attr('height', 0).remove())
@@ -338,5 +352,9 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
         this.deleteAnnotations.emit(marker);
       },
     });
+  }
+
+  onAnnotationDetailSave(annotationDetail: AnnotationDetail) {
+    this.annotationComment.emit(annotationDetail);
   }
 }
