@@ -841,6 +841,30 @@ export type SetPlayPositionMutation = {
   };
 };
 
+export type UpdateMarkerMutationVariables = Exact<{
+  markerId: Scalars['Int']['input'];
+  updateMarkerInput: UpdateMarkerInput;
+}>;
+
+export type UpdateMarkerMutation = {
+  __typename?: 'Mutation';
+  updateMarker: {
+    __typename?: 'Marker';
+    id: number;
+    type: MarkerType;
+    name: string;
+    abbreviation?: string | null;
+    description?: string | null;
+    color: string;
+    icon?: string | null;
+    contentColor: string;
+    valueRangeFrom?: number | null;
+    valueRangeTo?: number | null;
+    createdAt: any;
+    updatedAt: any;
+  };
+};
+
 export type UpdateAnnotationNoteMutationVariables = Exact<{
   id: Scalars['Int']['input'];
   note: Scalars['String']['input'];
@@ -1453,7 +1477,6 @@ export const SetPlayModeDocument = gql`
       playPosition
       liveSessionStart
       code
-      isAudioSession
       media {
         id
         name
@@ -1577,6 +1600,35 @@ export const SetPlayPositionDocument = gql`
 })
 export class SetPlayPositionGQL extends Apollo.Mutation<SetPlayPositionMutation, SetPlayPositionMutationVariables> {
   override document = SetPlayPositionDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateMarkerDocument = gql`
+  mutation updateMarker($markerId: Int!, $updateMarkerInput: UpdateMarkerInput!) {
+    updateMarker(id: $markerId, updateMarkerInput: $updateMarkerInput) {
+      id
+      type
+      name
+      abbreviation
+      description
+      color
+      icon
+      contentColor
+      valueRangeFrom
+      valueRangeTo
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateMarkerGQL extends Apollo.Mutation<UpdateMarkerMutation, UpdateMarkerMutationVariables> {
+  override document = UpdateMarkerDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
