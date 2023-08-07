@@ -17,14 +17,12 @@ export class SessionsSeeder implements SeederInterface<Session> {
   async seed(options: SeederOptions): Promise<Session[]> {
     const sessions: Partial<Session>[] = [];
 
-    for (let i = 0; i < SessionsData.length; i++) {
-      const sessionData = SessionsData[i];
-
+    for (const sessionData of SessionsData) {
       const userSession = new UserSession();
       userSession.ownerId = sessionData.owner.id;
 
       const session = {
-        ...SessionsData[i],
+        ...sessionData,
         toolbars: [
           new Toolbar(),
         ],
