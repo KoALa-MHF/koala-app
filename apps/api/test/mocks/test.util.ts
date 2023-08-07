@@ -9,6 +9,7 @@ import { SeedModule } from '../../src/app/seed/seed.module';
 import { SeedService } from '../../src/app/seed/seed.service';
 import { JwtService } from '@nestjs/jwt';
 import { JwtServiceMock } from './services/JwtService.mock';
+import { AuthGuard as PassportAuthGuard } from '@nestjs/passport';
 
 export async function setupTestApplication(): Promise<INestApplication> {
   const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -17,6 +18,8 @@ export async function setupTestApplication(): Promise<INestApplication> {
       AppModule,
     ],
   })
+    .overrideGuard(PassportAuthGuard('jwt'))
+    .useValue(new AuthGuardMock())
     .overrideGuard(AuthGuard)
     .useValue(new AuthGuardMock())
     .overrideProvider(JwtService)
