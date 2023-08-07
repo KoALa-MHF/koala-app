@@ -1,7 +1,8 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
 import { IsEnum, IsNotEmpty, IsOptional, ValidateIf } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '../../core/base.entity';
+import { User } from '../../users/entities/user.entity';
 
 export enum MarkerType {
   RANGE = 'range',
@@ -73,4 +74,12 @@ export class Marker extends BaseEntity {
   @ValidateIf((o) => o.type === MarkerType.SLIDER)
   @IsNotEmpty()
   valueRangeTo: number;
+
+  @ManyToOne(() => User)
+  @Field(() => User, { description: 'Associated User' })
+  @IsNotEmpty()
+  owner: User;
+
+  @Column()
+  ownerId: number;
 }

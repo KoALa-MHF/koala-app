@@ -3,14 +3,21 @@ import { MarkersService } from './markers.service';
 import { Marker } from './entities/marker.entity';
 import { CreateMarkerInput } from './dto/create-marker.input';
 import { UpdateMarkerInput } from './dto/update-marker.input';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from '../core/guards/auth.guard';
+import { RegisteredUserGuard } from '../core/guards/registerd-user.guard';
+import { CurrentUser } from '../core/decorators/user.decorator';
+import { User } from '../users/entities/user.entity';
 
 @Resolver(() => Marker)
+@UseGuards(AuthGuard)
 export class MarkersResolver {
   constructor(private readonly markersService: MarkersService) {}
 
   @Mutation(() => Marker)
-  createMarker(@Args('createMarkerInput') createMarkerInput: CreateMarkerInput) {
-    return this.markersService.create(createMarkerInput);
+  @UseGuards(RegisteredUserGuard)
+  createMarker(@Args('createMarkerInput') createMarkerInput: CreateMarkerInput, @CurrentUser() user: User) {
+    return this.markersService.create(createMarkerInput, user);
   }
 
   @Query(
@@ -37,15 +44,18 @@ export class MarkersResolver {
   }
 
   @Mutation(() => Marker)
+  @UseGuards(RegisteredUserGuard)
   updateMarker(
     @Args('id', { type: () => Int }) id: number,
-    @Args('updateMarkerInput') updateMarkerInput: UpdateMarkerInput
+    @Args('updateMarkerInput') updateMarkerInput: UpdateMarkerInput,
+    @CurrentUser() user: User
   ) {
-    return this.markersService.update(id, updateMarkerInput);
+    return this.markersService.update(id, updateMarkerInput, user);
   }
 
   @Mutation(() => Marker)
-  removeMarker(@Args('id', { type: () => Int }) id: number) {
-    return this.markersService.remove(id);
+  @UseGuards(RegisteredUserGuard)
+  removeMarker(@Args('id', { type: () => Int }) id: number, @CurrentUser() user: User) {
+    return this.markersService.remove(id, user);
   }
 }
