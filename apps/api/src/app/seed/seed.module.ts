@@ -11,12 +11,15 @@ import { UserSession } from '../user-sessions/entities/user-session.entity';
 import { Annotation } from '../annotations/entities/annotation.entity';
 import { Marker } from '../markers/entities/marker.entity';
 import { Toolbar } from '../toolbars/entities/toolbar.entity';
+import { Media } from '../media/entities/media.entity';
+import { MediaSeeder } from './seeders/media.seeder';
 
 @Module({
   imports: [
     DatabaseModule,
     TypeOrmModule.forFeature([
       User,
+      Media,
       Session,
       UserSession,
       Annotation,
@@ -27,6 +30,7 @@ import { Toolbar } from '../toolbars/entities/toolbar.entity';
   controllers: [],
   providers: [
     SeedService,
+    MediaSeeder,
     UsersSeeder,
     SessionsSeeder,
     UserSessionsSeeder,
