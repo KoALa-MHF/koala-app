@@ -19,7 +19,9 @@
         "inlineStyleLanguage": "scss",
         "assets": [
           "apps/koala-frontend/src/favicon.ico",
-          "apps/koala-frontend/src/assets"
+          "apps/koala-frontend/src/assets",
+          "apps/koala-frontend/src/about.html",
+          "apps/koala-frontend/src/imprint.html"
         ],
         "styles": [
           "apps/koala-frontend/src/styles.scss",
