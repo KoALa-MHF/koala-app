@@ -1,10 +1,11 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateMarkerInput } from './dto/create-marker.input';
 import { UpdateMarkerInput } from './dto/update-marker.input';
 import { Marker } from './entities/marker.entity';
 import { In } from 'typeorm';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class MarkersService {
@@ -13,18 +14,19 @@ export class MarkersService {
     private markersRepository: Repository<Marker>
   ) {}
 
-  create(createMarkerInput: CreateMarkerInput) {
-    const newMarker = this.markersRepository.create();
-
-    newMarker.name = createMarkerInput.name;
-    newMarker.abbreviation = createMarkerInput.abbreviation;
-    newMarker.description = createMarkerInput.description;
-    newMarker.type = createMarkerInput.type;
-    newMarker.color = createMarkerInput.color;
-    newMarker.contentColor = createMarkerInput.contentColor;
-    newMarker.icon = createMarkerInput.icon;
-    newMarker.valueRangeFrom = createMarkerInput.valueRangeFrom;
-    newMarker.valueRangeTo = createMarkerInput.valueRangeTo;
+  create(createMarkerInput: CreateMarkerInput, owner: User) {
+    const newMarker = this.markersRepository.create({
+      name: createMarkerInput.name,
+      abbreviation: createMarkerInput.abbreviation,
+      description: createMarkerInput.description,
+      type: createMarkerInput.type,
+      color: createMarkerInput.color,
+      contentColor: createMarkerInput.contentColor,
+      icon: createMarkerInput.icon,
+      valueRangeFrom: createMarkerInput.valueRangeFrom,
+      valueRangeTo: createMarkerInput.valueRangeTo,
+      owner,
+    });
 
     return this.markersRepository.save(newMarker);
   }
@@ -40,31 +42,53 @@ export class MarkersService {
     return this.markersRepository.find(query);
   }
 
-  findOne(id: number) {
-    return this.markersRepository.findOneByOrFail({ id });
-  }
+  async findOne(id: number) {
+    const marker = await this.markersRepository.findOneBy({ id });
 
-  async update(id: number, updateMarkerInput: UpdateMarkerInput) {
-    try {
-      await this.markersRepository.update(id, {
-        name: updateMarkerInput.name,
-        abbreviation: updateMarkerInput.abbreviation,
-        icon: updateMarkerInput.icon,
-        description: updateMarkerInput.description,
-        type: updateMarkerInput.type,
-        color: updateMarkerInput.color,
-        contentColor: updateMarkerInput.contentColor,
-        valueRangeFrom: updateMarkerInput.valueRangeFrom,
-        valueRangeTo: updateMarkerInput.valueRangeTo,
-      });
-
-      return this.findOne(id);
-    } catch (error) {
-      throw new BadRequestException(error.detail);
+    if (!marker) {
+      throw new NotFoundException();
     }
+
+    return marker;
   }
 
-  remove(id: number) {
-    return this.markersRepository.delete(id);
+  async findOneOfOwner(id: number, owner: User): Promise<Marker> {
+    const marker = await this.markersRepository.findOne({
+      where: {
+        id,
+        ownerId: owner.id,
+      },
+    });
+
+    if (!marker) {
+      throw new NotFoundException();
+    }
+
+    return marker;
+  }
+
+  async update(id: number, updateMarkerInput: UpdateMarkerInput, owner: User) {
+    const marker = await this.findOneOfOwner(id, owner);
+
+    this.markersRepository.merge(marker, {
+      name: updateMarkerInput.name,
+      abbreviation: updateMarkerInput.abbreviation,
+      icon: updateMarkerInput.icon,
+      description: updateMarkerInput.description,
+      type: updateMarkerInput.type,
+      color: updateMarkerInput.color,
+      contentColor: updateMarkerInput.contentColor,
+      valueRangeFrom: updateMarkerInput.valueRangeFrom,
+      valueRangeTo: updateMarkerInput.valueRangeTo,
+    });
+
+    return this.markersRepository.save(marker);
+  }
+
+  async remove(id: number, owner: User) {
+    const marker = await this.findOneOfOwner(id, owner);
+    await this.markersRepository.remove(marker);
+    marker.id = id;
+    return marker;
   }
 }
