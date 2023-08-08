@@ -6,6 +6,7 @@ import { FormGroup } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { MarkerType } from '../../../../graphql/generated/graphql';
 import { MarkerService } from '../../services/marker.service';
+import { AuthService } from '../../../auth/services/auth.service';
 
 export interface DisplayedColumns {
   name: boolean;
@@ -56,6 +57,8 @@ export class MarkerOverviewListComponent implements OnInit {
 
   icons = this.markerService.getAllIcons();
 
+  userId = '0';
+
   get previewMarker(): Marker {
     return {
       id: 0,
@@ -75,7 +78,8 @@ export class MarkerOverviewListComponent implements OnInit {
   constructor(
     private readonly translateService: TranslateService,
     private readonly messageService: MessageService,
-    private readonly markerService: MarkerService
+    private readonly markerService: MarkerService,
+    private readonly authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -84,6 +88,12 @@ export class MarkerOverviewListComponent implements OnInit {
       { label: this.translateService.instant('MARKER.TYPE.RANGE'), value: 'RANGE' },
       { label: this.translateService.instant('MARKER.TYPE.SLIDER'), value: 'SLIDER' },
     ];
+
+    this.authService.me().subscribe({
+      next: (data) => {
+        this.userId = data.id;
+      },
+    });
   }
 
   onMarkerCreateRequested() {
