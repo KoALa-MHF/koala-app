@@ -87,6 +87,7 @@ export class MarkerOverviewListComponent implements OnInit {
   }
 
   onMarkerCreateRequested() {
+    this.resetMarkerData.emit();
     this.createDialogVisible = true;
   }
 
