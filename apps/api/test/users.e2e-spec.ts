@@ -11,6 +11,7 @@ const QUERY_ME = gql`
       id
       email
       displayName
+      role
     }
   }
 `;
@@ -50,9 +51,18 @@ describe('Users (e2e)', () => {
       expect(errors[0].message).toBe('Unauthorized');
     });
 
-    it('Authenticated user should get the own user data returned', async () => {
+    it('Authenticated SAML users should get the own user data returned with role "User"', async () => {
       const { data } = await request(app.getHttpServer())
         .auth(`${UsersData.sessionOwner1.id}`, { type: 'bearer' })
+        .query(QUERY_ME)
+        .expectNoErrors();
+
+      expect(data).toMatchSnapshot();
+    });
+
+    it('Authenticated guest users should get the own user data returned with role "Guest"', async () => {
+      const { data } = await request(app.getHttpServer())
+        .auth(`${UsersData.sessionParticipant1.id}`, { type: 'bearer' })
         .query(QUERY_ME)
         .expectNoErrors();
 

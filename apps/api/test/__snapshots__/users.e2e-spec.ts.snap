@@ -1,11 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Users (e2e) Query Me Authenticated user should get the own user data returned 1`] = `
+exports[`Users (e2e) Query Me Authenticated SAML users should get the own user data returned with role "User" 1`] = `
 {
   "me": {
     "displayName": "Session Owner 1",
     "email": "session-owner-1@koala-app.de",
     "id": "1",
+    "role": "USER",
+  },
+}
+`;
+
+exports[`Users (e2e) Query Me Authenticated guest users should get the own user data returned with role "Guest" 1`] = `
+{
+  "me": {
+    "displayName": "Session Participant 1",
+    "email": "session-participant-1@koala-app.de",
+    "id": "3",
+    "role": "GUEST",
   },
 }
 `;
