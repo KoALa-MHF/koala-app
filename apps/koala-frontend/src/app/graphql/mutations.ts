@@ -317,7 +317,6 @@ const SET_PLAY_POSITION = gql`
   }
 `;
 
-
 const UPDATE_MARKER = gql`
   mutation updateMarker($markerId: Int!, $updateMarkerInput: UpdateMarkerInput!) {
     updateMarker(id: $markerId, updateMarkerInput: $updateMarkerInput) {
@@ -333,8 +332,14 @@ const UPDATE_MARKER = gql`
       valueRangeTo
       createdAt
       updatedAt
-}}`;
-
+      owner {
+        id
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
 
 const UPDATE_ANNOTATION_NOTE = gql`
   mutation updateAnnotationNote($id: Int!, $note: String!) {

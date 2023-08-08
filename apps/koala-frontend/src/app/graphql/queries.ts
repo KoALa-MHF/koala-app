@@ -149,6 +149,11 @@ const GET_MARKERS = gql`
       type
       valueRangeFrom
       valueRangeTo
+      owner {
+        id
+        createdAt
+        updatedAt
+      }
     }
   }
 `;
