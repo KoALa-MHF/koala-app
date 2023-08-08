@@ -214,7 +214,7 @@
           </ng-template>
         </p-cellEditor>
       </td>
-      <td *ngIf="editEnabled && userId === marker.ownerId">
+      <td *ngIf="editEnabled && userId === marker.owner.id">
         <div class="flex align-items-center justify-content-center gap-2">
           <button
             *ngIf="!editing"

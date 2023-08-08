@@ -57,7 +57,7 @@ export class MarkerOverviewListComponent implements OnInit {
 
   icons = this.markerService.getAllIcons();
 
-  userId = 0;
+  userId = '0';
 
   get previewMarker(): Marker {
     return {
@@ -91,7 +91,7 @@ export class MarkerOverviewListComponent implements OnInit {
 
     this.authService.me().subscribe({
       next: (data) => {
-        this.userId = parseInt(data.id);
+        this.userId = data.id;
       },
     });
   }
