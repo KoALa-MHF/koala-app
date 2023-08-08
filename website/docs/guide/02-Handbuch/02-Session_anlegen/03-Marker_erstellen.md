@@ -18,4 +18,4 @@ Auf der rechten Seite sehen Sie dann eine Vorschau Ihres Markers. Wenn Sie zufri
 Hier können Sie gespeicherte Toolbars oder einzelne Marker laden. Wählen Sie durch Anklicken der Checkbox die Marker aus der Liste aus, die Sie benutzen möchten und wählen Sie danach **Marker hinzufügen**. Sie können auch nach Markern suchen.  
 
 3. Platzierung
-Zuletzt können Sie noch die Platzierung der Marker ändern, indem Sie die Marker per Drag&Drop individuell anordnen. Außerdem können Sie hier bereits hinzugefügte Marker wieder löschen, indem Sie den Marker auf den Mülleimer ziehen. 
+Zuletzt können Sie noch die Platzierung der Marker ändern, indem Sie die Marker per Drag&Drop individuell anordnen. Außerdem können Sie hier bereits hinzugefügte Marker wieder löschen, indem Sie den Marker in das rota Feld mit dem Papierkorb ziehen. 
