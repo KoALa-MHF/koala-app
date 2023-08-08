@@ -12,5 +12,5 @@ export interface Marker {
   visible?: boolean | true;
   valueRangeFrom?: number | null;
   valueRangeTo?: number | null;
-  owner?: User;
+  owner?: User | null;
 }
