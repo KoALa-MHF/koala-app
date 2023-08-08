@@ -157,6 +157,8 @@ export type Marker = {
   id: Scalars['Int']['output'];
   /** Marker Name */
   name: Scalars['String']['output'];
+  /** Associated User */
+  owner: User;
   /** Marker Type */
   type: MarkerType;
   /** Date of Last Update */
@@ -862,6 +864,7 @@ export type UpdateMarkerMutation = {
     valueRangeTo?: number | null;
     createdAt: any;
     updatedAt: any;
+    owner: { __typename?: 'User'; id: string; createdAt: any; updatedAt: any };
   };
 };
 
@@ -1003,6 +1006,7 @@ export type GetMarkersQuery = {
     type: MarkerType;
     valueRangeFrom?: number | null;
     valueRangeTo?: number | null;
+    owner: { __typename?: 'User'; id: string; createdAt: any; updatedAt: any };
   }>;
 };
 
@@ -1620,6 +1624,11 @@ export const UpdateMarkerDocument = gql`
       valueRangeTo
       createdAt
       updatedAt
+      owner {
+        id
+        createdAt
+        updatedAt
+      }
     }
   }
 `;
@@ -1838,6 +1847,11 @@ export const GetMarkersDocument = gql`
       type
       valueRangeFrom
       valueRangeTo
+      owner {
+        id
+        createdAt
+        updatedAt
+      }
     }
   }
 `;
