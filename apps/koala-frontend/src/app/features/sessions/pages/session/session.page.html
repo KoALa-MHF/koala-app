@@ -1,4 +1,4 @@
-<div class="container" *ngIf="session$ | async as session">
+<div #sessionContainer class="container" *ngIf="session$ | async as session">
   <div class="content-left">
     <div
       *ngIf="( ( session.enablePlayer ) || session.isSessionOwner ) && ( session.isAudioSession )"
@@ -115,3 +115,7 @@
     </div>
   </div>
 </p-sidebar>
+
+<p-blockUI target="sessionContainer" [blocked]="isBusy">
+  <p-progressSpinner></p-progressSpinner>
+</p-blockUI>

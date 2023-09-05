@@ -25,6 +25,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { BlockUIModule } from 'primeng/blockui';
 
 import { QRCodeModule } from 'angularx-qrcode';
 
@@ -130,6 +131,7 @@ import { TimePipe } from './pipes/time.pipe';
     InputSwitchModule,
     ConfirmDialogModule,
     MarkersModule,
+    BlockUIModule,
   ],
   providers: [
     MediaService,
