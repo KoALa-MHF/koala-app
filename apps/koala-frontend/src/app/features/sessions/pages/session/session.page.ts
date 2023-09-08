@@ -49,6 +49,7 @@ export class SessionPage implements OnInit, OnDestroy {
   userID = -1;
   timer = '0:00';
   seeked = false;
+  isBusy = false;
   private myUserSession?: UserSession;
 
   sessionUpdatedSubscription?: Subscription;
@@ -86,6 +87,8 @@ export class SessionPage implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    this.isBusy = true;
+
     this.sessionId = parseInt(this.route.snapshot.paramMap.get('sessionId') || '0');
     this.authService.me().subscribe({
       next: (data) => {
@@ -173,6 +176,8 @@ export class SessionPage implements OnInit, OnDestroy {
         this.waveContainer = `waveContainer-${focusSession.id}`;
 
         await this.loadMediaData(focusSession.media.id);
+      } else {
+        this.isBusy = false;
       }
 
       const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
@@ -228,6 +233,9 @@ export class SessionPage implements OnInit, OnDestroy {
             .subscribe({
               next: () => {
                 this.totalAudioTime = this.sessionControlService.getDuration();
+                //switch off busy state
+                this.isBusy = false;
+
                 resolve();
               },
             });
