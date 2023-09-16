@@ -168,6 +168,17 @@
     <button
       pButton
       pRipple
+      *ngIf="isAuthenticated$ | async"
+      icon="pi pi-bookmark"
+      label="{{ 'SESSION.MARKERS_OVERVIEW_NAV_BTN' | translate }}"
+      class="p-button-text"
+      style="flex: 1"
+      (click)="onMarkersOverview()"
+    ></button>
+
+    <button
+      pButton
+      pRipple
       *ngIf="(isAuthenticated$ | async) && isOnAnySessionPage"
       class="p-button-text"
       (click)="onSession()"
