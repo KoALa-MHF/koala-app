@@ -15,6 +15,7 @@
           pInputText
           aria-describedby="display-name-help"
           formControlName="displayName"
+          [readonly]="user?.role === Role.User"
         />
         <label for="display-name-input">{{ 'AUTH.DISPLAY_NAME_INPUT_LABEL' | translate }}</label>
       </span>
