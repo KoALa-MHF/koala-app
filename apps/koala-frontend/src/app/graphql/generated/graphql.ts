@@ -348,6 +348,11 @@ export type QueryUserSessionArgs = {
   id: Scalars['Int']['input'];
 };
 
+export enum Role {
+  Guest = 'GUEST',
+  User = 'USER',
+}
+
 export type Session = {
   __typename?: 'Session';
   code: Scalars['String']['output'];
@@ -517,6 +522,8 @@ export type User = {
   email?: Maybe<Scalars['String']['output']>;
   /** ID for User */
   id: Scalars['ID']['output'];
+  /** User Role */
+  role: Role;
   /** Date of Last Update */
   updatedAt: Scalars['DateTime']['output'];
 };
@@ -692,7 +699,11 @@ export type CreateUserSessionMutationVariables = Exact<{
 
 export type CreateUserSessionMutation = {
   __typename?: 'Mutation';
-  createUserSession: { __typename?: 'UserSession'; id: number; owner: { __typename?: 'User'; email?: string | null } };
+  createUserSession: {
+    __typename?: 'UserSession';
+    id: number;
+    owner: { __typename?: 'User'; role: Role; email?: string | null };
+  };
 };
 
 export type InviteParticipantsMutationVariables = Exact<{
@@ -778,7 +789,7 @@ export type SetPlayModeMutation = {
     userSessions: Array<{
       __typename?: 'UserSession';
       id: number;
-      owner: { __typename?: 'User'; id: string; email?: string | null };
+      owner: { __typename?: 'User'; id: string; email?: string | null; role: Role };
       annotations: Array<{
         __typename?: 'Annotation';
         id: number;
@@ -788,7 +799,7 @@ export type SetPlayModeMutation = {
         marker: { __typename?: 'Marker'; id: number; color: string; contentColor: string };
       }>;
     }>;
-    owner: { __typename?: 'User'; id: string; createdAt: any; updatedAt: any };
+    owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
   };
 };
 
@@ -829,7 +840,7 @@ export type SetPlayPositionMutation = {
     userSessions: Array<{
       __typename?: 'UserSession';
       id: number;
-      owner: { __typename?: 'User'; id: string; email?: string | null };
+      owner: { __typename?: 'User'; id: string; email?: string | null; role: Role };
       annotations: Array<{
         __typename?: 'Annotation';
         id: number;
@@ -839,7 +850,7 @@ export type SetPlayPositionMutation = {
         marker: { __typename?: 'Marker'; id: number; color: string; contentColor: string };
       }>;
     }>;
-    owner: { __typename?: 'User'; id: string; createdAt: any; updatedAt: any };
+    owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
   };
 };
 
@@ -864,7 +875,7 @@ export type UpdateMarkerMutation = {
     valueRangeTo?: number | null;
     createdAt: any;
     updatedAt: any;
-    owner: { __typename?: 'User'; id: string; createdAt: any; updatedAt: any };
+    owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
   };
 };
 
@@ -908,7 +919,7 @@ export type GetSessionsQuery = {
     userSessions: Array<{
       __typename?: 'UserSession';
       id: number;
-      owner: { __typename?: 'User'; id: string; email?: string | null; displayName?: string | null };
+      owner: { __typename?: 'User'; id: string; email?: string | null; displayName?: string | null; role: Role };
     }>;
     media?: { __typename?: 'Media'; id: string; name: string; mimeType: string; createdAt: any; updatedAt: any } | null;
     toolbars: Array<{
@@ -918,7 +929,7 @@ export type GetSessionsQuery = {
       updatedAt: any;
       markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
     }>;
-    owner: { __typename?: 'User'; id: string; createdAt: any; updatedAt: any };
+    owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
   }>;
 };
 
@@ -962,7 +973,7 @@ export type GetOneSessionQuery = {
     userSessions: Array<{
       __typename?: 'UserSession';
       id: number;
-      owner: { __typename?: 'User'; id: string; email?: string | null; displayName?: string | null };
+      owner: { __typename?: 'User'; id: string; email?: string | null; displayName?: string | null; role: Role };
       annotations: Array<{
         __typename?: 'Annotation';
         id: number;
@@ -973,7 +984,7 @@ export type GetOneSessionQuery = {
         marker: { __typename?: 'Marker'; id: number; color: string; contentColor: string };
       }>;
     }>;
-    owner: { __typename?: 'User'; id: string; createdAt: any; updatedAt: any };
+    owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
   };
 };
 
@@ -1006,7 +1017,7 @@ export type GetMarkersQuery = {
     type: MarkerType;
     valueRangeFrom?: number | null;
     valueRangeTo?: number | null;
-    owner: { __typename?: 'User'; id: string; createdAt: any; updatedAt: any };
+    owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
   }>;
 };
 
@@ -1014,7 +1025,15 @@ export type GetUserQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetUserQuery = {
   __typename?: 'Query';
-  me: { __typename?: 'User'; id: string; displayName?: string | null; email?: string | null };
+  me: {
+    __typename?: 'User';
+    id: string;
+    displayName?: string | null;
+    email?: string | null;
+    role: Role;
+    createdAt: any;
+    updatedAt: any;
+  };
 };
 
 export type SessionExportQueryVariables = Exact<{
@@ -1353,6 +1372,7 @@ export const CreateUserSessionDocument = gql`
     createUserSession(createUserSessionInput: { sessionId: $sessionId, owner: { email: $email } }) {
       id
       owner {
+        role
         email
       }
     }
@@ -1502,6 +1522,7 @@ export const SetPlayModeDocument = gql`
         owner {
           id
           email
+          role
         }
         annotations {
           id
@@ -1517,6 +1538,7 @@ export const SetPlayModeDocument = gql`
       }
       owner {
         id
+        role
         createdAt
         updatedAt
       }
@@ -1575,6 +1597,7 @@ export const SetPlayPositionDocument = gql`
         owner {
           id
           email
+          role
         }
         annotations {
           id
@@ -1590,6 +1613,7 @@ export const SetPlayPositionDocument = gql`
       }
       owner {
         id
+        role
         createdAt
         updatedAt
       }
@@ -1626,6 +1650,7 @@ export const UpdateMarkerDocument = gql`
       updatedAt
       owner {
         id
+        role
         createdAt
         updatedAt
       }
@@ -1693,6 +1718,7 @@ export const GetSessionsDocument = gql`
           id
           email
           displayName
+          role
         }
       }
       media {
@@ -1713,6 +1739,7 @@ export const GetSessionsDocument = gql`
       }
       owner {
         id
+        role
         createdAt
         updatedAt
       }
@@ -1776,6 +1803,7 @@ export const GetOneSessionDocument = gql`
           id
           email
           displayName
+          role
         }
         annotations {
           id
@@ -1792,6 +1820,7 @@ export const GetOneSessionDocument = gql`
       }
       owner {
         id
+        role
         createdAt
         updatedAt
       }
@@ -1849,6 +1878,7 @@ export const GetMarkersDocument = gql`
       valueRangeTo
       owner {
         id
+        role
         createdAt
         updatedAt
       }
@@ -1872,6 +1902,9 @@ export const GetUserDocument = gql`
       id
       displayName
       email
+      role
+      createdAt
+      updatedAt
     }
   }
 `;
