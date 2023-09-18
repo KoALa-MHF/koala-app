@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { WaveSurfer, WaveSurferEvents } from 'wavesurfer.js';
+import { WaveSurferEvents } from 'wavesurfer.js';
+import WaveSurfer from 'wavesurfer.js';
 import TimelinePlugin from 'wavesurfer.js/dist/plugins/timeline.js';
 import { EventHandler } from 'wavesurfer.js/types/util';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -80,13 +81,20 @@ export class MediaControlService {
       });
       this.addEventHandler('audioprocess', (currentTime) => {
         if (this.sessionService.getFocusSession()?.isSessionOwner) {
-          console.log(`Current Time: ${currentTime}`);
-          console.log(`Session Position: ${this.sessionService.getFocusSession()?.playPosition}`);
           if (
             //only send every 300ms
-            Math.round((this.sessionService.getFocusSession()?.playPosition || 0) * 1000) + 300 <
+            Math.round((this.sessionService.getFocusSession()?.playPosition || 0) * 1000 + 300) <
             Math.round(currentTime * 1000)
           ) {
+            console.log(`Current Time: ${currentTime}`);
+            console.log(`Calculated Current Time: ${Math.round(currentTime * 1000)}`);
+            console.log(`Session Position: ${this.sessionService.getFocusSession()?.playPosition}`);
+            console.log(
+              `Calculated Session Position: ${
+                Math.round((this.sessionService.getFocusSession()?.playPosition || 0) * 1000) + 300
+              }`
+            );
+
             this.sessionService
               .setPlayPosition(parseInt(this.sessionService.getFocusSession()?.id || '0'), currentTime)
               .subscribe();
