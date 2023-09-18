@@ -12,33 +12,21 @@ const FeatureList: FeatureItem[] = [
   {
     title: 'Tutorial und Handbuch',
     Svg: require('@site/static/img/menu_book.svg').default,
-    description: (
-      <>
-        Ein Handbuch für Koala.
-      </>
-    ),
+    description: <>Ein Handbuch für Koala.</>,
   },
   {
     title: 'API Dokumentation',
     Svg: require('@site/static/img/api_webhook_icon.svg').default,
-    description: (
-      <>
-        Entwickler Dokumentation. Datenmodell etc… Für alle die tiefer in Koala einsteigen wollen.
-      </>
-    ),
+    description: <>Entwickler Dokumentation. Datenmodell etc… Für alle die tiefer in Koala einsteigen wollen.</>,
   },
   {
     title: 'Blog',
     Svg: require('@site/static/img/rss_feed.svg').default,
-    description: (
-      <>
-        Neuigkeiten aus der Entwicklung und zu Einsatzmöglichekeiten der Koala-App.
-      </>
-    ),
+    description: <>Neuigkeiten aus der Entwicklung und zu Einsatzmöglichekeiten der Koala-App.</>,
   },
 ];
 
-function Feature({title, Svg, description}: FeatureItem) {
+function Feature({ title, Svg, description }: FeatureItem) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
