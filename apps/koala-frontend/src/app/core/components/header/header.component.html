@@ -148,7 +148,12 @@
       </ng-template>
     </p-overlayPanel>
 
-    <p-button (click)="sidebarVisible = true" icon="pi pi-bars" class="hidden-lg hidden-md"></p-button>
+    <p-button
+      *ngIf="isAuthenticated$ | async"
+      (click)="sidebarVisible = true"
+      icon="pi pi-bars"
+      class="hidden-lg hidden-md"
+    ></p-button>
   </div>
 </p-toolbar>
 
