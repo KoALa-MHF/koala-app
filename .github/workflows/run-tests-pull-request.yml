@@ -38,3 +38,4 @@ jobs:
         saml__entryPoint: https://not-needed-for-test.com
         saml__audience: not-needed-for-test
         saml__redirectFrontendUrl: https://not-needed-for-test.com
+        auth__secret: not-needed-for-test
