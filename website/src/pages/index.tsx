@@ -21,6 +21,13 @@ function HomepageHeader() {
             KoALa Tutorial - 5min ⏱️
           </Link>
         </div>
+        <div className={styles.buttons} class="button_start" >
+          <Link
+          className="button button--secondary button--lg" 
+            to="https://docs.google.com/forms/d/e/1FAIpQLSdRNeZu8K-_CENwJQYS6LPGbJ3kD8F9qHXNxItHXBtYbKm2BA/viewform?fbzx=9118902381424291925">
+            Zum Newsletter anmelden
+          </Link>
+        </div>
       </div>
     </header>
   );

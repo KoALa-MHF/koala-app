@@ -29,7 +29,7 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
-img[alt="picture"] {
+img[alt='picture'] {
   max-width: 50%;
   min-width: 30%;
   height: auto;
@@ -37,9 +37,12 @@ img[alt="picture"] {
   border: 1px solid #9f9f9f;
 }
 
-
-img[alt="icon"] {
+img[alt='icon'] {
   height: 14pt;
   display: inline;
   vertical-align: sub;
+}
+
+.button_start {
+  margin-top: 10px;
 }
