@@ -83,6 +83,8 @@ export class MediaControlService {
       });
       this.addEventHandler('audioprocess', (currentTime) => {
         if (this.sessionService.getFocusSession()?.isSessionOwner) {
+          console.log(`Current Time: ${currentTime}`);
+          console.log(`Session Position: ${this.sessionService.getFocusSession()?.playPosition}`);
           if (
             //only send every 300ms
             this.lastPlayPositionUpdate !== this.sessionService.getFocusSession()?.playPosition &&
