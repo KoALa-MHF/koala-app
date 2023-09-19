@@ -29,6 +29,8 @@ export class MediaControlService {
   uuid!: string | HTMLElement;
   private waves = new Map<string | HTMLElement, WaveSurfer>();
 
+  private lastPlayPositionUpdate = -1;
+
   private mediaPlayStateChangedSubject = new Subject<MediaActions>();
   public mediaPlayStateChanged$ = this.mediaPlayStateChangedSubject.asObservable();
 
@@ -83,8 +85,9 @@ export class MediaControlService {
         if (this.sessionService.getFocusSession()?.isSessionOwner) {
           if (
             //only send every 300ms
+            this.lastPlayPositionUpdate !== this.sessionService.getFocusSession()?.playPosition &&
             Math.round((this.sessionService.getFocusSession()?.playPosition || 0) * 1000 + 300) <
-            Math.round(currentTime * 1000)
+              Math.round(currentTime * 1000)
           ) {
             console.log(`Current Time: ${currentTime}`);
             console.log(`Calculated Current Time: ${Math.round(currentTime * 1000)}`);
@@ -97,7 +100,11 @@ export class MediaControlService {
 
             this.sessionService
               .setPlayPosition(parseInt(this.sessionService.getFocusSession()?.id || '0'), currentTime)
-              .subscribe();
+              .subscribe({
+                error: () => (this.lastPlayPositionUpdate = -1),
+              });
+
+            this.lastPlayPositionUpdate = this.sessionService.getFocusSession()?.playPosition || -1;
           }
         }
       });
