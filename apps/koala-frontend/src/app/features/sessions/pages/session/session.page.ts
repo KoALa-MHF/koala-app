@@ -55,6 +55,7 @@ export class SessionPage implements OnInit, OnDestroy {
   sessionUpdatedSubscription?: Subscription;
   toolbarUpdatedSubscription?: Subscription;
   private timerSubscription?: Subscription;
+  private audioTimerSubscription?: Subscription;
 
   sessionSettingsToggled$ = this.navigationService.sessionSettingsSidePanelToggled$;
   session$ = this.sessionService.focusSessionChanged$;
@@ -118,6 +119,19 @@ export class SessionPage implements OnInit, OnDestroy {
         if (!session.isSessionOwner && session.isAudioSession && !session.enablePlayer) {
           this.mediaControlService.setPosition(session.playPosition || 0);
           this.currentAudioTime = session.playPosition || 0;
+
+          if (session.playMode === PlayMode.Running) {
+            this.audioTimerSubscription?.unsubscribe();
+            this.audioTimerSubscription = timer(100, 100).subscribe(() => {
+              const newAudioPosition = this.mediaControlService.getCurrentTime() + 0.1;
+              this.mediaControlService.setPosition(newAudioPosition);
+              this.currentAudioTime = newAudioPosition;
+            });
+          } else {
+            this.audioTimerSubscription?.unsubscribe();
+          }
+        } else {
+          this.audioTimerSubscription?.unsubscribe();
         }
 
         if (session.liveSessionStart && session.playMode === PlayMode.Running) {
