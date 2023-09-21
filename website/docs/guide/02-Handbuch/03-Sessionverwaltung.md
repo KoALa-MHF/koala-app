@@ -19,9 +19,9 @@ Mit den Elementen oberhalb der Tabelle können Sie mit einzelnen oder mehreren
 Sessions interagieren. Mehrere Sessions wählen Sie über die Checkboxen aus.
 Sie können:
 
-- Eine neue Sessions erstellen (<span style="color: blue;">􀁌 Neue Session</span>)
-- Eine oder mehrere Sessions exportieren (<span style="color: blue;"><img src="img/export.svg" style="height: 1em;"></img> Session Exportieren</span>)
-- Eine oder mehrere Sessions löschen (<span style="color: blue;"><img src="img/trash.svg" style="height: 1em;"></img> Session Löschen</span>)
+- Eine neue Sessions erstellen
+- Eine oder mehrere Sessions exportieren
+- Eine oder mehrere Sessions löschen
 
 > Die Knöpfe zum exportieren und löschen von Sessions werden erst aktiv,
 > wenn mind. eine Session über die Checkbox ausgewählt ist.
@@ -30,7 +30,7 @@ Sie können:
 
 Innerhalb eine Tabellenzeile agieren Sie mit dieser Session. Sie können
 
-- die [Einstellungen](path/to/Sessioneinstellungen) bearbeiten,
+- die [Einstellungen](./02-Session_anlegen/01-Sessioneinstellungen.md) bearbeiten,
 - sich den QR-Code und Link ansehen, mit dem sie Teilnehmer zu dieser
   Session einladen können,
 - die Session duplizieren und
