@@ -95,7 +95,7 @@ export class MediaControlService {
                 error: () => (this.lastPlayPositionUpdate = -1),
               });
 
-            this.lastPlayPositionUpdate = this.sessionService.getFocusSession()?.playPosition || -1;
+            this.lastPlayPositionUpdate = this.sessionService.getFocusSession()?.playPosition || 0;
           }
         }
       });
