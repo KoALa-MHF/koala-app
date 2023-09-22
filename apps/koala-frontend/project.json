@@ -52,7 +52,7 @@
             }
           ],
           "outputHashing": "all",
-          "baseHref": "app"
+          "baseHref": "/app/"
         },
         "development": {
           "buildOptimizer": false,
@@ -61,7 +61,7 @@
           "extractLicenses": false,
           "sourceMap": true,
           "namedChunks": true,
-          "baseHref": "app"
+          "baseHref": "/app/"
         }
       },
       "defaultConfiguration": "production"
