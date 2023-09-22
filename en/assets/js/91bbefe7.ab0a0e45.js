@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocs=self.webpackChunkdocs||[]).push([[5503],{110:a=>{a.exports=JSON.parse('{"label":"KoALa","permalink":"/koala-app/en/blog/tags/ko-a-la","allTagsPath":"/koala-app/en/blog/tags","count":1}')}}]);

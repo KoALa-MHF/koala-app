@@ -1,21 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
     <channel>
-        <title>KoALa App Blog</title>
-        <link>https://your-docusaurus-test-site.com/koala-app/en/blog</link>
-        <description>KoALa App Blog</description>
-        <lastBuildDate>Thu, 26 Aug 2021 00:00:00 GMT</lastBuildDate>
+        <title>Koala App Blog</title>
+        <link>https://koala-mhf.github.io/koala-app/en/blog</link>
+        <description>Koala App Blog</description>
+        <lastBuildDate>Wed, 30 Aug 2023 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
         <item>
-            <title><![CDATA[Welcome]]></title>
-            <link>https://your-docusaurus-test-site.com/koala-app/en/blog/welcome</link>
-            <guid>welcome</guid>
-            <pubDate>Thu, 26 Aug 2021 00:00:00 GMT</pubDate>
-            <description><![CDATA[Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.]]></description>
-            <content:encoded><![CDATA[<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p><p><img loading="lazy" alt="Docusaurus Plushie" src="/koala-app/en/assets/images/docusaurus-plushie-banner-a60f7593abca1e3eef26a9afa244e4fb.jpeg" width="1500" height="500" class="img_ev3q"></p>]]></content:encoded>
+            <title><![CDATA[Präsentation auf der GMTH Konferenz 2023]]></title>
+            <link>https://koala-mhf.github.io/koala-app/en/blog/gmth_conference_2023</link>
+            <guid>gmth_conference_2023</guid>
+            <pubDate>Wed, 30 Aug 2023 00:00:00 GMT</pubDate>
+            <description><![CDATA[Auf dem Freiburger Jahreskongress der GMTH \(Gesellschaft für Musiktheorie\) stellen wir die Koala App zum ersten Mal öffentlich vor. Wir hoffen auf ein gutes Feedback und werden die Präsentation auch hier posten. Das Merchandise Material in Form von Flyern und Aufklebern ist bestellt und bereit.]]></description>
+            <content:encoded><![CDATA[<p>Auf dem Freiburger Jahreskongress der <a href="https://gmth.de" target="_blank" rel="noopener noreferrer">GMTH <!-- -->(<!-- -->Gesellschaft für Musiktheorie<!-- -->)</a> stellen wir die Koala App zum ersten Mal öffentlich vor. Wir hoffen auf ein gutes Feedback und werden die Präsentation auch hier posten. Das Merchandise Material in Form von Flyern und Aufklebern ist bestellt und bereit.</p><p><img loading="lazy" alt="img" src="/koala-app/en/assets/images/Koala-Aufkleber_rund-6496c5b9b626d67679836dc0b2a9e50f.png" width="638" height="638" class="img_ev3q">
+<img loading="lazy" alt="img" src="/koala-app/en/assets/images/Flyer-1-576434db9c95ace752485fbd37b1a066.png" width="634" height="636" class="img_ev3q">
+<img loading="lazy" alt="img" src="/koala-app/en/assets/images/Flyer-2-9009d83601a11a76a2fb7407207b69c7.png" width="634" height="638" class="img_ev3q"></p>]]></content:encoded>
             <category>KoALa</category>
+            <category>News</category>
+        </item>
+        <item>
+            <title><![CDATA[Update Sommersemester 2023]]></title>
+            <link>https://koala-mhf.github.io/koala-app/en/blog/summer_term_23_update</link>
+            <guid>summer_term_23_update</guid>
+            <pubDate>Mon, 17 Jul 2023 00:00:00 GMT</pubDate>
+            <description><![CDATA[Im Sommersemester hatten wir zwei Blocktage, an denen wir mit unseren Tutoren und einigen Studierenden die koala App im Beta Stadium testen konnten. Dabei entstanden einige Einsatzmöglichkeiten und auch einige konkrete Wünsche an die Entwickler.]]></description>
+            <content:encoded><![CDATA[<p>Im Sommersemester hatten wir zwei Blocktage, an denen wir mit unseren Tutoren und einigen Studierenden die koala App im Beta Stadium testen konnten. Dabei entstanden einige Einsatzmöglichkeiten und auch einige konkrete Wünsche an die Entwickler.</p><p>Tests unter „echten Bedingenungen“ und mit einer breiteren Nutzerschaft werden im Wintersemester folgen. Eine Nutzung im Rahmen eines Forschungsprojekts ist für Anfang November 2023 angesetzt.</p>]]></content:encoded>
+            <category>KoALa</category>
+            <category>Progress</category>
+            <category>News</category>
+        </item>
+        <item>
+            <title><![CDATA[First post]]></title>
+            <link>https://koala-mhf.github.io/koala-app/en/blog/first_post</link>
+            <guid>first_post</guid>
+            <pubDate>Sun, 12 Mar 2023 00:00:00 GMT</pubDate>
+            <description><![CDATA[We are pleased to announce that we are entering a new phase. After half of the porject time the models and basic setup of KoALa is done and we are moving on to the next phase.]]></description>
+            <content:encoded><![CDATA[<p>We are pleased to announce that we are entering a new phase. After half of the porject time the models and basic setup of KoALa is done and we are moving on to the next phase.</p><p>The roadmap for the second half of the project is quite exciting:</p><ul><li>First working prototype of the app</li><li>Integration of usermanagement (especially the Shibboleth authentication)</li><li>Test, test, test… with a lot of students and colleages</li></ul>]]></content:encoded>
+            <category>KoALa</category>
+            <category>Progress</category>
+            <category>News</category>
         </item>
     </channel>
 </rss>
