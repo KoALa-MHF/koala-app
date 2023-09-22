@@ -51,7 +51,8 @@
               "with": "apps/koala-frontend/src/environments/environment.prod.ts"
             }
           ],
-          "outputHashing": "all"
+          "outputHashing": "all",
+          "baseHref": "app"
         },
         "development": {
           "buildOptimizer": false,
@@ -59,7 +60,8 @@
           "vendorChunk": true,
           "extractLicenses": false,
           "sourceMap": true,
-          "namedChunks": true
+          "namedChunks": true,
+          "baseHref": "app"
         }
       },
       "defaultConfiguration": "production"
