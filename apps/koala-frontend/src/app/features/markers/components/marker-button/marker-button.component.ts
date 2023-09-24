@@ -14,7 +14,7 @@ export class MarkerButtonComponent implements OnInit {
   @Input() marker!: Marker;
   @Input() enabled = false;
   @Output() event = new EventEmitter<{ marker: Marker; value?: number }>();
-  isActive = false;
+  @Input() active = false;
   range = 0;
   sliderValue = 0;
 
@@ -39,7 +39,7 @@ export class MarkerButtonComponent implements OnInit {
 
   private rangeButton() {
     this.event.emit({ marker: this.marker });
-    this.isActive = !this.isActive;
+    this.active = !this.active;
   }
 
   private eventButton() {
