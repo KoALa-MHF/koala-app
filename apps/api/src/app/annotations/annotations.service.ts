@@ -39,8 +39,6 @@ export class AnnotationsService {
       note: createMarkerInput.note,
     });
 
-    console.log(newAnnotation.value);
-
     // check for events or sliders/ranges
     if (newAnnotation.value == undefined) {
       return this.annotationsRepository.save(newAnnotation);

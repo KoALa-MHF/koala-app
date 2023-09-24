@@ -405,7 +405,7 @@ export class SessionPage implements OnInit, OnDestroy {
     };
 
     this.AnnotationData.get(m.id)?.push(dp);
-    dp.id = this.saveAnnotation(dp, m.id);
+    this.saveAnnotation(dp, m.id);
   }
 
   onMarkerRange(m: Marker, aData: DataPoint[]) {
@@ -417,7 +417,7 @@ export class SessionPage implements OnInit, OnDestroy {
         if (latest.active) {
           latest.endTime = Math.floor(this.sessionControlService.getCurrentTime());
           latest.active = false;
-          latest.id = this.saveAnnotation(latest, m.id);
+          this.saveAnnotation(latest, m.id);
           return;
         }
       }
@@ -442,7 +442,7 @@ export class SessionPage implements OnInit, OnDestroy {
       if (latest.active) {
         latest.endTime = t;
         latest.active = false;
-        latest.id = this.saveAnnotation(latest, m.id);
+        this.saveAnnotation(latest, m.id);
       }
     }
     if (strength != 0) {
@@ -555,7 +555,15 @@ export class SessionPage implements OnInit, OnDestroy {
 
   onDeleteAnnotations(marker: Marker) {
     this.AnnotationData.get(marker.id)?.forEach((annotation) => {
-      this.annotationService.remove(annotation.id).subscribe();
+      this.annotationService.remove(annotation.id).subscribe({
+        error: (err) => {
+          console.log(err);
+          this.messageService.add({
+            severity: 'error',
+            summary: this.translateService.instant('SESSION.MAINTAIN.SESSION_SETTINGS.SAVE_ERROR_MESSAGE_TITLE'),
+          });
+        },
+      });
     });
 
     this.AnnotationData.set(marker.id, new Array<DataPoint>());
@@ -592,7 +600,7 @@ export class SessionPage implements OnInit, OnDestroy {
         if (annotation.active) {
           annotation.active = false;
           annotation.endTime = Math.floor(time * 1000);
-          annotation.id = this.saveAnnotation(annotation, id);
+          this.saveAnnotation(annotation, id);
         }
         return;
       });
@@ -620,7 +628,7 @@ export class SessionPage implements OnInit, OnDestroy {
     return aData;
   }
 
-  saveAnnotation(d: DataPoint, markerID: number): number {
+  saveAnnotation(d: DataPoint, markerID: number) {
     this.annotationService
       .create({
         start: d.startTime,
@@ -631,13 +639,12 @@ export class SessionPage implements OnInit, OnDestroy {
       })
       .subscribe({
         next: (result) => {
-          return result.data?.createAnnotation.id || 1;
+          d.id = result.data?.createAnnotation.id || 1;
         },
         error: (error) => {
           this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.ANNOTATION_ERROR', '');
           console.log(error);
         },
       });
-    return 1;
   }
 }
