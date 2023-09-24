@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { WaveSurfer, WaveSurferEvents } from 'wavesurfer.js';
+import { WaveSurferEvents } from 'wavesurfer.js';
+import WaveSurfer from 'wavesurfer.js';
 import TimelinePlugin from 'wavesurfer.js/dist/plugins/timeline.js';
 import { EventHandler } from 'wavesurfer.js/types/util';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -27,6 +28,8 @@ export interface MediaEvent {
 export class MediaControlService {
   uuid!: string | HTMLElement;
   private waves = new Map<string | HTMLElement, WaveSurfer>();
+
+  private lastPlayPositionUpdate = -1;
 
   private mediaPlayStateChangedSubject = new Subject<MediaActions>();
   public mediaPlayStateChanged$ = this.mediaPlayStateChangedSubject.asObservable();
@@ -81,12 +84,18 @@ export class MediaControlService {
       this.addEventHandler('audioprocess', (currentTime) => {
         if (this.sessionService.getFocusSession()?.isSessionOwner) {
           if (
-            Math.round((this.sessionService.getFocusSession()?.playPosition || 0) * 10) + 3 <
-            Math.round(currentTime * 10)
+            //only send every 5s for syncing reasons => clients play on their own in that timeframe
+            this.lastPlayPositionUpdate !== this.sessionService.getFocusSession()?.playPosition &&
+            Math.round((this.sessionService.getFocusSession()?.playPosition || 0) * 1000 + 5000) <
+              Math.round(currentTime * 1000)
           ) {
             this.sessionService
               .setPlayPosition(parseInt(this.sessionService.getFocusSession()?.id || '0'), currentTime)
-              .subscribe();
+              .subscribe({
+                error: () => (this.lastPlayPositionUpdate = -1),
+              });
+
+            this.lastPlayPositionUpdate = this.sessionService.getFocusSession()?.playPosition || 0;
           }
         }
       });

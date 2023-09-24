@@ -28,7 +28,7 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 import { AuthInterceptor } from './features/auth/http-interceptors/auth-interceptor';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { OperationDefinitionNode } from 'graphql';
-import { registerLocaleData } from '@angular/common';
+import { APP_BASE_HREF, registerLocaleData } from '@angular/common';
 import { AccessTokenService } from './features/auth/services/access-token.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -61,6 +61,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     ToastModule,
   ],
   providers: [
+    [
+      { provide: APP_BASE_HREF, useValue: '/app' },
+    ],
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     {
       provide: APOLLO_OPTIONS,

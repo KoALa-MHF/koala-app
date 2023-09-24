@@ -1,5 +1,7 @@
 <p-accordion [activeIndex]="0">
-  <p-accordionTab header="Sessionbeschreibung"> {{session?.description}} </p-accordionTab>
+  <p-accordionTab header="Sessionbeschreibung">
+    <div [innerText]="session?.description"></div>
+  </p-accordionTab>
   <p-accordionTab header="Markerbeschreibung">
     <div class="marker-description-container">
       <div *ngFor="let marker of markers">

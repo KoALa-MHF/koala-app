@@ -148,7 +148,12 @@
       </ng-template>
     </p-overlayPanel>
 
-    <p-button (click)="sidebarVisible = true" icon="pi pi-bars" class="hidden-lg hidden-md"></p-button>
+    <p-button
+      *ngIf="isAuthenticated$ | async"
+      (click)="sidebarVisible = true"
+      icon="pi pi-bars"
+      class="hidden-lg hidden-md"
+    ></p-button>
   </div>
 </p-toolbar>
 
@@ -162,7 +167,18 @@
       label="{{ 'SESSION.MY_SESSIONS_NAV_BTN' | translate }}"
       class="p-button-text"
       style="flex: 1"
-      (click)="onMySessions()"
+      (click)="onMySessions(); sidebarVisible = false"
+    ></button>
+
+    <button
+      pButton
+      pRipple
+      *ngIf="isAuthenticated$ | async"
+      icon="pi pi-bookmark"
+      label="{{ 'SESSION.MARKERS_OVERVIEW_NAV_BTN' | translate }}"
+      class="p-button-text"
+      style="flex: 1"
+      (click)="onMarkersOverview(); sidebarVisible = false"
     ></button>
 
     <button
@@ -170,7 +186,7 @@
       pRipple
       *ngIf="(isAuthenticated$ | async) && isOnAnySessionPage"
       class="p-button-text"
-      (click)="onSession()"
+      (click)="onSession(); sidebarVisible = false"
     >
       <span>&#x266B;</span><span style="margin-left: 8px">Session</span>
     </button>
@@ -186,7 +202,7 @@
       icon="pi pi-chart-bar"
       label="{{ 'SESSION.ANALYSIS_NAV_BTN' | translate }}"
       class="p-button-text"
-      (click)="onAnalysis()"
+      (click)="onAnalysis(); sidebarVisible = false"
     ></button>
 
     <button
@@ -196,7 +212,7 @@
       icon="pi pi-info-circle"
       label="{{ 'SESSION.INFO_NAV_BTN' | translate }}"
       class="p-button-text"
-      (click)="onSessionInfo()"
+      (click)="onSessionInfo(); sidebarVisible = false"
     ></button>
 
     <button
@@ -206,7 +222,7 @@
       icon="pi pi-cog"
       label="{{ 'SESSION.SESSION_SETTINGS_BTN' | translate }}"
       class="p-button-text"
-      (click)="onSessionSettings()"
+      (click)="onSessionSettings(); sidebarVisible = false"
     ></button>
   </div>
 </p-sidebar>

@@ -7,6 +7,9 @@ export const SessionsData = [
     name: 'Session 1',
     owner: UsersData.sessionOwner1,
     status: SessionStatus.IN_PREPARATION,
+    media: {
+      id: 1,
+    },
   },
   {
     id: 2,

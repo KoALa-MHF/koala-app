@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { Role, User } from '../../../../graphql/generated/graphql';
 
 @Component({
   selector: 'koala-user-profile',
@@ -13,6 +14,9 @@ export class UserProfileComponent implements OnInit, OnChanges {
   @Input() visible = false;
   @Output() visibleChange = new EventEmitter<boolean>();
   maintainUserProfileForm: FormGroup;
+
+  user?: User;
+  Role = Role;
 
   constructor(private readonly authService: AuthService) {
     this.maintainUserProfileForm = new FormGroup({
@@ -52,6 +56,7 @@ export class UserProfileComponent implements OnInit, OnChanges {
 
   private readUserData() {
     this.authService.me().subscribe((result) => {
+      this.user = result;
       this.maintainUserProfileForm.get('displayName')?.setValue(result.displayName || '');
     });
   }

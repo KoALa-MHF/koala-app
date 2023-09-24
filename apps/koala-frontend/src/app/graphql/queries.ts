@@ -28,6 +28,7 @@ const GET_SESSIONS = gql`
           id
           email
           displayName
+          role
         }
       }
       media {
@@ -48,6 +49,7 @@ const GET_SESSIONS = gql`
       }
       owner {
         id
+        role
         createdAt
         updatedAt
       }
@@ -101,6 +103,7 @@ const GET_ONE_SESSION = gql`
           id
           email
           displayName
+          role
         }
         annotations {
           id
@@ -117,6 +120,7 @@ const GET_ONE_SESSION = gql`
       }
       owner {
         id
+        role
         createdAt
         updatedAt
       }
@@ -149,6 +153,12 @@ const GET_MARKERS = gql`
       type
       valueRangeFrom
       valueRangeTo
+      owner {
+        id
+        role
+        createdAt
+        updatedAt
+      }
     }
   }
 `;
@@ -159,6 +169,9 @@ const GET_USER = gql`
       id
       displayName
       email
+      role
+      createdAt
+      updatedAt
     }
   }
 `;

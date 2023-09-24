@@ -1,4 +1,4 @@
-import { MarkerType } from '../../../graphql/generated/graphql';
+import { MarkerType, User } from '../../../graphql/generated/graphql';
 
 export interface Marker {
   id: number;
@@ -9,7 +9,8 @@ export interface Marker {
   color: string;
   contentColor: string;
   icon?: string | null;
-  visible: boolean | true;
+  visible?: boolean | true;
   valueRangeFrom?: number | null;
   valueRangeTo?: number | null;
+  owner?: User | null;
 }

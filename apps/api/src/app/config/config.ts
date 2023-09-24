@@ -97,4 +97,7 @@ export class Config {
 
   @IsString()
   public readonly koalaAssetsUrl: string;
+
+  @IsString()
+  public readonly uploadFolderPath: string = './uploads';
 }

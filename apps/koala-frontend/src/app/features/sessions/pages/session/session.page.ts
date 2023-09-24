@@ -49,11 +49,13 @@ export class SessionPage implements OnInit, OnDestroy {
   userID = -1;
   timer = '0:00';
   seeked = false;
+  isBusy = false;
   private myUserSession?: UserSession;
 
   sessionUpdatedSubscription?: Subscription;
   toolbarUpdatedSubscription?: Subscription;
   private timerSubscription?: Subscription;
+  private audioTimerSubscription?: Subscription;
 
   sessionSettingsToggled$ = this.navigationService.sessionSettingsSidePanelToggled$;
   session$ = this.sessionService.focusSessionChanged$;
@@ -86,6 +88,8 @@ export class SessionPage implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    this.isBusy = true;
+
     this.sessionId = parseInt(this.route.snapshot.paramMap.get('sessionId') || '0');
     this.authService.me().subscribe({
       next: (data) => {
@@ -115,6 +119,19 @@ export class SessionPage implements OnInit, OnDestroy {
         if (!session.isSessionOwner && session.isAudioSession && !session.enablePlayer) {
           this.mediaControlService.setPosition(session.playPosition || 0);
           this.currentAudioTime = session.playPosition || 0;
+
+          if (session.playMode === PlayMode.Running) {
+            this.audioTimerSubscription?.unsubscribe();
+            this.audioTimerSubscription = timer(100, 100).subscribe(() => {
+              const newAudioPosition = this.mediaControlService.getCurrentTime() + 0.1;
+              this.mediaControlService.setPosition(newAudioPosition);
+              this.currentAudioTime = newAudioPosition;
+            });
+          } else {
+            this.audioTimerSubscription?.unsubscribe();
+          }
+        } else {
+          this.audioTimerSubscription?.unsubscribe();
         }
 
         if (session.liveSessionStart && session.playMode === PlayMode.Running) {
@@ -173,6 +190,8 @@ export class SessionPage implements OnInit, OnDestroy {
         this.waveContainer = `waveContainer-${focusSession.id}`;
 
         await this.loadMediaData(focusSession.media.id);
+      } else {
+        this.isBusy = false;
       }
 
       const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
@@ -232,6 +251,9 @@ export class SessionPage implements OnInit, OnDestroy {
             .subscribe({
               next: () => {
                 this.totalAudioTime = this.sessionControlService.getDuration();
+                //switch off busy state
+                this.isBusy = false;
+
                 resolve();
               },
             });
