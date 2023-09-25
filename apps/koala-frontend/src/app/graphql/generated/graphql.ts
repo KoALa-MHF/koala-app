@@ -1500,6 +1500,7 @@ export const SetPlayModeDocument = gql`
       playMode
       playPosition
       liveSessionStart
+      isAudioSession
       code
       media {
         id
