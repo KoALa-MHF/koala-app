@@ -39,6 +39,34 @@ export class AnnotationsService {
       note: createMarkerInput.note,
     });
 
+    // check for events or sliders/ranges
+    if (newAnnotation.value == undefined) {
+      return this.annotationsRepository.save(newAnnotation);
+    }
+
+    const allAnnotations = await this.annotationsRepository.findBy({
+      markerId: createMarkerInput.markerId,
+    });
+
+    // delete all annotations that are in the future of the curren one being created
+    const futureAnnotations = allAnnotations.filter((annotation) => {
+      if (annotation.start > newAnnotation.start) {
+        return true;
+      }
+    });
+
+    const updatedAnnotations = allAnnotations.map((annoation) => {
+      if (annoation.start < newAnnotation.start) {
+        if (annoation.end > newAnnotation.start) {
+          annoation.end = newAnnotation.start;
+        }
+      }
+      return annoation;
+    });
+
+    await this.annotationsRepository.save(updatedAnnotations);
+    await this.annotationsRepository.remove(futureAnnotations);
+
     return this.annotationsRepository.save(newAnnotation);
   }
 

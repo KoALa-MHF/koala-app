@@ -50,7 +50,6 @@ export class MediaControlService {
     }
     const audio = new Audio();
     audio.src = URL.createObjectURL(audioBlob);
-    const timelineContainer = document.getElementById(`${this.uuid}-timeline`)!;
     this.createMediadata(audioBlob);
     this.waves.set(
       this.uuid,
@@ -117,7 +116,9 @@ export class MediaControlService {
   setPosition(positionInSeconds: number) {
     try {
       this.getWave().setTime(positionInSeconds);
-    } catch {}
+    } catch {
+      console.log('error setting media time position');
+    }
   }
 
   private async createMediadata(blob: Blob): Promise<any> {
