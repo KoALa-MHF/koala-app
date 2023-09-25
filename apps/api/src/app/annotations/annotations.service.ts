@@ -55,13 +55,13 @@ export class AnnotationsService {
       }
     });
 
-    const updatedAnnotations = allAnnotations.map((annoation) => {
-      if (annoation.start < newAnnotation.start) {
-        if (annoation.end > newAnnotation.start) {
-          annoation.end = newAnnotation.start;
+    const updatedAnnotations = allAnnotations.map((annotation) => {
+      if (annotation.start < newAnnotation.start) {
+        if (annotation.end > newAnnotation.start) {
+          annotation.end = newAnnotation.start;
         }
       }
-      return annoation;
+      return annotation;
     });
 
     await this.annotationsRepository.save(updatedAnnotations);
