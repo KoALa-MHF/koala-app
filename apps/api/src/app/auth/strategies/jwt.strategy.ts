@@ -5,6 +5,7 @@ import { UsersService } from '../../users/users.service';
 import { User } from '../../users/entities/user.entity';
 import { Payload } from '../models/payload.model';
 import { EntityNotFoundError } from 'typeorm';
+import { authConfig } from '../../config/config.module';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -12,7 +13,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: 'jWTSecret', // TODO Move to config
+      secretOrKey: authConfig.secret,
     });
   }
 

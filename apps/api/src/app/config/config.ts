@@ -79,6 +79,14 @@ export class SamlConfig {
   public readonly identifierFormat: string | null;
 }
 
+export class AuthConfig {
+  @IsString()
+  public readonly secret: string;
+
+  @IsString()
+  public readonly expiresIn: string = '24h';
+}
+
 export class Config {
   @Type(() => DatabaseConfig)
   @ValidateNested()
@@ -91,6 +99,10 @@ export class Config {
   @Type(() => SamlConfig)
   @ValidateNested()
   public readonly saml: SamlConfig = new SamlConfig();
+
+  @Type(() => AuthConfig)
+  @ValidateNested()
+  public readonly auth: AuthConfig = new AuthConfig();
 
   @IsString()
   public readonly koalaFrontendUrl: string;
