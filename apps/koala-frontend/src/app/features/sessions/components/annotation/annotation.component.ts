@@ -24,11 +24,13 @@ export enum Display {
 export interface DataPoint {
   id: number;
   note?: string;
-  strength: number;
+  strength?: number;
   display: Display;
   startTime: number;
   endTime: number;
   color: string;
+  transparent?: boolean;
+  active?: boolean;
 }
 
 @Component({
@@ -172,8 +174,10 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
     const trans = svg.transition().duration(50);
     const posY = this.getPositionY(index);
     const rowElem = svg.select('g#row_' + row);
-    const mouseover = (d: any, ev: any) => {
-      d3.select(ev.target).style('stroke', 'black').style('opacity', 1);
+    const mouseover = (d: DataPoint, ev: any) => {
+      if (!d.transparent) {
+        d3.select(ev.target).style('stroke', 'black').style('opacity', 1);
+      }
     };
     const click = (d: any, ev: any) => {
       this.annotationDetailOverlay.show(null, ev.target);
@@ -183,7 +187,9 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
       this.selectedDataPoint = d;
     };
     const mouseleave = (d: any, ev: any) => {
-      d3.select(ev.target).style('stroke', 'none').style('opacity', 1);
+      if (!d.transparent) {
+        d3.select(ev.target).style('stroke', 'none').style('opacity', 1);
+      }
     };
 
     rowElem
@@ -205,6 +211,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
             .attr('height', (d: DataPoint) => this.getRectHeight(d, m))
             .attr('id', (d: DataPoint) => `row_${row}_${d.id}`)
             .attr('fill', (d: DataPoint) => d.color)
+            .attr('opacity', (d: DataPoint) => (d.transparent ? 0.3 : 1))
             .on('mouseleave', (ev, d) => mouseleave(d, ev))
             .on('mouseover', (ev, d) => mouseover(d, ev))
             .on('click', (ev, d) => click(d, ev)),
@@ -268,7 +275,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
 
   private getRectHeight(d: DataPoint, m: Marker) {
     if (!d.strength || d.strength == 0) {
-      return 2;
+      return 4;
     }
     if (m.valueRangeTo) {
       this.sliderHeight = 30 / m.valueRangeTo;
@@ -278,7 +285,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
 
   private getRectPositionY(d: DataPoint, posY: number, m: Marker) {
     if (!d.strength) {
-      return posY - 1;
+      return posY - 2;
     }
     if (d.strength < 0) {
       return posY;
@@ -293,7 +300,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
     if (d.display == Display.Circle) {
       return 0;
     }
-    if (d.endTime == 0) {
+    if (d.active) {
       const w = Math.abs(this.currentTime - d.startTime / 1000) * this.getPositionXRatio();
       return w.toFixed(1);
     }

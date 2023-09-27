@@ -140,6 +140,7 @@ const CREATE_USERSESSION = gql`
     createUserSession(createUserSessionInput: { sessionId: $sessionId, owner: { email: $email } }) {
       id
       owner {
+        role
         email
       }
     }
@@ -230,6 +231,7 @@ const SET_PLAY_MODE = gql`
         owner {
           id
           email
+          role
         }
         annotations {
           id
@@ -245,6 +247,7 @@ const SET_PLAY_MODE = gql`
       }
       owner {
         id
+        role
         createdAt
         updatedAt
       }
@@ -293,6 +296,7 @@ const SET_PLAY_POSITION = gql`
         owner {
           id
           email
+          role
         }
         annotations {
           id
@@ -308,6 +312,7 @@ const SET_PLAY_POSITION = gql`
       }
       owner {
         id
+        role
         createdAt
         updatedAt
       }
@@ -334,6 +339,7 @@ const UPDATE_MARKER = gql`
       updatedAt
       owner {
         id
+        role
         createdAt
         updatedAt
       }

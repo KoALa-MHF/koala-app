@@ -55,6 +55,7 @@ export class SessionPage implements OnInit, OnDestroy {
   sessionUpdatedSubscription?: Subscription;
   toolbarUpdatedSubscription?: Subscription;
   private timerSubscription?: Subscription;
+  private audioTimerSubscription?: Subscription;
 
   sessionSettingsToggled$ = this.navigationService.sessionSettingsSidePanelToggled$;
   session$ = this.sessionService.focusSessionChanged$;
@@ -118,6 +119,19 @@ export class SessionPage implements OnInit, OnDestroy {
         if (!session.isSessionOwner && session.isAudioSession && !session.enablePlayer) {
           this.mediaControlService.setPosition(session.playPosition || 0);
           this.currentAudioTime = session.playPosition || 0;
+
+          if (session.playMode === PlayMode.Running) {
+            this.audioTimerSubscription?.unsubscribe();
+            this.audioTimerSubscription = timer(100, 100).subscribe(() => {
+              const newAudioPosition = this.mediaControlService.getCurrentTime() + 0.1;
+              this.mediaControlService.setPosition(newAudioPosition);
+              this.currentAudioTime = newAudioPosition;
+            });
+          } else {
+            this.audioTimerSubscription?.unsubscribe();
+          }
+        } else {
+          this.audioTimerSubscription?.unsubscribe();
         }
 
         if (session.liveSessionStart && session.playMode === PlayMode.Running) {
@@ -208,8 +222,12 @@ export class SessionPage implements OnInit, OnDestroy {
           this.currentAudioTime = time.toFixed(2);
         });
 
-        this.mediaControlService.addEventHandler('seeking', (time) => {
-          this.onSeeking(time);
+        this.mediaControlService.addEventHandler('seeking', () => {
+          this.endActiveSliders(this.currentAudioTime);
+        });
+
+        this.mediaControlService.addEventHandler('finish', () => {
+          this.endActiveSliders(this.totalAudioTime);
         });
 
         this.mediaControlService.mediaPlayStateChanged$
@@ -336,9 +354,9 @@ export class SessionPage implements OnInit, OnDestroy {
           id: annotation.id,
           note: annotation.note,
           startTime: annotation.start,
-          endTime: annotation.end != null ? annotation.end : 0,
+          endTime: annotation.end != 0 ? annotation.end : 0,
           strength: annotation.value,
-          display: annotation.end == null ? Display.Circle : Display.Rect,
+          display: annotation.end == 0 ? Display.Circle : Display.Rect,
           color: annotation.marker.color,
         });
       }
@@ -354,9 +372,6 @@ export class SessionPage implements OnInit, OnDestroy {
   }
 
   onMarkerButtonEvent({ marker, value }: { marker: Marker; value?: number }) {
-    /*if (this.audioPaused) {
-      return;
-    }*/
     let aData = this.AnnotationData.get(marker.id);
     if (aData == undefined) {
       aData = this.AnnotationData.set(marker.id, new Array<DataPoint>()).get(marker.id);
@@ -365,7 +380,9 @@ export class SessionPage implements OnInit, OnDestroy {
         this.onMarkerEvent(marker, aData);
       }
       if (marker.type === MarkerType.Range) {
-        this.onMarkerRange(marker, aData);
+        const filteredData = this.updateAnnotations(this.currentAudioTime, aData);
+        this.onMarkerRange(marker, filteredData);
+        this.AnnotationData.set(marker.id, filteredData);
       }
       if (marker.type === MarkerType.Slider) {
         const filteredData = this.updateAnnotations(this.currentAudioTime, aData);
@@ -379,26 +396,16 @@ export class SessionPage implements OnInit, OnDestroy {
     let t = this.sessionControlService.getCurrentTime();
     t = Math.floor(t);
 
-    this.AnnotationData.get(m.id)?.push({
+    const dp: DataPoint = {
       startTime: t,
       endTime: 0,
-      strength: 0,
       id: aData.length,
       color: m.color,
       display: Display.Circle,
-    });
-    this.annotationService
-      .create({
-        start: t,
-        userSessionId: this.myUserSession?.id || 0,
-        markerId: m.id,
-      })
-      .subscribe({
-        error: (error) => {
-          this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.ANNOTATION_ERROR', '');
-          console.log(error);
-        },
-      });
+    };
+
+    this.AnnotationData.get(m.id)?.push(dp);
+    this.saveAnnotation(dp, m.id);
   }
 
   onMarkerRange(m: Marker, aData: DataPoint[]) {
@@ -406,23 +413,13 @@ export class SessionPage implements OnInit, OnDestroy {
     t = Math.floor(t);
     if (aData.length > 0) {
       const latest = aData.at(-1);
-      if (latest?.endTime == 0) {
-        latest.endTime = Math.floor(this.sessionControlService.getCurrentTime());
-
-        this.annotationService
-          .create({
-            start: latest.startTime,
-            end: latest.endTime,
-            userSessionId: this.myUserSession?.id || 0,
-            markerId: m.id,
-          })
-          .subscribe({
-            error: (error) => {
-              this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.ANNOTATION_ERROR', '');
-              console.log(error);
-            },
-          });
-        return;
+      if (latest) {
+        if (latest.active) {
+          latest.endTime = Math.floor(this.sessionControlService.getCurrentTime());
+          latest.active = false;
+          this.saveAnnotation(latest, m.id);
+          return;
+        }
       }
     }
     this.AnnotationData.get(m.id)?.push({
@@ -432,6 +429,7 @@ export class SessionPage implements OnInit, OnDestroy {
       id: aData.length,
       color: m.color,
       display: Display.Rect,
+      active: true,
     });
   }
 
@@ -439,52 +437,26 @@ export class SessionPage implements OnInit, OnDestroy {
     const strength = value;
     let t = this.sessionControlService.getCurrentTime();
     t = Math.floor(t);
-    if (aData.length == 0) {
+    const latest = aData.at(-1);
+    if (latest) {
+      if (latest.active) {
+        latest.endTime = t;
+        latest.active = false;
+        this.saveAnnotation(latest, m.id);
+      }
+    }
+    if (strength != 0) {
       aData.push({
         startTime: t,
         endTime: 0,
         strength: strength,
-        id: 1,
+        id: aData.length,
         color: m.color,
         display: Display.Rect,
+        active: true,
       });
-      return;
     }
-    const latest = aData.at(-1);
-    if (latest) {
-      if (latest.endTime == 0) {
-        latest.endTime = t;
-
-        this.annotationService
-          .create({
-            start: latest.startTime,
-            end: latest.endTime,
-            value: latest.strength,
-            userSessionId: this.myUserSession?.id || 0,
-            markerId: m.id,
-          })
-          .subscribe({
-            next: (result) => {
-              latest.id = result.data?.createAnnotation.id || 1;
-            },
-            error: (error) => {
-              this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.ANNOTATION_ERROR', '');
-              console.log(error);
-            },
-          });
-      }
-      if (strength != 0) {
-        aData.push({
-          startTime: t,
-          endTime: 0,
-          strength: strength,
-          id: aData.length,
-          color: m.color,
-          display: Display.Rect,
-        });
-      }
-      this.AnnotationData.set(m.id, aData);
-    }
+    this.AnnotationData.set(m.id, aData);
   }
 
   onMediaEvent(evt: MediaEvent) {
@@ -583,7 +555,15 @@ export class SessionPage implements OnInit, OnDestroy {
 
   onDeleteAnnotations(marker: Marker) {
     this.AnnotationData.get(marker.id)?.forEach((annotation) => {
-      this.annotationService.remove(annotation.id).subscribe();
+      this.annotationService.remove(annotation.id).subscribe({
+        error: (err) => {
+          console.log(err);
+          this.messageService.add({
+            severity: 'error',
+            summary: this.translateService.instant('SESSION.MAINTAIN.SESSION_SETTINGS.SAVE_ERROR_MESSAGE_TITLE'),
+          });
+        },
+      });
     });
 
     this.AnnotationData.set(marker.id, new Array<DataPoint>());
@@ -611,16 +591,16 @@ export class SessionPage implements OnInit, OnDestroy {
     return this.sidePanelForm.get('markersArray') as FormGroup;
   }
 
-  onSeeking(time: number) {
-    time = time * 1000;
+  endActiveSliders(time: number) {
     this.AnnotationData.forEach((marker, id) => {
       this.AnnotationData.get(id)?.forEach((annotation, i) => {
         if (annotation.display == Display.Circle) {
           return;
         }
-        if (annotation.endTime == 0 && annotation.startTime > time) {
-          // delete unfinished annotation
-          this.AnnotationData.get(id)?.splice(i, 1);
+        if (annotation.active) {
+          annotation.active = false;
+          annotation.endTime = Math.floor(time * 1000);
+          this.saveAnnotation(annotation, id);
         }
         return;
       });
@@ -629,33 +609,42 @@ export class SessionPage implements OnInit, OnDestroy {
 
   updateAnnotations(time: number, aData: DataPoint[]) {
     time = time * 1000;
-    aData.forEach((dp, i) => {
-      if (dp.startTime < time && dp.endTime > time) {
-        dp.endTime = 0;
-        this.annotationService.remove(dp.id).subscribe({
-          error: (error) => {
-            this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.ANNOTATION_ERROR', '');
-            console.log(error);
-          },
-        });
+    aData.forEach((dp: DataPoint) => {
+      // ignore
+      if (dp.endTime != 0 && dp.endTime < time) {
+        return;
       }
-    });
-    aData = aData.filter((dp: DataPoint) => {
-      if (dp.endTime < time || dp.endTime == 0) {
-        return true;
+      if (dp.active) {
+        dp.endTime = time;
       }
-      //delete annotation via api
-      this.annotationService.remove(dp.id).subscribe({
-        error: (error) => {
-          this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.ANNOTATION_ERROR', '');
-          console.log(error);
-        },
-      });
-      return false;
+      // all current/future annotations are transparent
+      if (dp.startTime > time || dp.endTime > time) {
+        dp.transparent = true;
+      }
     });
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'));
     }, 100);
     return aData;
+  }
+
+  saveAnnotation(d: DataPoint, markerID: number) {
+    this.annotationService
+      .create({
+        start: d.startTime,
+        end: d.endTime,
+        value: d.strength,
+        userSessionId: this.myUserSession?.id || 0,
+        markerId: markerID,
+      })
+      .subscribe({
+        next: (result) => {
+          d.id = result.data?.createAnnotation.id || 1;
+        },
+        error: (error) => {
+          this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.ANNOTATION_ERROR', '');
+          console.log(error);
+        },
+      });
   }
 }

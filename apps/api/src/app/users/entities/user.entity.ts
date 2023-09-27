@@ -1,5 +1,5 @@
 import { ObjectType, Field, ID, registerEnumType } from '@nestjs/graphql';
-import { AfterLoad, BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { AfterLoad, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '../../core/base.entity';
 
 export enum Role {
