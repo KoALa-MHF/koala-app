@@ -13,7 +13,7 @@
     <div class="p-toolbar-group-end"></div>
   </p-toolbar>
   <div *ngFor="let userSession of session.userSessions ">
-    <div style="display: flex">
+    <div style="display: flex" *ngIf="userSession.visible">
       <p class="session-name">
         {{userSession.owner?.displayName || userSession.owner?.email || userSession.owner?.id }}
       </p>
@@ -31,6 +31,41 @@
   <p-sidebar [visible]="(sessionAnalysisSettingsToggled$ | async) || false" (onHide)="onSidebarHide()" position="right">
     <ng-template pTemplate="header">
       <span class="sidebar-title">Freigaben</span>
+    </ng-template>
+    <ng-template pTemplate="content">
+      <div class="form-group">
+        <b>{{'SESSION.SIDEBAR.MARKER_TITLE' | translate}}</b>
+      </div>
+      <div class="form-group overflow">
+        <div *ngFor="let userSession of session.userSessions ">
+          <p-checkbox
+            type="checkbox"
+            [id]="userSession.owner?.id"
+            label="{{userSession.owner?.displayName || userSession.owner?.email || userSession.owner?.id }}"
+            [binary]="true"
+            [ngModel]="userSession.visible"
+            (ngModelChange)="onUserSessionDisplayChange($event, userSession)"
+          ></p-checkbox>
+        </div>
+      </div>
+
+      <p-divider></p-divider>
+
+      <div class="form-group">
+        <b>{{'SESSION.SIDEBAR.MARKER_TITLE' | translate}}</b>
+      </div>
+      <div class="form-group overflow">
+        <div *ngFor="let marker of markers">
+          <p-checkbox
+            type="checkbox"
+            [id]="marker.id"
+            label="{{marker.name}}"
+            [binary]="true"
+            [ngModel]="marker.visible"
+            (ngModelChange)="onMarkerDisplayChange($event, marker)"
+          ></p-checkbox>
+        </div>
+      </div>
     </ng-template>
   </p-sidebar>
 </div>

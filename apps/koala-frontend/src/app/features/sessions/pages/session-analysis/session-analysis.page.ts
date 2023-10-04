@@ -13,6 +13,8 @@ import { environment } from '../../../../../environments/environment';
 import { Marker } from '../../types/marker.entity';
 import { filter } from 'rxjs';
 import { NavigationService } from '../../services/navigation.service';
+import { ToolbarsService } from '../../services/toolbars.service';
+import { UserSession } from '../../types/user-session.entity';
 
 export interface AnnotationData {
   AnnotationData: Map<number, Array<DataPoint>>;
@@ -50,6 +52,7 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly mediaControlService: MediaControlService,
     private readonly messageService: MessageService,
+    private readonly toolbarService: ToolbarsService,
     private readonly translateService: TranslateService,
     private readonly navigationService: NavigationService,
     private appRef: ApplicationRef
@@ -186,17 +189,18 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
   }
 
   private loadAnnotations(userSessions: any[]): void {
-    for (const userSessoin of userSessions) {
-      this.userSessionAnnotationData.set(userSessoin.id, {
+    for (const userSession of userSessions) {
+      userSession.visible = true;
+      this.userSessionAnnotationData.set(userSession.id, {
         AnnotationData: new Map<number, Array<DataPoint>>(),
       });
       for (const marker of this.markers) {
-        this.userSessionAnnotationData.get(userSessoin.id)?.AnnotationData.set(marker.id, new Array<DataPoint>());
+        this.userSessionAnnotationData.get(userSession.id)?.AnnotationData.set(marker.id, new Array<DataPoint>());
       }
-      for (const annotation of userSessoin.annotations) {
-        if (this.userSessionAnnotationData.get(userSessoin.id)) {
+      for (const annotation of userSession.annotations) {
+        if (this.userSessionAnnotationData.get(userSession.id)) {
           this.userSessionAnnotationData
-            .get(userSessoin.id)
+            .get(userSession.id)
             ?.AnnotationData.get(annotation.marker.id)
             ?.push({
               id: annotation.id,
@@ -208,12 +212,12 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
             });
         }
       }
-      if (this.userSessionAnnotationData.get(userSessoin.id)?.AnnotationData) {
+      if (this.userSessionAnnotationData.get(userSession.id)?.AnnotationData) {
         // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
-        this.userSessionAnnotationData.get(userSessoin.id)!.AnnotationData = new Map(
+        this.userSessionAnnotationData.get(userSession.id)!.AnnotationData = new Map(
           [
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            ...this.userSessionAnnotationData.get(userSessoin.id)!.AnnotationData.entries(),
+            ...this.userSessionAnnotationData.get(userSession.id)!.AnnotationData.entries(),
           ].sort()
         );
       }
@@ -238,6 +242,38 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
         });
       });
   }
+
+  onUserSessionDisplayChange(value: boolean, userSession: UserSession) {
+    if (this.session.userSessions) {
+      this.session.userSessions = this.session.userSessions.map((u) =>
+        u.id == userSession.id ? { ...u, visible: value } : u
+      );
+      this.appRef.tick();
+      window.dispatchEvent(new Event('resize'));
+    }
+  }
+
+  onMarkerDisplayChange(value: boolean, marker: Marker) {
+    this.markers = this.markers.map((m) => (m.id == marker.id ? { ...m, visible: value } : m));
+
+    const toolbars = this.sessionService.getFocusSession()?.toolbars;
+
+    if (toolbars) {
+      const toolbar = toolbars[0];
+      this.toolbarService
+        .setVisibilityForMarker(parseInt(toolbar.id), {
+          markerId: marker.id.toString(),
+          visible: value,
+        })
+        .subscribe({
+          error: (error) => {
+            console.log('Toolbar Update Error');
+            console.log(error);
+          },
+        });
+    }
+  }
+
   onMediaEvent(evt: MediaEvent) {
     switch (evt.actions) {
       case MediaActions.Play:
