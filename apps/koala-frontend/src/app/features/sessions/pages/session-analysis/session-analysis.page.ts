@@ -266,6 +266,14 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
           visible: value,
         })
         .subscribe({
+          next: () => {
+            this.appRef.tick();
+
+            setTimeout(() => {
+              //TODO: fix using separate component/service
+              window.dispatchEvent(new Event('resize'));
+            }, 100);
+          },
           error: (error) => {
             console.log('Toolbar Update Error');
             console.log(error);
