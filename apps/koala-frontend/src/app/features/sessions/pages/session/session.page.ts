@@ -222,8 +222,10 @@ export class SessionPage implements OnInit, OnDestroy {
           this.currentAudioTime = time.toFixed(2);
         });
 
-        this.mediaControlService.addEventHandler('seeking', () => {
-          this.endActiveSliders(this.currentAudioTime);
+        this.mediaControlService.addEventHandler('seeking', (time) => {
+          if (time != 0) {
+            this.endActiveSliders(this.currentAudioTime);
+          }
         });
 
         this.mediaControlService.addEventHandler('finish', () => {
@@ -234,6 +236,7 @@ export class SessionPage implements OnInit, OnDestroy {
           .pipe(filter((mediaAction) => mediaAction === MediaActions.Stop))
           .subscribe({
             next: () => {
+              this.endActiveSliders(this.currentAudioTime);
               this.audioPaused = true;
             },
           });
