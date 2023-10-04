@@ -1,5 +1,5 @@
 import { TypedConfigModule, fileLoader, selectConfig, dotenvLoader } from 'nest-typed-config';
-import { Config, DatabaseConfig, MailConfig, SamlConfig } from './config';
+import { Config, DatabaseConfig, MailConfig, SamlConfig, AuthConfig } from './config';
 import { plainToClass } from 'class-transformer';
 import { validateSync } from 'class-validator';
 
@@ -47,3 +47,4 @@ export const config = selectConfig(ConfigModule, Config);
 export const databaseConfig = selectConfig(ConfigModule, DatabaseConfig);
 export const mailConfig = selectConfig(ConfigModule, MailConfig);
 export const samlConfig = selectConfig(ConfigModule, SamlConfig);
+export const authConfig = selectConfig(ConfigModule, AuthConfig);
