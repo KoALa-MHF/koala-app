@@ -22,7 +22,7 @@
     <button
       pButton
       pRipple
-      *ngIf="isAuthenticated$ | async"
+      *ngIf="(isAuthenticated$ | async) && userRole === Role.User"
       icon="pi pi-bookmark"
       label="{{ 'SESSION.MARKERS_OVERVIEW_NAV_BTN' | translate }}"
       class="p-button-text hidden-xs hidden-sm"
