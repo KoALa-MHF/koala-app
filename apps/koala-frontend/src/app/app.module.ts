@@ -32,7 +32,7 @@ import { APP_BASE_HREF, registerLocaleData } from '@angular/common';
 import { AccessTokenService } from './features/auth/services/access-token.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http);
+  return new TranslateHttpLoader(http, 'assets/i18n/');
 }
 
 @NgModule({
@@ -62,7 +62,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   providers: [
     [
-      { provide: APP_BASE_HREF, useValue: '/app' },
+      { provide: APP_BASE_HREF, useValue: '/app/' },
     ],
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     {
