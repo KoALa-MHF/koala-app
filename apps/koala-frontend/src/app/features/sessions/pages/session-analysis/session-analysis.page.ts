@@ -12,6 +12,7 @@ import { Session } from '../../types/session.entity';
 import { environment } from '../../../../../environments/environment';
 import { Marker } from '../../types/marker.entity';
 import { filter } from 'rxjs';
+import { NavigationService } from '../../services/navigation.service';
 
 export interface AnnotationData {
   AnnotationData: Map<number, Array<DataPoint>>;
@@ -39,6 +40,8 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
   totalAudioTime = 0;
   audioPaused = true;
 
+  sessionAnalysisSettingsToggled$ = this.navigationService.sessionAnalysisSettingsSidePanelToggled$;
+
   constructor(
     private readonly sessionService: SessionsService,
     private readonly annotationService: AnnotationService,
@@ -48,6 +51,7 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
     private readonly mediaControlService: MediaControlService,
     private readonly messageService: MessageService,
     private readonly translateService: TranslateService,
+    private readonly navigationService: NavigationService,
     private appRef: ApplicationRef
   ) {}
 
@@ -214,6 +218,10 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
         );
       }
     }
+  }
+
+  onSidebarHide() {
+    this.navigationService.setSessionAnalysisSettingsSidePanelVisible(false);
   }
 
   private showErrorMessage(severity: string, detail: string, sum: string) {

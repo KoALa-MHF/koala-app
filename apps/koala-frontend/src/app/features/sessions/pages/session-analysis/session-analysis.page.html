@@ -27,4 +27,7 @@
       ></koala-app-annotation>
     </div>
   </div>
+
+  <p-sidebar [visible]="(sessionAnalysisSettingsToggled$ | async) || false" (onHide)="onSidebarHide()" position="right">
+  </p-sidebar>
 </div>
