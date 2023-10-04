@@ -197,9 +197,9 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
             ?.push({
               id: annotation.id,
               startTime: annotation.start,
-              endTime: annotation.end != null ? annotation.end : 0,
+              endTime: annotation.end != 0 ? annotation.end : 0,
               strength: annotation.value,
-              display: annotation.end == null ? Display.Circle : Display.Rect,
+              display: annotation.end == 0 ? Display.Circle : Display.Rect,
               color: annotation.marker.color,
             });
         }
