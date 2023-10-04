@@ -29,5 +29,8 @@
   </div>
 
   <p-sidebar [visible]="(sessionAnalysisSettingsToggled$ | async) || false" (onHide)="onSidebarHide()" position="right">
+    <ng-template pTemplate="header">
+      <span class="sidebar-title">Freigaben</span>
+    </ng-template>
   </p-sidebar>
 </div>

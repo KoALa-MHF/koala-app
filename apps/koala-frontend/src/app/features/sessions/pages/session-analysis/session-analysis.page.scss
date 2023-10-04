@@ -32,3 +32,20 @@ koala-app-annotation {
   margin-bottom: 10px;
   flex: 20;
 }
+
+.p-sidebar-header {
+  background-color: #006687;
+}
+
+.sidebar-title {
+  color: #ffffff;
+}
+
+.p-sidebar {
+  background-color: #bad8d4;
+}
+
+.p-sidebar .p-sidebar-header .p-sidebar-close,
+.p-sidebar .p-sidebar-header .p-sidebar-icon {
+  color: #ffffff;
+}
