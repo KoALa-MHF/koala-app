@@ -9,13 +9,14 @@ import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { SamlStrategy } from './strategies/saml.strategy';
+import { authConfig } from '../config/config.module';
 
 @Module({
   imports: [
     PassportModule,
     JwtModule.register({
-      secret: 'jWTSecret', // TODO Move to config
-      signOptions: { expiresIn: '24h' },
+      secret: authConfig.secret,
+      signOptions: { expiresIn: authConfig.expiresIn },
     }),
     UserSessionsModule,
     UsersModule,
