@@ -7,6 +7,7 @@ import { AuthService } from '../../../features/auth/services/auth.service';
 import { environment } from '../../../../environments/environment';
 import { NavigationService } from '../../../features/sessions/services/navigation.service';
 import { SessionsService } from '../../../features/sessions/services/sessions.service';
+import { Role } from '../../../graphql/generated/graphql';
 
 export enum LANGUAGE_CODE {
   GERMAN = 'de',
@@ -36,6 +37,9 @@ export class HeaderComponent implements OnInit {
 
   sidebarVisible = false;
 
+  userRole = Role.Guest;
+  Role = Role;
+
   isAuthenticated$ = this.authService.isAuthenticated$;
   language$ = merge(this.translateService.onDefaultLangChange, this.translateService.onLangChange).pipe(
     map((event) => event.lang),
@@ -55,6 +59,10 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.authService.me().subscribe((result) => {
+      this.userRole = result.role;
+    });
+
     this.router.events
       .pipe(filter((event: any) => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
