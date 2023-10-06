@@ -41,6 +41,27 @@ koala-app-annotation {
   color: #dee9ed;
 }
 
+.content {
+  font-size: small;
+}
+
+.p-checkbox .p-checkbox-box.p-highlight {
+  border-color: #226685;
+  background: #226685;
+}
+
+.p-checkbox:hover .p-checkbox-box.p-highlight:hover {
+  border-color: #34738f;
+  background: #34738f;
+}
+
+.sidebar-sub-title {
+  color: #494b49;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
 .p-sidebar {
   background-color: #c0d7d4;
 }

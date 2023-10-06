@@ -24,7 +24,8 @@
     "SESSION_CLOSED_INFO": "Die Session ist beendet",
     "SIDEBAR": {
       "SESSION_GENERAL_SETTINGS_TITLE": "Freigaben",
-      "MARKER_TITLE": "Marker"
+      "MARKER_TITLE": "Marker",
+      "PARTICIPANTS_TITLE": "Mitglieder"
     },
     "CREATE_DIALOG": {
       "TITLE": "Neue Session Anlegen",
