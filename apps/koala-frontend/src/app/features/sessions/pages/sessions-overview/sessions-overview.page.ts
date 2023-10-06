@@ -8,6 +8,8 @@ import { UserSessionService } from '../../services/user-session.service';
 import { saveAs } from 'file-saver';
 import { MessageService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
+import { AuthService } from '../../../auth/services/auth.service';
+import { Role } from '../../../../graphql/generated/graphql';
 
 @Component({
   selector: 'koala-sessions-overview',
@@ -26,6 +28,8 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
   showDeleteConfirm = false;
   selectedSessions?: Session[];
   selectedSession?: Session;
+  userRole = Role.Guest;
+  Role = Role;
 
   constructor(
     private readonly sessionService: SessionsService,
@@ -33,6 +37,7 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly userSessionService: UserSessionService,
     private readonly messageService: MessageService,
+    private readonly authService: AuthService,
     private readonly translateService: TranslateService
   ) {}
 
@@ -45,6 +50,10 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
       name: new FormControl<string>('', [
         Validators.required,
       ]),
+    });
+
+    this.authService.me().subscribe((response) => {
+      this.userRole = response.role;
     });
   }
 

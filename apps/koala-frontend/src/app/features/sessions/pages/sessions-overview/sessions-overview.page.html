@@ -1,6 +1,6 @@
 <div style="margin: 20px">
   <p-accordion [multiple]="true">
-    <p-accordionTab [selected]="true">
+    <p-accordionTab *ngIf="userRole === Role.User" [selected]="true">
       <ng-template pTemplate="header">
         <span>
           <!--style="font: 500 20px / 32px Roboto, 'Helvetica Neue', sans-serif"-->
@@ -18,7 +18,7 @@
         (sessionCodeDisplay)="onSessionCodeDisplay($event)"
       ></koala-sessions-overview-table>
     </p-accordionTab>
-    <p-accordionTab>
+    <p-accordionTab [selected]="userRole === Role.Guest">
       <ng-template pTemplate="header">
         <span> {{ 'SESSION.OVERVIEW.OTHER_SESSIONS_TITLE' | translate }} </span>
       </ng-template>
