@@ -113,7 +113,7 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
             ],
             { type: 'application/json;charset=utf-8' }
           );
-          saveAs(blob, `${result.name}.json`);
+          saveAs(blob, `${result.name}_${result.id}.json`);
         },
         error: () => {
           this.messageService.add({

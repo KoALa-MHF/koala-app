@@ -67,7 +67,11 @@ export class SessionsOverviewTableComponent {
     this.sessionCodeDisplay.emit(session);
   }
 
-  public onExport() {
+  public onJSONExport() {
+    this.sessionExport.emit(this.selectedSessions);
+  }
+
+  public onCSVExport() {
     this.sessionExport.emit(this.selectedSessions);
   }
 
