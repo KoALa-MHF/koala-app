@@ -18,3 +18,14 @@
   display: inline-block;
   padding-left: 15px;
 }
+
+.inline-component {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.inline-component > * {
+  width: auto;
+}
