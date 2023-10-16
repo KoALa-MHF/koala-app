@@ -12,7 +12,7 @@ import { MarkersModule } from './markers/markers.module';
 import { UserSessionsModule } from './user-sessions/user-sessions.module';
 import { AnnotationsModule } from './annotations/annotations.module';
 import { formatError } from './core/formatters/grapqhl-error.formatter';
-import { ConfigModule, mailConfig } from './config/config.module';
+import { ConfigModule, authConfig, mailConfig } from './config/config.module';
 import { ToolbarsModule } from './toolbars/toolbars.module';
 
 import { MailerModule } from '@nestjs-modules/mailer';
@@ -58,7 +58,7 @@ import { UsersService } from './users/users.service';
               }
 
               const token = authToken.split(' ')[1];
-              const { sub } = jwtService.verify(token, { secret: 'jWTSecret' });
+              const { sub } = jwtService.verify(token, { secret: authConfig.secret });
 
               const user = await userService.findOne(sub);
               return { user };
