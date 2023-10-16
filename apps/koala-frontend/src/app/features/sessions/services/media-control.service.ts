@@ -71,7 +71,6 @@ export class MediaControlService {
       const w = this.getWave();
 
       this.addEventHandler('pause', () => {
-        console.log(this.getCurrentTime());
         this.mediaPlayStateChangedSubject.next(MediaActions.Stop);
       });
       this.addEventHandler('play', () => {
