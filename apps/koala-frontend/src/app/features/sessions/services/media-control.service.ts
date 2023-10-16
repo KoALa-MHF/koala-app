@@ -71,6 +71,7 @@ export class MediaControlService {
       const w = this.getWave();
 
       this.addEventHandler('pause', () => {
+        console.log(this.getCurrentTime());
         this.mediaPlayStateChangedSubject.next(MediaActions.Stop);
       });
       this.addEventHandler('play', () => {
@@ -103,9 +104,7 @@ export class MediaControlService {
         if (this.sessionService.getFocusSession()?.isSessionOwner) {
           this.sessionService
             .setPlayPosition(parseInt(this.sessionService.getFocusSession()?.id || '0'), w.getDuration() * newTime)
-            .subscribe(() => {
-              console.log('Success');
-            });
+            .subscribe();
         }
       });
     } catch (e) {
