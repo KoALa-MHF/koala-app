@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { MarkerType } from '../../../../graphql/generated/graphql';
 import { TranslateService } from '@ngx-translate/core';
 import { MarkerService } from '../../services/marker.service';
+import { ColorPicker } from 'primeng/colorpicker';
 
 @Component({
   selector: 'koala-marker-maintain',
@@ -39,6 +40,12 @@ export class MarkerMaintainComponent {
 
   get markerType() {
     return this.markerDataForm.get('type')?.value;
+  }
+
+  public onColorChanged(color: ColorPicker): void {
+    // update form value manually
+    color.writeValue(color.inputBgColor);
+    color.onModelChange(color.inputBgColor);
   }
 
   constructor(private readonly markersService: MarkerService, private readonly translateService: TranslateService) {}
