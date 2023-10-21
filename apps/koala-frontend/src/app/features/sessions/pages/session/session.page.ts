@@ -402,6 +402,7 @@ export class SessionPage implements OnInit, OnDestroy {
       id: aData.length,
       color: m.color,
       display: Display.Circle,
+      note: '',
     };
 
     this.AnnotationData.get(m.id)?.push(dp);
@@ -430,6 +431,7 @@ export class SessionPage implements OnInit, OnDestroy {
       color: m.color,
       display: Display.Rect,
       active: true,
+      note: '',
     });
   }
 
@@ -454,6 +456,7 @@ export class SessionPage implements OnInit, OnDestroy {
         color: m.color,
         display: Display.Rect,
         active: true,
+        note: '',
       });
     }
     this.AnnotationData.set(m.id, aData);
