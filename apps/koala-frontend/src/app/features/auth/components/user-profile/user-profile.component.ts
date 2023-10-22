@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Role, User } from '../../../../graphql/generated/graphql';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'koala-user-profile',
@@ -17,6 +18,8 @@ export class UserProfileComponent implements OnInit, OnChanges {
 
   user?: User;
   Role = Role;
+  isAuthSubscription: Subscription | undefined;
+  isAuthenticated$ = this.authService.isAuthenticated$;
 
   constructor(private readonly authService: AuthService) {
     this.maintainUserProfileForm = new FormGroup({
@@ -25,7 +28,11 @@ export class UserProfileComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.readUserData();
+    this.isAuthSubscription = this.isAuthenticated$.subscribe((authenticated) => {
+      if (authenticated) {
+        this.readUserData();
+      }
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
