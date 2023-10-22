@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Role, User } from '../../../../graphql/generated/graphql';
@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
     './user-profile.component.scss',
   ],
 })
-export class UserProfileComponent implements OnInit, OnChanges {
+export class UserProfileComponent implements OnInit, OnChanges, OnDestroy {
   @Input() visible = false;
   @Output() visibleChange = new EventEmitter<boolean>();
   maintainUserProfileForm: FormGroup;
@@ -45,6 +45,10 @@ export class UserProfileComponent implements OnInit, OnChanges {
         }
       }
     }
+  }
+
+  ngOnDestroy(): void {
+    this.isAuthSubscription?.unsubscribe();
   }
 
   onSave() {
