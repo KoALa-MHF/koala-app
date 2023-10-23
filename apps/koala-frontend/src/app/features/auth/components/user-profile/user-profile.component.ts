@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Role, User } from '../../../../graphql/generated/graphql';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'koala-user-profile',
@@ -10,13 +11,15 @@ import { Role, User } from '../../../../graphql/generated/graphql';
     './user-profile.component.scss',
   ],
 })
-export class UserProfileComponent implements OnInit, OnChanges {
+export class UserProfileComponent implements OnInit, OnChanges, OnDestroy {
   @Input() visible = false;
   @Output() visibleChange = new EventEmitter<boolean>();
   maintainUserProfileForm: FormGroup;
 
   user?: User;
   Role = Role;
+  isAuthSubscription: Subscription | undefined;
+  isAuthenticated$ = this.authService.isAuthenticated$;
 
   constructor(private readonly authService: AuthService) {
     this.maintainUserProfileForm = new FormGroup({
@@ -25,7 +28,11 @@ export class UserProfileComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.readUserData();
+    this.isAuthSubscription = this.isAuthenticated$.subscribe((authenticated) => {
+      if (authenticated) {
+        this.readUserData();
+      }
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -38,6 +45,10 @@ export class UserProfileComponent implements OnInit, OnChanges {
         }
       }
     }
+  }
+
+  ngOnDestroy(): void {
+    this.isAuthSubscription?.unsubscribe();
   }
 
   onSave() {

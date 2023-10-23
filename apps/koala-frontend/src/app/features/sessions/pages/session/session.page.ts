@@ -222,10 +222,8 @@ export class SessionPage implements OnInit, OnDestroy {
           this.currentAudioTime = time.toFixed(2);
         });
 
-        this.mediaControlService.addEventHandler('seeking', (time) => {
-          if (time != 0) {
-            this.endActiveSliders(this.currentAudioTime);
-          }
+        this.mediaControlService.addEventHandler('click', () => {
+          this.endActiveSliders(this.currentAudioTime);
         });
 
         this.mediaControlService.addEventHandler('finish', () => {
@@ -236,7 +234,6 @@ export class SessionPage implements OnInit, OnDestroy {
           .pipe(filter((mediaAction) => mediaAction === MediaActions.Stop))
           .subscribe({
             next: () => {
-              this.endActiveSliders(this.currentAudioTime);
               this.audioPaused = true;
             },
           });
@@ -405,6 +402,7 @@ export class SessionPage implements OnInit, OnDestroy {
       id: aData.length,
       color: m.color,
       display: Display.Circle,
+      note: '',
     };
 
     this.AnnotationData.get(m.id)?.push(dp);
@@ -433,6 +431,7 @@ export class SessionPage implements OnInit, OnDestroy {
       color: m.color,
       display: Display.Rect,
       active: true,
+      note: '',
     });
   }
 
@@ -457,6 +456,7 @@ export class SessionPage implements OnInit, OnDestroy {
         color: m.color,
         display: Display.Rect,
         active: true,
+        note: '',
       });
     }
     this.AnnotationData.set(m.id, aData);
@@ -477,6 +477,7 @@ export class SessionPage implements OnInit, OnDestroy {
         break;
       case MediaActions.Stop:
         try {
+          this.endActiveSliders(this.currentAudioTime);
           this.sessionControlService.stopSession().subscribe();
         } catch (error) {
           this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');

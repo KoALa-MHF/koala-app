@@ -1,8 +1,8 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { OverlayPanel } from 'primeng/overlaypanel';
-import { filter, map, merge } from 'rxjs';
+import { Subscription, filter, map, merge } from 'rxjs';
 import { AuthService } from '../../../features/auth/services/auth.service';
 import { environment } from '../../../../environments/environment';
 import { NavigationService } from '../../../features/sessions/services/navigation.service';
@@ -22,7 +22,7 @@ export enum LANGUAGE_CODE {
     './header.component.scss',
   ],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   @Output() languageChange = new EventEmitter<LANGUAGE_CODE>();
   @Output() userProfileEditRequest = new EventEmitter<void>();
 
@@ -39,6 +39,7 @@ export class HeaderComponent implements OnInit {
 
   userRole = Role.Guest;
   Role = Role;
+  isAuthSubscription: Subscription | undefined;
 
   isAuthenticated$ = this.authService.isAuthenticated$;
   language$ = merge(this.translateService.onDefaultLangChange, this.translateService.onLangChange).pipe(
@@ -59,8 +60,14 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.authService.me().subscribe((result) => {
-      this.userRole = result.role;
+    this.isAuthSubscription = this.isAuthenticated$.subscribe((authenticated) => {
+      if (authenticated) {
+        this.authService.me().subscribe((result) => {
+          this.userRole = result.role;
+        });
+      } else {
+        this.userRole = Role.Guest;
+      }
     });
 
     this.router.events
@@ -77,6 +84,7 @@ export class HeaderComponent implements OnInit {
           const sessionIdInURL = routeUrl.match('[1-9]+');
           if (sessionIdInURL) {
             this.authService.me().subscribe((result) => {
+              this.userRole = result.role;
               if (!result.displayName) {
                 this.userProfileEditRequest.emit();
               }
@@ -92,6 +100,10 @@ export class HeaderComponent implements OnInit {
           }
         }
       });
+  }
+
+  ngOnDestroy(): void {
+    this.isAuthSubscription?.unsubscribe();
   }
 
   public onToolbarHomePressed() {

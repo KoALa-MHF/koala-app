@@ -103,9 +103,7 @@ export class MediaControlService {
         if (this.sessionService.getFocusSession()?.isSessionOwner) {
           this.sessionService
             .setPlayPosition(parseInt(this.sessionService.getFocusSession()?.id || '0'), w.getDuration() * newTime)
-            .subscribe(() => {
-              console.log('Success');
-            });
+            .subscribe();
         }
       });
     } catch (e) {

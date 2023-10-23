@@ -92,28 +92,34 @@
   </div>
 
   <div>
-    <h5 style="display: inline; margin-right: 15px; opacity: 100%">
-      {{ 'MARKER.MAINTAIN.MARKER_COLOR_INPUT_LABEL' | translate }}
-    </h5>
-    <div style="display: inline; margin-right: 15px">
-      <p-colorPicker formControlName="color"></p-colorPicker>
+    <div class="inline-component">
+      <h5>
+        {{ 'MARKER.MAINTAIN.MARKER_COLOR_INPUT_LABEL' | translate }}
+      </h5>
+      <p-colorPicker #markerColor formControlName="color"></p-colorPicker>
+      <input
+        pInputText
+        type="text"
+        (change)="onColorChanged(markerColor)"
+        [(ngModel)]="markerColor.inputBgColor"
+        [ngModelOptions]="{ standalone: true }"
+      />
     </div>
-    <small style="display: inline" id="marker-name-help" class="field-explanation">
+
+    <small id="marker-name-help" class="field-explanation">
       {{ 'MARKER.MAINTAIN.MARKER_COLOR_INPUT_EXPLANATION' | translate }}
     </small>
   </div>
 
-  <div>
-    <h5 style="display: inline; margin-right: 15px; opacity: 100%">
+  <div class="inline-component">
+    <h5>
       {{
         markerType !== MarkerType.Slider
           ? ('MARKER.MAINTAIN.MARKER_CONTENT_COLOR_INPUT_LABEL' | translate)
           : ('MARKER.MAINTAIN.MARKER_CONTENT_COLOR_INPUT_SLIDER_LABEL' | translate)
       }}
     </h5>
-    <div style="display: inline; margin-right: 15px">
-      <p-inputSwitch inputId="contentColorSwitch" formControlName="contentColor"></p-inputSwitch>
-    </div>
+    <p-inputSwitch inputId="contentColorSwitch" formControlName="contentColor"></p-inputSwitch>
   </div>
 
   <div *ngIf="markerType !== MarkerType.Slider">
