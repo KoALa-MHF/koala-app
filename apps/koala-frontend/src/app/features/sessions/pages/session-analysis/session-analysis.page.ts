@@ -1,4 +1,4 @@
-import { ApplicationRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { ApplicationRef, Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
 import { MediaControlService, MediaEvent, MediaActions } from '../../services/media-control.service';
@@ -15,6 +15,7 @@ import { filter } from 'rxjs';
 import { NavigationService } from '../../services/navigation.service';
 import { ToolbarsService } from '../../services/toolbars.service';
 import { UserSession } from '../../types/user-session.entity';
+import { CheckboxChangeEvent } from 'primeng/checkbox';
 
 export interface AnnotationData {
   AnnotationData: Map<number, Array<DataPoint>>;
@@ -243,6 +244,26 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
       });
   }
 
+  onUserSessionAllChange(event: CheckboxChangeEvent) {
+    if (this.session.userSessions) {
+      this.session.userSessions = this.session.userSessions.map((u) => {
+        return { ...u, visible: event.checked };
+      });
+      this.appRef.tick();
+      window.dispatchEvent(new Event('resize'));
+    }
+  }
+
+  onMarkersAllChange(event: CheckboxChangeEvent) {
+    this.markers = this.markers.map((u) => {
+      return { ...u, visible: event.checked };
+    });
+    this.appRef.tick();
+    window.dispatchEvent(new Event('resize'));
+
+    this.applyTempFixForMarkerDrawingIssue();
+  }
+
   onUserSessionDisplayChange(value: boolean, userSession: UserSession) {
     if (this.session.userSessions) {
       this.session.userSessions = this.session.userSessions.map((u) =>
@@ -255,30 +276,30 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
 
   onMarkerDisplayChange(value: boolean, marker: Marker) {
     this.markers = this.markers.map((m) => (m.id == marker.id ? { ...m, visible: value } : m));
+    this.applyTempFixForMarkerDrawingIssue();
+  }
 
-    const toolbars = this.sessionService.getFocusSession()?.toolbars;
+  isAllCheckBoxSelected(values: Array<{ visible?: boolean }>): boolean {
+    let count = 0;
+    values.forEach((value) => {
+      count += value.visible ? 1 : 0;
+    });
+    return count == values.length;
+  }
 
-    if (toolbars) {
-      const toolbar = toolbars[0];
-      this.toolbarService
-        .setVisibilityForMarker(parseInt(toolbar.id), {
-          markerId: marker.id.toString(),
-          visible: value,
-        })
-        .subscribe({
-          next: () => {
-            this.appRef.tick();
+  applyTempFixForMarkerDrawingIssue() {
+    // TODO: Temp bugfix for drawing issue -> remove when fixed
+    if (this.session.userSessions) {
+      this.session.userSessions = this.session.userSessions.map((u) => {
+        return { ...u, visible: !u.visible };
+      });
+      this.appRef.tick();
 
-            setTimeout(() => {
-              //TODO: fix using separate component/service
-              window.dispatchEvent(new Event('resize'));
-            }, 100);
-          },
-          error: (error) => {
-            console.log('Toolbar Update Error');
-            console.log(error);
-          },
-        });
+      this.session.userSessions = this.session.userSessions.map((u) => {
+        return { ...u, visible: !u.visible };
+      });
+      this.appRef.tick();
+      window.dispatchEvent(new Event('resize'));
     }
   }
 
