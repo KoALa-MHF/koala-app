@@ -25,7 +25,9 @@
     "SIDEBAR": {
       "SESSION_GENERAL_SETTINGS_TITLE": "Freigaben",
       "MARKER_TITLE": "Marker",
-      "PARTICIPANTS_TITLE": "Mitglieder"
+      "PARTICIPANTS_TITLE": "Mitglieder",
+      "SELECT_ALL_CHECKBOX": "Alle",
+      "ANALYSIS_HEADER": "Ansicht"
     },
     "CREATE_DIALOG": {
       "TITLE": "Neue Session Anlegen",
