@@ -27,7 +27,6 @@ export interface AnnotationData {
   styleUrls: [
     './session-analysis.page.scss',
   ],
-  encapsulation: ViewEncapsulation.None,
 })
 export class SessionAnalysisPage implements OnInit, OnDestroy {
   mediaUri: string = environment.production
@@ -254,16 +253,6 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
     }
   }
 
-  onMarkersAllChange(event: CheckboxChangeEvent) {
-    this.markers = this.markers.map((u) => {
-      return { ...u, visible: event.checked };
-    });
-    this.appRef.tick();
-    window.dispatchEvent(new Event('resize'));
-
-    this.applyTempFixForMarkerDrawingIssue();
-  }
-
   onUserSessionDisplayChange(value: boolean, userSession: UserSession) {
     if (this.session.userSessions) {
       this.session.userSessions = this.session.userSessions.map((u) =>
@@ -272,6 +261,13 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
       this.appRef.tick();
       window.dispatchEvent(new Event('resize'));
     }
+  }
+
+  onMarkersAllChange(event: CheckboxChangeEvent) {
+    this.markers = this.markers.map((marker) => {
+      return { ...marker, visible: event.checked };
+    });
+    this.applyTempFixForMarkerDrawingIssue();
   }
 
   onMarkerDisplayChange(value: boolean, marker: Marker) {

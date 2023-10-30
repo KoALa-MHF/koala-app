@@ -23,7 +23,8 @@
     "SESSION_NOT_YET_STARTED_INFO": "Die Session ist noch nicht gestartet",
     "SESSION_CLOSED_INFO": "Die Session ist beendet",
     "SIDEBAR": {
-      "SESSION_GENERAL_SETTINGS_TITLE": "Freigaben",
+      "SESSION_HEADER": "Freigaben",
+      "SESSION_GENERAL_SETTINGS_TITLE": "Elemente",
       "MARKER_TITLE": "Marker",
       "PARTICIPANTS_TITLE": "Mitglieder",
       "SELECT_ALL_CHECKBOX": "Alle",

@@ -3,7 +3,7 @@
   margin-right: 30px;
 }
 
-.analysis div[role='toolbar'] {
+:host ::ng-deep .analysis div[role='toolbar'] {
   background: transparent;
 }
 
@@ -12,7 +12,7 @@
   flex: 1 0 auto;
 }
 
-#wavesurfer-container {
+:host ::ng-deep #wavesurfer-container {
   margin-left: 71px;
   margin-right: 0px;
 }
@@ -33,7 +33,7 @@ koala-app-annotation {
   flex: 20;
 }
 
-.p-sidebar-header {
+:host ::ng-deep .p-sidebar-header {
   background-color: #246584;
 }
 
@@ -41,20 +41,20 @@ koala-app-annotation {
   color: #dee9ed;
 }
 
-.content {
-  font-size: small;
-}
-
 .checkbox-wrapper {
   margin-bottom: 10px;
 }
 
-.p-checkbox .p-checkbox-box.p-highlight {
+:host ::ng-deep .p-sidebar-content {
+  font-size: small;
+}
+
+:host ::ng-deep .p-checkbox .p-checkbox-box.p-highlight {
   border-color: #226685;
   background: #226685;
 }
 
-.p-checkbox:hover .p-checkbox-box.p-highlight:hover {
+:host ::ng-deep .p-checkbox:hover .p-checkbox-box.p-highlight:hover {
   border-color: #34738f;
   background: #34738f;
 }
@@ -66,11 +66,11 @@ koala-app-annotation {
   margin-bottom: 20px;
 }
 
-.p-sidebar {
+:host ::ng-deep .p-sidebar {
   background-color: #c0d7d4;
 }
 
-.p-sidebar .p-sidebar-header .p-sidebar-close,
-.p-sidebar .p-sidebar-header .p-sidebar-icon {
+:host ::ng-deep .p-sidebar .p-sidebar-header .p-sidebar-close,
+:host ::ng-deep .p-sidebar .p-sidebar-header .p-sidebar-icon {
   color: #dee9ed;
 }
