@@ -297,13 +297,14 @@ export class SessionPage implements OnInit, OnDestroy {
       const markerIds: Array<number> = toolbarMarkers.map((marker) => parseInt(marker.markerId));
       this.markerService.getAll(markerIds).subscribe((result) => {
         const markers = result.data?.markers;
-        for (const marker of markers) {
-          const toolbarMarker = toolbarMarkers.find((t) => parseInt(t.markerId) == marker.id);
-          const m = { visible: toolbarMarker ? toolbarMarker.visible : true, ...marker };
-          this.markers.push(m);
+        toolbarMarkers.forEach((toolbarMarker) => {
+          const marker = markers.find((t) => t.id == parseInt(toolbarMarker.markerId));
+          if (marker) {
+            this.markers.push({ ...marker, visible: toolbarMarker ? toolbarMarker.visible : true });
+            this.AnnotationData.set(marker.id, new Array<DataPoint>());
+          }
+        });
 
-          this.AnnotationData.set(marker.id, new Array<DataPoint>());
-        }
         this.loadAnnotations(userSessions);
         this.markers = [
           ...this.markers,
