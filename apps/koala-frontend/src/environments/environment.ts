@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'http://localhost:4200',
+  baseUrl: 'http://localhost:4200/app',
   wsBaseUrl: 'ws://localhost:3333',
   samlUrl: 'http://localhost:3333/api/auth/sso/saml/login',
 };
