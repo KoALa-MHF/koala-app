@@ -77,6 +77,16 @@
       (click)="onSessionSettings()"
     ></button>
 
+    <button
+      pButton
+      pRipple
+      *ngIf="(isAuthenticated$ | async) && isOnSessionAnalysisPage && (focusSessionChanged$ | async)?.isSessionOwner"
+      icon="pi pi-cog"
+      label="{{ 'SESSION.SESSION_ANALYSIS_SETTINGS_BTN' | translate }}"
+      class="p-button-text hidden-xs hidden-sm"
+      (click)="onSessionAnalysisSettings()"
+    ></button>
+
     <p-divider
       layout="vertical"
       *ngIf="
@@ -223,6 +233,16 @@
       label="{{ 'SESSION.SESSION_SETTINGS_BTN' | translate }}"
       class="p-button-text"
       (click)="onSessionSettings(); sidebarVisible = false"
+    ></button>
+
+    <button
+      pButton
+      pRipple
+      *ngIf="(isAuthenticated$ | async) && isOnSessionAnalysisPage && (focusSessionChanged$ | async)?.isSessionOwner"
+      icon="pi pi-cog"
+      label="{{ 'SESSION.SESSION_ANALYSIS_SETTINGS_BTN' | translate }}"
+      class="p-button-text"
+      (click)="onSessionAnalysisSettings(); sidebarVisible = false"
     ></button>
   </div>
 </p-sidebar>

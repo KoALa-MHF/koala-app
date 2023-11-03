@@ -1,4 +1,4 @@
-import { ApplicationRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { ApplicationRef, Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
 import { MediaControlService, MediaEvent, MediaActions } from '../../services/media-control.service';
@@ -12,6 +12,10 @@ import { Session } from '../../types/session.entity';
 import { environment } from '../../../../../environments/environment';
 import { Marker } from '../../types/marker.entity';
 import { filter } from 'rxjs';
+import { NavigationService } from '../../services/navigation.service';
+import { ToolbarsService } from '../../services/toolbars.service';
+import { UserSession } from '../../types/user-session.entity';
+import { CheckboxChangeEvent } from 'primeng/checkbox';
 
 export interface AnnotationData {
   AnnotationData: Map<number, Array<DataPoint>>;
@@ -23,7 +27,6 @@ export interface AnnotationData {
   styleUrls: [
     './session-analysis.page.scss',
   ],
-  encapsulation: ViewEncapsulation.None,
 })
 export class SessionAnalysisPage implements OnInit, OnDestroy {
   mediaUri: string = environment.production
@@ -39,6 +42,8 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
   totalAudioTime = 0;
   audioPaused = true;
 
+  sessionAnalysisSettingsToggled$ = this.navigationService.sessionAnalysisSettingsSidePanelToggled$;
+
   constructor(
     private readonly sessionService: SessionsService,
     private readonly annotationService: AnnotationService,
@@ -47,7 +52,9 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly mediaControlService: MediaControlService,
     private readonly messageService: MessageService,
+    private readonly toolbarService: ToolbarsService,
     private readonly translateService: TranslateService,
+    private readonly navigationService: NavigationService,
     private appRef: ApplicationRef
   ) {}
 
@@ -182,17 +189,18 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
   }
 
   private loadAnnotations(userSessions: any[]): void {
-    for (const userSessoin of userSessions) {
-      this.userSessionAnnotationData.set(userSessoin.id, {
+    for (const userSession of userSessions) {
+      userSession.visible = true;
+      this.userSessionAnnotationData.set(userSession.id, {
         AnnotationData: new Map<number, Array<DataPoint>>(),
       });
       for (const marker of this.markers) {
-        this.userSessionAnnotationData.get(userSessoin.id)?.AnnotationData.set(marker.id, new Array<DataPoint>());
+        this.userSessionAnnotationData.get(userSession.id)?.AnnotationData.set(marker.id, new Array<DataPoint>());
       }
-      for (const annotation of userSessoin.annotations) {
-        if (this.userSessionAnnotationData.get(userSessoin.id)) {
+      for (const annotation of userSession.annotations) {
+        if (this.userSessionAnnotationData.get(userSession.id)) {
           this.userSessionAnnotationData
-            .get(userSessoin.id)
+            .get(userSession.id)
             ?.AnnotationData.get(annotation.marker.id)
             ?.push({
               id: annotation.id,
@@ -204,16 +212,20 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
             });
         }
       }
-      if (this.userSessionAnnotationData.get(userSessoin.id)?.AnnotationData) {
+      if (this.userSessionAnnotationData.get(userSession.id)?.AnnotationData) {
         // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
-        this.userSessionAnnotationData.get(userSessoin.id)!.AnnotationData = new Map(
+        this.userSessionAnnotationData.get(userSession.id)!.AnnotationData = new Map(
           [
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            ...this.userSessionAnnotationData.get(userSessoin.id)!.AnnotationData.entries(),
+            ...this.userSessionAnnotationData.get(userSession.id)!.AnnotationData.entries(),
           ].sort()
         );
       }
     }
+  }
+
+  onSidebarHide() {
+    this.navigationService.setSessionAnalysisSettingsSidePanelVisible(false);
   }
 
   private showErrorMessage(severity: string, detail: string, sum: string) {
@@ -230,6 +242,63 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
         });
       });
   }
+
+  onUserSessionAllChange(event: CheckboxChangeEvent) {
+    if (this.session.userSessions) {
+      this.session.userSessions = this.session.userSessions.map((u) => {
+        return { ...u, visible: event.checked };
+      });
+      this.appRef.tick();
+      window.dispatchEvent(new Event('resize'));
+    }
+  }
+
+  onUserSessionDisplayChange(value: boolean, userSession: UserSession) {
+    if (this.session.userSessions) {
+      this.session.userSessions = this.session.userSessions.map((u) =>
+        u.id == userSession.id ? { ...u, visible: value } : u
+      );
+      this.appRef.tick();
+      window.dispatchEvent(new Event('resize'));
+    }
+  }
+
+  onMarkersAllChange(event: CheckboxChangeEvent) {
+    this.markers = this.markers.map((marker) => {
+      return { ...marker, visible: event.checked };
+    });
+    this.applyTempFixForMarkerDrawingIssue();
+  }
+
+  onMarkerDisplayChange(value: boolean, marker: Marker) {
+    this.markers = this.markers.map((m) => (m.id == marker.id ? { ...m, visible: value } : m));
+    this.applyTempFixForMarkerDrawingIssue();
+  }
+
+  isAllCheckBoxSelected(values: Array<{ visible?: boolean }>): boolean {
+    let count = 0;
+    values.forEach((value) => {
+      count += value.visible ? 1 : 0;
+    });
+    return count == values.length;
+  }
+
+  applyTempFixForMarkerDrawingIssue() {
+    // TODO: Temp bugfix for drawing issue -> remove when fixed
+    if (this.session.userSessions) {
+      this.session.userSessions = this.session.userSessions.map((u) => {
+        return { ...u, visible: !u.visible };
+      });
+      this.appRef.tick();
+
+      this.session.userSessions = this.session.userSessions.map((u) => {
+        return { ...u, visible: !u.visible };
+      });
+      this.appRef.tick();
+      window.dispatchEvent(new Event('resize'));
+    }
+  }
+
   onMediaEvent(evt: MediaEvent) {
     switch (evt.actions) {
       case MediaActions.Play:

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
 import { MarkerService } from '../../../markers/services/marker.service';
@@ -21,6 +21,7 @@ import { NavigationService } from '../../services/navigation.service';
 import { UserSession } from '../../types/user-session.entity';
 import { SessionControlService } from '../../services/session-control.service';
 import { AnnotationDetail } from '../../components/annotation-detail/annotation-detail.component';
+import { CheckboxChangeEvent } from 'primeng/checkbox';
 
 @Component({
   selector: 'koala-app-session',
@@ -28,6 +29,7 @@ import { AnnotationDetail } from '../../components/annotation-detail/annotation-
   styleUrls: [
     './session.page.scss',
   ],
+  // encapsulation: ViewEncapsulation.None,
 })
 export class SessionPage implements OnInit, OnDestroy {
   sidePanelForm: FormGroup;
@@ -285,27 +287,6 @@ export class SessionPage implements OnInit, OnDestroy {
 
     //reset dirty state
     sidePanelForm?.reset(details);
-  }
-
-  onMarkerDisplayChange(value: boolean, marker: Marker) {
-    this.markers = this.markers.map((m) => (m.id == marker.id ? { ...m, visible: value } : m));
-
-    const toolbars = this.sessionService.getFocusSession()?.toolbars;
-
-    if (toolbars) {
-      const toolbar = toolbars[0];
-      this.toolbarService
-        .setVisibilityForMarker(parseInt(toolbar.id), {
-          markerId: marker.id.toString(),
-          visible: value,
-        })
-        .subscribe({
-          error: (error) => {
-            console.log('Toolbar Update Error');
-            console.log(error);
-          },
-        });
-    }
   }
 
   private loadMarkerData(userSessions: any[]): void {
@@ -651,5 +632,40 @@ export class SessionPage implements OnInit, OnDestroy {
           console.log(error);
         },
       });
+  }
+
+  onMarkerDisplayChange(value: boolean, marker: Marker) {
+    this.markers = this.markers.map((m) => (m.id == marker.id ? { ...m, visible: value } : m));
+
+    const toolbars = this.sessionService.getFocusSession()?.toolbars;
+
+    if (toolbars) {
+      const toolbar = toolbars[0];
+      this.toolbarService
+        .setVisibilityForMarker(parseInt(toolbar.id), {
+          markerId: marker.id.toString(),
+          visible: value,
+        })
+        .subscribe({
+          error: (error) => {
+            console.log('Toolbar Update Error');
+            console.log(error);
+          },
+        });
+    }
+  }
+
+  onMarkersAllChange(event: CheckboxChangeEvent) {
+    this.markers.forEach((marker) => {
+      this.onMarkerDisplayChange(event.checked, marker);
+    });
+  }
+
+  isAllCheckBoxSelected(values: Array<{ visible?: boolean }>): boolean {
+    let count = 0;
+    values.forEach((value) => {
+      count += value.visible ? 1 : 0;
+    });
+    return count == values.length;
   }
 }
