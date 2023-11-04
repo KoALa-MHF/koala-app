@@ -1,14 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DataPoint } from '../annotation/annotation.component';
+import { DisplayMode } from '../../types/display-mode.enum';
 
 export interface AnnotationDetail {
   id: number;
   note: string;
-}
-
-enum Mode {
-  EDIT = 'Edit',
-  DISPLAY = 'Display',
 }
 
 @Component({
@@ -23,9 +19,11 @@ export class AnnotationDetailComponent {
     if (value) {
       this._annotation = value;
       if (this._annotation.note) {
-        this.mode = Mode.DISPLAY;
+        this.note = this._annotation.note;
+        this.mode = DisplayMode.DISPLAY;
       } else {
-        this.mode = Mode.EDIT;
+        this.note = '';
+        this.mode = DisplayMode.EDIT;
       }
     }
   }
@@ -40,30 +38,30 @@ export class AnnotationDetailComponent {
 
   note = '';
 
-  mode = Mode.EDIT;
-  Mode = Mode;
+  mode = DisplayMode.EDIT;
+  Mode = DisplayMode;
 
   onAnnotationDetailCancel() {
     this.note = this.annotation?.note || '';
-    this.mode = Mode.DISPLAY;
+    this.mode = DisplayMode.DISPLAY;
   }
 
   onAnnotationDetailSave() {
     this.save.emit({ id: this.annotation?.id || 0, note: this.note });
-    this.mode = Mode.DISPLAY;
+    this.mode = DisplayMode.DISPLAY;
   }
 
   onAnnotationDetailDelete() {
     this.note = '';
     this.save.emit({ id: this.annotation?.id || 0, note: '' });
-    this.mode = Mode.DISPLAY;
+    this.mode = DisplayMode.DISPLAY;
   }
 
   onAnnotationDetailEdit() {
-    this.mode = Mode.EDIT;
+    this.mode = DisplayMode.EDIT;
   }
 
-  onNoteChange(event: any) {
-    this.note = event.target.value;
+  onNoteChange(note: string) {
+    this.note = note;
   }
 }

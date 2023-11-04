@@ -68,6 +68,8 @@ import { SessionMarkerPreviewComponent } from './components/session-marker-previ
 import { SessionMarkerMaintainComponent } from './components/session-marker-maintain/session-marker-maintain.component';
 import { AnnotationDetailComponent } from './components/annotation-detail/annotation-detail.component';
 import { TimePipe } from './pipes/time.pipe';
+import { AnnotationTextCommentComponent } from './components/annotation-text-comment/annotation-text-comment.component';
+import { AnnotationAudioCommentComponent } from './components/annotation-audio-comment/annotation-audio-comment.component';
 
 @NgModule({
   declarations: [
@@ -102,6 +104,8 @@ import { TimePipe } from './pipes/time.pipe';
     SessionMarkerPreviewComponent,
     SessionMarkerMaintainComponent,
     AnnotationDetailComponent,
+    AnnotationTextCommentComponent,
+    AnnotationAudioCommentComponent,
   ],
   imports: [
     SharedModule,
