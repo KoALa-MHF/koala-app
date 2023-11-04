@@ -12,6 +12,11 @@ export interface SessionOverviewActions {
   leaveSession: boolean;
 }
 
+export enum ExportType {
+  json,
+  csv,
+}
+
 @Component({
   selector: 'koala-sessions-overview-table',
   templateUrl: './sessions-overview-table.component.html',
@@ -37,7 +42,7 @@ export class SessionsOverviewTableComponent {
   @Output() sessionCreate = new EventEmitter<void>();
   @Output() sessionUpdate = new EventEmitter<Session>();
   @Output() sessionEnter = new EventEmitter<Session>();
-  @Output() sessionExport = new EventEmitter<Session[]>();
+  @Output() sessionExport = new EventEmitter<{ exportType: ExportType; sessions: Session[] }>();
   @Output() sessionCopy = new EventEmitter<Session>();
   @Output() sessionCodeDisplay = new EventEmitter<Session>();
   @Output() sessionLeave = new EventEmitter<Session>();
@@ -68,11 +73,11 @@ export class SessionsOverviewTableComponent {
   }
 
   public onJSONExport() {
-    this.sessionExport.emit(this.selectedSessions);
+    this.sessionExport.emit({ exportType: ExportType.json, sessions: this.selectedSessions });
   }
 
   public onCSVExport() {
-    this.sessionExport.emit(this.selectedSessions);
+    this.sessionExport.emit({ exportType: ExportType.csv, sessions: this.selectedSessions });
   }
 
   public onSettings(session: Session) {

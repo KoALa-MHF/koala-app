@@ -10,6 +10,7 @@ import { MessageService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../../auth/services/auth.service';
 import { Role } from '../../../../graphql/generated/graphql';
+import { ExportType } from '../../components/sessions-overview-table/sessions-overview-table.component';
 
 @Component({
   selector: 'koala-sessions-overview',
@@ -103,28 +104,40 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
     ]);
   }
 
-  public onSessionExport(sessions: Session[]) {
-    sessions.forEach((session) => {
-      this.sessionService.createSessionJSON(parseInt(session.id)).subscribe({
-        next: (result) => {
-          const blob = new Blob(
-            [
-              JSON.stringify(result),
-            ],
-            { type: 'application/json;charset=utf-8' }
-          );
-          saveAs(blob, `${result.name}_${result.id}.json`);
-        },
-        error: () => {
-          this.messageService.add({
-            severity: 'error',
-            summary: this.translateService.instant('SESSION.EXPORT_SESSION_ERROR_TITLE'),
-            detail: this.translateService.instant('SESSION.EXPORT_SESSION_ERROR_MESSAGE', {
-              sessionName: session.name,
-            }),
-          });
-        },
-      });
+  public onSessionExport({ exportType, sessions }: { exportType: ExportType; sessions: Session[] }) {
+    sessions.forEach(async (session) => {
+      if (exportType === ExportType.json) {
+        this.sessionService.createSessionJSON(parseInt(session.id)).subscribe({
+          next: (result) => {
+            const blob = new Blob(
+              [
+                JSON.stringify(result),
+              ],
+              { type: 'application/json;charset=utf-8' }
+            );
+            saveAs(blob, `${result.name}_${result.id}.json`);
+          },
+          error: () => {
+            this.messageService.add({
+              severity: 'error',
+              summary: this.translateService.instant('SESSION.EXPORT_SESSION_ERROR_TITLE'),
+              detail: this.translateService.instant('SESSION.EXPORT_SESSION_ERROR_MESSAGE', {
+                sessionName: session.name,
+              }),
+            });
+          },
+        });
+      } else {
+        const result = await this.sessionService.createSessionCSV(parseInt(session.id));
+
+        const blob = new Blob(
+          [
+            result,
+          ],
+          { type: 'text/csv;charset=utf-8' }
+        );
+        saveAs(blob, `${session.name}_${session.id}.csv`);
+      }
     });
   }
 

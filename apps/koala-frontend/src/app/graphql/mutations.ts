@@ -181,6 +181,8 @@ const CREATE_ANNOTATION = gql`
       id
       marker {
         id
+        type
+        name
       }
       userSession {
         id
@@ -240,6 +242,8 @@ const SET_PLAY_MODE = gql`
           value
           marker {
             id
+            type
+            name
             color
             contentColor
           }
@@ -305,6 +309,8 @@ const SET_PLAY_POSITION = gql`
           value
           marker {
             id
+            type
+            name
             color
             contentColor
           }
