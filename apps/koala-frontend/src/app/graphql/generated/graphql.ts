@@ -31,6 +31,8 @@ export type Annotation = {
   id: Scalars['Int']['output'];
   /** Associated Marker */
   marker: Marker;
+  /** Associated Media File */
+  media?: Maybe<Media>;
   /** Annotation Note */
   note?: Maybe<Scalars['String']['output']>;
   /** Annotation Start Seconds */
@@ -66,6 +68,8 @@ export type CreateAnnotationInput = {
   end?: InputMaybe<Scalars['Int']['input']>;
   /** Associated Marker */
   markerId: Scalars['Int']['input'];
+  /** Assigned Media */
+  mediaId?: InputMaybe<Scalars['Int']['input']>;
   /** Annotation Note */
   note?: Scalars['String']['input'];
   /** Annotation Start Seconds */
@@ -455,6 +459,8 @@ export type ToolbarMarker = {
 };
 
 export type UpdateAnnotationInput = {
+  /** Assigned Media */
+  mediaId?: InputMaybe<Scalars['Int']['input']>;
   /** Annotation Note */
   note?: InputMaybe<Scalars['String']['input']>;
   /** Annotation Value */
