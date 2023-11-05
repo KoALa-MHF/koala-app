@@ -26,4 +26,8 @@ export class CreateAnnotationInput {
   @MaxLength(ANNOTATION_NOTE_MAX_LENGTH)
   @IsOptional()
   note?: string;
+
+  @Field(() => Int, { nullable: true, description: 'Assigned Media' })
+  @IsOptional()
+  mediaId?: number;
 }
