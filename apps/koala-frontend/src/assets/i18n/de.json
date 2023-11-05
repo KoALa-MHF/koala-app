@@ -9,12 +9,15 @@
   "SESSION": {
     "CREATE_SESSION_MENU_LABEL": "Neue Session",
     "EXPORT_SESSIONS_MENU_LABEL": "Session Exportieren",
+    "EXPORT_SESSIONS_JSON_MENU_LABEL": "Session als JSON Exportieren",
+    "EXPORT_SESSIONS_CSV_MENU_LABEL": "Session als CSV Exportieren",
     "EXPORT_SESSION_ERROR_TITLE": "Export Nicht Erfolgreich",
     "EXPORT_SESSION_ERROR_MESSAGE": "Export von Session '{{sessionName}}' konnte nicht durchgeführt werden",
     "DELETE_SESSIONS_MENU_LABEL": "Session Löschen",
     "DUPLICATE_SESSION_MENU_LABEL": "Session Duplizieren",
     "ENTER_SESSION_MENU_LABEL": "Session Beitreten",
     "SESSION_SETTINGS_BTN": "Freigaben",
+    "SESSION_ANALYSIS_SETTINGS_BTN": "Ansicht",
     "MY_SESSIONS_NAV_BTN": "Meine Sessions",
     "MARKERS_OVERVIEW_NAV_BTN": "Marker",
     "ANALYSIS_NAV_BTN": "Auswertung",
@@ -22,8 +25,12 @@
     "SESSION_NOT_YET_STARTED_INFO": "Die Session ist noch nicht gestartet",
     "SESSION_CLOSED_INFO": "Die Session ist beendet",
     "SIDEBAR": {
-      "SESSION_GENERAL_SETTINGS_TITLE": "Freigaben",
-      "MARKER_TITLE": "Marker"
+      "SESSION_HEADER": "Freigaben",
+      "SESSION_GENERAL_SETTINGS_TITLE": "Elemente",
+      "MARKER_TITLE": "Marker",
+      "PARTICIPANTS_TITLE": "Mitglieder",
+      "SELECT_ALL_CHECKBOX": "Alle",
+      "ANALYSIS_HEADER": "Ansicht"
     },
     "CREATE_DIALOG": {
       "TITLE": "Neue Session Anlegen",

@@ -12,6 +12,32 @@
       attr.aria-label="{{ 'SESSION.OVERVIEW.ACC.CREATE' | translate }}"
     ></button>
 
+    <p-overlayPanel #exportOP>
+      <div style="display: flex; flex-direction: column; align-items: flex-start">
+        <button
+          pButton
+          pRipple
+          *ngIf="supportedActions.exportSession"
+          label="{{ 'SESSION.EXPORT_SESSIONS_JSON_MENU_LABEL' | translate }}"
+          class="p-button-text menu-button"
+          (click)="onJSONExport()"
+          data-cy="session-overview-export-json-btn"
+          [disabled]="selectedSessions.length === 0"
+        ></button>
+
+        <button
+          pButton
+          pRipple
+          *ngIf="supportedActions.exportSession"
+          label="{{ 'SESSION.EXPORT_SESSIONS_CSV_MENU_LABEL' | translate }}"
+          class="p-button-text menu-button"
+          (click)="onCSVExport()"
+          data-cy="session-overview-export-csv-btn"
+          [disabled]="selectedSessions.length === 0"
+        ></button>
+      </div>
+    </p-overlayPanel>
+
     <button
       pButton
       pRipple
@@ -20,7 +46,7 @@
       icon="pi pi-file-export"
       class="p-button-text menu-button"
       aria-labelledby="SessionOverviewTableHeaderExportColumn"
-      (click)="onExport()"
+      (click)="exportOP.toggle($event)"
       data-cy="session-overview-export-btn"
       [disabled]="selectedSessions.length === 0"
     ></button>

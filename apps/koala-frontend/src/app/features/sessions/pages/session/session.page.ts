@@ -21,6 +21,7 @@ import { NavigationService } from '../../services/navigation.service';
 import { UserSession } from '../../types/user-session.entity';
 import { SessionControlService } from '../../services/session-control.service';
 import { AnnotationDetail } from '../../components/annotation-detail/annotation-detail.component';
+import { CheckboxChangeEvent } from 'primeng/checkbox';
 
 @Component({
   selector: 'koala-app-session',
@@ -288,27 +289,6 @@ export class SessionPage implements OnInit, OnDestroy {
     sidePanelForm?.reset(details);
   }
 
-  onMarkerDisplayChange(value: boolean, marker: Marker) {
-    this.markers = this.markers.map((m) => (m.id == marker.id ? { ...m, visible: value } : m));
-
-    const toolbars = this.sessionService.getFocusSession()?.toolbars;
-
-    if (toolbars) {
-      const toolbar = toolbars[0];
-      this.toolbarService
-        .setVisibilityForMarker(parseInt(toolbar.id), {
-          markerId: marker.id.toString(),
-          visible: value,
-        })
-        .subscribe({
-          error: (error) => {
-            console.log('Toolbar Update Error');
-            console.log(error);
-          },
-        });
-    }
-  }
-
   private loadMarkerData(userSessions: any[]): void {
     const toolbars = this.sessionService.getFocusSession()?.toolbars;
     if (toolbars) {
@@ -317,13 +297,14 @@ export class SessionPage implements OnInit, OnDestroy {
       const markerIds: Array<number> = toolbarMarkers.map((marker) => parseInt(marker.markerId));
       this.markerService.getAll(markerIds).subscribe((result) => {
         const markers = result.data?.markers;
-        for (const marker of markers) {
-          const toolbarMarker = toolbarMarkers.find((t) => parseInt(t.markerId) == marker.id);
-          const m = { visible: toolbarMarker ? toolbarMarker.visible : true, ...marker };
-          this.markers.push(m);
+        toolbarMarkers.forEach((toolbarMarker) => {
+          const marker = markers.find((t) => t.id == parseInt(toolbarMarker.markerId));
+          if (marker) {
+            this.markers.push({ ...marker, visible: toolbarMarker ? toolbarMarker.visible : true });
+            this.AnnotationData.set(marker.id, new Array<DataPoint>());
+          }
+        });
 
-          this.AnnotationData.set(marker.id, new Array<DataPoint>());
-        }
         this.loadAnnotations(userSessions);
         this.markers = [
           ...this.markers,
@@ -668,5 +649,40 @@ export class SessionPage implements OnInit, OnDestroy {
           console.log(error);
         },
       });
+  }
+
+  onMarkerDisplayChange(value: boolean, marker: Marker) {
+    this.markers = this.markers.map((m) => (m.id == marker.id ? { ...m, visible: value } : m));
+
+    const toolbars = this.sessionService.getFocusSession()?.toolbars;
+
+    if (toolbars) {
+      const toolbar = toolbars[0];
+      this.toolbarService
+        .setVisibilityForMarker(parseInt(toolbar.id), {
+          markerId: marker.id.toString(),
+          visible: value,
+        })
+        .subscribe({
+          error: (error) => {
+            console.log('Toolbar Update Error');
+            console.log(error);
+          },
+        });
+    }
+  }
+
+  onMarkersAllChange(event: CheckboxChangeEvent) {
+    this.markers.forEach((marker) => {
+      this.onMarkerDisplayChange(event.checked, marker);
+    });
+  }
+
+  isAllCheckBoxSelected(values: Array<{ visible?: boolean }>): boolean {
+    let count = 0;
+    values.forEach((value) => {
+      count += value.visible ? 1 : 0;
+    });
+    return count == values.length;
   }
 }
