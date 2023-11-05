@@ -10,13 +10,21 @@
   </div>
 
   <p-divider></p-divider>
-  <koala-annotation-text-comment
-    [note]="note"
-    [displayMode]="mode"
-    (save)="onAnnotationDetailSave()"
-    (edit)="onAnnotationDetailEdit()"
-    (cancel)="onAnnotationDetailCancel()"
-    (delete)="onAnnotationDetailDelete()"
-    (noteChange)="onNoteChange($event)"
-  ></koala-annotation-text-comment>
+
+  <p-tabView>
+    <p-tabPanel header="Text">
+      <koala-annotation-text-comment
+        [note]="note"
+        [displayMode]="mode"
+        (save)="onAnnotationDetailSave()"
+        (edit)="onAnnotationDetailEdit()"
+        (cancel)="onAnnotationDetailCancel()"
+        (delete)="onAnnotationDetailDelete()"
+        (noteChange)="onNoteChange($event)"
+      ></koala-annotation-text-comment>
+    </p-tabPanel>
+    <p-tabPanel header="Audio">
+      <koala-annotation-audio-comment></koala-annotation-audio-comment>
+    </p-tabPanel>
+  </p-tabView>
 </div>

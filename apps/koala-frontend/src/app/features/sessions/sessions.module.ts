@@ -26,6 +26,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { BlockUIModule } from 'primeng/blockui';
+import { ButtonModule } from 'primeng/button';
 
 import { QRCodeModule } from 'angularx-qrcode';
 
@@ -136,6 +137,7 @@ import { AnnotationAudioCommentComponent } from './components/annotation-audio-c
     ConfirmDialogModule,
     MarkersModule,
     BlockUIModule,
+    ButtonModule,
   ],
   providers: [
     MediaService,
