@@ -753,7 +753,7 @@ export type CreateAnnotationMutation = {
     start: number;
     end?: number | null;
     value?: number | null;
-    marker: { __typename?: 'Marker'; id: number };
+    marker: { __typename?: 'Marker'; id: number; type: MarkerType; name: string };
     userSession: { __typename?: 'UserSession'; id: number };
   };
 };
@@ -802,7 +802,14 @@ export type SetPlayModeMutation = {
         end?: number | null;
         start: number;
         value?: number | null;
-        marker: { __typename?: 'Marker'; id: number; color: string; contentColor: string };
+        marker: {
+          __typename?: 'Marker';
+          id: number;
+          type: MarkerType;
+          name: string;
+          color: string;
+          contentColor: string;
+        };
       }>;
     }>;
     owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
@@ -853,7 +860,14 @@ export type SetPlayPositionMutation = {
         end?: number | null;
         start: number;
         value?: number | null;
-        marker: { __typename?: 'Marker'; id: number; color: string; contentColor: string };
+        marker: {
+          __typename?: 'Marker';
+          id: number;
+          type: MarkerType;
+          name: string;
+          color: string;
+          contentColor: string;
+        };
       }>;
     }>;
     owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
@@ -987,7 +1001,14 @@ export type GetOneSessionQuery = {
         end?: number | null;
         start: number;
         value?: number | null;
-        marker: { __typename?: 'Marker'; id: number; color: string; contentColor: string };
+        marker: {
+          __typename?: 'Marker';
+          id: number;
+          name: string;
+          type: MarkerType;
+          color: string;
+          contentColor: string;
+        };
       }>;
     }>;
     owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
@@ -1077,6 +1098,61 @@ export type SessionExportQuery = {
           abbreviation?: string | null;
           description?: string | null;
           color: string;
+          contentColor: string;
+          icon?: string | null;
+          valueRangeFrom?: number | null;
+          valueRangeTo?: number | null;
+        };
+      }>;
+    }>;
+  };
+};
+
+export type SessionCsvExportQueryVariables = Exact<{
+  sessionId: Scalars['Int']['input'];
+}>;
+
+export type SessionCsvExportQuery = {
+  __typename?: 'Query';
+  session: {
+    __typename?: 'Session';
+    id: string;
+    start?: any | null;
+    end?: any | null;
+    name: string;
+    description?: string | null;
+    status?: SessionStatus | null;
+    isAudioSession: boolean;
+    owner: { __typename?: 'User'; id: string };
+    toolbars: Array<{
+      __typename?: 'Toolbar';
+      id: string;
+      createdAt: any;
+      updatedAt: any;
+      markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+    }>;
+    userSessions: Array<{
+      __typename?: 'UserSession';
+      id: number;
+      status: UserSessionStatus;
+      note?: string | null;
+      owner: { __typename?: 'User'; id: string };
+      annotations: Array<{
+        __typename?: 'Annotation';
+        id: number;
+        start: number;
+        end?: number | null;
+        value?: number | null;
+        note?: string | null;
+        marker: {
+          __typename?: 'Marker';
+          id: number;
+          type: MarkerType;
+          name: string;
+          abbreviation?: string | null;
+          description?: string | null;
+          color: string;
+          contentColor: string;
           icon?: string | null;
           valueRangeFrom?: number | null;
           valueRangeTo?: number | null;
@@ -1468,6 +1544,8 @@ export const CreateAnnotationDocument = gql`
       id
       marker {
         id
+        type
+        name
       }
       userSession {
         id
@@ -1506,7 +1584,6 @@ export const SetPlayModeDocument = gql`
       playMode
       playPosition
       liveSessionStart
-      isAudioSession
       code
       media {
         id
@@ -1538,6 +1615,8 @@ export const SetPlayModeDocument = gql`
           value
           marker {
             id
+            type
+            name
             color
             contentColor
           }
@@ -1613,6 +1692,8 @@ export const SetPlayPositionDocument = gql`
           value
           marker {
             id
+            type
+            name
             color
             contentColor
           }
@@ -1820,6 +1901,8 @@ export const GetOneSessionDocument = gql`
           value
           marker {
             id
+            name
+            type
             color
             contentColor
           }
@@ -1953,6 +2036,7 @@ export const SessionExportDocument = gql`
             abbreviation
             description
             color
+            contentColor
             icon
             valueRangeFrom
             valueRangeTo
@@ -1968,6 +2052,69 @@ export const SessionExportDocument = gql`
 })
 export class SessionExportGQL extends Apollo.Query<SessionExportQuery, SessionExportQueryVariables> {
   override document = SessionExportDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SessionCsvExportDocument = gql`
+  query sessionCSVExport($sessionId: Int!) {
+    session(id: $sessionId) {
+      id
+      start
+      end
+      name
+      description
+      status
+      isAudioSession
+      owner {
+        id
+      }
+      toolbars {
+        id
+        markers {
+          markerId
+          visible
+        }
+        createdAt
+        updatedAt
+      }
+      userSessions {
+        id
+        status
+        note
+        owner {
+          id
+        }
+        annotations {
+          id
+          start
+          end
+          value
+          note
+          marker {
+            id
+            type
+            name
+            abbreviation
+            description
+            color
+            contentColor
+            icon
+            valueRangeFrom
+            valueRangeTo
+          }
+        }
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class SessionCsvExportGQL extends Apollo.Query<SessionCsvExportQuery, SessionCsvExportQueryVariables> {
+  override document = SessionCsvExportDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

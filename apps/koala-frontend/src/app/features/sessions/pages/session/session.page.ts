@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ApplicationRef } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
 import { MarkerService } from '../../../markers/services/marker.service';
@@ -28,7 +28,6 @@ import { CheckboxChangeEvent } from 'primeng/checkbox';
   styleUrls: [
     './session.page.scss',
   ],
-  // encapsulation: ViewEncapsulation.None,
 })
 export class SessionPage implements OnInit, OnDestroy {
   sidePanelForm: FormGroup;
@@ -73,7 +72,8 @@ export class SessionPage implements OnInit, OnDestroy {
     private readonly formBuilder: FormBuilder,
     private readonly toolbarService: ToolbarsService,
     private readonly navigationService: NavigationService,
-    private readonly sessionControlService: SessionControlService
+    private readonly sessionControlService: SessionControlService,
+    private appRef: ApplicationRef
   ) {
     this.sidePanelForm = this.formBuilder.group({
       details: this.formBuilder.group({
@@ -450,7 +450,16 @@ export class SessionPage implements OnInit, OnDestroy {
           if (this.audioPaused) {
             this.sessionControlService.startSession().subscribe();
           } else {
+            this.endActiveSliders(this.currentAudioTime);
             this.sessionControlService.pauseSession().subscribe();
+            this.sessionService.setFocusSession(this.sessionId).subscribe((focusSession: Session) => {
+              const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
+              if (userSessions) {
+                this.loadAnnotations(userSessions);
+                this.appRef.tick();
+                window.dispatchEvent(new Event('resize'));
+              }
+            });
           }
         } catch (error) {
           this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
@@ -460,6 +469,15 @@ export class SessionPage implements OnInit, OnDestroy {
         try {
           this.endActiveSliders(this.currentAudioTime);
           this.sessionControlService.stopSession().subscribe();
+          this.sessionService.setFocusSession(this.sessionId).subscribe((focusSession: Session) => {
+            const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
+            if (userSessions) {
+              this.loadAnnotations(userSessions);
+              this.appRef.tick();
+              window.dispatchEvent(new Event('resize'));
+            }
+          });
+          this.currentAudioTime = 0;
         } catch (error) {
           this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
         }
@@ -607,9 +625,8 @@ export class SessionPage implements OnInit, OnDestroy {
         dp.transparent = true;
       }
     });
-    setTimeout(() => {
-      window.dispatchEvent(new Event('resize'));
-    }, 100);
+    this.appRef.tick();
+    window.dispatchEvent(new Event('resize'));
     return aData;
   }
 

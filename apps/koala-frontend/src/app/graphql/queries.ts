@@ -113,6 +113,8 @@ const GET_ONE_SESSION = gql`
           value
           marker {
             id
+            name
+            type
             color
             contentColor
           }
@@ -203,6 +205,60 @@ const GET_SESSION_FOR_EXPORT = gql`
             abbreviation
             description
             color
+            contentColor
+            icon
+            valueRangeFrom
+            valueRangeTo
+          }
+        }
+      }
+    }
+  }
+`;
+
+const GET_SESSION_FOR_CSV_EXPORT = gql`
+  query sessionCSVExport($sessionId: Int!) {
+    session(id: $sessionId) {
+      id
+      start
+      end
+      name
+      description
+      status
+      isAudioSession
+      owner {
+        id
+      }
+      toolbars {
+        id
+        markers {
+          markerId
+          visible
+        }
+        createdAt
+        updatedAt
+      }
+      userSessions {
+        id
+        status
+        note
+        owner {
+          id
+        }
+        annotations {
+          id
+          start
+          end
+          value
+          note
+          marker {
+            id
+            type
+            name
+            abbreviation
+            description
+            color
+            contentColor
             icon
             valueRangeFrom
             valueRangeTo
