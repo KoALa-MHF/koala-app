@@ -3,7 +3,7 @@
   pRipple
   [icon]="recording ? 'pi pi-pause' : 'pi pi-microphone'"
   [loading]="loading"
-  (click)="recording ? onStop() : onRecord($event)"
+  (click)="recording ? onStop() : onRecord()"
   class="p-button-rounded p-button-danger"
   attr.aria-label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.SAVE_BTN' | translate }}"
 ></button>
@@ -12,15 +12,14 @@
 
 {{ recordingTime | date : 'mm:ss' }}
 
-<!--<div style="margin-top: 20px; display: flex; justify-content: center">
+<div style="margin-top: 20px; display: flex; justify-content: center">
   <button
     pButton
     pRipple
     *ngIf="displayMode === DisplayMode.EDIT"
     label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.CANCEL_BTN' | translate }}"
     icon="pi pi-times"
-    data-cy="annotation-detail-cancel-btn"
-    (click)="onAnnotationDetailCancel()"
+    (click)="onCancel()"
     class="p-button-text menu-button p-button-danger"
     attr.aria-label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.CANCEL_BTN' | translate }}"
   ></button>
@@ -28,11 +27,10 @@
   <button
     pButton
     pRipple
-    *ngIf="displayMode === DisplayMode.EDIT"
     label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.SAVE_BTN' | translate }}"
     icon="pi pi-check"
     data-cy="annotation-detail-save-btn"
-    (click)="onAnnotationDetailSave()"
+    (click)="onSave()"
     class="p-button-text menu-button p-button-success"
     attr.aria-label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.SAVE_BTN' | translate }}"
   ></button>
@@ -44,8 +42,8 @@
     label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.DELETE_BTN' | translate }}"
     icon="pi pi-times"
     data-cy="annotation-detail-delete-btn"
-    (click)="onAnnotationDetailDelete()"
+    (click)="onDelete()"
     class="p-button-text menu-button p-button-danger"
     attr.aria-label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.EDIT_BTN' | translate }}"
   ></button>
-</div>-->
+</div>

@@ -15,6 +15,7 @@ import { ConfirmationService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 import * as d3 from 'd3';
 import { AnnotationTextComment } from '../annotation-text-comment/annotation-text-comment.component';
+import { AnnotationAudioComment } from '../annotation-audio-comment/annotation-audio-comment.component';
 
 export enum Display {
   Rect = 'rect',
@@ -53,6 +54,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
 
   @Output() deleteAnnotations = new EventEmitter<Marker>();
   @Output() annotationTextComment = new EventEmitter<AnnotationTextComment>();
+  @Output() annotationAudioComment = new EventEmitter<AnnotationAudioComment>();
 
   private sliderHeight = 2.5;
   d3Container = 'd3-container-';
@@ -362,5 +364,9 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
 
   onAnnotationTextCommentSave(annotationDetail: AnnotationTextComment) {
     this.annotationTextComment.emit(annotationDetail);
+  }
+
+  onAnnotationAudioCommentSave(annotationDetail: AnnotationAudioComment) {
+    this.annotationAudioComment.emit(annotationDetail);
   }
 }

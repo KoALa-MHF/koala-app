@@ -1,5 +1,12 @@
-import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
 import { Subscription, timer } from 'rxjs';
+import { DisplayMode } from '../../types/display-mode.enum';
+import { MediaRecorderService } from '../../services/media-recorder.service';
+
+export interface AnnotationAudioComment {
+  annotationId: number;
+  comment: Blob;
+}
 
 @Component({
   selector: 'koala-annotation-audio-comment',
@@ -9,21 +16,42 @@ import { Subscription, timer } from 'rxjs';
   ],
 })
 export class AnnotationAudioCommentComponent implements OnDestroy {
-  mediaRecorder?: MediaRecorder;
-  private chunks: Blob[] = [];
+  @Output() save = new EventEmitter<AnnotationAudioComment>();
+  @Output() delete = new EventEmitter();
+
+  //mediaRecorder?: MediaRecorder;
+  //private chunks: Blob[] = [];
 
   audioSource = '';
   loading = false;
   recording = false;
   recordingTime = new Date('000000');
   recordingStartDate?: number;
+  recordedBlob?: Blob;
+  displayMode = DisplayMode.DISPLAY;
+
+  DisplayMode = DisplayMode;
 
   recordingTimerSubscription?: Subscription;
 
-  constructor(private readonly ref: ChangeDetectorRef) {}
+  constructor(private readonly mediaRecorderService: MediaRecorderService) {}
 
-  onRecord(event: any) {
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+  async onRecord() {
+    this.loading = true;
+
+    await this.mediaRecorderService.record();
+
+    this.loading = false;
+    this.recording = true;
+    this.recordingStartDate = Date.now();
+
+    this.recordingTimerSubscription = timer(1000, 1000).subscribe(() => {
+      if (this.recordingStartDate) {
+        this.recordingTime = new Date(Date.now() - this.recordingStartDate);
+      }
+    });
+
+    /*if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       this.loading = true;
       navigator.mediaDevices
         .getUserMedia({ audio: true })
@@ -51,7 +79,7 @@ export class AnnotationAudioCommentComponent implements OnDestroy {
           this.mediaRecorder.onstop = () => {
             this.recording = false;
             this.recordingTimerSubscription?.unsubscribe();
-            const blob = new Blob(this.chunks, { type: 'audio/ogg; codecs=opus' });
+            const blob = this.createBlobFromChunks();
             this.chunks = [];
             const audioURL = window.URL.createObjectURL(blob);
             this.audioSource = audioURL;
@@ -69,15 +97,35 @@ export class AnnotationAudioCommentComponent implements OnDestroy {
         });
     } else {
       console.log('getUserMedia not supported on your browser!');
+    }*/
+  }
+
+  async onStop() {
+    this.recordedBlob = await this.mediaRecorderService.stop();
+    this.recording = false;
+    this.recordingTimerSubscription?.unsubscribe();
+
+    const audioURL = window.URL.createObjectURL(this.recordedBlob);
+    this.audioSource = audioURL;
+
+    /*if (this.mediaRecorder) {
+      this.mediaRecorder.stop();
+      console.log(this.mediaRecorder.state);
+    }*/
+  }
+
+  onSave() {
+    if (this.recordedBlob) {
+      this.save.emit({
+        annotationId: 0,
+        comment: this.recordedBlob,
+      });
     }
   }
 
-  onStop() {
-    if (this.mediaRecorder) {
-      this.mediaRecorder.stop();
-      console.log(this.mediaRecorder.state);
-    }
-  }
+  onCancel() {}
+
+  onDelete() {}
 
   ngOnDestroy() {
     this.recordingTimerSubscription?.unsubscribe();

@@ -21,6 +21,8 @@ import { UserSession } from '../../types/user-session.entity';
 import { SessionControlService } from '../../services/session-control.service';
 import { AnnotationTextComment } from '../../components/annotation-text-comment/annotation-text-comment.component';
 import { CheckboxChangeEvent } from 'primeng/checkbox';
+import { AnnotationAudioComment } from '../../components/annotation-audio-comment/annotation-audio-comment.component';
+import { MediaService } from '../../services/media.service';
 
 @Component({
   selector: 'koala-app-session',
@@ -73,6 +75,7 @@ export class SessionPage implements OnInit, OnDestroy {
     private readonly toolbarService: ToolbarsService,
     private readonly navigationService: NavigationService,
     private readonly sessionControlService: SessionControlService,
+    private readonly mediaService: MediaService,
     private appRef: ApplicationRef
   ) {
     this.sidePanelForm = this.formBuilder.group({
@@ -584,6 +587,25 @@ export class SessionPage implements OnInit, OnDestroy {
         console.log('Error');
       },
     });
+  }
+
+  onAnnotationAudioComment(annotationAudioComment: AnnotationAudioComment) {
+    this.mediaService.create({ file: annotationAudioComment.comment }).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+    /*this.annotationService.updateNote(annotationTextComment.id, annotationTextComment.note).subscribe({
+      next: () => {
+        this.sessionService.setFocusSession(parseInt(this.sessionService.getFocusSession()?.id || '0')).subscribe();
+      },
+      error: () => {
+        console.log('Error');
+      },
+    });*/
   }
 
   get sessionDetailsFormGroup(): FormGroup {

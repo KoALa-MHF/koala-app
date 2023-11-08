@@ -20,7 +20,7 @@
       ></koala-annotation-text-comment>
     </p-tabPanel>
     <p-tabPanel header="Audio">
-      <koala-annotation-audio-comment></koala-annotation-audio-comment>
+      <koala-annotation-audio-comment (save)="onAudioCommentSave($event)"></koala-annotation-audio-comment>
     </p-tabPanel>
   </p-tabView>
 </div>
