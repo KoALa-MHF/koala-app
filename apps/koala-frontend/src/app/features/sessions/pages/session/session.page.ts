@@ -19,7 +19,7 @@ import { ToolbarsService } from '../../services/toolbars.service';
 import { NavigationService } from '../../services/navigation.service';
 import { UserSession } from '../../types/user-session.entity';
 import { SessionControlService } from '../../services/session-control.service';
-import { AnnotationDetail } from '../../components/annotation-detail/annotation-detail.component';
+import { AnnotationTextComment } from '../../components/annotation-text-comment/annotation-text-comment.component';
 import { CheckboxChangeEvent } from 'primeng/checkbox';
 
 @Component({
@@ -575,8 +575,8 @@ export class SessionPage implements OnInit, OnDestroy {
     ]);
   }
 
-  onAnnotationComment(annotationDetail: AnnotationDetail) {
-    this.annotationService.updateNote(annotationDetail.id, annotationDetail.note).subscribe({
+  onAnnotationTextComment(annotationTextComment: AnnotationTextComment) {
+    this.annotationService.updateNote(annotationTextComment.id, annotationTextComment.note).subscribe({
       next: () => {
         this.sessionService.setFocusSession(parseInt(this.sessionService.getFocusSession()?.id || '0')).subscribe();
       },

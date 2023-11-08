@@ -1,6 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DisplayMode } from '../../types/display-mode.enum';
 
+export interface AnnotationTextComment {
+  id: number;
+  note: string;
+}
+
 @Component({
   selector: 'koala-annotation-text-comment',
   templateUrl: './annotation-text-comment.component.html',
@@ -9,34 +14,58 @@ import { DisplayMode } from '../../types/display-mode.enum';
   ],
 })
 export class AnnotationTextCommentComponent {
-  @Input() note = '';
-  @Input() displayMode = DisplayMode.DISPLAY;
+  @Input() set comment(value: AnnotationTextComment) {
+    this.originalNote = value.note;
+    this._note = value.note;
+    if (this._note) {
+      this.displayMode = DisplayMode.DISPLAY;
+    } else {
+      this.displayMode = DisplayMode.EDIT;
+    }
+  }
 
-  @Output() edit = new EventEmitter();
-  @Output() save = new EventEmitter();
-  @Output() cancel = new EventEmitter();
+  get comment() {
+    return { id: this._commentId, note: this._note };
+  }
+
+  originalNote = '';
+  _note = '';
+  _commentId = 0;
+
+  @Output() save = new EventEmitter<string>();
   @Output() delete = new EventEmitter();
-  @Output() noteChange = new EventEmitter<string>();
 
+  displayMode = DisplayMode.DISPLAY;
   DisplayMode = DisplayMode;
 
-  onAnnotationDetailCancel() {
-    this.cancel.emit();
+  onCancel() {
+    this._note = this.originalNote;
+    if (this._note) {
+      this.displayMode = DisplayMode.DISPLAY;
+    } else {
+      this.displayMode = DisplayMode.EDIT;
+    }
   }
 
-  onAnnotationDetailSave() {
-    this.save.emit();
+  onSave() {
+    this.save.emit(this._note);
+    if (this._note) {
+      this.displayMode = DisplayMode.DISPLAY;
+    } else {
+      this.displayMode = DisplayMode.EDIT;
+    }
   }
 
-  onAnnotationDetailDelete() {
+  onDelete() {
     this.delete.emit();
+    this.displayMode = DisplayMode.EDIT;
   }
 
-  onAnnotationDetailEdit() {
-    this.edit.emit();
+  onEdit() {
+    this.displayMode = DisplayMode.EDIT;
   }
 
-  onNoteChange(event: any) {
-    this.noteChange.emit(event.target.value);
+  onChange(event: any) {
+    this._note = event.target.value;
   }
 }

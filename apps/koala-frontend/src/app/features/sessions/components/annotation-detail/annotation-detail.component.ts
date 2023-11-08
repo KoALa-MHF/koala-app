@@ -1,11 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DataPoint } from '../annotation/annotation.component';
-import { DisplayMode } from '../../types/display-mode.enum';
-
-export interface AnnotationDetail {
-  id: number;
-  note: string;
-}
+import { AnnotationTextComment } from '../annotation-text-comment/annotation-text-comment.component';
 
 @Component({
   selector: 'koala-annotation-detail',
@@ -19,11 +14,9 @@ export class AnnotationDetailComponent {
     if (value) {
       this._annotation = value;
       if (this._annotation.note) {
-        this.note = this._annotation.note;
-        this.mode = DisplayMode.DISPLAY;
+        this.note = { id: value.id, note: this._annotation.note };
       } else {
-        this.note = '';
-        this.mode = DisplayMode.EDIT;
+        this.note = { id: value.id, note: '' };
       }
     }
   }
@@ -34,38 +27,23 @@ export class AnnotationDetailComponent {
 
   private _annotation!: DataPoint | null;
 
-  @Output() save = new EventEmitter<AnnotationDetail>();
+  @Output() saveTextComment = new EventEmitter<AnnotationTextComment>();
+  @Output() saveAudioComment = new EventEmitter<AnnotationTextComment>();
 
-  note = '';
+  note: AnnotationTextComment = {
+    id: 0,
+    note: '',
+  };
 
-  mode = DisplayMode.EDIT;
-  Mode = DisplayMode;
-
-  onAnnotationDetailCancel() {
-    this.note = this.annotation?.note || '';
-    if (this.note) {
-      this.mode = DisplayMode.DISPLAY;
-    } else {
-      this.mode = DisplayMode.EDIT;
-    }
+  onTextCommentSave(note: string) {
+    this.saveTextComment.emit({ id: this.annotation?.id || 0, note: note });
   }
 
-  onAnnotationDetailSave() {
-    this.save.emit({ id: this.annotation?.id || 0, note: this.note });
-    this.mode = DisplayMode.DISPLAY;
+  onTextCommentDelete() {
+    this.saveTextComment.emit({ id: this.annotation?.id || 0, note: '' });
   }
 
-  onAnnotationDetailDelete() {
-    this.note = '';
-    this.save.emit({ id: this.annotation?.id || 0, note: '' });
-    this.mode = DisplayMode.DISPLAY;
-  }
-
-  onAnnotationDetailEdit() {
-    this.mode = DisplayMode.EDIT;
-  }
-
-  onNoteChange(note: string) {
-    this.note = note;
+  onAudioCommentSave() {
+    this.saveAudioComment.emit();
   }
 }

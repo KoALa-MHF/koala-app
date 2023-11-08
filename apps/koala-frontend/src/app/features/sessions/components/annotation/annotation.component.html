@@ -25,7 +25,7 @@
 <p-overlayPanel #annotationDetailOverlay [style]="annotationDetailOverlayStyle" [showCloseIcon]="true">
   <koala-annotation-detail
     [annotation]="selectedDataPoint"
-    (save)="onAnnotationDetailSave($event)"
+    (saveTextComment)="onAnnotationTextCommentSave($event)"
   ></koala-annotation-detail>
 </p-overlayPanel>
 

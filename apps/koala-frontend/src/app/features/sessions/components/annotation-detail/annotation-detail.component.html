@@ -14,13 +14,9 @@
   <p-tabView>
     <p-tabPanel header="Text">
       <koala-annotation-text-comment
-        [note]="note"
-        [displayMode]="mode"
-        (save)="onAnnotationDetailSave()"
-        (edit)="onAnnotationDetailEdit()"
-        (cancel)="onAnnotationDetailCancel()"
-        (delete)="onAnnotationDetailDelete()"
-        (noteChange)="onNoteChange($event)"
+        [comment]="{ id: annotation?.id || 0, note: annotation?.note || '' }"
+        (save)="onTextCommentSave($event)"
+        (delete)="onTextCommentDelete()"
       ></koala-annotation-text-comment>
     </p-tabPanel>
     <p-tabPanel header="Audio">
