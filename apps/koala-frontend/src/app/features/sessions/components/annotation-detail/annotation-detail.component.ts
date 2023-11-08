@@ -43,7 +43,11 @@ export class AnnotationDetailComponent {
 
   onAnnotationDetailCancel() {
     this.note = this.annotation?.note || '';
-    this.mode = DisplayMode.DISPLAY;
+    if (this.note) {
+      this.mode = DisplayMode.DISPLAY;
+    } else {
+      this.mode = DisplayMode.EDIT;
+    }
   }
 
   onAnnotationDetailSave() {
