@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Annotation } from './entities/annotation.entity';
 import { MarkersModule } from '../markers/markers.module';
 import { UserSessionsModule } from '../user-sessions/user-sessions.module';
+import { MediaModule } from '../media/media.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { UserSessionsModule } from '../user-sessions/user-sessions.module';
     ]),
     MarkersModule,
     forwardRef(() => UserSessionsModule),
+    MediaModule,
   ],
   providers: [
     AnnotationsResolver,

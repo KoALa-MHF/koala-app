@@ -9,6 +9,7 @@ import { forwardRef, Inject, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../core/guards/auth.guard';
 import { CurrentUser } from '../core/decorators/user.decorator';
 import { User } from '../users/entities/user.entity';
+import { MediaService } from '../media/media.service';
 
 @Resolver(() => Annotation)
 @UseGuards(AuthGuard)
@@ -17,7 +18,8 @@ export class AnnotationsResolver {
     private readonly annotationsService: AnnotationsService,
     private readonly markersService: MarkersService,
     @Inject(forwardRef(() => UserSessionsService))
-    private readonly userSessionsService: UserSessionsService
+    private readonly userSessionsService: UserSessionsService,
+    private readonly mediaService: MediaService
   ) {}
 
   @Mutation(() => Annotation)
@@ -57,5 +59,11 @@ export class AnnotationsResolver {
   marker(@Parent() annotation: Annotation) {
     const { markerId } = annotation;
     return this.markersService.findOne(markerId);
+  }
+
+  @ResolveField()
+  media(@Parent() annotation: Annotation) {
+    const { mediaId } = annotation;
+    return this.mediaService.findOne(mediaId);
   }
 }
