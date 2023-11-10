@@ -590,22 +590,34 @@ export class SessionPage implements OnInit, OnDestroy {
   }
 
   onAnnotationAudioComment(annotationAudioComment: AnnotationAudioComment) {
-    this.mediaService.create({ file: annotationAudioComment.comment }).subscribe({
-      next: (response) => {
-        console.log(response);
-      },
-      error: (error) => {
-        console.log(error);
-      },
-    });
-    /*this.annotationService.updateNote(annotationTextComment.id, annotationTextComment.note).subscribe({
-      next: () => {
-        this.sessionService.setFocusSession(parseInt(this.sessionService.getFocusSession()?.id || '0')).subscribe();
-      },
-      error: () => {
-        console.log('Error');
-      },
-    });*/
+    this.mediaService
+      .create({
+        file: new File(
+          [
+            annotationAudioComment.comment,
+          ],
+          `Annotation_Audio_${annotationAudioComment.annotationId}`
+        ),
+      })
+      .subscribe({
+        next: (response) => {
+          const mediaId = response.data?.createMedia.id;
+          if (mediaId) {
+            //always is there, because otherwise mediaService would return error
+            this.annotationService.updateMedia(annotationAudioComment.annotationId, parseInt(mediaId)).subscribe({
+              next: (response) => {
+                console.log(response);
+              },
+              error: (error) => {
+                console.log(error);
+              },
+            });
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
   }
 
   get sessionDetailsFormGroup(): FormGroup {

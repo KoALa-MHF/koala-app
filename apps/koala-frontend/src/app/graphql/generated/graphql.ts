@@ -71,7 +71,7 @@ export type CreateAnnotationInput = {
   /** Assigned Media */
   mediaId?: InputMaybe<Scalars['Int']['input']>;
   /** Annotation Note */
-  note?: Scalars['String']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
   /** Annotation Start Seconds */
   start: Scalars['Int']['input'];
   /** Associated User Session */
@@ -907,6 +907,16 @@ export type UpdateAnnotationNoteMutationVariables = Exact<{
 export type UpdateAnnotationNoteMutation = {
   __typename?: 'Mutation';
   updateAnnotation: { __typename?: 'Annotation'; id: number; note?: string | null };
+};
+
+export type UpdateAnnotationAudioMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  mediaId: Scalars['Int']['input'];
+}>;
+
+export type UpdateAnnotationAudioMutation = {
+  __typename?: 'Mutation';
+  updateAnnotation: { __typename?: 'Annotation'; id: number; media?: { __typename?: 'Media'; id: string } | null };
 };
 
 export type GetSessionsQueryVariables = Exact<{ [key: string]: never }>;
@@ -1773,6 +1783,30 @@ export class UpdateAnnotationNoteGQL extends Apollo.Mutation<
   UpdateAnnotationNoteMutationVariables
 > {
   override document = UpdateAnnotationNoteDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateAnnotationAudioDocument = gql`
+  mutation updateAnnotationAudio($id: Int!, $mediaId: Int!) {
+    updateAnnotation(id: $id, updateAnnotationInput: { mediaId: $mediaId }) {
+      id
+      media {
+        id
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateAnnotationAudioGQL extends Apollo.Mutation<
+  UpdateAnnotationAudioMutation,
+  UpdateAnnotationAudioMutationVariables
+> {
+  override document = UpdateAnnotationAudioDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

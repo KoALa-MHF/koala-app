@@ -361,3 +361,14 @@ const UPDATE_ANNOTATION_NOTE = gql`
     }
   }
 `;
+
+const UPDATE_ANNOTATION_MEDIA = gql`
+  mutation updateAnnotationAudio($id: Int!, $mediaId: Int!) {
+    updateAnnotation(id: $id, updateAnnotationInput: { mediaId: $mediaId }) {
+      id
+      media {
+        id
+      }
+    }
+  }
+`;

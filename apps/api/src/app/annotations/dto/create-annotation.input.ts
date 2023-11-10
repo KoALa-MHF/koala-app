@@ -22,7 +22,7 @@ export class CreateAnnotationInput {
   @IsNotEmpty()
   userSessionId: number;
 
-  @Field({ description: 'Annotation Note' })
+  @Field({ nullable: true, description: 'Annotation Note' })
   @MaxLength(ANNOTATION_NOTE_MAX_LENGTH)
   @IsOptional()
   note?: string;
