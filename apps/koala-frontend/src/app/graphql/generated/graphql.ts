@@ -802,6 +802,8 @@ export type SetPlayModeMutation = {
         end?: number | null;
         start: number;
         value?: number | null;
+        note?: string | null;
+        media?: { __typename?: 'Media'; id: string } | null;
         marker: {
           __typename?: 'Marker';
           id: number;
@@ -860,6 +862,8 @@ export type SetPlayPositionMutation = {
         end?: number | null;
         start: number;
         value?: number | null;
+        note?: string | null;
+        media?: { __typename?: 'Media'; id: string } | null;
         marker: {
           __typename?: 'Marker';
           id: number;
@@ -1011,6 +1015,7 @@ export type GetOneSessionQuery = {
         end?: number | null;
         start: number;
         value?: number | null;
+        media?: { __typename?: 'Media'; id: string } | null;
         marker: {
           __typename?: 'Marker';
           id: number;
@@ -1100,6 +1105,7 @@ export type SessionExportQuery = {
         end?: number | null;
         value?: number | null;
         note?: string | null;
+        media?: { __typename?: 'Media'; id: string } | null;
         marker: {
           __typename?: 'Marker';
           id: number;
@@ -1154,6 +1160,7 @@ export type SessionCsvExportQuery = {
         end?: number | null;
         value?: number | null;
         note?: string | null;
+        media?: { __typename?: 'Media'; id: string } | null;
         marker: {
           __typename?: 'Marker';
           id: number;
@@ -1623,6 +1630,10 @@ export const SetPlayModeDocument = gql`
           end
           start
           value
+          note
+          media {
+            id
+          }
           marker {
             id
             type
@@ -1700,6 +1711,10 @@ export const SetPlayPositionDocument = gql`
           end
           start
           value
+          note
+          media {
+            id
+          }
           marker {
             id
             type
@@ -1930,6 +1945,9 @@ export const GetOneSessionDocument = gql`
         annotations {
           id
           note
+          media {
+            id
+          }
           end
           start
           value
@@ -2063,6 +2081,9 @@ export const SessionExportDocument = gql`
           end
           value
           note
+          media {
+            id
+          }
           marker {
             id
             type
@@ -2126,6 +2147,9 @@ export const SessionCsvExportDocument = gql`
           end
           value
           note
+          media {
+            id
+          }
           marker {
             id
             type

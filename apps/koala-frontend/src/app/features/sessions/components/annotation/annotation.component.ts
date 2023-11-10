@@ -25,6 +25,7 @@ export enum Display {
 export interface DataPoint {
   id: number;
   note?: string;
+  mediaId?: number;
   strength?: number;
   display: Display;
   startTime: number;

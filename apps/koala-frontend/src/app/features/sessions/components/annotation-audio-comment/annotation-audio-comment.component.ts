@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core
 import { Subscription, timer } from 'rxjs';
 import { DisplayMode } from '../../types/display-mode.enum';
 import { MediaRecorderService } from '../../services/media-recorder.service';
+import { environment } from '../../../../../environments/environment';
+import { AccessTokenService } from '../../../auth/services/access-token.service';
 
 export interface AnnotationAudioComment {
   annotationId: number;
@@ -17,14 +19,22 @@ export interface AnnotationAudioComment {
 })
 export class AnnotationAudioCommentComponent implements OnDestroy {
   @Input() annotationId = 0;
-  @Input() audioSrc = '';
+  @Input() set mediaId(value: number) {
+    if (value !== 0) {
+      fetch(`${this.mediaUrl}/${value}`, {
+        headers: {
+          Authorization: `Bearer ${this.accessTokenService.getAccessToken()}`,
+        },
+      }).then(async (response) => {
+        this.audioSource = window.URL.createObjectURL(await response.blob());
+      });
+    }
+  }
   @Output() save = new EventEmitter<AnnotationAudioComment>();
   @Output() delete = new EventEmitter();
 
-  //mediaRecorder?: MediaRecorder;
-  //private chunks: Blob[] = [];
-
-  audioSource = '';
+  mediaUrl = environment.mediaUrl;
+  audioSource?: string;
   loading = false;
   recording = false;
   recordingTime = new Date('000000');
@@ -36,7 +46,10 @@ export class AnnotationAudioCommentComponent implements OnDestroy {
 
   recordingTimerSubscription?: Subscription;
 
-  constructor(private readonly mediaRecorderService: MediaRecorderService) {}
+  constructor(
+    private readonly mediaRecorderService: MediaRecorderService,
+    private readonly accessTokenService: AccessTokenService
+  ) {}
 
   async onRecord() {
     this.loading = true;

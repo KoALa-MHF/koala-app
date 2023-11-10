@@ -240,6 +240,10 @@ const SET_PLAY_MODE = gql`
           end
           start
           value
+          note
+          media {
+            id
+          }
           marker {
             id
             type
@@ -307,6 +311,10 @@ const SET_PLAY_POSITION = gql`
           end
           start
           value
+          note
+          media {
+            id
+          }
           marker {
             id
             type

@@ -108,6 +108,9 @@ const GET_ONE_SESSION = gql`
         annotations {
           id
           note
+          media {
+            id
+          }
           end
           start
           value
@@ -198,6 +201,9 @@ const GET_SESSION_FOR_EXPORT = gql`
           end
           value
           note
+          media {
+            id
+          }
           marker {
             id
             type
@@ -251,6 +257,9 @@ const GET_SESSION_FOR_CSV_EXPORT = gql`
           end
           value
           note
+          media {
+            id
+          }
           marker {
             id
             type

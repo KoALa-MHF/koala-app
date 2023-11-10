@@ -37,9 +37,7 @@ export class SessionPage implements OnInit, OnDestroy {
   PlayMode = PlayMode;
 
   waveContainer!: string;
-  mediaUri: string = environment.production
-    ? 'https://koala.mh-freiburg.de/api/media'
-    : 'http://localhost:4200/api/media';
+  mediaUri: string = environment.mediaUrl;
   sessionId = 0;
   AnnotationData: Map<number, Array<DataPoint>> = new Map<number, Array<DataPoint>>();
   AnnotationDislay = Display;
@@ -342,6 +340,7 @@ export class SessionPage implements OnInit, OnDestroy {
           strength: annotation.value,
           display: annotation.end == 0 ? Display.Circle : Display.Rect,
           color: annotation.marker.color,
+          mediaId: annotation.media?.id,
         });
       }
     }
