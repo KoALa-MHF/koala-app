@@ -605,7 +605,12 @@ export class SessionPage implements OnInit, OnDestroy {
             //always is there, because otherwise mediaService would return error
             this.annotationService.updateMedia(annotationAudioComment.annotationId, parseInt(mediaId)).subscribe({
               next: (response) => {
-                console.log(response);
+                this.sessionService.setFocusSession(this.sessionId).subscribe((focusSession: Session) => {
+                  const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
+                  if (userSessions) {
+                    this.loadAnnotations(userSessions);
+                  }
+                });
               },
               error: (error) => {
                 console.log(error);
@@ -617,6 +622,23 @@ export class SessionPage implements OnInit, OnDestroy {
           console.log(error);
         },
       });
+  }
+
+  onAnnotationAudioCommentDelete(annotationId: number) {
+    this.annotationService.removeMedia(annotationId).subscribe({
+      next: () => {
+        this.sessionService.setFocusSession(this.sessionId).subscribe((focusSession: Session) => {
+          const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
+          if (userSessions) {
+            this.loadAnnotations(userSessions);
+          }
+        });
+        console.log('Audio Successfully Removed');
+      },
+      error: (error) => {
+        console.log('Error Annotation Audio Removal');
+      },
+    });
   }
 
   get sessionDetailsFormGroup(): FormGroup {

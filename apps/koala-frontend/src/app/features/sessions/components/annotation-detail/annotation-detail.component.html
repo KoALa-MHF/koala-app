@@ -24,6 +24,7 @@
         [annotationId]="annotation?.id || 0"
         [mediaId]="annotation?.mediaId || 0"
         (save)="onAudioCommentSave($event)"
+        (delete)="onAudioCommentDelete()"
       ></koala-annotation-audio-comment>
     </p-tabPanel>
   </p-tabView>

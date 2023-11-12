@@ -56,6 +56,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Output() deleteAnnotations = new EventEmitter<Marker>();
   @Output() annotationTextComment = new EventEmitter<AnnotationTextComment>();
   @Output() annotationAudioComment = new EventEmitter<AnnotationAudioComment>();
+  @Output() annotationAudioCommentDelete = new EventEmitter<number>();
 
   private sliderHeight = 2.5;
   d3Container = 'd3-container-';
@@ -369,5 +370,9 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
 
   onAnnotationAudioCommentSave(annotationDetail: AnnotationAudioComment) {
     this.annotationAudioComment.emit(annotationDetail);
+  }
+
+  onAnnotationAudioCommentDelete(annotationId: number) {
+    this.annotationAudioCommentDelete.emit(annotationId);
   }
 }

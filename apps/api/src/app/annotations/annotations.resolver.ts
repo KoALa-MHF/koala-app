@@ -45,6 +45,11 @@ export class AnnotationsResolver {
   }
 
   @Mutation(() => Annotation)
+  removeAnnotationMedia(@Args('id', { type: () => Int }) id: number, @CurrentUser() user: User) {
+    return this.annotationsService.removeMedia(id, user);
+  }
+
+  @Mutation(() => Annotation)
   removeAnnotation(@Args('id', { type: () => Int }) id: number, @CurrentUser() user: User) {
     return this.annotationsService.remove(id, user);
   }
@@ -64,6 +69,10 @@ export class AnnotationsResolver {
   @ResolveField()
   media(@Parent() annotation: Annotation) {
     const { mediaId } = annotation;
-    return this.mediaService.findOne(mediaId);
+    if (mediaId === null) {
+      return null;
+    } else {
+      return this.mediaService.findOne(mediaId);
+    }
   }
 }

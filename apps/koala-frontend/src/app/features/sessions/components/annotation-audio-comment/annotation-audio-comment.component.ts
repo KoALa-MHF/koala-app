@@ -20,13 +20,15 @@ export interface AnnotationAudioComment {
 export class AnnotationAudioCommentComponent implements OnDestroy {
   @Input() annotationId = 0;
   @Input() set mediaId(value: number) {
+    delete this.recordedAudioSource;
+    delete this.recordedBlob;
+    delete this.annotationAudioSource;
+
+    this._mediaId = value;
+
     if (value !== 0) {
-      fetch(`${this.mediaUrl}/${value}`, {
-        headers: {
-          Authorization: `Bearer ${this.accessTokenService.getAccessToken()}`,
-        },
-      }).then(async (response) => {
-        this.audioSource = window.URL.createObjectURL(await response.blob());
+      this.fetchAudioBlob(value).then((audioUrl) => {
+        this.annotationAudioSource = audioUrl;
       });
     }
   }
@@ -34,8 +36,10 @@ export class AnnotationAudioCommentComponent implements OnDestroy {
   @Output() delete = new EventEmitter();
 
   mediaUrl = environment.mediaUrl;
-  audioSource?: string;
-  loading = false;
+  recordedAudioSource?: string;
+  annotationAudioSource?: string;
+  _mediaId = 0;
+  loadingForRecordingService = false;
   recording = false;
   recordingTime = new Date('000000');
   recordingStartDate?: number;
@@ -52,11 +56,11 @@ export class AnnotationAudioCommentComponent implements OnDestroy {
   ) {}
 
   async onRecord() {
-    this.loading = true;
+    this.loadingForRecordingService = true;
 
     await this.mediaRecorderService.record();
 
-    this.loading = false;
+    this.loadingForRecordingService = false;
     this.recording = true;
     this.recordingStartDate = Date.now();
 
@@ -72,8 +76,7 @@ export class AnnotationAudioCommentComponent implements OnDestroy {
     this.recording = false;
     this.recordingTimerSubscription?.unsubscribe();
 
-    const audioURL = window.URL.createObjectURL(this.recordedBlob);
-    this.audioSource = audioURL;
+    this.recordedAudioSource = window.URL.createObjectURL(this.recordedBlob);
   }
 
   onSave() {
@@ -82,14 +85,32 @@ export class AnnotationAudioCommentComponent implements OnDestroy {
         annotationId: this.annotationId,
         comment: this.recordedBlob,
       });
+
+      delete this.recordedBlob;
+      delete this.annotationAudioSource;
     }
   }
 
-  onCancel() {}
+  async onCancel() {
+    delete this.recordedBlob;
+    delete this.recordedAudioSource;
+  }
 
-  onDelete() {}
+  onDelete() {
+    this.delete.emit();
+  }
 
   ngOnDestroy() {
     this.recordingTimerSubscription?.unsubscribe();
+  }
+
+  private async fetchAudioBlob(mediaId: number): Promise<string> {
+    const response = await fetch(`${this.mediaUrl}/${mediaId}`, {
+      headers: {
+        Authorization: `Bearer ${this.accessTokenService.getAccessToken()}`,
+      },
+    });
+
+    return window.URL.createObjectURL(await response.blob());
   }
 }

@@ -204,6 +204,7 @@ export type Mutation = {
   createUserSession: UserSession;
   inviteUserSession: Array<UserSession>;
   removeAnnotation: Annotation;
+  removeAnnotationMedia: Annotation;
   removeMarker: Marker;
   removeSession: Session;
   removeUserSession: UserSession;
@@ -251,6 +252,10 @@ export type MutationInviteUserSessionArgs = {
 };
 
 export type MutationRemoveAnnotationArgs = {
+  id: Scalars['Int']['input'];
+};
+
+export type MutationRemoveAnnotationMediaArgs = {
   id: Scalars['Int']['input'];
 };
 
@@ -921,6 +926,15 @@ export type UpdateAnnotationAudioMutationVariables = Exact<{
 export type UpdateAnnotationAudioMutation = {
   __typename?: 'Mutation';
   updateAnnotation: { __typename?: 'Annotation'; id: number; media?: { __typename?: 'Media'; id: string } | null };
+};
+
+export type RemoveAnnotationAudioMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type RemoveAnnotationAudioMutation = {
+  __typename?: 'Mutation';
+  removeAnnotationMedia: { __typename?: 'Annotation'; id: number };
 };
 
 export type GetSessionsQueryVariables = Exact<{ [key: string]: never }>;
@@ -1822,6 +1836,27 @@ export class UpdateAnnotationAudioGQL extends Apollo.Mutation<
   UpdateAnnotationAudioMutationVariables
 > {
   override document = UpdateAnnotationAudioDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const RemoveAnnotationAudioDocument = gql`
+  mutation removeAnnotationAudio($id: Int!) {
+    removeAnnotationMedia(id: $id) {
+      id
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class RemoveAnnotationAudioGQL extends Apollo.Mutation<
+  RemoveAnnotationAudioMutation,
+  RemoveAnnotationAudioMutationVariables
+> {
+  override document = RemoveAnnotationAudioDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

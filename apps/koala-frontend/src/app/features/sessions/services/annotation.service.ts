@@ -3,6 +3,7 @@ import {
   CreateAnnotationGQL,
   CreateAnnotationInput,
   DeleteAnnotationGQL,
+  RemoveAnnotationAudioGQL,
   UpdateAnnotationAudioGQL,
   UpdateAnnotationNoteGQL,
 } from '../../../graphql/generated/graphql';
@@ -13,7 +14,8 @@ export class AnnotationService {
     private readonly createAnnotationGQL: CreateAnnotationGQL,
     private readonly deleteAnnotationGQL: DeleteAnnotationGQL,
     private readonly updateAnnotationNoteGQL: UpdateAnnotationNoteGQL,
-    private readonly updateAnnotationAudioGQL: UpdateAnnotationAudioGQL
+    private readonly updateAnnotationAudioGQL: UpdateAnnotationAudioGQL,
+    private readonly removeAnnotationAudioGQL: RemoveAnnotationAudioGQL
   ) {}
 
   create(annotation: CreateAnnotationInput) {
@@ -30,5 +32,9 @@ export class AnnotationService {
 
   updateMedia(id: number, mediaId: number) {
     return this.updateAnnotationAudioGQL.mutate({ id, mediaId });
+  }
+
+  removeMedia(id: number) {
+    return this.removeAnnotationAudioGQL.mutate({ id });
   }
 }

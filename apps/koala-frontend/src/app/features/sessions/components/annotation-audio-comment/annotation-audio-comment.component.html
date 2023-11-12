@@ -2,21 +2,26 @@
   pButton
   pRipple
   [icon]="recording ? 'pi pi-pause' : 'pi pi-microphone'"
-  [loading]="loading"
+  [loading]="loadingForRecordingService"
   (click)="recording ? onStop() : onRecord()"
   class="p-button-rounded p-button-danger"
   attr.aria-label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.SAVE_BTN' | translate }}"
 ></button>
 
-<audio #audio controls [src]="audioSource" *ngIf="audioSource && recording === false"></audio>
+<audio
+  #audio
+  controls
+  [src]="recordedAudioSource || annotationAudioSource"
+  *ngIf="(recordedAudioSource || annotationAudioSource) && recording === false"
+></audio>
 
-{{ recordingTime | date : 'mm:ss' }}
+<div *ngIf="recording">{{ recordingTime | date : 'mm:ss' }}</div>
 
 <div style="margin-top: 20px; display: flex; justify-content: center">
   <button
     pButton
     pRipple
-    *ngIf="displayMode === DisplayMode.EDIT"
+    *ngIf="!recording && recordedAudioSource"
     label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.CANCEL_BTN' | translate }}"
     icon="pi pi-times"
     (click)="onCancel()"
@@ -27,6 +32,7 @@
   <button
     pButton
     pRipple
+    *ngIf="!recording && recordedAudioSource"
     label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.SAVE_BTN' | translate }}"
     icon="pi pi-check"
     data-cy="annotation-detail-save-btn"
@@ -38,7 +44,7 @@
   <button
     pButton
     pRipple
-    *ngIf="displayMode === DisplayMode.DISPLAY"
+    *ngIf="!recording && annotationAudioSource && !recordedAudioSource"
     label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.DELETE_BTN' | translate }}"
     icon="pi pi-times"
     data-cy="annotation-detail-delete-btn"

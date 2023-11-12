@@ -380,3 +380,11 @@ const UPDATE_ANNOTATION_MEDIA = gql`
     }
   }
 `;
+
+const REMOVE_ANNOTATION_MEDIA = gql`
+  mutation removeAnnotationAudio($id: Int!) {
+    removeAnnotationMedia(id: $id) {
+      id
+    }
+  }
+`;

@@ -58,18 +58,18 @@ export class AnnotationsService {
       }
     });
 
-    const updatedAnnotations = allAnnotations.map((annoation) => {
-      if (annoation.start < newAnnotation.start) {
-        if (annoation.end > newAnnotation.start) {
-          annoation.end = newAnnotation.start;
+    const updatedAnnotations = allAnnotations.map((annotation) => {
+      if (annotation.start < newAnnotation.start) {
+        if (annotation.end > newAnnotation.start) {
+          annotation.end = newAnnotation.start;
         }
       }
-      return annoation;
+
+      return annotation;
     });
 
     await this.annotationsRepository.save(updatedAnnotations);
     await this.annotationsRepository.remove(futureAnnotations);
-
     return this.annotationsRepository.save(newAnnotation);
   }
 
@@ -109,10 +109,27 @@ export class AnnotationsService {
     return this.annotationsRepository.save(annotation);
   }
 
-  async remove(id: number, user: User) {
+  async removeMedia(id: number, user: User) {
     const annotation = await this.findOne(id, user);
+    this.annotationsRepository.update(id, {
+      mediaId: null,
+      media: null,
+    });
+
+    return { ...annotation, mediaId: null, media: null };
+  }
+
+  async remove(id: number, user: User) {
+    let annotation = await this.findOne(id, user);
+
+    if (!annotation) {
+      throw new NotFoundException();
+    }
+
     await this.annotationsRepository.remove(annotation);
-    annotation.id = id;
+
+    //return updated entity
+    annotation = await this.findOne(id, user);
     return annotation;
   }
 }

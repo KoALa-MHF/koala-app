@@ -30,6 +30,7 @@ export class AnnotationDetailComponent {
 
   @Output() saveTextComment = new EventEmitter<AnnotationTextComment>();
   @Output() saveAudioComment = new EventEmitter<AnnotationAudioComment>();
+  @Output() deleteAudioComment = new EventEmitter<number>();
 
   note: AnnotationTextComment = {
     id: 0,
@@ -46,5 +47,9 @@ export class AnnotationDetailComponent {
 
   onAudioCommentSave(audioComment: AnnotationAudioComment) {
     this.saveAudioComment.emit(audioComment);
+  }
+
+  onAudioCommentDelete() {
+    this.deleteAudioComment.emit(this.annotation?.id || 0);
   }
 }
