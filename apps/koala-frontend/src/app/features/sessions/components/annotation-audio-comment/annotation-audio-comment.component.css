@@ -1,0 +1,7 @@
+.tab-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-content: space-around;
+  min-width: 340px;
+}

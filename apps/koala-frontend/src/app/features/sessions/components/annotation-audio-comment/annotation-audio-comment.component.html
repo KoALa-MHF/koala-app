@@ -1,55 +1,61 @@
-<button
-  pButton
-  pRipple
-  [icon]="recording ? 'pi pi-pause' : 'pi pi-microphone'"
-  [loading]="loadingForRecordingService"
-  (click)="recording ? onStop() : onRecord()"
-  class="p-button-rounded p-button-danger"
-  attr.aria-label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.SAVE_BTN' | translate }}"
-></button>
+<div class="tab-container">
+  <div style="display: flex; justify-content: center; align-items: center; gap: 15px">
+    <button
+      pButton
+      pRipple
+      [icon]="recording ? 'pi pi-pause' : 'pi pi-microphone'"
+      [loading]="loadingForRecordingService"
+      (click)="recording ? onStop() : onRecord()"
+      class="p-button-rounded p-button-danger"
+      attr.aria-label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.SAVE_BTN' | translate }}"
+    ></button>
 
-<audio
-  #audio
-  controls
-  [src]="recordedAudioSource || annotationAudioSource"
-  *ngIf="(recordedAudioSource || annotationAudioSource) && recording === false"
-></audio>
+    <span *ngIf="recording">{{ recordingTime | date : 'mm:ss' }}</span>
+  </div>
 
-<div *ngIf="recording">{{ recordingTime | date : 'mm:ss' }}</div>
+  <div style="display: flex; justify-content: center">
+    <audio
+      #audio
+      controls
+      [src]="recordedAudioSource || annotationAudioSource"
+      *ngIf="(recordedAudioSource || annotationAudioSource) && recording === false"
+    ></audio>
+  </div>
 
-<div style="margin-top: 20px; display: flex; justify-content: center">
-  <button
-    pButton
-    pRipple
-    *ngIf="!recording && recordedAudioSource"
-    label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.CANCEL_BTN' | translate }}"
-    icon="pi pi-times"
-    (click)="onCancel()"
-    class="p-button-text menu-button p-button-danger"
-    attr.aria-label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.CANCEL_BTN' | translate }}"
-  ></button>
+  <div style="display: flex; justify-content: center">
+    <button
+      pButton
+      pRipple
+      *ngIf="!recording && recordedAudioSource"
+      label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.CANCEL_BTN' | translate }}"
+      icon="pi pi-times"
+      (click)="onCancel()"
+      class="p-button-text menu-button p-button-danger"
+      attr.aria-label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.CANCEL_BTN' | translate }}"
+    ></button>
 
-  <button
-    pButton
-    pRipple
-    *ngIf="!recording && recordedAudioSource"
-    label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.SAVE_BTN' | translate }}"
-    icon="pi pi-check"
-    data-cy="annotation-detail-save-btn"
-    (click)="onSave()"
-    class="p-button-text menu-button p-button-success"
-    attr.aria-label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.SAVE_BTN' | translate }}"
-  ></button>
+    <button
+      pButton
+      pRipple
+      *ngIf="!recording && recordedAudioSource"
+      label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.SAVE_BTN' | translate }}"
+      icon="pi pi-check"
+      data-cy="annotation-detail-save-btn"
+      (click)="onSave()"
+      class="p-button-text menu-button p-button-success"
+      attr.aria-label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.SAVE_BTN' | translate }}"
+    ></button>
 
-  <button
-    pButton
-    pRipple
-    *ngIf="!recording && annotationAudioSource && !recordedAudioSource"
-    label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.DELETE_BTN' | translate }}"
-    icon="pi pi-times"
-    data-cy="annotation-detail-delete-btn"
-    (click)="onDelete()"
-    class="p-button-text menu-button p-button-danger"
-    attr.aria-label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.EDIT_BTN' | translate }}"
-  ></button>
+    <button
+      pButton
+      pRipple
+      *ngIf="!recording && annotationAudioSource && !recordedAudioSource"
+      label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.DELETE_BTN' | translate }}"
+      icon="pi pi-times"
+      data-cy="annotation-detail-delete-btn"
+      (click)="onDelete()"
+      class="p-button-text menu-button p-button-danger"
+      attr.aria-label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.EDIT_BTN' | translate }}"
+    ></button>
+  </div>
 </div>
