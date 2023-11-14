@@ -1,15 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DataPoint } from '../annotation/annotation.component';
-
-export interface AnnotationDetail {
-  id: number;
-  note: string;
-}
-
-enum Mode {
-  EDIT = 'Edit',
-  DISPLAY = 'Display',
-}
+import { AnnotationTextComment } from '../annotation-text-comment/annotation-text-comment.component';
+import { AnnotationAudioComment } from '../annotation-audio-comment/annotation-audio-comment.component';
 
 @Component({
   selector: 'koala-annotation-detail',
@@ -23,9 +15,9 @@ export class AnnotationDetailComponent {
     if (value) {
       this._annotation = value;
       if (this._annotation.note) {
-        this.mode = Mode.DISPLAY;
+        this.note = { id: value.id, note: this._annotation.note };
       } else {
-        this.mode = Mode.EDIT;
+        this.note = { id: value.id, note: '' };
       }
     }
   }
@@ -36,34 +28,28 @@ export class AnnotationDetailComponent {
 
   private _annotation!: DataPoint | null;
 
-  @Output() save = new EventEmitter<AnnotationDetail>();
+  @Output() saveTextComment = new EventEmitter<AnnotationTextComment>();
+  @Output() saveAudioComment = new EventEmitter<AnnotationAudioComment>();
+  @Output() deleteAudioComment = new EventEmitter<number>();
 
-  note = '';
+  note: AnnotationTextComment = {
+    id: 0,
+    note: '',
+  };
 
-  mode = Mode.EDIT;
-  Mode = Mode;
-
-  onAnnotationDetailCancel() {
-    this.note = this.annotation?.note || '';
-    this.mode = Mode.DISPLAY;
+  onTextCommentSave(note: string) {
+    this.saveTextComment.emit({ id: this.annotation?.id || 0, note: note });
   }
 
-  onAnnotationDetailSave() {
-    this.save.emit({ id: this.annotation?.id || 0, note: this.note });
-    this.mode = Mode.DISPLAY;
+  onTextCommentDelete() {
+    this.saveTextComment.emit({ id: this.annotation?.id || 0, note: '' });
   }
 
-  onAnnotationDetailDelete() {
-    this.note = '';
-    this.save.emit({ id: this.annotation?.id || 0, note: '' });
-    this.mode = Mode.DISPLAY;
+  onAudioCommentSave(audioComment: AnnotationAudioComment) {
+    this.saveAudioComment.emit(audioComment);
   }
 
-  onAnnotationDetailEdit() {
-    this.mode = Mode.EDIT;
-  }
-
-  onNoteChange(event: any) {
-    this.note = event.target.value;
+  onAudioCommentDelete() {
+    this.deleteAudioComment.emit(this.annotation?.id || 0);
   }
 }

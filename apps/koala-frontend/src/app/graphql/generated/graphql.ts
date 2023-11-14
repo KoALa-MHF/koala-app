@@ -31,6 +31,8 @@ export type Annotation = {
   id: Scalars['Int']['output'];
   /** Associated Marker */
   marker: Marker;
+  /** Associated Media File */
+  media?: Maybe<Media>;
   /** Annotation Note */
   note?: Maybe<Scalars['String']['output']>;
   /** Annotation Start Seconds */
@@ -66,8 +68,10 @@ export type CreateAnnotationInput = {
   end?: InputMaybe<Scalars['Int']['input']>;
   /** Associated Marker */
   markerId: Scalars['Int']['input'];
+  /** Assigned Media */
+  mediaId?: InputMaybe<Scalars['Int']['input']>;
   /** Annotation Note */
-  note?: Scalars['String']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
   /** Annotation Start Seconds */
   start: Scalars['Int']['input'];
   /** Associated User Session */
@@ -200,6 +204,7 @@ export type Mutation = {
   createUserSession: UserSession;
   inviteUserSession: Array<UserSession>;
   removeAnnotation: Annotation;
+  removeAnnotationMedia: Annotation;
   removeMarker: Marker;
   removeSession: Session;
   removeUserSession: UserSession;
@@ -247,6 +252,10 @@ export type MutationInviteUserSessionArgs = {
 };
 
 export type MutationRemoveAnnotationArgs = {
+  id: Scalars['Int']['input'];
+};
+
+export type MutationRemoveAnnotationMediaArgs = {
   id: Scalars['Int']['input'];
 };
 
@@ -455,6 +464,8 @@ export type ToolbarMarker = {
 };
 
 export type UpdateAnnotationInput = {
+  /** Assigned Media */
+  mediaId?: InputMaybe<Scalars['Int']['input']>;
   /** Annotation Note */
   note?: InputMaybe<Scalars['String']['input']>;
   /** Annotation Value */
@@ -796,6 +807,8 @@ export type SetPlayModeMutation = {
         end?: number | null;
         start: number;
         value?: number | null;
+        note?: string | null;
+        media?: { __typename?: 'Media'; id: string } | null;
         marker: {
           __typename?: 'Marker';
           id: number;
@@ -854,6 +867,8 @@ export type SetPlayPositionMutation = {
         end?: number | null;
         start: number;
         value?: number | null;
+        note?: string | null;
+        media?: { __typename?: 'Media'; id: string } | null;
         marker: {
           __typename?: 'Marker';
           id: number;
@@ -901,6 +916,25 @@ export type UpdateAnnotationNoteMutationVariables = Exact<{
 export type UpdateAnnotationNoteMutation = {
   __typename?: 'Mutation';
   updateAnnotation: { __typename?: 'Annotation'; id: number; note?: string | null };
+};
+
+export type UpdateAnnotationAudioMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  mediaId: Scalars['Int']['input'];
+}>;
+
+export type UpdateAnnotationAudioMutation = {
+  __typename?: 'Mutation';
+  updateAnnotation: { __typename?: 'Annotation'; id: number; media?: { __typename?: 'Media'; id: string } | null };
+};
+
+export type RemoveAnnotationAudioMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type RemoveAnnotationAudioMutation = {
+  __typename?: 'Mutation';
+  removeAnnotationMedia: { __typename?: 'Annotation'; id: number };
 };
 
 export type GetSessionsQueryVariables = Exact<{ [key: string]: never }>;
@@ -995,6 +1029,7 @@ export type GetOneSessionQuery = {
         end?: number | null;
         start: number;
         value?: number | null;
+        media?: { __typename?: 'Media'; id: string } | null;
         marker: {
           __typename?: 'Marker';
           id: number;
@@ -1084,6 +1119,7 @@ export type SessionExportQuery = {
         end?: number | null;
         value?: number | null;
         note?: string | null;
+        media?: { __typename?: 'Media'; id: string } | null;
         marker: {
           __typename?: 'Marker';
           id: number;
@@ -1138,6 +1174,7 @@ export type SessionCsvExportQuery = {
         end?: number | null;
         value?: number | null;
         note?: string | null;
+        media?: { __typename?: 'Media'; id: string } | null;
         marker: {
           __typename?: 'Marker';
           id: number;
@@ -1607,6 +1644,10 @@ export const SetPlayModeDocument = gql`
           end
           start
           value
+          note
+          media {
+            id
+          }
           marker {
             id
             type
@@ -1684,6 +1725,10 @@ export const SetPlayPositionDocument = gql`
           end
           start
           value
+          note
+          media {
+            id
+          }
           marker {
             id
             type
@@ -1767,6 +1812,51 @@ export class UpdateAnnotationNoteGQL extends Apollo.Mutation<
   UpdateAnnotationNoteMutationVariables
 > {
   override document = UpdateAnnotationNoteDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateAnnotationAudioDocument = gql`
+  mutation updateAnnotationAudio($id: Int!, $mediaId: Int!) {
+    updateAnnotation(id: $id, updateAnnotationInput: { mediaId: $mediaId }) {
+      id
+      media {
+        id
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateAnnotationAudioGQL extends Apollo.Mutation<
+  UpdateAnnotationAudioMutation,
+  UpdateAnnotationAudioMutationVariables
+> {
+  override document = UpdateAnnotationAudioDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const RemoveAnnotationAudioDocument = gql`
+  mutation removeAnnotationAudio($id: Int!) {
+    removeAnnotationMedia(id: $id) {
+      id
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class RemoveAnnotationAudioGQL extends Apollo.Mutation<
+  RemoveAnnotationAudioMutation,
+  RemoveAnnotationAudioMutationVariables
+> {
+  override document = RemoveAnnotationAudioDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
@@ -1890,6 +1980,9 @@ export const GetOneSessionDocument = gql`
         annotations {
           id
           note
+          media {
+            id
+          }
           end
           start
           value
@@ -2023,6 +2116,9 @@ export const SessionExportDocument = gql`
           end
           value
           note
+          media {
+            id
+          }
           marker {
             id
             type
@@ -2086,6 +2182,9 @@ export const SessionCsvExportDocument = gql`
           end
           value
           note
+          media {
+            id
+          }
           marker {
             id
             type

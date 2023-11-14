@@ -7,6 +7,7 @@ export const environment = {
   baseUrl: 'http://localhost:4200/app',
   wsBaseUrl: 'ws://localhost:3333',
   samlUrl: 'http://localhost:3333/api/auth/sso/saml/login',
+  mediaUrl: 'http://localhost:4200/api/media',
 };
 
 /*

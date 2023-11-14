@@ -22,8 +22,12 @@ export class CreateAnnotationInput {
   @IsNotEmpty()
   userSessionId: number;
 
-  @Field({ defaultValue: '', description: 'Annotation Note' })
+  @Field({ nullable: true, description: 'Annotation Note' })
   @MaxLength(ANNOTATION_NOTE_MAX_LENGTH)
   @IsOptional()
   note?: string;
+
+  @Field(() => Int, { nullable: true, description: 'Assigned Media' })
+  @IsOptional()
+  mediaId?: number;
 }

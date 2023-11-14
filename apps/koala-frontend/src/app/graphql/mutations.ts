@@ -240,6 +240,10 @@ const SET_PLAY_MODE = gql`
           end
           start
           value
+          note
+          media {
+            id
+          }
           marker {
             id
             type
@@ -307,6 +311,10 @@ const SET_PLAY_POSITION = gql`
           end
           start
           value
+          note
+          media {
+            id
+          }
           marker {
             id
             type
@@ -358,6 +366,25 @@ const UPDATE_ANNOTATION_NOTE = gql`
     updateAnnotation(id: $id, updateAnnotationInput: { note: $note }) {
       id
       note
+    }
+  }
+`;
+
+const UPDATE_ANNOTATION_MEDIA = gql`
+  mutation updateAnnotationAudio($id: Int!, $mediaId: Int!) {
+    updateAnnotation(id: $id, updateAnnotationInput: { mediaId: $mediaId }) {
+      id
+      media {
+        id
+      }
+    }
+  }
+`;
+
+const REMOVE_ANNOTATION_MEDIA = gql`
+  mutation removeAnnotationAudio($id: Int!) {
+    removeAnnotationMedia(id: $id) {
+      id
     }
   }
 `;

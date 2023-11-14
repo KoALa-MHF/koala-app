@@ -38,7 +38,9 @@
       [enableAnnotationDelete]="!session.lockAnnotationDelete"
       [deactivateAnnotationDelete]="!audioPaused"
       (deleteAnnotations)="onDeleteAnnotations($event)"
-      (annotationComment)="onAnnotationComment($event)"
+      (annotationTextComment)="onAnnotationTextComment($event)"
+      (annotationAudioComment)="onAnnotationAudioComment($event)"
+      (annotationAudioCommentDelete)="onAnnotationAudioCommentDelete($event)"
     ></koala-app-annotation>
     <koala-marker-toolbar
       class="content-centered-horizontally"

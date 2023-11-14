@@ -14,14 +14,15 @@ import { Marker } from '../../types/marker.entity';
 import { MarkerType, PlayMode } from '../../../../graphql/generated/graphql';
 import { ToolbarMode } from '../../components/marker-toolbar/marker-toolbar.component';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
-import { filter, timer } from 'rxjs';
-import { Subscription } from 'rxjs';
+import { filter, timer, Subscription } from 'rxjs';
 import { ToolbarsService } from '../../services/toolbars.service';
 import { NavigationService } from '../../services/navigation.service';
 import { UserSession } from '../../types/user-session.entity';
 import { SessionControlService } from '../../services/session-control.service';
-import { AnnotationDetail } from '../../components/annotation-detail/annotation-detail.component';
+import { AnnotationTextComment } from '../../components/annotation-text-comment/annotation-text-comment.component';
 import { CheckboxChangeEvent } from 'primeng/checkbox';
+import { AnnotationAudioComment } from '../../components/annotation-audio-comment/annotation-audio-comment.component';
+import { MediaService } from '../../services/media.service';
 
 @Component({
   selector: 'koala-app-session',
@@ -36,9 +37,7 @@ export class SessionPage implements OnInit, OnDestroy {
   PlayMode = PlayMode;
 
   waveContainer!: string;
-  mediaUri: string = environment.production
-    ? 'https://koala.mh-freiburg.de/api/media'
-    : 'http://localhost:4200/api/media';
+  mediaUri: string = environment.mediaUrl;
   sessionId = 0;
   AnnotationData: Map<number, Array<DataPoint>> = new Map<number, Array<DataPoint>>();
   AnnotationDislay = Display;
@@ -74,6 +73,7 @@ export class SessionPage implements OnInit, OnDestroy {
     private readonly toolbarService: ToolbarsService,
     private readonly navigationService: NavigationService,
     private readonly sessionControlService: SessionControlService,
+    private readonly mediaService: MediaService,
     private appRef: ApplicationRef
   ) {
     this.sidePanelForm = this.formBuilder.group({
@@ -340,6 +340,7 @@ export class SessionPage implements OnInit, OnDestroy {
           strength: annotation.value,
           display: annotation.end == 0 ? Display.Circle : Display.Rect,
           color: annotation.marker.color,
+          mediaId: annotation.media?.id,
         });
       }
     }
@@ -576,13 +577,66 @@ export class SessionPage implements OnInit, OnDestroy {
     ]);
   }
 
-  onAnnotationComment(annotationDetail: AnnotationDetail) {
-    this.annotationService.updateNote(annotationDetail.id, annotationDetail.note).subscribe({
+  onAnnotationTextComment(annotationTextComment: AnnotationTextComment) {
+    this.annotationService.updateNote(annotationTextComment.id, annotationTextComment.note).subscribe({
       next: () => {
         this.sessionService.setFocusSession(parseInt(this.sessionService.getFocusSession()?.id || '0')).subscribe();
       },
       error: () => {
         console.log('Error');
+      },
+    });
+  }
+
+  onAnnotationAudioComment(annotationAudioComment: AnnotationAudioComment) {
+    this.mediaService
+      .create({
+        file: new File(
+          [
+            annotationAudioComment.comment,
+          ],
+          `Annotation_Audio_${annotationAudioComment.annotationId}`
+        ),
+      })
+      .subscribe({
+        next: (response) => {
+          const mediaId = response.data?.createMedia.id;
+          if (mediaId) {
+            //always is there, because otherwise mediaService would return error
+            this.annotationService.updateMedia(annotationAudioComment.annotationId, parseInt(mediaId)).subscribe({
+              next: (response) => {
+                this.sessionService.setFocusSession(this.sessionId).subscribe((focusSession: Session) => {
+                  const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
+                  if (userSessions) {
+                    this.loadAnnotations(userSessions);
+                  }
+                });
+              },
+              error: (error) => {
+                console.log(error);
+              },
+            });
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+  }
+
+  onAnnotationAudioCommentDelete(annotationId: number) {
+    this.annotationService.removeMedia(annotationId).subscribe({
+      next: () => {
+        this.sessionService.setFocusSession(this.sessionId).subscribe((focusSession: Session) => {
+          const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
+          if (userSessions) {
+            this.loadAnnotations(userSessions);
+          }
+        });
+        console.log('Audio Successfully Removed');
+      },
+      error: (error) => {
+        console.log('Error Annotation Audio Removal');
       },
     });
   }

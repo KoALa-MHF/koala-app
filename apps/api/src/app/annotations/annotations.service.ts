@@ -23,20 +23,23 @@ export class AnnotationsService {
     private readonly userSessionsService: UserSessionsService
   ) {}
 
-  async create(createMarkerInput: CreateAnnotationInput, user: User) {
-    const userSession = await this.userSessionsService.findOne(createMarkerInput.userSessionId, user);
+  async create(createAnnotationInput: CreateAnnotationInput, user: User) {
+    const userSession = await this.userSessionsService.findOne(createAnnotationInput.userSessionId, user);
 
     const newAnnotation = this.annotationsRepository.create({
-      start: createMarkerInput.start,
-      end: createMarkerInput.end,
-      value: createMarkerInput.value,
+      start: createAnnotationInput.start,
+      end: createAnnotationInput.end,
+      value: createAnnotationInput.value,
       marker: {
-        id: createMarkerInput.markerId,
+        id: createAnnotationInput.markerId,
       },
       userSession: {
         id: userSession.id,
       },
-      note: createMarkerInput.note,
+      media: {
+        id: createAnnotationInput.mediaId,
+      },
+      note: createAnnotationInput.note,
     });
 
     // check for events or sliders/ranges
@@ -45,7 +48,7 @@ export class AnnotationsService {
     }
 
     const allAnnotations = await this.annotationsRepository.findBy({
-      markerId: createMarkerInput.markerId,
+      markerId: createAnnotationInput.markerId,
     });
 
     // delete all annotations that are in the future of the curren one being created
@@ -55,18 +58,18 @@ export class AnnotationsService {
       }
     });
 
-    const updatedAnnotations = allAnnotations.map((annoation) => {
-      if (annoation.start < newAnnotation.start) {
-        if (annoation.end > newAnnotation.start) {
-          annoation.end = newAnnotation.start;
+    const updatedAnnotations = allAnnotations.map((annotation) => {
+      if (annotation.start < newAnnotation.start) {
+        if (annotation.end > newAnnotation.start) {
+          annotation.end = newAnnotation.start;
         }
       }
-      return annoation;
+
+      return annotation;
     });
 
     await this.annotationsRepository.save(updatedAnnotations);
     await this.annotationsRepository.remove(futureAnnotations);
-
     return this.annotationsRepository.save(newAnnotation);
   }
 
@@ -100,15 +103,33 @@ export class AnnotationsService {
 
     this.annotationsRepository.merge(annotation, {
       note: updateAnnotationInput.note,
+      ...(updateAnnotationInput.mediaId && { media: { id: updateAnnotationInput.mediaId } }),
     });
 
     return this.annotationsRepository.save(annotation);
   }
 
-  async remove(id: number, user: User) {
+  async removeMedia(id: number, user: User) {
     const annotation = await this.findOne(id, user);
+    this.annotationsRepository.update(id, {
+      mediaId: null,
+      media: null,
+    });
+
+    return { ...annotation, mediaId: null, media: null };
+  }
+
+  async remove(id: number, user: User) {
+    let annotation = await this.findOne(id, user);
+
+    if (!annotation) {
+      throw new NotFoundException();
+    }
+
     await this.annotationsRepository.remove(annotation);
-    annotation.id = id;
+
+    //return updated entity
+    annotation = await this.findOne(id, user);
     return annotation;
   }
 }

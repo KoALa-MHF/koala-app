@@ -14,7 +14,8 @@ import { MarkerService } from '../../../markers/services/marker.service';
 import { ConfirmationService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 import * as d3 from 'd3';
-import { AnnotationDetail } from '../annotation-detail/annotation-detail.component';
+import { AnnotationTextComment } from '../annotation-text-comment/annotation-text-comment.component';
+import { AnnotationAudioComment } from '../annotation-audio-comment/annotation-audio-comment.component';
 
 export enum Display {
   Rect = 'rect',
@@ -24,6 +25,7 @@ export enum Display {
 export interface DataPoint {
   id: number;
   note?: string;
+  mediaId?: number;
   strength?: number;
   display: Display;
   startTime: number;
@@ -52,7 +54,9 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input() deactivateAnnotationDelete = false;
 
   @Output() deleteAnnotations = new EventEmitter<Marker>();
-  @Output() annotationComment = new EventEmitter<AnnotationDetail>();
+  @Output() annotationTextComment = new EventEmitter<AnnotationTextComment>();
+  @Output() annotationAudioComment = new EventEmitter<AnnotationAudioComment>();
+  @Output() annotationAudioCommentDelete = new EventEmitter<number>();
 
   private sliderHeight = 2.5;
   d3Container = 'd3-container-';
@@ -180,11 +184,10 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
       }
     };
     const click = (d: any, ev: any) => {
+      this.selectedDataPoint = d;
       this.annotationDetailOverlay.show(null, ev.target);
       this.annotationDetailOverlayStyle.top = ev.target.getBoundingClientRect().y + 10 + 'px';
       this.annotationDetailOverlayStyle.left = ev.target.getBoundingClientRect().x + 'px';
-
-      this.selectedDataPoint = d;
     };
     const mouseleave = (d: any, ev: any) => {
       if (!d.transparent) {
@@ -361,7 +364,15 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
     });
   }
 
-  onAnnotationDetailSave(annotationDetail: AnnotationDetail) {
-    this.annotationComment.emit(annotationDetail);
+  onAnnotationTextCommentSave(annotationDetail: AnnotationTextComment) {
+    this.annotationTextComment.emit(annotationDetail);
+  }
+
+  onAnnotationAudioCommentSave(annotationDetail: AnnotationAudioComment) {
+    this.annotationAudioComment.emit(annotationDetail);
+  }
+
+  onAnnotationAudioCommentDelete(annotationId: number) {
+    this.annotationAudioCommentDelete.emit(annotationId);
   }
 }

@@ -1,9 +1,10 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { IsNotEmpty, MaxLength } from 'class-validator';
+import { IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '../../core/base.entity';
 import { Marker } from '../../markers/entities/marker.entity';
 import { UserSession } from '../../user-sessions/entities/user-session.entity';
+import { Media } from '../../media/entities/media.entity';
 
 export const ANNOTATION_NOTE_MAX_LENGTH = 1024;
 
@@ -40,11 +41,22 @@ export class Annotation extends BaseEntity {
   @IsNotEmpty()
   userSession: UserSession;
 
+  @Column()
+  userSessionId: number;
+
   @Column({ nullable: true, length: ANNOTATION_NOTE_MAX_LENGTH, default: '' })
   @Field({ nullable: true, description: 'Annotation Note', defaultValue: '' })
   @MaxLength(ANNOTATION_NOTE_MAX_LENGTH)
   note?: string;
 
-  @Column()
-  userSessionId: number;
+  @ManyToOne(() => Media, { nullable: true })
+  @Field((type) => Media, {
+    nullable: true,
+    description: 'Associated Media File',
+  })
+  @IsOptional()
+  media?: Media;
+
+  @Column({ nullable: true })
+  mediaId?: number;
 }
