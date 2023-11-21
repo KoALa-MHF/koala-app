@@ -24,6 +24,7 @@ import { DatabaseModule } from './database.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { UsersService } from './users/users.service';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -103,6 +104,7 @@ import { UsersService } from './users/users.service';
     UserSessionsModule,
     UsersModule,
     AnnotationsModule,
+    CommentsModule,
   ],
   controllers: [
     AppController,
