@@ -46,7 +46,7 @@ const eventMarkerPressed = 1;
 const eventMarkerNotPressed = 0;
 const rangeMarkerActivated = 1;
 const rangeMarkerDeactivated = 0;
-const sliderInactive = 2016;
+const unkown = 2016;
 const csvSeparator = ',';
 const csvNewLine = '\n';
 
@@ -261,7 +261,7 @@ export class SessionsService {
 
             //combine in CSV string
             const csvString =
-              'SEP=,\n' +
+              `SEP=${csvSeparator}${csvNewLine}` +
               csvHeaderColumns.map((csvHeaderColumn) => csvHeaderColumn.title).join(csvSeparator) +
               csvNewLine +
               annotationRows.join(csvNewLine);
@@ -379,7 +379,7 @@ export class SessionsService {
                 break;
 
               case MarkerType.Slider:
-                cleanedUpValue = sliderInactive;
+                cleanedUpValue = unkown;
                 break;
 
               default:
@@ -417,8 +417,8 @@ export class SessionsService {
               csvHeaderColumn.markerType === MarkerType.Event
                 ? eventMarkerNotPressed.toString()
                 : csvHeaderColumn.markerType === MarkerType.Range
-                ? sliderInactive.toString()
-                : sliderInactive.toString();
+                ? unkown.toString()
+                : unkown.toString();
           }
         });
       }
@@ -430,6 +430,34 @@ export class SessionsService {
         return csvHeaderColumn.markerId === annotation.markerId && csvHeaderColumn.userIndex === annotation.userIndex;
       });
       annotationRows[annotation.timestamp][columnIndex] = annotation.value.toString();
+    });
+
+    let formerAnnotationRow: string[];
+    annotationRows.forEach((annotationRow) => {
+      annotationRow.forEach((annotationCell, cellIndex) => {
+        const markerType = csvHeaderColumns[cellIndex].markerType;
+
+        //take over former value in case of range and slider
+        //nothing to do for event markers
+        if (formerAnnotationRow) {
+          if (markerType === MarkerType.Range) {
+            if (annotationCell === unkown.toString()) {
+              if (formerAnnotationRow[cellIndex] === rangeMarkerActivated.toString()) {
+                //copy activated information here in case there range was not explicitely deactivated
+                annotationRow[cellIndex] = rangeMarkerActivated.toString();
+              } else {
+                annotationRow[cellIndex] = rangeMarkerDeactivated.toString();
+              }
+            }
+          } else if (markerType === MarkerType.Slider) {
+          }
+        } else {
+          if (markerType === MarkerType.Range) {
+            annotationRow[cellIndex] = rangeMarkerDeactivated.toString();
+          }
+        }
+      });
+      formerAnnotationRow = annotationRow;
     });
 
     annotationRows.forEach((annotationRow) => {
