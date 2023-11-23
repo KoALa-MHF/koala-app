@@ -12,7 +12,7 @@ interface IMailDev {
 }
 
 export function setupApplication(app: INestApplication) {
-  app.use(helmet());
+  //app.use(helmet());
   app.useGlobalPipes(new GraphQLValidationPipe());
   app.use(graphqlUploadExpress({ maxFileSize: 100000000, maxFiles: 10 }));
   app.setGlobalPrefix(GLOBAL_PREFIX);
