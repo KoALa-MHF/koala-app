@@ -104,6 +104,10 @@ export class AnnotationAudioCommentComponent implements OnDestroy {
     this.recordingTimerSubscription?.unsubscribe();
   }
 
+  reset() {
+    this.onCancel();
+  }
+
   private async fetchAudioBlob(mediaId: number): Promise<string> {
     const response = await fetch(`${this.mediaUrl}/${mediaId}`, {
       headers: {

@@ -1,7 +1,13 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { DataPoint } from '../annotation/annotation.component';
-import { AnnotationTextComment } from '../annotation-text-comment/annotation-text-comment.component';
-import { AnnotationAudioComment } from '../annotation-audio-comment/annotation-audio-comment.component';
+import {
+  AnnotationTextComment,
+  AnnotationTextCommentComponent,
+} from '../annotation-text-comment/annotation-text-comment.component';
+import {
+  AnnotationAudioComment,
+  AnnotationAudioCommentComponent,
+} from '../annotation-audio-comment/annotation-audio-comment.component';
 
 @Component({
   selector: 'koala-annotation-detail',
@@ -32,6 +38,9 @@ export class AnnotationDetailComponent {
   @Output() saveAudioComment = new EventEmitter<AnnotationAudioComment>();
   @Output() deleteAudioComment = new EventEmitter<number>();
 
+  @ViewChild('textComment') textCommentComponent!: AnnotationTextCommentComponent;
+  @ViewChild('audioComment') audioCommentComponent!: AnnotationAudioCommentComponent;
+
   note: AnnotationTextComment = {
     id: 0,
     note: '',
@@ -51,5 +60,10 @@ export class AnnotationDetailComponent {
 
   onAudioCommentDelete() {
     this.deleteAudioComment.emit(this.annotation?.id || 0);
+  }
+
+  resetComment() {
+    this.textCommentComponent.reset();
+    this.audioCommentComponent.reset();
   }
 }
