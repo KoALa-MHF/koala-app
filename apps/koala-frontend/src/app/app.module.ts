@@ -83,7 +83,7 @@ export function HttpLoaderFactory(http: HttpClient) {
           },
         });
 
-        const uri: string = environment.baseUrl + '/graphql';
+        const uri: string = environment.graphqlBaseUrl + '/graphql';
         const http = httpLink.create({
           uri: uri,
         });
