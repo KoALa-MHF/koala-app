@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   baseUrl: 'http://localhost:4200/app',
+  graphqlBaseUrl: 'http://localhost:4200',
   wsBaseUrl: 'ws://localhost:3333',
   samlUrl: 'http://localhost:3333/api/auth/sso/saml/login',
   mediaUrl: 'http://localhost:4200/api/media',
