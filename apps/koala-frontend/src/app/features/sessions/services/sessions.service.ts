@@ -46,7 +46,8 @@ const eventMarkerPressed = 1;
 const eventMarkerNotPressed = 0;
 const rangeMarkerActivated = 1;
 const rangeMarkerDeactivated = 0;
-const sliderInactive = 2016;
+const sliderInactive = 2021;
+const notDefined = 2016;
 const csvSeparator = ',';
 const csvNewLine = '\n';
 
@@ -261,7 +262,7 @@ export class SessionsService {
 
             //combine in CSV string
             const csvString =
-              'SEP=,\n' +
+              `SEP=${csvSeparator}${csvNewLine}` +
               csvHeaderColumns.map((csvHeaderColumn) => csvHeaderColumn.title).join(csvSeparator) +
               csvNewLine +
               annotationRows.join(csvNewLine);
@@ -417,8 +418,8 @@ export class SessionsService {
               csvHeaderColumn.markerType === MarkerType.Event
                 ? eventMarkerNotPressed.toString()
                 : csvHeaderColumn.markerType === MarkerType.Range
-                ? sliderInactive.toString()
-                : sliderInactive.toString();
+                ? notDefined.toString()
+                : notDefined.toString();
           }
         });
       }
@@ -432,7 +433,43 @@ export class SessionsService {
       annotationRows[annotation.timestamp][columnIndex] = annotation.value.toString();
     });
 
+    let formerAnnotationRow: string[];
     annotationRows.forEach((annotationRow) => {
+      annotationRow.forEach((annotationCell, cellIndex) => {
+        const markerType = csvHeaderColumns[cellIndex].markerType;
+
+        //take over former value in case of range and slider
+        //nothing to do for event markers
+        if (formerAnnotationRow) {
+          if (markerType === MarkerType.Range) {
+            if (annotationCell === notDefined.toString()) {
+              if (formerAnnotationRow[cellIndex] === rangeMarkerActivated.toString()) {
+                //copy activated information here in case there range was not explicitely deactivated
+                annotationRow[cellIndex] = rangeMarkerActivated.toString();
+              } else {
+                annotationRow[cellIndex] = rangeMarkerDeactivated.toString();
+              }
+            }
+          } else if (markerType === MarkerType.Slider) {
+            if (annotationCell === notDefined.toString()) {
+              if (formerAnnotationRow[cellIndex] !== notDefined.toString()) {
+                //copy activated information here in case there range was not explicitely deactivated
+                annotationRow[cellIndex] = formerAnnotationRow[cellIndex];
+              } else {
+                annotationRow[cellIndex] = sliderInactive.toString();
+              }
+            }
+          }
+        } else {
+          if (markerType === MarkerType.Range && annotationRow[cellIndex] !== rangeMarkerActivated.toString()) {
+            annotationRow[cellIndex] = rangeMarkerDeactivated.toString();
+          } else if (markerType === MarkerType.Slider && annotationRow[cellIndex] === notDefined.toString()) {
+            annotationRow[cellIndex] = sliderInactive.toString();
+          }
+        }
+      });
+      formerAnnotationRow = annotationRow;
+
       csvDataRows.push(annotationRow.join(csvSeparator));
     });
 
