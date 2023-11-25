@@ -119,7 +119,7 @@
         "SAVE_ERROR_MESSAGE_TITLE": "Änderungen an der Session konnten nicht gespeichert werden",
         "SAVE_SUCCESS_MESSAGE_TITLE": "Änderungen an Session '{{sessionName}}' wurden gespeichert",
         "STATUS": {
-          "IN_PREPARATION_LABEL": "In Bearbeitung",
+          "IN_PREPARATION_LABEL": "Im Aufbau",
           "OPEN_LABEL": "Online",
           "CLOSED_LABEL": "Geschlossen",
           "ARCHIVED_LABEL": "Archiviert"
