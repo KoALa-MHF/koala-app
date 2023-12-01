@@ -13,6 +13,8 @@ import { User } from '../users/entities/user.entity';
 import { CreateAnnotationInput } from './dto/create-annotation.input';
 import { UpdateAnnotationInput } from './dto/update-annotation.input';
 import { Annotation } from './entities/annotation.entity';
+import { CreateCommentInput } from '../comments/dto/create-comment.input';
+import { Comment } from '../comments/entities/comment.entity';
 
 @Injectable()
 export class AnnotationsService {
@@ -131,5 +133,26 @@ export class AnnotationsService {
     //return updated entity
     annotation = await this.findOne(id, user);
     return annotation;
+  }
+
+  async createComment(id: number, createCommentInput: CreateCommentInput, user: User): Promise<Annotation> {
+    const annotation = await this.findOne(id, user);
+    annotation.comments.push({
+      text: createCommentInput.text,
+      owner: user,
+    } as Comment);
+    return this.annotationsRepository.save(annotation);
+  }
+
+  async findAllCommments(id: number, user: User): Promise<Comment[]> {
+    const annotation = await this.annotationsRepository.findOne({
+      where: { id },
+      relations: {
+        userSession: true,
+        comments: true,
+      },
+    });
+
+    return annotation.comments;
   }
 }

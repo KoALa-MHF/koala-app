@@ -8,6 +8,7 @@ import { Session } from './sessions/entities/session.entity';
 import { Toolbar } from './toolbars/entities/toolbar.entity';
 import { UserSession } from './user-sessions/entities/user-session.entity';
 import { User } from './users/entities/user.entity';
+import { Comment } from './comments/entities/comment.entity';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { User } from './users/entities/user.entity';
         Media,
         Marker,
         Annotation,
+        Comment,
         UserSession,
         User,
         Toolbar,
