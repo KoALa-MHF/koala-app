@@ -41,7 +41,7 @@ export class MediaService {
     formData.append('map', JSON.stringify(_map));
     formData.append('file', media.file);
 
-    const graphQLEndpoint = `${environment.baseUrl}/graphql`;
+    const graphQLEndpoint = `${environment.graphqlBaseUrl}/graphql`;
 
     this.mediaUploadState.next(MediaUploadState.started);
 
