@@ -22,7 +22,21 @@ export class SamlStrategy extends PassportStrategy(Strategy) {
       signatureAlgorithm: config.saml.signatureAlgorithm,
       identifierFormat: config.saml.identifierFormat,
       acceptedClockSkewMs: config.saml.acceptedClockSkewMs,
+      validateInResponseTo: config.saml.validateInResponseTo,
+      authnContext: config.saml.authnContext
+        ? [
+            config.saml.authnContext,
+          ]
+        : undefined,
+      authnRequestBinding: config.saml.authnRequestBinding,
+      protocol: config.saml.protocol,
     } as SamlOptions);
+
+    console.log(
+      this.generateServiceProviderMetadata(
+        config.saml.decryptionCertPath ? fs.readFileSync(config.saml.decryptionCertPath, 'utf-8') : undefined
+      )
+    );
   }
 
   async validate(profile: Profile) {
