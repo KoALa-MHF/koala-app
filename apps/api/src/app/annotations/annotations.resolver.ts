@@ -32,15 +32,6 @@ export class AnnotationsResolver {
     return this.annotationsService.create(createAnnotationInput, user);
   }
 
-  @Mutation(() => Annotation)
-  createAnnotationComment(
-    @Args('id', { type: () => Int }) id: number,
-    @Args('createCommentInput') createCommentInput: CreateCommentInput,
-    @CurrentUser() user: User
-  ) {
-    return this.annotationsService.createComment(id, createCommentInput, user);
-  }
-
   @Query(() => Annotation, { name: 'annotation' })
   findOne(@Args('id', { type: () => Int }) id: number, @CurrentUser() user: User) {
     return this.annotationsService.findOne(id, user);

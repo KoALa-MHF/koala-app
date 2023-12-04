@@ -3,6 +3,7 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '../../core/base.entity';
 import { IsNotEmpty, MaxLength } from 'class-validator';
 import { User } from '../../users/entities/user.entity';
+import { Annotation } from '../../annotations/entities/annotation.entity';
 
 export const COMMENT_TEXT_MAX_LENGTH = 1024;
 
@@ -25,4 +26,12 @@ export class Comment extends BaseEntity {
 
   @Column()
   ownerId: number;
+
+  @ManyToOne(() => Annotation, (annotation) => annotation.comments, { onDelete: 'CASCADE' })
+  @Field((type) => Annotation, { description: 'Associated Annotation' })
+  @IsNotEmpty()
+  annotation: Annotation;
+
+  @Column()
+  annotationId: number;
 }

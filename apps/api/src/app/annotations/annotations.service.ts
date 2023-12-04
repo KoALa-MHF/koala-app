@@ -15,6 +15,7 @@ import { UpdateAnnotationInput } from './dto/update-annotation.input';
 import { Annotation } from './entities/annotation.entity';
 import { CreateCommentInput } from '../comments/dto/create-comment.input';
 import { Comment } from '../comments/entities/comment.entity';
+import { constants } from 'crypto';
 
 @Injectable()
 export class AnnotationsService {
@@ -122,26 +123,12 @@ export class AnnotationsService {
   }
 
   async remove(id: number, user: User) {
-    let annotation = await this.findOne(id, user);
-
-    if (!annotation) {
-      throw new NotFoundException();
-    }
+    const annotation = await this.findOne(id, user);
 
     await this.annotationsRepository.remove(annotation);
 
-    //return updated entity
-    annotation = await this.findOne(id, user);
+    annotation.id = id;
     return annotation;
-  }
-
-  async createComment(id: number, createCommentInput: CreateCommentInput, user: User): Promise<Annotation> {
-    const annotation = await this.findOne(id, user);
-    annotation.comments.push({
-      text: createCommentInput.text,
-      owner: user,
-    } as Comment);
-    return this.annotationsRepository.save(annotation);
   }
 
   async findAllCommments(id: number, user: User): Promise<Comment[]> {

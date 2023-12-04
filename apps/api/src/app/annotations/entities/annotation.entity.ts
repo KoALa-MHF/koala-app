@@ -1,6 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '../../core/base.entity';
 import { Marker } from '../../markers/entities/marker.entity';
 import { UserSession } from '../../user-sessions/entities/user-session.entity';
@@ -61,7 +61,12 @@ export class Annotation extends BaseEntity {
   @Column({ nullable: true })
   mediaId?: number;
 
-  @ManyToMany(() => Comment)
-  @JoinTable()
+  @OneToMany(() => Comment, (comment) => comment.annotation, { cascade: true })
+  @Field(
+    (type) => [
+      Comment,
+    ],
+    { description: 'Associated Comments' }
+  )
   comments: Comment[];
 }
