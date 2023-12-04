@@ -1,11 +1,4 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  forwardRef,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { ForbiddenException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserSessionsService } from '../user-sessions/user-sessions.service';
@@ -13,9 +6,7 @@ import { User } from '../users/entities/user.entity';
 import { CreateAnnotationInput } from './dto/create-annotation.input';
 import { UpdateAnnotationInput } from './dto/update-annotation.input';
 import { Annotation } from './entities/annotation.entity';
-import { CreateCommentInput } from '../comments/dto/create-comment.input';
 import { Comment } from '../comments/entities/comment.entity';
-import { constants } from 'crypto';
 
 @Injectable()
 export class AnnotationsService {

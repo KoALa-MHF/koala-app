@@ -10,7 +10,6 @@ import { AuthGuard } from '../core/guards/auth.guard';
 import { CurrentUser } from '../core/decorators/user.decorator';
 import { User } from '../users/entities/user.entity';
 import { MediaService } from '../media/media.service';
-import { CreateCommentInput } from '../comments/dto/create-comment.input';
 import { Comment } from '../comments/entities/comment.entity';
 
 @Resolver(() => Annotation)
