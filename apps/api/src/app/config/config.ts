@@ -1,3 +1,4 @@
+import { ValidateInResponseTo } from '@node-saml/passport-saml';
 import { Type } from 'class-transformer';
 import { IsBoolean, IsNumber, IsOptional, IsString, IsUrl, ValidateNested } from 'class-validator';
 
@@ -56,6 +57,9 @@ export class SamlConfig {
   public readonly wantAssertionsSigned: boolean = false;
 
   @IsString()
+  public readonly validateInResponseTo: ValidateInResponseTo = ValidateInResponseTo.never;
+
+  @IsString()
   public readonly redirectFrontendUrl: string;
 
   @IsString()
@@ -65,6 +69,22 @@ export class SamlConfig {
   @IsString()
   @IsOptional()
   public readonly decryptionPvkPath: string;
+
+  @IsString()
+  @IsOptional()
+  public readonly decryptionCertPath: string;
+
+  @IsString()
+  @IsOptional()
+  public readonly authnContext: string;
+
+  @IsString()
+  @IsOptional()
+  public readonly authnRequestBinding: string;
+
+  @IsString()
+  @IsOptional()
+  public readonly protocol: string;
 
   @IsString()
   @IsOptional()
