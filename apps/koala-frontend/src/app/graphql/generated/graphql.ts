@@ -784,6 +784,7 @@ export type SetPlayModeMutation = {
     enableLiveAnalysis?: boolean | null;
     lockAnnotationDelete?: boolean | null;
     playMode?: PlayMode | null;
+    isAudioSession: boolean;
     playPosition?: number | null;
     liveSessionStart?: number | null;
     code: string;
@@ -1613,6 +1614,7 @@ export const SetPlayModeDocument = gql`
       enableLiveAnalysis
       lockAnnotationDelete
       playMode
+      isAudioSession
       playPosition
       liveSessionStart
       code
