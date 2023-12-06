@@ -10,6 +10,7 @@ import { SharedModule } from '../shared/shared.module';
 import { ImageModule } from 'primeng/image';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { SplitButtonModule } from 'primeng/splitbutton';
 import { SidebarModule } from 'primeng/sidebar';
 import { AboutPage } from './pages/about/about.page';
 import { ImprintPage } from './pages/imprint/imprint.page';
@@ -33,6 +34,7 @@ import { CoreRoutingModule } from './core-routing.module';
     ToggleButtonModule,
     SidebarModule,
     CoreRoutingModule,
+    SplitButtonModule,
   ],
   exports: [
     HeaderComponent,
