@@ -10,6 +10,7 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { SamlStrategy } from './strategies/saml.strategy';
 import { authConfig } from '../config/config.module';
+import { SamlOptionStrategy } from './strategies/saml-option.strategy';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { authConfig } from '../config/config.module';
     AuthService,
     JwtStrategy,
     SamlStrategy,
+    SamlOptionStrategy,
   ],
   controllers: [
     AuthController,

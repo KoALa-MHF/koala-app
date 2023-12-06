@@ -6,7 +6,7 @@ import { Config } from '../../config/config';
 import * as fs from 'fs';
 
 @Injectable()
-export class SamlStrategy extends PassportStrategy(Strategy, 'saml') {
+export class SamlOptionStrategy extends PassportStrategy(Strategy, 'samlOption') {
   constructor(private readonly usersService: UsersService, private readonly config: Config) {
     super({
       issuer: config.saml.issuer,
@@ -41,7 +41,6 @@ export class SamlStrategy extends PassportStrategy(Strategy, 'saml') {
 
   async validate(profile: Profile) {
     try {
-      console.log(profile);
       return this.usersService.upsertBySamlProfile(profile);
     } catch (error) {
       throw new UnauthorizedException();
