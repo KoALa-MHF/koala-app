@@ -26,7 +26,7 @@ export class AuthController {
     }
   }
 
-  @Get('sso/saml/loginOption')
+  @Get('sso/saml/option/login')
   @UseGuards(SamlAuthOptionGuard)
   async samlLoginOption() {
     //this route is handled by passport-saml
@@ -39,7 +39,7 @@ export class AuthController {
     const user: User = req.user;
     if (user) {
       const authentication = await this.authService.authenticateSamlUser(user);
-      res.redirect(this.config.saml.redirectFrontendUrl + authentication.accessToken);
+      res.redirect(this.config.samlOption.redirectFrontendUrl + authentication.accessToken);
     }
   }
 }
