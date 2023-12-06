@@ -16,6 +16,7 @@ import { TranslateService } from '@ngx-translate/core';
 import * as d3 from 'd3';
 import { AnnotationTextComment } from '../annotation-text-comment/annotation-text-comment.component';
 import { AnnotationAudioComment } from '../annotation-audio-comment/annotation-audio-comment.component';
+import { AnnotationDetailComponent } from '../annotation-detail/annotation-detail.component';
 
 export enum Display {
   Rect = 'rect',
@@ -57,6 +58,8 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Output() annotationTextComment = new EventEmitter<AnnotationTextComment>();
   @Output() annotationAudioComment = new EventEmitter<AnnotationAudioComment>();
   @Output() annotationAudioCommentDelete = new EventEmitter<number>();
+
+  @ViewChild('annotationDetail') annotationDetail!: AnnotationDetailComponent;
 
   private sliderHeight = 2.5;
   d3Container = 'd3-container-';
@@ -374,5 +377,9 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
 
   onAnnotationAudioCommentDelete(annotationId: number) {
     this.annotationAudioCommentDelete.emit(annotationId);
+  }
+
+  onAnnotationDetailClosed() {
+    this.annotationDetail.resetComment();
   }
 }
