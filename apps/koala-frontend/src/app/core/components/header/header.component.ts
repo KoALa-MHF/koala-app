@@ -8,6 +8,7 @@ import { environment } from '../../../../environments/environment';
 import { NavigationService } from '../../../features/sessions/services/navigation.service';
 import { SessionsService } from '../../../features/sessions/services/sessions.service';
 import { Role } from '../../../graphql/generated/graphql';
+import { MenuItem } from 'primeng/api';
 
 export enum LANGUAGE_CODE {
   GERMAN = 'de',
@@ -27,6 +28,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Output() userProfileEditRequest = new EventEmitter<void>();
 
   LANGUAGE_CODE = LANGUAGE_CODE;
+  SAMLLoginOptionEnabled = environment.showSAMLLoginOption;
+
+  loginOptions!: MenuItem[];
 
   @ViewChild('languageSelector', { static: true }) languageSelector!: OverlayPanel;
   @ViewChild('accountMenu', { static: true }) accountMenu!: OverlayPanel;
@@ -100,6 +104,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
           }
         }
       });
+
+    this.translateService.get('LOGIN_OPTION_NAV_BTN').subscribe((translatedText) => {
+      this.loginOptions = [
+        {
+          label: translatedText,
+          command: () => {
+            this.loginWithSecondSAMLProvider();
+          },
+        },
+      ];
+    });
   }
 
   ngOnDestroy(): void {
@@ -157,6 +172,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   public onLogin() {
     window.location.href = environment.samlUrl;
+  }
+
+  public loginWithSecondSAMLProvider() {
+    window.location.href = environment.samlUrlOption;
   }
 
   public onLogout() {

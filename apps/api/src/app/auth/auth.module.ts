@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, ModuleMetadata } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { SessionsModule } from '../sessions/sessions.module';
@@ -9,9 +9,10 @@ import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { SamlStrategy } from './strategies/saml.strategy';
-import { authConfig } from '../config/config.module';
+import { config, authConfig } from '../config/config.module';
+import { SamlOptionStrategy } from './strategies/saml-option.strategy';
 
-@Module({
+const moduleConfig = {
   imports: [
     PassportModule,
     JwtModule.register({
@@ -32,5 +33,11 @@ import { authConfig } from '../config/config.module';
     AuthController,
   ],
   exports: [],
-})
+} as ModuleMetadata;
+
+if (config.samlOption) {
+  moduleConfig.providers.push(SamlOptionStrategy);
+}
+
+@Module(moduleConfig)
 export class AuthModule {}

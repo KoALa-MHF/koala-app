@@ -3,6 +3,18 @@ import { Config, DatabaseConfig, MailConfig, SamlConfig, AuthConfig } from './co
 import { plainToClass } from 'class-transformer';
 import { validateSync } from 'class-validator';
 
+const normalizeSamlConfig = (samlConfig) => {
+  if (samlConfig) {
+    samlConfig.wantAuthnResponseSigned =
+      samlConfig.wantAuthnResponseSigned === 'true' || samlConfig.wantAuthnResponseSigned === true;
+    samlConfig.wantAssertionsSigned =
+      samlConfig.wantAssertionsSigned === 'true' || samlConfig.wantAssertionsSigned === true;
+    samlConfig.identifierFormat = samlConfig.identifierFormat === 'null' ? null : samlConfig.identifierFormat;
+    samlConfig.acceptedClockSkewMs =
+      typeof samlConfig.acceptedClockSkewMs !== 'undefined' ? parseInt(samlConfig.acceptedClockSkewMs, 10) : undefined;
+  }
+};
+
 export const ConfigModule = TypedConfigModule.forRoot({
   schema: Config,
   load: [
@@ -25,20 +37,20 @@ export const ConfigModule = TypedConfigModule.forRoot({
     return config as Config;
   },
   normalize(config) {
+    // Mail
     config.mail.port = parseInt(config.mail.port, 10);
-    const synchronize = config.database.synchronize;
-    config.database.synchronize = synchronize === 'true' || synchronize === true;
-    const dropSchema = config.database.dropSchema;
-    config.database.dropSchema = dropSchema === 'true' || dropSchema === true;
-    const wantAuthnResponseSigned = config.saml.wantAuthnResponseSigned;
-    config.saml.wantAuthnResponseSigned = wantAuthnResponseSigned === 'true' || wantAuthnResponseSigned === true;
-    const wantAssertionsSigned = config.saml.wantAssertionsSigned;
-    config.saml.wantAssertionsSigned = wantAssertionsSigned === 'true' || wantAssertionsSigned === true;
-    const identifierFormat = config.saml.identifierFormat;
-    config.saml.identifierFormat = identifierFormat === 'null' ? null : identifierFormat;
-    const acceptedClockSkewMs = config.saml.acceptedClockSkewMs;
-    config.saml.acceptedClockSkewMs =
-      typeof acceptedClockSkewMs !== 'undefined' ? parseInt(acceptedClockSkewMs, 10) : undefined;
+
+    // Database
+    const synchronizeDB = config.database.synchronize;
+    config.database.synchronize = synchronizeDB === 'true' || synchronizeDB === true;
+    const dropSchemaDB = config.database.dropSchema;
+    config.database.dropSchema = dropSchemaDB === 'true' || dropSchemaDB === true;
+    // SAML
+    normalizeSamlConfig(config.saml);
+
+    // SAML Option (for the second SAML provider)
+    normalizeSamlConfig(config.samlOption);
+
     return config;
   },
 });
