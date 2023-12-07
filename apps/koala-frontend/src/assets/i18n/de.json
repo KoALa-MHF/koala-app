@@ -1,6 +1,7 @@
 {
   "KOALA_PROJECT_TITLE": "KoALa Projekt",
   "LOGIN_NAV_BTN": "Login",
+  "LOGIN_OPTION_NAV_BTN": "Login mit OneLogin",
   "LANGUAGE_SELECTION": {
     "LANG_GERMAN_LABEL": "Deutsch",
     "LANG_ENGLISH_LABEL": "English",
