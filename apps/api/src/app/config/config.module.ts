@@ -4,13 +4,15 @@ import { plainToClass } from 'class-transformer';
 import { validateSync } from 'class-validator';
 
 const normalizeSamlConfig = (samlConfig) => {
-  samlConfig.wantAuthnResponseSigned =
-    samlConfig.wantAuthnResponseSigned === 'true' || samlConfig.wantAuthnResponseSigned === true;
-  samlConfig.wantAssertionsSigned =
-    samlConfig.wantAssertionsSigned === 'true' || samlConfig.wantAssertionsSigned === true;
-  samlConfig.identifierFormat = samlConfig.identifierFormat === 'null' ? null : samlConfig.identifierFormat;
-  samlConfig.acceptedClockSkewMs =
-    typeof samlConfig.acceptedClockSkewMs !== 'undefined' ? parseInt(samlConfig.acceptedClockSkewMs, 10) : undefined;
+  if (samlConfig) {
+    samlConfig.wantAuthnResponseSigned =
+      samlConfig.wantAuthnResponseSigned === 'true' || samlConfig.wantAuthnResponseSigned === true;
+    samlConfig.wantAssertionsSigned =
+      samlConfig.wantAssertionsSigned === 'true' || samlConfig.wantAssertionsSigned === true;
+    samlConfig.identifierFormat = samlConfig.identifierFormat === 'null' ? null : samlConfig.identifierFormat;
+    samlConfig.acceptedClockSkewMs =
+      typeof samlConfig.acceptedClockSkewMs !== 'undefined' ? parseInt(samlConfig.acceptedClockSkewMs, 10) : undefined;
+  }
 };
 
 export const ConfigModule = TypedConfigModule.forRoot({
