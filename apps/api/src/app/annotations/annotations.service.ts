@@ -48,6 +48,7 @@ export class AnnotationsService {
     }
 
     const allAnnotations = await this.annotationsRepository.findBy({
+      userSessionId: user.id,
       markerId: createAnnotationInput.markerId,
     });
 
