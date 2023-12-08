@@ -2,41 +2,37 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Strategy, Profile, SamlOptions } from '@node-saml/passport-saml';
 import { UsersService } from '../../users/users.service';
-import { Config } from '../../config/config';
+import { Config, SamlConfig } from '../../config/config';
 import * as fs from 'fs';
 
-@Injectable()
-export class SamlStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly usersService: UsersService, private readonly config: Config) {
-    super({
-      issuer: config.saml.issuer,
-      callbackUrl: config.saml.callbackUrl,
-      cert: config.saml.cert,
-      privateKey: config.saml.privateKeyPath ? fs.readFileSync(config.saml.privateKeyPath, 'utf-8') : undefined,
-      decryptionPvk: config.saml.decryptionPvkPath
-        ? fs.readFileSync(config.saml.decryptionPvkPath, 'utf-8')
-        : undefined,
-      entryPoint: config.saml.entryPoint,
-      audience: config.saml.audience,
-      wantAuthnResponseSigned: config.saml.wantAuthnResponseSigned,
-      signatureAlgorithm: config.saml.signatureAlgorithm,
-      identifierFormat: config.saml.identifierFormat,
-      acceptedClockSkewMs: config.saml.acceptedClockSkewMs,
-      validateInResponseTo: config.saml.validateInResponseTo,
-      authnContext: config.saml.authnContext
-        ? [
-            config.saml.authnContext,
-          ]
-        : undefined,
-      authnRequestBinding: config.saml.authnRequestBinding,
-      protocol: config.saml.protocol,
-    } as SamlOptions);
+export function createSamlConfig(config: SamlConfig): SamlOptions {
+  return {
+    issuer: config.issuer,
+    callbackUrl: config.callbackUrl,
+    cert: config.cert,
+    privateKey: config.privateKeyPath ? fs.readFileSync(config.privateKeyPath, 'utf-8') : undefined,
+    decryptionPvk: config.decryptionPvkPath ? fs.readFileSync(config.decryptionPvkPath, 'utf-8') : undefined,
+    entryPoint: config.entryPoint,
+    audience: config.audience,
+    wantAuthnResponseSigned: config.wantAuthnResponseSigned,
+    signatureAlgorithm: config.signatureAlgorithm,
+    identifierFormat: config.identifierFormat,
+    acceptedClockSkewMs: config.acceptedClockSkewMs,
+    validateInResponseTo: config.validateInResponseTo,
+    authnContext: config.authnContext
+      ? [
+          config.authnContext,
+        ]
+      : undefined,
+    authnRequestBinding: config.authnRequestBinding,
+    protocol: config.protocol,
+  } as SamlOptions;
+}
 
-    console.log(
-      this.generateServiceProviderMetadata(
-        config.saml.decryptionCertPath ? fs.readFileSync(config.saml.decryptionCertPath, 'utf-8') : undefined
-      )
-    );
+@Injectable()
+export class SamlStrategy extends PassportStrategy(Strategy, 'saml') {
+  constructor(private readonly usersService: UsersService, private readonly config: Config) {
+    super(createSamlConfig(config.saml));
   }
 
   async validate(profile: Profile) {

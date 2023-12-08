@@ -209,6 +209,7 @@ const SET_PLAY_MODE = gql`
       enableLiveAnalysis
       lockAnnotationDelete
       playMode
+      isAudioSession
       playPosition
       liveSessionStart
       code

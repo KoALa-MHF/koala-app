@@ -14,6 +14,7 @@
   <p-tabView>
     <p-tabPanel header="Text">
       <koala-annotation-text-comment
+        #textComment
         [comment]="{ id: annotation?.id || 0, note: annotation?.note || '' }"
         (save)="onTextCommentSave($event)"
         (delete)="onTextCommentDelete()"
@@ -21,6 +22,7 @@
     </p-tabPanel>
     <p-tabPanel header="Audio">
       <koala-annotation-audio-comment
+        #audioComment
         [annotationId]="annotation?.id || 0"
         [mediaId]="annotation?.mediaId || 0"
         (save)="onAudioCommentSave($event)"

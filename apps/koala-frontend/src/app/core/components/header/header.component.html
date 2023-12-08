@@ -97,10 +97,20 @@
       class="hidden-xs hidden-sm"
     ></p-divider>
 
+    <p-splitButton
+      pRipple
+      *ngIf="SAMLLoginOptionEnabled && (isAuthenticated$ | async) === false"
+      label="{{ 'LOGIN_NAV_BTN' | translate }}"
+      icon="pi pi-sign-in"
+      (onClick)="onLogin()"
+      [model]="loginOptions"
+      styleClass="p-button-text"
+    ></p-splitButton>
+
     <button
+      *ngIf="SAMLLoginOptionEnabled === false && (isAuthenticated$ | async) === false"
       pButton
       pRipple
-      *ngIf="(isAuthenticated$ | async) === false"
       icon="pi pi-sign-in"
       label="{{ 'LOGIN_NAV_BTN' | translate }}"
       class="p-button-text"

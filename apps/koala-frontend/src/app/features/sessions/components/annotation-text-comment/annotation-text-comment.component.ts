@@ -68,4 +68,8 @@ export class AnnotationTextCommentComponent {
   onChange(event: any) {
     this._note = event.target.value;
   }
+
+  reset() {
+    this.onCancel();
+  }
 }

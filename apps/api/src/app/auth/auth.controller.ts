@@ -3,6 +3,7 @@ import { Config } from '../config/config';
 import { SamlAuthGuard } from '../core/guards/saml-auth.guard';
 import { User } from '../users/entities/user.entity';
 import { AuthService } from './auth.service';
+import { SamlAuthOptionGuard } from '../core/guards/saml-auth-option.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -22,6 +23,23 @@ export class AuthController {
     if (user) {
       const authentication = await this.authService.authenticateSamlUser(user);
       res.redirect(this.config.saml.redirectFrontendUrl + authentication.accessToken);
+    }
+  }
+
+  @Get('sso/saml/option/login')
+  @UseGuards(SamlAuthOptionGuard)
+  async samlLoginOption() {
+    //this route is handled by passport-saml
+    return;
+  }
+
+  @Post('sso/saml/option/ac')
+  @UseGuards(SamlAuthOptionGuard)
+  async samlOptionAssertionConsumer(@Req() req, @Res() res) {
+    const user: User = req.user;
+    if (user) {
+      const authentication = await this.authService.authenticateSamlUser(user);
+      res.redirect(this.config.samlOption.redirectFrontendUrl + authentication.accessToken);
     }
   }
 }
