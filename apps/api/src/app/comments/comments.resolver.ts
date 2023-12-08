@@ -28,7 +28,7 @@ export class CommentsResolver {
   }
 
   @Mutation(() => Comment)
-  updateAnnotation(
+  updateComment(
     @Args('id', { type: () => Int }) id: number,
     @Args('updateCommentInput') updateCommentInput: UpdateCommentInput,
     @CurrentUser() user: User

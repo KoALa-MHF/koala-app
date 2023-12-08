@@ -77,11 +77,13 @@ export class AnnotationsService {
     });
   }
 
-  async findOne(id: number, user?: User) {
+  async findOne(id: number, user?: User, withSessionOwnerCheck = false) {
     const annotation = await this.annotationsRepository.findOne({
       where: { id },
       relations: {
-        userSession: true,
+        userSession: {
+          session: true,
+        },
       },
     });
 
@@ -89,8 +91,15 @@ export class AnnotationsService {
       throw new NotFoundException();
     }
 
-    if (user && annotation.userSession.ownerId !== user.id) {
-      throw new ForbiddenException();
+    if (user) {
+      const isUserSessionOwner = annotation.userSession.ownerId === user.id;
+      const isSessionOwner = annotation.userSession.session.ownerId === user.id;
+
+      if (!isUserSessionOwner && !withSessionOwnerCheck) {
+        throw new ForbiddenException();
+      } else if (!isUserSessionOwner && !isSessionOwner) {
+        throw new ForbiddenException();
+      }
     }
 
     return annotation;
@@ -128,9 +137,23 @@ export class AnnotationsService {
 
   async findAllCommments(id: number, user: User): Promise<Comment[]> {
     const annotation = await this.annotationsRepository.findOne({
-      where: { id },
+      where: [
+        {
+          id,
+          userSession: {
+            ownerId: user.id,
+          },
+        },
+        {
+          id,
+          userSession: {
+            session: {
+              ownerId: user.id,
+            },
+          },
+        },
+      ],
       relations: {
-        userSession: true,
         comments: true,
       },
     });

@@ -5,19 +5,24 @@ import { Comment } from './entities/comment.entity';
 import { CreateCommentInput } from './dto/create-comment.input';
 import { User } from '../users/entities/user.entity';
 import { UpdateCommentInput } from './dto/update-comment.input';
+import { UserSession } from '../user-sessions/entities/user-session.entity';
+import { AnnotationsService } from '../annotations/annotations.service';
 
 @Injectable()
 export class CommentsService {
   constructor(
     @InjectRepository(Comment)
-    private commentsRepository: Repository<Comment>
+    private commentsRepository: Repository<Comment>,
+    private readonly annotationsService: AnnotationsService
   ) {}
 
   async create(createCommentInput: CreateCommentInput, user: User): Promise<Comment> {
+    const annotation = await this.annotationsService.findOne(createCommentInput.annotationId, user, true);
+
     const comment = this.commentsRepository.create({
       text: createCommentInput.text,
       annotation: {
-        id: createCommentInput.annotationId,
+        id: annotation.id,
       },
       owner: user,
     });
