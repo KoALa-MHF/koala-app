@@ -33,7 +33,7 @@ export class AnnotationsResolver {
 
   @Query(() => Annotation, { name: 'annotation' })
   findOne(@Args('id', { type: () => Int }) id: number, @CurrentUser() user: User) {
-    return this.annotationsService.findOne(id, user);
+    return this.annotationsService.findOne(id, user, true);
   }
 
   @Mutation(() => Annotation)
