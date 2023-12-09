@@ -41,4 +41,10 @@ export class CommentsResolver {
     const { annotationId } = comment;
     return this.annotationsService.findOne(annotationId);
   }
+
+  @ResolveField()
+  owner(@Parent() comment: Comment) {
+    const { ownerId } = comment;
+    return this.commentsService.findOne(ownerId);
+  }
 }
