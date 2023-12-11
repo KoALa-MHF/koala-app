@@ -23,6 +23,8 @@ export type Scalars = {
 
 export type Annotation = {
   __typename?: 'Annotation';
+  /** Associated Comments */
+  comments: Array<Comment>;
   /** Creation Date */
   createdAt: Scalars['DateTime']['output'];
   /** Annotation End Seconds */
@@ -63,6 +65,22 @@ export type Authentication = {
   user: User;
 };
 
+export type Comment = {
+  __typename?: 'Comment';
+  /** Associated Annotation */
+  annotation: Annotation;
+  /** Creation Date */
+  createdAt: Scalars['DateTime']['output'];
+  /** ID for Comment */
+  id: Scalars['Int']['output'];
+  /** Associated User */
+  owner: User;
+  /** Comment Text */
+  text: Scalars['String']['output'];
+  /** Date of Last Update */
+  updatedAt: Scalars['DateTime']['output'];
+};
+
 export type CreateAnnotationInput = {
   /** Annotation End Seconds */
   end?: InputMaybe<Scalars['Int']['input']>;
@@ -78,6 +96,13 @@ export type CreateAnnotationInput = {
   userSessionId: Scalars['Int']['input'];
   /** Annotation Value */
   value?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type CreateCommentInput = {
+  /** Associated Annotation */
+  annotationId: Scalars['Int']['input'];
+  /** Comment Text */
+  text: Scalars['String']['input'];
 };
 
 export type CreateMarkerInput = {
@@ -198,6 +223,7 @@ export type Mutation = {
   authenticateSession: Authentication;
   authenticateUserSession: Authentication;
   createAnnotation: Annotation;
+  createComment: Comment;
   createMarker: Marker;
   createMedia: Media;
   createSession: Session;
@@ -205,6 +231,7 @@ export type Mutation = {
   inviteUserSession: Array<UserSession>;
   removeAnnotation: Annotation;
   removeAnnotationMedia: Annotation;
+  removeComment: Comment;
   removeMarker: Marker;
   removeSession: Session;
   removeUserSession: UserSession;
@@ -212,6 +239,7 @@ export type Mutation = {
   setPlayMode: Session;
   setPlayPosition: Session;
   updateAnnotation: Annotation;
+  updateComment: Comment;
   updateMarker: Marker;
   updateSession: Session;
   updateToolbar: Toolbar;
@@ -229,6 +257,10 @@ export type MutationAuthenticateUserSessionArgs = {
 
 export type MutationCreateAnnotationArgs = {
   createAnnotationInput: CreateAnnotationInput;
+};
+
+export type MutationCreateCommentArgs = {
+  createCommentInput: CreateCommentInput;
 };
 
 export type MutationCreateMarkerArgs = {
@@ -256,6 +288,10 @@ export type MutationRemoveAnnotationArgs = {
 };
 
 export type MutationRemoveAnnotationMediaArgs = {
+  id: Scalars['Int']['input'];
+};
+
+export type MutationRemoveCommentArgs = {
   id: Scalars['Int']['input'];
 };
 
@@ -289,6 +325,11 @@ export type MutationSetPlayPositionArgs = {
 export type MutationUpdateAnnotationArgs = {
   id: Scalars['Int']['input'];
   updateAnnotationInput: UpdateAnnotationInput;
+};
+
+export type MutationUpdateCommentArgs = {
+  id: Scalars['Int']['input'];
+  updateCommentInput: UpdateCommentInput;
 };
 
 export type MutationUpdateMarkerArgs = {
@@ -470,6 +511,11 @@ export type UpdateAnnotationInput = {
   note?: InputMaybe<Scalars['String']['input']>;
   /** Annotation Value */
   value?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UpdateCommentInput = {
+  /** Comment Text */
+  text?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateMarkerInput = {
@@ -808,7 +854,12 @@ export type SetPlayModeMutation = {
         end?: number | null;
         start: number;
         value?: number | null;
-        note?: string | null;
+        comments: Array<{
+          __typename?: 'Comment';
+          id: number;
+          text: string;
+          owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
+        }>;
         media?: { __typename?: 'Media'; id: string } | null;
         marker: {
           __typename?: 'Marker';
@@ -868,7 +919,12 @@ export type SetPlayPositionMutation = {
         end?: number | null;
         start: number;
         value?: number | null;
-        note?: string | null;
+        comments: Array<{
+          __typename?: 'Comment';
+          id: number;
+          text: string;
+          owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
+        }>;
         media?: { __typename?: 'Media'; id: string } | null;
         marker: {
           __typename?: 'Marker';
@@ -936,6 +992,45 @@ export type RemoveAnnotationAudioMutationVariables = Exact<{
 export type RemoveAnnotationAudioMutation = {
   __typename?: 'Mutation';
   removeAnnotationMedia: { __typename?: 'Annotation'; id: number };
+};
+
+export type CreateAnnotationCommentMutationVariables = Exact<{
+  annotationId: Scalars['Int']['input'];
+  commentText: Scalars['String']['input'];
+}>;
+
+export type CreateAnnotationCommentMutation = {
+  __typename?: 'Mutation';
+  createComment: {
+    __typename?: 'Comment';
+    id: number;
+    text: string;
+    owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
+  };
+};
+
+export type UpdateAnnotationCommentMutationVariables = Exact<{
+  commentId: Scalars['Int']['input'];
+  commentText: Scalars['String']['input'];
+}>;
+
+export type UpdateAnnotationCommentMutation = {
+  __typename?: 'Mutation';
+  updateComment: {
+    __typename?: 'Comment';
+    id: number;
+    text: string;
+    owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
+  };
+};
+
+export type RemoveAnnotationCommentMutationVariables = Exact<{
+  commentId: Scalars['Int']['input'];
+}>;
+
+export type RemoveAnnotationCommentMutation = {
+  __typename?: 'Mutation';
+  removeComment: { __typename?: 'Comment'; id: number };
 };
 
 export type GetSessionsQueryVariables = Exact<{ [key: string]: never }>;
@@ -1026,10 +1121,15 @@ export type GetOneSessionQuery = {
       annotations: Array<{
         __typename?: 'Annotation';
         id: number;
-        note?: string | null;
         end?: number | null;
         start: number;
         value?: number | null;
+        comments: Array<{
+          __typename?: 'Comment';
+          id: number;
+          text: string;
+          owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
+        }>;
         media?: { __typename?: 'Media'; id: string } | null;
         marker: {
           __typename?: 'Marker';
@@ -1119,7 +1219,12 @@ export type SessionExportQuery = {
         start: number;
         end?: number | null;
         value?: number | null;
-        note?: string | null;
+        comments: Array<{
+          __typename?: 'Comment';
+          id: number;
+          text: string;
+          owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
+        }>;
         media?: { __typename?: 'Media'; id: string } | null;
         marker: {
           __typename?: 'Marker';
@@ -1174,7 +1279,6 @@ export type SessionCsvExportQuery = {
         start: number;
         end?: number | null;
         value?: number | null;
-        note?: string | null;
         media?: { __typename?: 'Media'; id: string } | null;
         marker: {
           __typename?: 'Marker';
@@ -1646,7 +1750,16 @@ export const SetPlayModeDocument = gql`
           end
           start
           value
-          note
+          comments {
+            id
+            text
+            owner {
+              id
+              role
+              createdAt
+              updatedAt
+            }
+          }
           media {
             id
           }
@@ -1727,7 +1840,16 @@ export const SetPlayPositionDocument = gql`
           end
           start
           value
-          note
+          comments {
+            id
+            text
+            owner {
+              id
+              role
+              createdAt
+              updatedAt
+            }
+          }
           media {
             id
           }
@@ -1864,6 +1986,83 @@ export class RemoveAnnotationAudioGQL extends Apollo.Mutation<
     super(apollo);
   }
 }
+export const CreateAnnotationCommentDocument = gql`
+  mutation createAnnotationComment($annotationId: Int!, $commentText: String!) {
+    createComment(createCommentInput: { annotationId: $annotationId, text: $commentText }) {
+      id
+      text
+      owner {
+        id
+        role
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateAnnotationCommentGQL extends Apollo.Mutation<
+  CreateAnnotationCommentMutation,
+  CreateAnnotationCommentMutationVariables
+> {
+  override document = CreateAnnotationCommentDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateAnnotationCommentDocument = gql`
+  mutation updateAnnotationComment($commentId: Int!, $commentText: String!) {
+    updateComment(id: $commentId, updateCommentInput: { text: $commentText }) {
+      id
+      text
+      owner {
+        id
+        role
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateAnnotationCommentGQL extends Apollo.Mutation<
+  UpdateAnnotationCommentMutation,
+  UpdateAnnotationCommentMutationVariables
+> {
+  override document = UpdateAnnotationCommentDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const RemoveAnnotationCommentDocument = gql`
+  mutation removeAnnotationComment($commentId: Int!) {
+    removeComment(id: $commentId) {
+      id
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class RemoveAnnotationCommentGQL extends Apollo.Mutation<
+  RemoveAnnotationCommentMutation,
+  RemoveAnnotationCommentMutationVariables
+> {
+  override document = RemoveAnnotationCommentDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const GetSessionsDocument = gql`
   query GetSessions {
     sessions {
@@ -1981,7 +2180,16 @@ export const GetOneSessionDocument = gql`
         }
         annotations {
           id
-          note
+          comments {
+            id
+            text
+            owner {
+              id
+              role
+              createdAt
+              updatedAt
+            }
+          }
           media {
             id
           }
@@ -2117,7 +2325,16 @@ export const SessionExportDocument = gql`
           start
           end
           value
-          note
+          comments {
+            id
+            text
+            owner {
+              id
+              role
+              createdAt
+              updatedAt
+            }
+          }
           media {
             id
           }
@@ -2183,7 +2400,6 @@ export const SessionCsvExportDocument = gql`
           start
           end
           value
-          note
           media {
             id
           }

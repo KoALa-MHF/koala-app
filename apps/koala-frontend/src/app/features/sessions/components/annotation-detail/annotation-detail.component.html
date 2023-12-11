@@ -12,15 +12,16 @@
   <p-divider></p-divider>
 
   <p-tabView>
-    <p-tabPanel header="Text">
-      <koala-annotation-text-comment
+    <p-tabPanel header="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.TEXT_COMMENT_TAB_TITLE' | translate }}">
+      <koala-annotation-text-comment-list
         #textComment
-        [comment]="{ id: annotation?.id || 0, note: annotation?.note || '' }"
-        (save)="onTextCommentSave($event)"
-        (delete)="onTextCommentDelete()"
-      ></koala-annotation-text-comment>
+        [comments]="annotation?.comments"
+        (create)="onTextCommentCreate($event)"
+        (update)="onTextCommentUpdate($event)"
+        (delete)="onTextCommentDelete($event)"
+      ></koala-annotation-text-comment-list>
     </p-tabPanel>
-    <p-tabPanel header="Audio">
+    <p-tabPanel header="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.AUDIO_COMMENT_TAB_TITLE' | translate }}">
       <koala-annotation-audio-comment
         #audioComment
         [annotationId]="annotation?.id || 0"

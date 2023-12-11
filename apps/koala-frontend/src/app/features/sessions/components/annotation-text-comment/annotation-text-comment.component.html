@@ -4,10 +4,10 @@
     rows="5"
     cols="30"
     pInputTextarea
-    [value]="comment.note"
+    [value]="comment.text"
     (change)="onChange($event)"
   ></textarea>
-  <span *ngIf="displayMode === DisplayMode.DISPLAY">{{ comment.note }}</span>
+  <span *ngIf="displayMode === DisplayMode.DISPLAY">{{ comment.text }}</span>
 </div>
 
 <div style="margin-top: 20px; display: flex; justify-content: center">

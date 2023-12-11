@@ -1,3 +1,4 @@
+import { Comment } from './comment.entity';
 import { Marker } from './marker.entity';
 
 export interface Annotation {
@@ -7,4 +8,5 @@ export interface Annotation {
   note?: string | null;
   value?: number | null;
   marker?: Marker | null;
+  comments?: Comment[] | null;
 }

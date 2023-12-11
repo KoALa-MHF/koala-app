@@ -1,10 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DisplayMode } from '../../types/display-mode.enum';
-
-export interface AnnotationTextComment {
-  id: number;
-  note: string;
-}
+import { Comment } from '../../types/comment.entity';
 
 @Component({
   selector: 'koala-annotation-text-comment',
@@ -14,10 +10,10 @@ export interface AnnotationTextComment {
   ],
 })
 export class AnnotationTextCommentComponent {
-  @Input() set comment(value: AnnotationTextComment) {
-    this.originalNote = value.note;
-    this._note = value.note;
-    if (this._note) {
+  @Input() set comment(value: Comment) {
+    this.originalNote = value.text;
+    this._comment = value;
+    if (this._comment.text) {
       this.displayMode = DisplayMode.DISPLAY;
     } else {
       this.displayMode = DisplayMode.EDIT;
@@ -25,22 +21,21 @@ export class AnnotationTextCommentComponent {
   }
 
   get comment() {
-    return { id: this._commentId, note: this._note };
+    return this._comment;
   }
 
   originalNote = '';
-  _note = '';
-  _commentId = 0;
+  _comment!: Comment;
 
-  @Output() save = new EventEmitter<string>();
-  @Output() delete = new EventEmitter();
+  @Output() update = new EventEmitter<Comment>();
+  @Output() delete = new EventEmitter<number>();
 
   displayMode = DisplayMode.DISPLAY;
   DisplayMode = DisplayMode;
 
   onCancel() {
-    this._note = this.originalNote;
-    if (this._note) {
+    this._comment.text = this.originalNote;
+    if (this._comment.text) {
       this.displayMode = DisplayMode.DISPLAY;
     } else {
       this.displayMode = DisplayMode.EDIT;
@@ -48,8 +43,8 @@ export class AnnotationTextCommentComponent {
   }
 
   onSave() {
-    this.save.emit(this._note);
-    if (this._note) {
+    this.update.emit(this.comment);
+    if (this._comment.text) {
       this.displayMode = DisplayMode.DISPLAY;
     } else {
       this.displayMode = DisplayMode.EDIT;
@@ -57,8 +52,7 @@ export class AnnotationTextCommentComponent {
   }
 
   onDelete() {
-    this.delete.emit();
-    this.displayMode = DisplayMode.EDIT;
+    this.delete.emit(this.comment.id);
   }
 
   onEdit() {
@@ -66,7 +60,7 @@ export class AnnotationTextCommentComponent {
   }
 
   onChange(event: any) {
-    this._note = event.target.value;
+    this._comment.text = event.target.value;
   }
 
   reset() {

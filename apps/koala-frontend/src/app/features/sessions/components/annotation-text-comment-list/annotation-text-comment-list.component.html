@@ -1,0 +1,8 @@
+<div *ngFor="let comment of comments">
+  <koala-annotation-text-comment
+    #comment
+    [comment]="comment"
+    (update)="onTextCommentUpdate($event)"
+    (delete)="onTextCommentDelete($event)"
+  ></koala-annotation-text-comment>
+</div>

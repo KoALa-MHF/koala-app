@@ -71,6 +71,7 @@ import { AnnotationDetailComponent } from './components/annotation-detail/annota
 import { TimePipe } from './pipes/time.pipe';
 import { AnnotationTextCommentComponent } from './components/annotation-text-comment/annotation-text-comment.component';
 import { AnnotationAudioCommentComponent } from './components/annotation-audio-comment/annotation-audio-comment.component';
+import { AnnotationTextCommentListComponent } from './components/annotation-text-comment-list/annotation-text-comment-list.component';
 
 @NgModule({
   declarations: [
@@ -107,6 +108,7 @@ import { AnnotationAudioCommentComponent } from './components/annotation-audio-c
     AnnotationDetailComponent,
     AnnotationTextCommentComponent,
     AnnotationAudioCommentComponent,
+    AnnotationTextCommentListComponent,
   ],
   imports: [
     SharedModule,

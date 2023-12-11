@@ -214,7 +214,9 @@
         "CANCEL_BTN": "Verwerfen",
         "EDIT_BTN": "Editieren",
         "DELETE_BTN": "Kommentar löschen",
-        "ANNOTATION_TIME_LABEL": "Zeit:"
+        "ANNOTATION_TIME_LABEL": "Zeit:",
+        "AUDIO_COMMENT_TAB_TITLE": "Audio",
+        "TEXT_COMMENT_TAB_TITLE": "Text"
       }
     }
   },
