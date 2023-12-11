@@ -85,14 +85,11 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
         this.setContainerHeight();
         this.drawTimeline();
         this.drawLines();
+        this.drawAnnotationsForAllRows();
       }
       if (changes['currentTime'] || changes['annotationData']) {
         this.drawTimeline();
-        let i = 0;
-        this.annotationData?.forEach((_, row) => {
-          this.drawAnnotations(row, i, this.markers[i]);
-          i++;
-        });
+        this.drawAnnotationsForAllRows();
 
         this.annotationData?.forEach((data) => {
           data.forEach((annotation) => {
@@ -176,11 +173,20 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
     }
   }
 
+  private drawAnnotationsForAllRows() {
+    let i = 0;
+    this.annotationData?.forEach((_, row) => {
+      this.drawAnnotations(row, i, this.markers[i]);
+      i++;
+    });
+  }
+
   private drawAnnotations(row: number, index: number, m: Marker) {
     const svg = d3.select(`svg#${this.d3Container}${this.d3ContainerID}`);
     const trans = svg.transition().duration(50);
     const posY = this.getPositionY(index);
     const rowElem = svg.select('g#row_' + row);
+
     const mouseover = (d: DataPoint, ev: any) => {
       if (!d.transparent) {
         d3.select(ev.target).style('stroke', 'black').style('opacity', 1);
@@ -213,6 +219,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
             .attr('cx', (d: DataPoint) => this.getPositionXRatio() * (d.startTime / 1000))
             .attr('cy', posY)
             .attr('r', 5)
+            .attr('visibility', m.visible ? 'visible' : 'hidden')
             .attr('width', (d: DataPoint) => this.getRectWidth(d))
             .attr('height', (d: DataPoint) => this.getRectHeight(d, m))
             .attr('id', (d: DataPoint) => `row_${row}_${d.id}`)
@@ -222,7 +229,12 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
             .on('mouseover', (ev, d) => mouseover(d, ev))
             .on('click', (ev, d) => click(d, ev)),
         (update) =>
-          update.call((update) => update.transition(trans).attr('width', (d: DataPoint) => this.getRectWidth(d))),
+          update.call((update) =>
+            update
+              .transition(trans)
+              .attr('width', (d: DataPoint) => this.getRectWidth(d))
+              .attr('visibility', m.visible ? 'visible' : 'hidden')
+          ),
         (exit) => exit.call((update) => update.transition(trans).attr('width', 0).attr('height', 0).remove())
       );
     rowElem.raise();
@@ -322,11 +334,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
     svgL.selectAll('text').remove();
     this.drawTimeline();
     this.drawLines();
-    let i = 0;
-    this.annotationData?.forEach((_, row) => {
-      this.drawAnnotations(row, i, this.markers[i]);
-      i++;
-    });
+    this.drawAnnotationsForAllRows();
   }
 
   private getContainerWidth() {
