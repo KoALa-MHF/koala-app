@@ -44,8 +44,8 @@ export class AnnotationDetailComponent {
   @ViewChild('textComment') textCommentListComponent!: AnnotationTextCommentListComponent;
   @ViewChild('audioComment') audioCommentComponent!: AnnotationAudioCommentComponent;
 
-  onTextCommentCreate(createComment: CreateAnnotationTextComment) {
-    this.createTextComment.emit({ annotationId: createComment.annotationId || 0, text: createComment.text });
+  onTextCommentCreate(commentText: string) {
+    this.createTextComment.emit({ annotationId: this._annotation?.id || 0, text: commentText });
   }
 
   onTextCommentUpdate(comment: Comment) {

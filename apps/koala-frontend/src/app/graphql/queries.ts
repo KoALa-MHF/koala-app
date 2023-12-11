@@ -110,6 +110,7 @@ const GET_ONE_SESSION = gql`
           comments {
             id
             text
+            createdAt
             owner {
               id
               role
@@ -212,6 +213,7 @@ const GET_SESSION_FOR_EXPORT = gql`
           comments {
             id
             text
+            createdAt
             owner {
               id
               role

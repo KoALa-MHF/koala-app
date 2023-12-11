@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
 import { Comment } from '../../types/comment.entity';
 import { AnnotationTextCommentComponent } from '../annotation-text-comment/annotation-text-comment.component';
 
@@ -14,13 +14,21 @@ export interface CreateAnnotationTextComment {
     './annotation-text-comment-list.component.css',
   ],
 })
-export class AnnotationTextCommentListComponent {
+export class AnnotationTextCommentListComponent implements AfterViewInit {
   @Input() comments?: Comment[] | null;
-  @Output() create = new EventEmitter<CreateAnnotationTextComment>();
+  @Output() create = new EventEmitter<string>();
   @Output() update = new EventEmitter<Comment>();
   @Output() delete = new EventEmitter<number>();
 
   @ViewChildren('comment') textCommentComponents!: QueryList<AnnotationTextCommentComponent>;
+
+  commentText = '';
+
+  ngAfterViewInit() {
+    this.comments?.sort((commentA, commentB) => {
+      return commentA.createdAt > commentB.createdAt ? 1 : -1;
+    });
+  }
 
   reset() {
     this.textCommentComponents.forEach((textCommentComponent: AnnotationTextCommentComponent) => {
@@ -36,7 +44,7 @@ export class AnnotationTextCommentListComponent {
     this.update.emit(comment);
   }
 
-  onTextCommentCreate(comment: CreateAnnotationTextComment) {
-    this.create.emit(comment);
+  onTextCommentCreate() {
+    this.create.emit(this.commentText);
   }
 }

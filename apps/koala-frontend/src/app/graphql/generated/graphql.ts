@@ -858,6 +858,7 @@ export type SetPlayModeMutation = {
           __typename?: 'Comment';
           id: number;
           text: string;
+          createdAt: any;
           owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
         }>;
         media?: { __typename?: 'Media'; id: string } | null;
@@ -923,6 +924,7 @@ export type SetPlayPositionMutation = {
           __typename?: 'Comment';
           id: number;
           text: string;
+          createdAt: any;
           owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
         }>;
         media?: { __typename?: 'Media'; id: string } | null;
@@ -1128,6 +1130,7 @@ export type GetOneSessionQuery = {
           __typename?: 'Comment';
           id: number;
           text: string;
+          createdAt: any;
           owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
         }>;
         media?: { __typename?: 'Media'; id: string } | null;
@@ -1223,6 +1226,7 @@ export type SessionExportQuery = {
           __typename?: 'Comment';
           id: number;
           text: string;
+          createdAt: any;
           owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
         }>;
         media?: { __typename?: 'Media'; id: string } | null;
@@ -1753,6 +1757,7 @@ export const SetPlayModeDocument = gql`
           comments {
             id
             text
+            createdAt
             owner {
               id
               role
@@ -1843,6 +1848,7 @@ export const SetPlayPositionDocument = gql`
           comments {
             id
             text
+            createdAt
             owner {
               id
               role
@@ -2183,6 +2189,7 @@ export const GetOneSessionDocument = gql`
           comments {
             id
             text
+            createdAt
             owner {
               id
               role
@@ -2328,6 +2335,7 @@ export const SessionExportDocument = gql`
           comments {
             id
             text
+            createdAt
             owner {
               id
               role

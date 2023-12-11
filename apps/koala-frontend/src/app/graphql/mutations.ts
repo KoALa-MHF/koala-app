@@ -244,6 +244,7 @@ const SET_PLAY_MODE = gql`
           comments {
             id
             text
+            createdAt
             owner {
               id
               role
@@ -324,6 +325,7 @@ const SET_PLAY_POSITION = gql`
           comments {
             id
             text
+            createdAt
             owner {
               id
               role
