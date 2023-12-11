@@ -8,13 +8,15 @@ import { CurrentUser } from '../core/decorators/user.decorator';
 import { User } from '../users/entities/user.entity';
 import { AnnotationsService } from '../annotations/annotations.service';
 import { UpdateCommentInput } from './dto/update-comment.input';
+import { UsersService } from '../users/users.service';
 
 @Resolver(() => Comment)
 @UseGuards(AuthGuard)
 export class CommentsResolver {
   constructor(
     private readonly commentsService: CommentsService,
-    private readonly annotationsService: AnnotationsService
+    private readonly annotationsService: AnnotationsService,
+    private readonly usersService: UsersService
   ) {}
 
   @Mutation(() => Comment)
@@ -45,6 +47,6 @@ export class CommentsResolver {
   @ResolveField()
   owner(@Parent() comment: Comment) {
     const { ownerId } = comment;
-    return this.commentsService.findOne(ownerId);
+    return this.usersService.findOne(ownerId);
   }
 }

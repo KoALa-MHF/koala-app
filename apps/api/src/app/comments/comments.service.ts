@@ -5,7 +5,6 @@ import { Comment } from './entities/comment.entity';
 import { CreateCommentInput } from './dto/create-comment.input';
 import { User } from '../users/entities/user.entity';
 import { UpdateCommentInput } from './dto/update-comment.input';
-import { UserSession } from '../user-sessions/entities/user-session.entity';
 import { AnnotationsService } from '../annotations/annotations.service';
 
 @Injectable()
@@ -32,6 +31,8 @@ export class CommentsService {
   async findOne(id: number, user?: User) {
     const comment = await this.commentsRepository.findOneBy({ id });
 
+    console.log(id);
+    console.log(comment);
     if (!comment) {
       throw new NotFoundException();
     }
