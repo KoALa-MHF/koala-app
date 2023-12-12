@@ -13,6 +13,7 @@ import { Marker } from '../markers/entities/marker.entity';
 import { Toolbar } from '../toolbars/entities/toolbar.entity';
 import { Media } from '../media/entities/media.entity';
 import { MediaSeeder } from './seeders/media.seeder';
+import { MarkersSeeder } from './seeders/markers.seeder';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { MediaSeeder } from './seeders/media.seeder';
     UsersSeeder,
     SessionsSeeder,
     UserSessionsSeeder,
+    MarkersSeeder,
   ],
 })
 export class SeedModule {}
