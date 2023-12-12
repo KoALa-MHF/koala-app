@@ -241,7 +241,17 @@ const SET_PLAY_MODE = gql`
           end
           start
           value
-          note
+          comments {
+            id
+            text
+            createdAt
+            owner {
+              id
+              role
+              createdAt
+              updatedAt
+            }
+          }
           media {
             id
           }
@@ -312,7 +322,17 @@ const SET_PLAY_POSITION = gql`
           end
           start
           value
-          note
+          comments {
+            id
+            text
+            createdAt
+            owner {
+              id
+              role
+              createdAt
+              updatedAt
+            }
+          }
           media {
             id
           }
@@ -385,6 +405,44 @@ const UPDATE_ANNOTATION_MEDIA = gql`
 const REMOVE_ANNOTATION_MEDIA = gql`
   mutation removeAnnotationAudio($id: Int!) {
     removeAnnotationMedia(id: $id) {
+      id
+    }
+  }
+`;
+
+const CREATE_ANNOTATION_COMMENT = gql`
+  mutation createAnnotationComment($annotationId: Int!, $commentText: String!) {
+    createComment(createCommentInput: { annotationId: $annotationId, text: $commentText }) {
+      id
+      text
+      owner {
+        id
+        role
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+const UPDATE_ANNOTATION_COMMENT = gql`
+  mutation updateAnnotationComment($commentId: Int!, $commentText: String!) {
+    updateComment(id: $commentId, updateCommentInput: { text: $commentText }) {
+      id
+      text
+      owner {
+        id
+        role
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+const REMOVE_ANNOTATION_COMMENT = gql`
+  mutation removeAnnotationComment($commentId: Int!) {
+    removeComment(id: $commentId) {
       id
     }
   }

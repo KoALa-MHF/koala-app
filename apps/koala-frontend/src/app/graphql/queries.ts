@@ -107,7 +107,17 @@ const GET_ONE_SESSION = gql`
         }
         annotations {
           id
-          note
+          comments {
+            id
+            text
+            createdAt
+            owner {
+              id
+              role
+              createdAt
+              updatedAt
+            }
+          }
           media {
             id
           }
@@ -200,7 +210,17 @@ const GET_SESSION_FOR_EXPORT = gql`
           start
           end
           value
-          note
+          comments {
+            id
+            text
+            createdAt
+            owner {
+              id
+              role
+              createdAt
+              updatedAt
+            }
+          }
           media {
             id
           }
@@ -256,7 +276,6 @@ const GET_SESSION_FOR_CSV_EXPORT = gql`
           start
           end
           value
-          note
           media {
             id
           }

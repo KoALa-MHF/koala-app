@@ -19,10 +19,11 @@ import { ToolbarsService } from '../../services/toolbars.service';
 import { NavigationService } from '../../services/navigation.service';
 import { UserSession } from '../../types/user-session.entity';
 import { SessionControlService } from '../../services/session-control.service';
-import { AnnotationTextComment } from '../../components/annotation-text-comment/annotation-text-comment.component';
 import { CheckboxChangeEvent } from 'primeng/checkbox';
 import { AnnotationAudioComment } from '../../components/annotation-audio-comment/annotation-audio-comment.component';
 import { MediaService } from '../../services/media.service';
+import { Comment } from '../../types/comment.entity';
+import { CreateAnnotationTextComment } from '../../components/annotation-text-comment-list/annotation-text-comment-list.component';
 
 @Component({
   selector: 'koala-app-session',
@@ -334,13 +335,13 @@ export class SessionPage implements OnInit, OnDestroy {
       for (const annotation of userSessions[0].annotations) {
         this.AnnotationData.get(annotation.marker.id)?.push({
           id: annotation.id,
-          note: annotation.note,
           startTime: annotation.start,
           endTime: annotation.end != 0 ? annotation.end : 0,
           strength: annotation.value,
           display: annotation.end == 0 ? Display.Circle : Display.Rect,
           color: annotation.marker.color,
           mediaId: annotation.media?.id,
+          comments: annotation.comments,
         });
       }
     }
@@ -385,7 +386,6 @@ export class SessionPage implements OnInit, OnDestroy {
       id: aData.length,
       color: m.color,
       display: Display.Circle,
-      note: '',
     };
 
     this.AnnotationData.get(m.id)?.push(dp);
@@ -414,7 +414,6 @@ export class SessionPage implements OnInit, OnDestroy {
       color: m.color,
       display: Display.Rect,
       active: true,
-      note: '',
     });
   }
 
@@ -439,7 +438,6 @@ export class SessionPage implements OnInit, OnDestroy {
         color: m.color,
         display: Display.Rect,
         active: true,
-        note: '',
       });
     }
     this.AnnotationData.set(m.id, aData);
@@ -577,13 +575,35 @@ export class SessionPage implements OnInit, OnDestroy {
     ]);
   }
 
-  onAnnotationTextComment(annotationTextComment: AnnotationTextComment) {
-    this.annotationService.updateNote(annotationTextComment.id, annotationTextComment.note).subscribe({
+  onAnnotationTextCommentCreate(createComment: CreateAnnotationTextComment) {
+    this.annotationService.createComment(createComment.annotationId, createComment.text).subscribe({
       next: () => {
         this.sessionService.setFocusSession(parseInt(this.sessionService.getFocusSession()?.id || '0')).subscribe();
       },
       error: () => {
-        console.log('Error');
+        console.log('Error in Comment Creation');
+      },
+    });
+  }
+
+  onAnnotationTextCommentUpdate(comment: Comment) {
+    this.annotationService.updateComment(comment.id, comment.text).subscribe({
+      next: () => {
+        this.sessionService.setFocusSession(parseInt(this.sessionService.getFocusSession()?.id || '0')).subscribe();
+      },
+      error: () => {
+        console.log('Error in Comment Update');
+      },
+    });
+  }
+
+  onAnnotationTextCommentRemove(commentId: number) {
+    this.annotationService.removeComment(commentId).subscribe({
+      next: () => {
+        this.sessionService.setFocusSession(parseInt(this.sessionService.getFocusSession()?.id || '0')).subscribe();
+      },
+      error: () => {
+        console.log('Error in Comment Removal');
       },
     });
   }

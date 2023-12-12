@@ -1,13 +1,14 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { DataPoint } from '../annotation/annotation.component';
 import {
-  AnnotationTextComment,
-  AnnotationTextCommentComponent,
-} from '../annotation-text-comment/annotation-text-comment.component';
-import {
   AnnotationAudioComment,
   AnnotationAudioCommentComponent,
 } from '../annotation-audio-comment/annotation-audio-comment.component';
+import {
+  AnnotationTextCommentListComponent,
+  CreateAnnotationTextComment,
+} from '../annotation-text-comment-list/annotation-text-comment-list.component';
+import { Comment } from '../../types/comment.entity';
 
 @Component({
   selector: 'koala-annotation-detail',
@@ -21,9 +22,9 @@ export class AnnotationDetailComponent {
     if (value) {
       this._annotation = value;
       if (this._annotation.note) {
-        this.note = { id: value.id, note: this._annotation.note };
+        //this.note = { id: value.id, note: this._annotation.note };
       } else {
-        this.note = { id: value.id, note: '' };
+        //this.note = { id: value.id, note: '' };
       }
     }
   }
@@ -34,24 +35,25 @@ export class AnnotationDetailComponent {
 
   private _annotation!: DataPoint | null;
 
-  @Output() saveTextComment = new EventEmitter<AnnotationTextComment>();
+  @Output() createTextComment = new EventEmitter<CreateAnnotationTextComment>();
+  @Output() updateTextComment = new EventEmitter<Comment>();
+  @Output() removeTextComment = new EventEmitter<number>();
   @Output() saveAudioComment = new EventEmitter<AnnotationAudioComment>();
   @Output() deleteAudioComment = new EventEmitter<number>();
 
-  @ViewChild('textComment') textCommentComponent!: AnnotationTextCommentComponent;
+  @ViewChild('textComment') textCommentListComponent!: AnnotationTextCommentListComponent;
   @ViewChild('audioComment') audioCommentComponent!: AnnotationAudioCommentComponent;
 
-  note: AnnotationTextComment = {
-    id: 0,
-    note: '',
-  };
-
-  onTextCommentSave(note: string) {
-    this.saveTextComment.emit({ id: this.annotation?.id || 0, note: note });
+  onTextCommentCreate(commentText: string) {
+    this.createTextComment.emit({ annotationId: this._annotation?.id || 0, text: commentText });
   }
 
-  onTextCommentDelete() {
-    this.saveTextComment.emit({ id: this.annotation?.id || 0, note: '' });
+  onTextCommentUpdate(comment: Comment) {
+    this.updateTextComment.emit(comment);
+  }
+
+  onTextCommentDelete(commentId: number) {
+    this.removeTextComment.emit(commentId);
   }
 
   onAudioCommentSave(audioComment: AnnotationAudioComment) {
@@ -63,7 +65,7 @@ export class AnnotationDetailComponent {
   }
 
   resetComment() {
-    this.textCommentComponent.reset();
+    this.textCommentListComponent.reset();
     this.audioCommentComponent.reset();
   }
 }

@@ -38,7 +38,9 @@
       [enableAnnotationDelete]="!session.lockAnnotationDelete"
       [deactivateAnnotationDelete]="!audioPaused"
       (deleteAnnotations)="onDeleteAnnotations($event)"
-      (annotationTextComment)="onAnnotationTextComment($event)"
+      (annotationTextCommentCreate)="onAnnotationTextCommentCreate($event)"
+      (annotationTextCommentUpdate)="onAnnotationTextCommentUpdate($event)"
+      (annotationTextCommentRemove)="onAnnotationTextCommentRemove($event)"
       (annotationAudioComment)="onAnnotationAudioComment($event)"
       (annotationAudioCommentDelete)="onAnnotationAudioCommentDelete($event)"
     ></koala-app-annotation>

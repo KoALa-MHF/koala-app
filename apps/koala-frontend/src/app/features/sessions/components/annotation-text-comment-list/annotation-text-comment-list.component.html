@@ -1,0 +1,33 @@
+<!--Create Comment Area-->
+<div>
+  <div>
+    <textarea class="full-width" rows="3" pInputTextarea [(ngModel)]="commentText"></textarea>
+  </div>
+
+  <div style="margin-top: 10px; display: flex; justify-content: flex-end">
+    <button
+      pButton
+      pRipple
+      label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.SAVE_BTN' | translate }}"
+      icon="pi pi-check"
+      data-cy="annotation-detail-save-btn"
+      (click)="onTextCommentCreate()"
+      class="p-button-text menu-button p-button-success"
+      attr.aria-label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.SAVE_BTN' | translate }}"
+    ></button>
+  </div>
+</div>
+
+<div style="margin-top: 20px; margin-bottom: 30px" *ngIf="comments?.length ? true : false">
+  <h3>{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.ALL_COMMENTS_TITLE' | translate }}</h3>
+</div>
+
+<!--Existing Comments List-->
+<div *ngFor="let comment of comments | orderByDate : 'desc'">
+  <koala-annotation-text-comment
+    #comment
+    [comment]="comment"
+    (update)="onTextCommentUpdate($event)"
+    (delete)="onTextCommentDelete($event)"
+  ></koala-annotation-text-comment>
+</div>

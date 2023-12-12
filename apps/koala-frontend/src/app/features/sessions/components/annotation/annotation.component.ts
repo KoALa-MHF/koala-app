@@ -10,13 +10,14 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Marker } from '../../types/marker.entity';
+import { Comment } from '../../types/comment.entity';
 import { MarkerService } from '../../../markers/services/marker.service';
 import { ConfirmationService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 import * as d3 from 'd3';
-import { AnnotationTextComment } from '../annotation-text-comment/annotation-text-comment.component';
 import { AnnotationAudioComment } from '../annotation-audio-comment/annotation-audio-comment.component';
 import { AnnotationDetailComponent } from '../annotation-detail/annotation-detail.component';
+import { CreateAnnotationTextComment } from '../annotation-text-comment-list/annotation-text-comment-list.component';
 
 export enum Display {
   Rect = 'rect',
@@ -34,6 +35,7 @@ export interface DataPoint {
   color: string;
   transparent?: boolean;
   active?: boolean;
+  comments?: Comment[];
 }
 
 @Component({
@@ -55,7 +57,9 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input() deactivateAnnotationDelete = false;
 
   @Output() deleteAnnotations = new EventEmitter<Marker>();
-  @Output() annotationTextComment = new EventEmitter<AnnotationTextComment>();
+  @Output() annotationTextCommentCreate = new EventEmitter<CreateAnnotationTextComment>();
+  @Output() annotationTextCommentUpdate = new EventEmitter<Comment>();
+  @Output() annotationTextCommentRemove = new EventEmitter<number>();
   @Output() annotationAudioComment = new EventEmitter<AnnotationAudioComment>();
   @Output() annotationAudioCommentDelete = new EventEmitter<number>();
 
@@ -375,8 +379,16 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
     });
   }
 
-  onAnnotationTextCommentSave(annotationDetail: AnnotationTextComment) {
-    this.annotationTextComment.emit(annotationDetail);
+  onAnnotationTextCommentCreate(annotationTextComment: CreateAnnotationTextComment) {
+    this.annotationTextCommentCreate.emit(annotationTextComment);
+  }
+
+  onAnnotationTextCommentUpdate(annotationTextComment: Comment) {
+    this.annotationTextCommentUpdate.emit(annotationTextComment);
+  }
+
+  onAnnotationTextCommentRemove(commentId: number) {
+    this.annotationTextCommentRemove.emit(commentId);
   }
 
   onAnnotationAudioCommentSave(annotationDetail: AnnotationAudioComment) {

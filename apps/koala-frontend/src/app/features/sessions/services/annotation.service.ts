@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import {
+  CreateAnnotationCommentGQL,
   CreateAnnotationGQL,
   CreateAnnotationInput,
   DeleteAnnotationGQL,
   RemoveAnnotationAudioGQL,
+  RemoveAnnotationCommentGQL,
   UpdateAnnotationAudioGQL,
+  UpdateAnnotationCommentGQL,
   UpdateAnnotationNoteGQL,
 } from '../../../graphql/generated/graphql';
 
@@ -15,7 +18,10 @@ export class AnnotationService {
     private readonly deleteAnnotationGQL: DeleteAnnotationGQL,
     private readonly updateAnnotationNoteGQL: UpdateAnnotationNoteGQL,
     private readonly updateAnnotationAudioGQL: UpdateAnnotationAudioGQL,
-    private readonly removeAnnotationAudioGQL: RemoveAnnotationAudioGQL
+    private readonly removeAnnotationAudioGQL: RemoveAnnotationAudioGQL,
+    private readonly createAnnotationCommentGQL: CreateAnnotationCommentGQL,
+    private readonly updateAnnotationCommentGQL: UpdateAnnotationCommentGQL,
+    private readonly removeAnnotationCommentGQL: RemoveAnnotationCommentGQL
   ) {}
 
   create(annotation: CreateAnnotationInput) {
@@ -36,5 +42,17 @@ export class AnnotationService {
 
   removeMedia(id: number) {
     return this.removeAnnotationAudioGQL.mutate({ id });
+  }
+
+  createComment(id: number, text: string) {
+    return this.createAnnotationCommentGQL.mutate({ annotationId: id, commentText: text });
+  }
+
+  updateComment(commentId: number, text: string) {
+    return this.updateAnnotationCommentGQL.mutate({ commentId, commentText: text });
+  }
+
+  removeComment(commentId: number) {
+    return this.removeAnnotationCommentGQL.mutate({ commentId });
   }
 }

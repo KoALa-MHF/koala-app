@@ -1,10 +1,11 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '../../core/base.entity';
 import { Marker } from '../../markers/entities/marker.entity';
 import { UserSession } from '../../user-sessions/entities/user-session.entity';
 import { Media } from '../../media/entities/media.entity';
+import { Comment } from '../../comments/entities/comment.entity';
 
 export const ANNOTATION_NOTE_MAX_LENGTH = 1024;
 
@@ -59,4 +60,13 @@ export class Annotation extends BaseEntity {
 
   @Column({ nullable: true })
   mediaId?: number;
+
+  @OneToMany(() => Comment, (comment) => comment.annotation, { cascade: true })
+  @Field(
+    (type) => [
+      Comment,
+    ],
+    { description: 'Associated Comments' }
+  )
+  comments: Comment[];
 }

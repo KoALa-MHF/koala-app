@@ -10,6 +10,7 @@ import { AuthGuard } from '../core/guards/auth.guard';
 import { CurrentUser } from '../core/decorators/user.decorator';
 import { User } from '../users/entities/user.entity';
 import { MediaService } from '../media/media.service';
+import { Comment } from '../comments/entities/comment.entity';
 
 @Resolver(() => Annotation)
 @UseGuards(AuthGuard)
@@ -32,7 +33,7 @@ export class AnnotationsResolver {
 
   @Query(() => Annotation, { name: 'annotation' })
   findOne(@Args('id', { type: () => Int }) id: number, @CurrentUser() user: User) {
-    return this.annotationsService.findOne(id, user);
+    return this.annotationsService.findOne(id, user, true);
   }
 
   @Mutation(() => Annotation)
@@ -74,5 +75,12 @@ export class AnnotationsResolver {
     } else {
       return this.mediaService.findOne(mediaId);
     }
+  }
+
+  @ResolveField(() => [
+    Comment,
+  ])
+  comments(@Parent() annotation: Annotation, @CurrentUser() user: User) {
+    return this.annotationsService.findAllCommments(annotation.id, user);
   }
 }
