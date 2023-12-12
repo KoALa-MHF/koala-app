@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DisplayMode } from '../../types/display-mode.enum';
 import { Comment } from '../../types/comment.entity';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'koala-annotation-text-comment',
@@ -27,11 +28,21 @@ export class AnnotationTextCommentComponent {
   originalNote = '';
   _comment!: Comment;
 
+  userId = '0';
+
   @Output() update = new EventEmitter<Comment>();
   @Output() delete = new EventEmitter<number>();
 
   displayMode = DisplayMode.DISPLAY;
   DisplayMode = DisplayMode;
+
+  constructor(private readonly authService: AuthService) {
+    this.authService.me().subscribe({
+      next: (data) => {
+        this.userId = data.id;
+      },
+    });
+  }
 
   onCancel() {
     this._comment.text = this.originalNote;

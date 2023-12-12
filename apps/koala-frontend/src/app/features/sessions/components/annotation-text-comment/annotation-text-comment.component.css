@@ -1,0 +1,29 @@
+.comment {
+  background-color: #fff;
+  border: 1px solid #e5e5ea;
+  max-width: 600px;
+  padding: 10px;
+  border-radius: 16px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.own {
+  background-color: #248bf5;
+  color: #fff;
+}
+
+.remove-button {
+  color: darkblue;
+}
+
+.comment-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}

@@ -1,13 +1,33 @@
-<div>
+<div style="display: flex; justify-content: space-between; max-width: 600px; gap: 50px">
   <textarea
     *ngIf="displayMode === DisplayMode.EDIT"
-    rows="5"
-    cols="30"
+    rows="3"
+    class="full-width"
     pInputTextarea
     [value]="comment.text"
     (change)="onChange($event)"
   ></textarea>
-  <span *ngIf="displayMode === DisplayMode.DISPLAY">{{ comment.text }}</span>
+  <div *ngIf="displayMode === DisplayMode.DISPLAY" class="comment-info">
+    {{ comment.createdAt | date : 'short' }}
+    <button
+      pButton
+      label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.EDIT_BTN' | translate }}"
+      class="p-button-link"
+      (click)="onEdit()"
+    ></button>
+  </div>
+  <div *ngIf="displayMode === DisplayMode.DISPLAY" class="comment own">
+    <span>{{ comment.text }}</span>
+    <span
+      ><button
+        pButton
+        pRipple
+        class="p-button-text remove-button"
+        (click)="onDelete()"
+        icon="pi pi-times-circle"
+      ></button
+    ></span>
+  </div>
 </div>
 
 <div style="margin-top: 20px; display: flex; justify-content: center">
@@ -33,29 +53,5 @@
     (click)="onSave()"
     class="p-button-text menu-button p-button-success"
     attr.aria-label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.SAVE_BTN' | translate }}"
-  ></button>
-
-  <button
-    pButton
-    pRipple
-    *ngIf="displayMode === DisplayMode.DISPLAY"
-    label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.DELETE_BTN' | translate }}"
-    icon="pi pi-times"
-    data-cy="annotation-detail-delete-btn"
-    (click)="onDelete()"
-    class="p-button-text menu-button p-button-danger"
-    attr.aria-label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.EDIT_BTN' | translate }}"
-  ></button>
-
-  <button
-    pButton
-    pRipple
-    *ngIf="displayMode === DisplayMode.DISPLAY"
-    label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.EDIT_BTN' | translate }}"
-    icon="pi pi-check"
-    data-cy="annotation-detail-edit-btn"
-    (click)="onEdit()"
-    class="p-button-text menu-button"
-    attr.aria-label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.EDIT_BTN' | translate }}"
   ></button>
 </div>

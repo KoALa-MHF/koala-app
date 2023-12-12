@@ -1,10 +1,10 @@
 <!--Create Comment Area-->
 <div>
   <div>
-    <textarea rows="5" cols="30" pInputTextarea [(ngModel)]="commentText"></textarea>
+    <textarea class="full-width" rows="3" pInputTextarea [(ngModel)]="commentText"></textarea>
   </div>
 
-  <div style="margin-top: 20px; display: flex; justify-content: center">
+  <div style="margin-top: 10px; display: flex; justify-content: flex-end">
     <button
       pButton
       pRipple
@@ -16,6 +16,10 @@
       attr.aria-label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.SAVE_BTN' | translate }}"
     ></button>
   </div>
+</div>
+
+<div style="margin-top: 20px; margin-bottom: 30px" *ngIf="comments?.length ? true : false">
+  <h3>{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.ALL_COMMENTS_TITLE' | translate }}</h3>
 </div>
 
 <!--Existing Comments List-->
