@@ -20,6 +20,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { ColorPickerModule } from 'primeng/colorpicker';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { MarkerMaintainComponent } from './components/marker-maintain/marker-maintain.component';
+import { RippleModule } from 'primeng/ripple';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { MarkerMaintainComponent } from './components/marker-maintain/marker-mai
     InputNumberModule,
     ColorPickerModule,
     InputSwitchModule,
+    RippleModule,
   ],
   exports: [
     MarkerOverviewListComponent,
