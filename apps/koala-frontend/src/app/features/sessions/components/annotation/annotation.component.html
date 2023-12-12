@@ -9,6 +9,7 @@
     <foreignObject xmlns="http://www.w3.org/2000/svg" x="0" y="0" width="44" height="100%">
       <div *ngFor="let marker of markers">
         <button
+          *ngIf="marker.visible"
           pButton
           style="margin-bottom: 12px; margin-top: 12px"
           class="p-button-text menu-button"
