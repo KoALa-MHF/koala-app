@@ -21,6 +21,7 @@ export class SeedService {
     const markers = await this.markersSeeder.seed();
     const sessions = await this.sessionsSeeder.seed({
       users,
+      markers,
     });
     await this.userSessionSeeder.seed({
       users,

@@ -9,7 +9,7 @@ export type SeederOptions = {
   userSessions?: UserSession[];
   sessions?: Session[];
   annotations?: Annotation[];
-  makers?: Marker[];
+  markers?: Marker[];
 };
 export interface SeederInterface<T> {
   seed: (options?: SeederOptions) => Promise<T[]>;
