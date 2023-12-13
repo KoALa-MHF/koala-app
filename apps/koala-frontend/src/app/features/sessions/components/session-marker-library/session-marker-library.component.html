@@ -11,6 +11,7 @@
   [(visible)]="showMarkerList"
   [modal]="true"
   [style]="{ width: '70vw' }"
+  [contentStyle]="{ height: '30vw' }"
 >
   <koala-marker-overview-list
     [markers]="markers"
@@ -25,9 +26,11 @@
     icon: true,
   }"
   ></koala-marker-overview-list>
-  <p-button
-    (click)="onMarkerAdd()"
-    [style]="{ 'margin-top': '2vw' }"
-    label="{{ 'SESSION.MAINTAIN.MARKER.LOAD_MARKER_DIALOG.ADD_MARKER' | translate }}"
-  ></p-button>
+  <ng-template pTemplate="footer">
+    <p-button
+      (click)="onMarkerAdd()"
+      [style]="{ 'margin-top': '2vw' }"
+      label="{{ 'SESSION.MAINTAIN.MARKER.LOAD_MARKER_DIALOG.ADD_MARKER' | translate }}"
+    ></p-button>
+  </ng-template>
 </p-dialog>
