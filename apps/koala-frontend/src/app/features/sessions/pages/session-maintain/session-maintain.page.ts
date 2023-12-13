@@ -2,9 +2,8 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } fr
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { MutationResult } from 'apollo-angular';
 import { MessageService } from 'primeng/api';
-import { MarkerType, SessionStatus, UpdateSessionMutation } from '../../../../graphql/generated/graphql';
+import { MarkerType, SessionStatus } from '../../../../graphql/generated/graphql';
 import { UserSession } from '../../types/user-session.entity';
 import {
   DEFAULT_ICON_COLOR,
@@ -22,7 +21,7 @@ import { datesStartEndValidator } from '../../../../shared/dates.validator';
 import { markerRangeValueValidator } from '../../../../shared/greater-than.validator';
 import { UserSessionService } from '../../services/user-session.service';
 import { TranslateService } from '@ngx-translate/core';
-import { Subscription, debounceTime, fromEvent } from 'rxjs';
+import { Subscription, debounceTime, fromEvent, pairwise } from 'rxjs';
 import { TabView } from 'primeng/tabview';
 import { DomHandler } from 'primeng/dom';
 
@@ -49,6 +48,9 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
 
   markerTypeValueChangeSubscription?: Subscription;
   windowResizeTabViewUpdateSubscription?: Subscription;
+  basicDataChangeSubscription?: Subscription;
+  detailsChangeSubscription?: Subscription;
+  datesChangeSubscription?: Subscription;
 
   constructor(
     private readonly sessionService: SessionsService,
@@ -64,10 +66,15 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
   ) {
     this.maintainSessionForm = this.formBuilder.group({
       basicData: this.formBuilder.group({
-        name: new FormControl<string>('', [
-          Validators.required,
-        ]),
-        description: new FormControl<string>(''),
+        name: new FormControl<string>('', {
+          updateOn: 'blur',
+          validators: [
+            Validators.required,
+          ],
+        }),
+        description: new FormControl<string>('', {
+          updateOn: 'blur',
+        }),
       }),
       dates: this.formBuilder.group(
         {
@@ -76,6 +83,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
           end: new FormControl<Date | null>(null),
         },
         {
+          updateOn: 'blur',
           validators: datesStartEndValidator,
         }
       ),
@@ -90,6 +98,100 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
         name: new FormControl<string>(''),
       }),
     });
+
+    this.basicDataChangeSubscription = this.maintainSessionForm
+      .get('basicData')
+      ?.valueChanges.pipe(pairwise())
+      .subscribe((valuesArray) => {
+        const newValues = valuesArray[1];
+        const oldValues = valuesArray[0];
+
+        if (
+          (!oldValues && this.maintainSessionForm.get('basicData')?.get('name')?.dirty === true) ||
+          (oldValues && newValues.name !== oldValues?.name)
+        ) {
+          this.onSave('name', newValues.name);
+        }
+
+        if (
+          (!oldValues && this.maintainSessionForm.get('basicData')?.get('description')?.dirty === true) ||
+          (oldValues && newValues.description !== oldValues.description)
+        ) {
+          this.onSave('description', newValues.description);
+        }
+      });
+
+    this.datesChangeSubscription = this.maintainSessionForm
+      .get('dates')
+      ?.valueChanges.pipe(pairwise())
+      .subscribe((valuesArray) => {
+        const newValues = valuesArray[1];
+        const oldValues = valuesArray[0];
+
+        if (
+          (!oldValues && this.maintainSessionForm.get('dates')?.get('status')?.dirty === true) ||
+          (oldValues && newValues.status !== oldValues.status)
+        ) {
+          this.onSave('status', newValues.status);
+        }
+
+        if (
+          (!oldValues && this.maintainSessionForm.get('dates')?.get('start')?.dirty === true) ||
+          (oldValues && newValues.start !== oldValues.start)
+        ) {
+          this.onSave('start', newValues.start);
+        }
+
+        if (
+          (!oldValues && this.maintainSessionForm.get('dates')?.get('end')?.dirty === true) ||
+          (oldValues && newValues.end !== oldValues.end)
+        ) {
+          this.onSave('end', newValues.end);
+        }
+      });
+
+    this.detailsChangeSubscription = this.maintainSessionForm
+      .get('details')
+      ?.valueChanges.pipe(pairwise())
+      .subscribe((valuesArray) => {
+        const newValues = valuesArray[1];
+        const oldValues = valuesArray[0];
+
+        if (
+          (!oldValues && this.maintainSessionForm.get('details')?.get('editable')?.dirty === true) ||
+          (oldValues && newValues.editable !== oldValues.editable)
+        ) {
+          this.onSave('editable', newValues.editable);
+        }
+
+        if (
+          (!oldValues && this.maintainSessionForm.get('details')?.get('enablePlayer')?.dirty === true) ||
+          (oldValues && newValues.enablePlayer !== oldValues.enablePlayer)
+        ) {
+          this.onSave('enablePlayer', newValues.enablePlayer);
+        }
+
+        if (
+          (!oldValues && this.maintainSessionForm.get('details')?.get('displaySampleSolution')?.dirty === true) ||
+          (oldValues && newValues.displaySampleSolution !== oldValues.displaySampleSolution)
+        ) {
+          this.onSave('displaySampleSolution', newValues.displaySampleSolution);
+        }
+
+        if (
+          (!oldValues && this.maintainSessionForm.get('details')?.get('enableLiveAnalysis')?.dirty === true) ||
+          (oldValues && newValues.enableLiveAnalysis !== oldValues.enableLiveAnalysis)
+        ) {
+          this.onSave('enableLiveAnalysis', newValues.enableLiveAnalysis);
+        }
+
+        if (
+          (!oldValues && this.maintainSessionForm.get('details')?.get('lockAnnotationDelete')?.dirty === true) ||
+          (oldValues && newValues.lockAnnotationDelete !== oldValues.lockAnnotationDelete)
+        ) {
+          this.onSave('lockAnnotationDelete', newValues.lockAnnotationDelete);
+        }
+      });
 
     this.maintainMarkerForm = this.formBuilder.group(
       {
@@ -141,6 +243,9 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy(): void {
     this.markerTypeValueChangeSubscription?.unsubscribe();
     this.windowResizeTabViewUpdateSubscription?.unsubscribe();
+    this.basicDataChangeSubscription?.unsubscribe();
+    this.detailsChangeSubscription?.unsubscribe();
+    this.datesChangeSubscription?.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -218,29 +323,12 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
   /*--------------------------
   Session Basic Data Handling
   ----------------------------*/
-  public onSave() {
+  public onSave(field: string, value: any) {
     this.sessionService
       .update(parseInt(this.session?.id || '0'), {
-        name: this.maintainSessionForm.value.basicData.name,
-        description: this.maintainSessionForm.value.basicData.description,
-        start: this.maintainSessionForm.value.dates.start,
-        end: this.maintainSessionForm.value.dates.end,
-        status: this.maintainSessionForm.value.dates.status,
-        editable: this.maintainSessionForm.value.details.editable,
-        enablePlayer: this.maintainSessionForm.value.details.enablePlayer,
-        displaySampleSolution: this.maintainSessionForm.value.details.displaySampleSolution,
-        enableLiveAnalysis: this.maintainSessionForm.value.details.enableLiveAnalysis,
-        lockAnnotationDelete: this.maintainSessionForm.value.details.lockAnnotationDelete,
+        [field]: value,
       })
       .subscribe({
-        next: (session: MutationResult<UpdateSessionMutation>) => {
-          this.messageService.add({
-            severity: 'success',
-            summary: this.translateService.instant('SESSION.MAINTAIN.SESSION_SETTINGS.SAVE_SUCCESS_MESSAGE_TITLE', {
-              sessionName: session.data?.updateSession.name,
-            }),
-          });
-        },
         error: () => {
           this.messageService.add({
             severity: 'error',
@@ -251,21 +339,30 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private setSessionGeneralDataForm(session: Session) {
-    this.maintainSessionForm.get('basicData')?.get('name')?.setValue(session.name);
+    this.maintainSessionForm.get('basicData')?.get('name')?.setValue(session.name, { emitEvent: false });
     this.maintainSessionForm.get('basicData')?.get('description')?.setValue(session.description);
-    this.maintainSessionForm.get('details')?.get('editable')?.setValue(session.editable);
-    this.maintainSessionForm.get('details')?.get('enablePlayer')?.setValue(session.enablePlayer);
-    this.maintainSessionForm.get('details')?.get('displaySampleSolution')?.setValue(session.displaySampleSolution);
-    this.maintainSessionForm.get('details')?.get('enableLiveAnalysis')?.setValue(session.enableLiveAnalysis);
-    this.maintainSessionForm.get('details')?.get('lockAnnotationDelete')?.setValue(session.lockAnnotationDelete);
-    this.maintainSessionForm.get('dates')?.get('status')?.setValue(session.status);
+    this.maintainSessionForm.get('details')?.get('editable')?.setValue(session.editable, { emitEvent: false });
+    this.maintainSessionForm.get('details')?.get('enablePlayer')?.setValue(session.enablePlayer, { emitEvent: false });
+    this.maintainSessionForm
+      .get('details')
+      ?.get('displaySampleSolution')
+      ?.setValue(session.displaySampleSolution, { emitEvent: false });
+    this.maintainSessionForm
+      .get('details')
+      ?.get('enableLiveAnalysis')
+      ?.setValue(session.enableLiveAnalysis, { emitEvent: false });
+    this.maintainSessionForm
+      .get('details')
+      ?.get('lockAnnotationDelete')
+      ?.setValue(session.lockAnnotationDelete, { emitEvent: false });
+    this.maintainSessionForm.get('dates')?.get('status')?.setValue(session.status, { emitEvent: false });
 
     if (session.start) {
-      this.maintainSessionForm.get('dates')?.get('start')?.setValue(new Date(session.start));
+      this.maintainSessionForm.get('dates')?.get('start')?.setValue(new Date(session.start), { emitEvent: false });
     }
 
     if (session.end) {
-      this.maintainSessionForm.get('dates')?.get('end')?.setValue(new Date(session.end));
+      this.maintainSessionForm.get('dates')?.get('end')?.setValue(new Date(session.end), { emitEvent: false });
     }
   }
 
@@ -289,12 +386,6 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
         }
       }
     });
-  }
-
-  public onCancel() {
-    this.router.navigate([
-      'sessions',
-    ]);
   }
 
   /*--------------------------
