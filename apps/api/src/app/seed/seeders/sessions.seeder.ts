@@ -21,27 +21,8 @@ export class SessionsSeeder implements SeederInterface<Session> {
       const userSession = new UserSession();
       userSession.ownerId = sessionData.owner.id;
 
-      const toolbar = new Toolbar();
-      toolbar.markers = [
-        {
-          markerId: 1,
-          visible: true,
-        },
-      ];
-      toolbar.markers.push({
-        markerId: 2,
-        visible: true,
-      });
-      toolbar.markers.push({
-        markerId: 3,
-        visible: true,
-      });
-
       const session = {
         ...sessionData,
-        toolbars: [
-          toolbar,
-        ],
         userSessions: [
           userSession,
         ],
