@@ -242,8 +242,14 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
           update.call((update) =>
             update
               .transition(trans)
+              .attr('x', (d: DataPoint) => this.getPositionXRatio() * (d.startTime / 1000))
+              .attr('y', (d: DataPoint) => this.getRectPositionY(d, posY, m))
+              .attr('cx', (d: DataPoint) => this.getPositionXRatio() * (d.startTime / 1000))
+              .attr('height', (d: DataPoint) => this.getRectHeight(d, m))
+              .attr('cy', posY)
               .attr('width', (d: DataPoint) => this.getRectWidth(d))
               .attr('visibility', m.visible ? 'visible' : 'hidden')
+              .attr('opacity', (d: DataPoint) => (d.transparent ? 0.3 : 1))
           ),
         (exit) => exit.call((update) => update.transition(trans).attr('width', 0).attr('height', 0).remove())
       );

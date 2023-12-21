@@ -134,9 +134,11 @@ export class SessionPage implements OnInit, OnDestroy {
         }
 
         if (session.playMode !== PlayMode.Running) {
-          this.loadAnnotations([
-            this.myUserSession,
-          ]);
+          if (session.playPosition == 0) {
+            this.loadAnnotations([
+              this.myUserSession,
+            ]);
+          }
         }
 
         if (session.liveSessionStart && session.playMode === PlayMode.Running) {
@@ -347,10 +349,6 @@ export class SessionPage implements OnInit, OnDestroy {
         });
       }
     }
-    this.appRef.tick();
-    setTimeout(() => {
-      window.dispatchEvent(new Event('resize'));
-    }, 10);
   }
 
   getAudioMetadata() {
@@ -458,12 +456,7 @@ export class SessionPage implements OnInit, OnDestroy {
           } else {
             this.endActiveSliders(this.currentAudioTime);
             this.sessionControlService.pauseSession().subscribe();
-            this.sessionService.setFocusSession(this.sessionId).subscribe((focusSession: Session) => {
-              const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
-              if (userSessions) {
-                //this.loadAnnotations(userSessions);
-              }
-            });
+            this.sessionService.setFocusSession(this.sessionId);
           }
         } catch (error) {
           this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
@@ -473,12 +466,7 @@ export class SessionPage implements OnInit, OnDestroy {
         try {
           this.endActiveSliders(this.currentAudioTime);
           this.sessionControlService.stopSession().subscribe();
-          this.sessionService.setFocusSession(this.sessionId).subscribe((focusSession: Session) => {
-            const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
-            if (userSessions) {
-              //this.loadAnnotations(userSessions);
-            }
-          });
+          this.sessionService.setFocusSession(this.sessionId);
           this.currentAudioTime = 0;
         } catch (error) {
           this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
