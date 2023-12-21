@@ -56,6 +56,7 @@
     "OVERVIEW": {
       "OWN_SESSIONS_TITLE": "Meine Sessions",
       "OTHER_SESSIONS_TITLE": "Andere Sessions",
+      "CLOSED_SESSIONS_TITLE": "Abgeschlossene Sessions",
       "TABLE_HEADER": {
         "NAME_COL_LABEL": "Name",
         "CREATION_DATE_COL_LABEL": "Erstellungsdatum",
