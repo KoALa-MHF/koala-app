@@ -37,6 +37,27 @@ const SUBSCRIBE_SESSION_UPDATED = gql`
           email
           displayName
         }
+        annotations {
+          id
+          start
+          end
+          value
+          media {
+            id
+          }
+          marker {
+            id
+            type
+            name
+            abbreviation
+            description
+            color
+            contentColor
+            icon
+            valueRangeFrom
+            valueRangeTo
+          }
+        }
       }
     }
   }

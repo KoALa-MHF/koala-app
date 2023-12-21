@@ -114,7 +114,6 @@ export class SessionPage implements OnInit, OnDestroy {
           .getFocusSession()
           ?.userSessions?.filter((userSession) => userSession.owner?.id === this.userID.toString())[0];
         this.setSidePanelFormData(session);
-
         this.loadAnnotations([
           this.myUserSession,
         ]);
@@ -345,6 +344,8 @@ export class SessionPage implements OnInit, OnDestroy {
         });
       }
     }
+    //this.appRef.tick();
+    //window.dispatchEvent(new Event('resize'));
   }
 
   getAudioMetadata() {
@@ -456,8 +457,6 @@ export class SessionPage implements OnInit, OnDestroy {
               const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
               if (userSessions) {
                 this.loadAnnotations(userSessions);
-                this.appRef.tick();
-                window.dispatchEvent(new Event('resize'));
               }
             });
           }
@@ -473,8 +472,6 @@ export class SessionPage implements OnInit, OnDestroy {
             const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
             if (userSessions) {
               this.loadAnnotations(userSessions);
-              this.appRef.tick();
-              window.dispatchEvent(new Event('resize'));
             }
           });
           this.currentAudioTime = 0;

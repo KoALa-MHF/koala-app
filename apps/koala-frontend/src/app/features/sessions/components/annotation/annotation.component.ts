@@ -129,6 +129,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
     const svgL = d3.select(`svg#${this.d3Labels}${this.d3ContainerID}`);
     const text = svgL.selectAll('text,foreignObject').data(this.markers);
     const gRow = svgC.selectAll('g').data(this.markers);
+    const notificationRow = svgC.selectAll('g').data(this.markers);
     const line = svgC.selectAll('line.marker').data(this.markers);
 
     text.style('visibility', (m: Marker) => (m.visible ? 'visible' : 'hidden'));
@@ -140,6 +141,11 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
       .enter()
       .append('g')
       .attr('id', (m: Marker) => 'row_' + m.id);
+    notificationRow.style('visibility', (m: Marker) => (m.visible ? 'visible' : 'hidden'));
+    notificationRow
+      .enter()
+      .append('g')
+      .attr('id', (m: Marker) => `row_${m.id}_notifications`);
     line.style('visibility', (m: Marker) => (m.visible ? 'visible' : 'hidden'));
     line
       .enter()
@@ -181,6 +187,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
     let i = 0;
     this.annotationData?.forEach((_, row) => {
       this.drawAnnotations(row, i, this.markers[i]);
+      this.drawNotifications(row, i, this.markers[i]);
       i++;
     });
   }
@@ -244,6 +251,61 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
     rowElem.raise();
   }
 
+  private drawNotifications(row: number, index: number, m: Marker) {
+    const svg = d3.select(`svg#${this.d3Container}${this.d3ContainerID}`);
+    const posY = this.getPositionY(index);
+    const rowElem = svg.select(`g#row_${row}_notifications`);
+    const getIcon = function (d: DataPoint) {
+      if (d.comments && d.comments!.length > 0) {
+        return 'pi pi-comment';
+      }
+      if (d.mediaId) {
+        return 'pi pi-volume-up';
+      }
+      return '';
+    };
+    const getXPosition = (d: DataPoint) => {
+      if (d.display == Display.Circle) {
+        return this.getPositionXRatio() * (d.startTime / 1000) - 2;
+      }
+      return this.getPositionXRatio() * (d.startTime / 1000) + this.getRectWidth(d) / 2;
+    };
+    const getYPosition = (d: DataPoint) => {
+      if (d.display == Display.Circle) {
+        return this.getRectPositionY(d, posY, m) - 15;
+      }
+      return this.getRectPositionY(d, posY, m) - 12;
+    };
+    rowElem
+      .selectAll<SVGRectElement, DataPoint>('*')
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      .data<DataPoint>(this.annotationData!.get(row)!)
+      .join(
+        (enter) =>
+          enter
+            .append('svg:foreignObject')
+            .attr('font-family', 'primeicons')
+            .attr('class', (d: DataPoint) => getIcon(d))
+            .attr('width', '12px')
+            .attr('height', '12px')
+            .style('font-size', '12px')
+            .style('color', (d: DataPoint) => d.color)
+            .attr('visibility', m.visible ? 'visible' : 'hidden')
+            .attr('y', (d: DataPoint) => getYPosition(d))
+            .attr('x', (d: DataPoint) => getXPosition(d))
+            .attr('id', (d: DataPoint) => `row_${row}_notification_${d.id}`),
+        (update) =>
+          update.call((update) =>
+            update
+              .attr('visibility', m.visible ? 'visible' : 'hidden')
+              .attr('y', (d: DataPoint) => getYPosition(d))
+              .attr('x', (d: DataPoint) => getXPosition(d))
+              .attr('class', (d: DataPoint) => getIcon(d))
+          ),
+        (exit) => exit.call((update) => update.attr('width', 0).attr('height', 0).remove())
+      );
+  }
+
   private drawTimeline() {
     const line = d3.select(`svg#${this.d3Container}${this.d3ContainerID}`).selectAll('line#timeline').data<number>([
       this.currentTime,
@@ -300,7 +362,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
       return 4;
     }
     if (m.valueRangeTo) {
-      this.sliderHeight = 30 / m.valueRangeTo;
+      this.sliderHeight = 25 / m.valueRangeTo;
     }
     return Math.abs(d.strength) * this.sliderHeight;
   }
@@ -313,18 +375,18 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
       return posY;
     }
     if (m.valueRangeTo) {
-      this.sliderHeight = 30 / m.valueRangeTo;
+      this.sliderHeight = 25 / m.valueRangeTo;
     }
     return posY + d.strength * this.sliderHeight * -1;
   }
 
-  private getRectWidth(d: DataPoint) {
+  private getRectWidth(d: DataPoint): number {
     if (d.display == Display.Circle) {
       return 0;
     }
     if (d.active) {
       const w = Math.abs(this.currentTime - d.startTime / 1000) * this.getPositionXRatio();
-      return w.toFixed(1);
+      return +w.toFixed(1);
     }
     return Math.abs(d.endTime / 1000 - d.startTime / 1000) * this.getPositionXRatio();
   }
@@ -335,6 +397,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
     svgC.selectAll('rect').remove();
     svgC.selectAll('circle').remove();
     svgC.selectAll('line.marker').remove();
+    svgC.selectAll('foreignobject').remove();
     svgL.selectAll('text').remove();
     this.drawTimeline();
     this.drawLines();
