@@ -94,7 +94,6 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
       if (changes['currentTime'] || changes['annotationData']) {
         this.drawTimeline();
         this.drawAnnotationsForAllRows();
-
         this.annotationData?.forEach((data) => {
           data.forEach((annotation) => {
             if (this.selectedDataPoint && annotation.id === this.selectedDataPoint.id) {

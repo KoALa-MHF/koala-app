@@ -114,9 +114,6 @@ export class SessionPage implements OnInit, OnDestroy {
           .getFocusSession()
           ?.userSessions?.filter((userSession) => userSession.owner?.id === this.userID.toString())[0];
         this.setSidePanelFormData(session);
-        this.loadAnnotations([
-          this.myUserSession,
-        ]);
 
         if (!session.isSessionOwner && session.isAudioSession && !session.enablePlayer) {
           this.mediaControlService.setPosition(session.playPosition || 0);
@@ -134,6 +131,12 @@ export class SessionPage implements OnInit, OnDestroy {
           }
         } else {
           this.audioTimerSubscription?.unsubscribe();
+        }
+
+        if (session.playMode !== PlayMode.Running) {
+          this.loadAnnotations([
+            this.myUserSession,
+          ]);
         }
 
         if (session.liveSessionStart && session.playMode === PlayMode.Running) {
@@ -344,8 +347,10 @@ export class SessionPage implements OnInit, OnDestroy {
         });
       }
     }
-    //this.appRef.tick();
-    //window.dispatchEvent(new Event('resize'));
+    this.appRef.tick();
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 10);
   }
 
   getAudioMetadata() {
@@ -456,7 +461,7 @@ export class SessionPage implements OnInit, OnDestroy {
             this.sessionService.setFocusSession(this.sessionId).subscribe((focusSession: Session) => {
               const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
               if (userSessions) {
-                this.loadAnnotations(userSessions);
+                //this.loadAnnotations(userSessions);
               }
             });
           }
@@ -471,7 +476,7 @@ export class SessionPage implements OnInit, OnDestroy {
           this.sessionService.setFocusSession(this.sessionId).subscribe((focusSession: Session) => {
             const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
             if (userSessions) {
-              this.loadAnnotations(userSessions);
+              //this.loadAnnotations(userSessions);
             }
           });
           this.currentAudioTime = 0;
