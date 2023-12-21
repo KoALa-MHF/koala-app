@@ -9,7 +9,7 @@ import { saveAs } from 'file-saver';
 import { MessageService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../../auth/services/auth.service';
-import { Role } from '../../../../graphql/generated/graphql';
+import { Role, SessionStatus } from '../../../../graphql/generated/graphql';
 import { ExportType } from '../../components/sessions-overview-table/sessions-overview-table.component';
 
 @Component({
@@ -31,6 +31,7 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
   selectedSession?: Session;
   userRole = Role.Guest;
   Role = Role;
+  SessionStatus = SessionStatus;
 
   constructor(
     private readonly sessionService: SessionsService,

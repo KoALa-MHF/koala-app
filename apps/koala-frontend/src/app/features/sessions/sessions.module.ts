@@ -62,6 +62,7 @@ import { SessionInfoPage } from './pages/session-info/session-info.page';
 import { SessionAnalysisPage } from './pages/session-analysis/session-analysis.page';
 import { VisibleFilterPipe } from './components/marker-toolbar/marker-visible.pipe';
 import { SessionOwnerPipe } from './pipes/session-owner.pipe';
+import { SessionStatusPipe } from './pipes/session-status.pipe';
 import { VolumeControlComponent } from './components/volume-control/volume-control.component';
 import { SessionTimerComponent } from './components/session-timer/session-timer.component';
 import { MarkersModule } from '../markers/markers.module';
@@ -101,6 +102,7 @@ import { OrderByDatePipe } from './pipes/order-by-date.pipe';
     SessionAnalysisPage,
     VisibleFilterPipe,
     SessionOwnerPipe,
+    SessionStatusPipe,
     TimePipe,
     OrderByDatePipe,
     VolumeControlComponent,
