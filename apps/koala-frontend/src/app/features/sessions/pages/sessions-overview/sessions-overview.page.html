@@ -8,7 +8,7 @@
         </span>
       </ng-template>
       <koala-sessions-overview-table
-        [sessions]="sessions | isSessionOwner:true"
+        [sessions]="sessions | isSessionOwner:true | sessionStatus:[SessionStatus.Open, SessionStatus.InPreparation]"
         (sessionDelete)="onSessionDelete($event)"
         (sessionCreate)="onSessionCreateRequested()"
         (sessionExport)="onSessionExport($event)"
@@ -24,7 +24,7 @@
       </ng-template>
 
       <koala-sessions-overview-table
-        [sessions]="sessions | isSessionOwner:false"
+        [sessions]="sessions | isSessionOwner:false | sessionStatus:[SessionStatus.Open, SessionStatus.InPreparation]"
         (sessionEnter)="onSessionEnter($event)"
         (sessionLeave)="onSessionLeave($event)"
         [supportedActions]="{createSession: false,
@@ -35,6 +35,26 @@
         updateSession: false,
         displaySessionCode: false,
         leaveSession: true}"
+      ></koala-sessions-overview-table>
+    </p-accordionTab>
+
+    <p-accordionTab>
+      <ng-template pTemplate="header">
+        <span> {{ 'SESSION.OVERVIEW.CLOSED_SESSIONS_TITLE' | translate }} </span>
+      </ng-template>
+
+      <koala-sessions-overview-table
+        [sessions]="sessions | isSessionOwner:true | sessionStatus:[SessionStatus.Closed]"
+        (sessionEnter)="onSessionEnter($event)"
+        (sessionLeave)="onSessionLeave($event)"
+        [supportedActions]="{createSession: false,
+          copySession: false,
+          enterSession: false,
+          deleteSession: false,
+          exportSession: false,
+          updateSession: false,
+          displaySessionCode: false,
+          leaveSession: false}"
       ></koala-sessions-overview-table>
     </p-accordionTab>
   </p-accordion>

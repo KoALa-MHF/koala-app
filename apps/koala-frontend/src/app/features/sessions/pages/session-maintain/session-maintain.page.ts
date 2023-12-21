@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { MessageService } from 'primeng/api';
 import { MarkerType, SessionStatus } from '../../../../graphql/generated/graphql';
@@ -21,7 +21,7 @@ import { datesStartEndValidator } from '../../../../shared/dates.validator';
 import { markerRangeValueValidator } from '../../../../shared/greater-than.validator';
 import { UserSessionService } from '../../services/user-session.service';
 import { TranslateService } from '@ngx-translate/core';
-import { Subscription, debounceTime, fromEvent, pairwise } from 'rxjs';
+import { Subscription, debounceTime, fromEvent, pairwise, startWith } from 'rxjs';
 import { TabView } from 'primeng/tabview';
 import { DomHandler } from 'primeng/dom';
 
@@ -57,7 +57,6 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
     private readonly toolbarService: ToolbarsService,
     private readonly mediaService: MediaService,
     private readonly markerService: MarkerService,
-    private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly formBuilder: FormBuilder,
     private readonly messageService: MessageService,
@@ -101,7 +100,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
 
     this.basicDataChangeSubscription = this.maintainSessionForm
       .get('basicData')
-      ?.valueChanges.pipe(pairwise())
+      ?.valueChanges.pipe(startWith(null), pairwise())
       .subscribe((valuesArray) => {
         const newValues = valuesArray[1];
         const oldValues = valuesArray[0];
@@ -123,7 +122,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
 
     this.datesChangeSubscription = this.maintainSessionForm
       .get('dates')
-      ?.valueChanges.pipe(pairwise())
+      ?.valueChanges.pipe(startWith(null), pairwise())
       .subscribe((valuesArray) => {
         const newValues = valuesArray[1];
         const oldValues = valuesArray[0];
@@ -152,7 +151,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
 
     this.detailsChangeSubscription = this.maintainSessionForm
       .get('details')
-      ?.valueChanges.pipe(pairwise())
+      ?.valueChanges.pipe(startWith(null), pairwise())
       .subscribe((valuesArray) => {
         const newValues = valuesArray[1];
         const oldValues = valuesArray[0];
