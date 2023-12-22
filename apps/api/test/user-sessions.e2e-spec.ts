@@ -363,8 +363,12 @@ describe('User Sessions (e2e)', () => {
     it('Authenticated owner of session can invite users to a session', async () => {
       const mailDev = await setupMailDevelopmentServer();
       mailDev.getAllEmail((errors, mailsBefore) => {
+        console.log('Inside Mail');
         expect(mailsBefore).toHaveLength(0);
+        console.log('Inside Mail Complete');
       });
+
+      console.log('After Mail');
 
       const { data } = await request(app.getHttpServer())
         .auth(`${UsersData.sessionOwner1.id}`, { type: 'bearer' })
@@ -372,7 +376,11 @@ describe('User Sessions (e2e)', () => {
         .variables(INVITE_USER_SESSION_VARIABLES)
         .expectNoErrors();
 
+      console.log('After Invite Mutation');
+
       expect(data).toMatchSnapshot();
+
+      console.log('After Invite Mutation Check');
 
       return new Promise((resolve) => {
         mailDev.on('new', function () {
