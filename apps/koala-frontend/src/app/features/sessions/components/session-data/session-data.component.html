@@ -12,30 +12,4 @@
   <div style="width: 50%">
     <koala-session-details [sessionDetailsForm]="sessionDetailsForm"></koala-session-details>
   </div>
-
-  <div style="display: flex; width: 100%; justify-content: flex-end; margin-right: 30px; margin-top: 50px; gap: 10px">
-    <button
-      pButton
-      pRipple
-      class="p-button-raised p-button-primary"
-      type="submit"
-      [disabled]="
-        !basicDataForm.valid ||
-        !sessionDatesForm.valid ||
-        !sessionDetailsForm.valid ||
-        (!basicDataForm.dirty && !sessionDatesForm.dirty && !sessionDetailsForm.dirty)
-      "
-      (click)="onSave()"
-      label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.SAVE_BTN' | translate }}"
-      data-cy="session-data-save-btn"
-    ></button>
-
-    <button
-      pButton
-      pRipple
-      (click)="onCancel()"
-      label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.CANCEL_BTN' | translate }}"
-      class="p-button-raised p-button-plain p-button-text"
-    ></button>
-  </div>
 </div>

@@ -24,6 +24,7 @@
     "ANALYSIS_NAV_BTN": "Auswertung",
     "INFO_NAV_BTN": "Sessioninfo",
     "SESSION_NOT_YET_STARTED_INFO": "Die Session ist noch nicht gestartet",
+    "SESSION_DOES_NOT_EXIST_INFO": "Die Session existiert nicht",
     "SESSION_CLOSED_INFO": "Die Session ist beendet",
     "SIDEBAR": {
       "SESSION_HEADER": "Freigaben",
@@ -56,6 +57,7 @@
     "OVERVIEW": {
       "OWN_SESSIONS_TITLE": "Meine Sessions",
       "OTHER_SESSIONS_TITLE": "Andere Sessions",
+      "CLOSED_SESSIONS_TITLE": "Abgeschlossene Sessions",
       "TABLE_HEADER": {
         "NAME_COL_LABEL": "Name",
         "CREATION_DATE_COL_LABEL": "Erstellungsdatum",

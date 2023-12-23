@@ -26,7 +26,11 @@ export class AccessTokenService {
   }
 
   public getAccessToken() {
-    return this.storedUser.accessToken;
+    if (this.isAccessTokenValid(this.storedUser.accessToken)) {
+      return this.storedUser.accessToken;
+    } else {
+      return null;
+    }
   }
 
   public getLoggedInUserId(): number {

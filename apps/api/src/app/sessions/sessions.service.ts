@@ -6,7 +6,7 @@ import { User } from '../users/entities/user.entity';
 
 import { CreateSessionInput } from './dto/create-session.input';
 import { UpdateSessionInput } from './dto/update-session.input';
-import { PlayMode, Session } from './entities/session.entity';
+import { PlayMode, Session, SessionStatus } from './entities/session.entity';
 import { SetPlayModeInput } from './dto/set-play-mode.input';
 import { SetPlayPositionInput } from './dto/set-play-position.input';
 import { UserSession } from '../user-sessions/entities/user-session.entity';
@@ -48,6 +48,7 @@ export class SessionsService {
           userSessions: {
             ownerId: user.id,
           },
+          status: SessionStatus.OPEN,
         },
       ],
     });

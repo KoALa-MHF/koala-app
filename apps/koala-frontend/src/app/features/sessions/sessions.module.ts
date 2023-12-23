@@ -62,6 +62,7 @@ import { SessionInfoPage } from './pages/session-info/session-info.page';
 import { SessionAnalysisPage } from './pages/session-analysis/session-analysis.page';
 import { VisibleFilterPipe } from './components/marker-toolbar/marker-visible.pipe';
 import { SessionOwnerPipe } from './pipes/session-owner.pipe';
+import { SessionStatusPipe } from './pipes/session-status.pipe';
 import { VolumeControlComponent } from './components/volume-control/volume-control.component';
 import { SessionTimerComponent } from './components/session-timer/session-timer.component';
 import { MarkersModule } from '../markers/markers.module';
@@ -73,6 +74,8 @@ import { AnnotationTextCommentComponent } from './components/annotation-text-com
 import { AnnotationAudioCommentComponent } from './components/annotation-audio-comment/annotation-audio-comment.component';
 import { AnnotationTextCommentListComponent } from './components/annotation-text-comment-list/annotation-text-comment-list.component';
 import { OrderByDatePipe } from './pipes/order-by-date.pipe';
+import { SessionNotFoundPage } from './pages/session-not-found/session-not-found.page';
+import { SessionNotActivePage } from './pages/session-not-active/session-not-active.page';
 
 @NgModule({
   declarations: [
@@ -101,6 +104,7 @@ import { OrderByDatePipe } from './pipes/order-by-date.pipe';
     SessionAnalysisPage,
     VisibleFilterPipe,
     SessionOwnerPipe,
+    SessionStatusPipe,
     TimePipe,
     OrderByDatePipe,
     VolumeControlComponent,
@@ -111,6 +115,8 @@ import { OrderByDatePipe } from './pipes/order-by-date.pipe';
     AnnotationTextCommentComponent,
     AnnotationAudioCommentComponent,
     AnnotationTextCommentListComponent,
+    SessionNotFoundPage,
+    SessionNotActivePage,
   ],
   imports: [
     SharedModule,

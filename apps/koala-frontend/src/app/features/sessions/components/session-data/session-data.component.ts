@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -9,23 +9,8 @@ import { FormGroup } from '@angular/forms';
     '../../session-common.scss',
   ],
 })
-export class SessionDataComponent implements OnInit {
+export class SessionDataComponent {
   @Input() basicDataForm!: FormGroup;
   @Input() sessionDatesForm!: FormGroup;
   @Input() sessionDetailsForm!: FormGroup;
-
-  @Output() sessionDataSave: EventEmitter<boolean> = new EventEmitter();
-  @Output() sessionDataCancel: EventEmitter<boolean> = new EventEmitter();
-
-  constructor() {}
-
-  ngOnInit(): void {}
-
-  public onSave() {
-    this.sessionDataSave.emit(true);
-  }
-
-  public onCancel() {
-    this.sessionDataCancel.emit(true);
-  }
 }
