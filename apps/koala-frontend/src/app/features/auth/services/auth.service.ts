@@ -24,9 +24,7 @@ export class AuthService {
     private readonly sessionService: SessionsService,
     private readonly accessTokenService: AccessTokenService
   ) {
-    this.authenticatedSubject.next(
-      this.accessTokenService.isAccessTokenValid(this.accessTokenService.getAccessToken())
-    );
+    this.authenticatedSubject.next(this.accessTokenService.getAccessToken() ? true : false);
   }
 
   public loginViaSaml(accessToken: string) {
@@ -94,8 +92,6 @@ export class AuthService {
   private handleLoginSuccess(accessToken: string) {
     this.accessTokenService.setAccessToken(accessToken);
 
-    this.authenticatedSubject.next(
-      this.accessTokenService.isAccessTokenValid(this.accessTokenService.getAccessToken())
-    );
+    this.authenticatedSubject.next(this.accessTokenService.getAccessToken() ? true : false);
   }
 }
