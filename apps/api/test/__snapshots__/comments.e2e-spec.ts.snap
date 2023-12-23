@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Comments (e2e) Query Annotation Comments Annotation Owner user should get list of all comments 1`] = `
+{
+  "annotation": {
+    "comments": [
+      {
+        "id": 1,
+        "owner": {
+          "email": "session-participant-1@koala-app.de",
+          "id": "3",
+        },
+        "text": "This is a comment from the Participant",
+      },
+      {
+        "id": 2,
+        "owner": {
+          "email": "session-owner-1@koala-app.de",
+          "id": "1",
+        },
+        "text": "This is a comment from the Owner",
+      },
+    ],
+    "id": 1,
+    "note": "",
+    "userSession": {
+      "id": 6,
+      "owner": {
+        "email": "session-participant-1@koala-app.de",
+        "id": "3",
+      },
+    },
+  },
+}
+`;
+
+exports[`Comments (e2e) Query Annotation Comments Session Owner user should get list of all comments 1`] = `
+{
+  "annotation": {
+    "comments": [
+      {
+        "id": 1,
+        "owner": {
+          "email": "session-participant-1@koala-app.de",
+          "id": "3",
+        },
+        "text": "This is a comment from the Participant",
+      },
+      {
+        "id": 2,
+        "owner": {
+          "email": "session-owner-1@koala-app.de",
+          "id": "1",
+        },
+        "text": "This is a comment from the Owner",
+      },
+    ],
+    "id": 1,
+    "note": "",
+    "userSession": {
+      "id": 6,
+      "owner": {
+        "email": "session-participant-1@koala-app.de",
+        "id": "3",
+      },
+    },
+  },
+}
+`;

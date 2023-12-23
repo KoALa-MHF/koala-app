@@ -81,6 +81,7 @@ export class AnnotationsResolver {
     Comment,
   ])
   comments(@Parent() annotation: Annotation, @CurrentUser() user: User) {
+    console.log('comments', user);
     return this.annotationsService.findAllCommments(annotation.id, user);
   }
 }
