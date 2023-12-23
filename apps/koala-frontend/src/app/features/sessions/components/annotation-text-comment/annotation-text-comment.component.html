@@ -11,15 +11,16 @@
     {{ comment.createdAt | date : 'short' }}
     <button
       pButton
+      *ngIf="comment.owner?.id === userId"
       label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.EDIT_BTN' | translate }}"
       class="p-button-link"
       (click)="onEdit()"
     ></button>
   </div>
-  <div *ngIf="displayMode === DisplayMode.DISPLAY" class="comment own">
+  <div *ngIf="displayMode === DisplayMode.DISPLAY" class="comment" [class.own]="comment.owner?.id === userId">
     <span>{{ comment.text }}</span>
-    <span
-      ><button
+    <span *ngIf="comment.owner?.id === userId">
+      <button
         pButton
         pRipple
         class="p-button-text remove-button"
