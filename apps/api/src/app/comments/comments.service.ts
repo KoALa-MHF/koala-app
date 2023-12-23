@@ -31,8 +31,6 @@ export class CommentsService {
   async findOne(id: number, user?: User) {
     const comment = await this.commentsRepository.findOneBy({ id });
 
-    console.log(id);
-    console.log(comment);
     if (!comment) {
       throw new NotFoundException();
     }
