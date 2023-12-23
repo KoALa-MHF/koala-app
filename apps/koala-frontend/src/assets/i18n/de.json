@@ -24,6 +24,7 @@
     "ANALYSIS_NAV_BTN": "Auswertung",
     "INFO_NAV_BTN": "Sessioninfo",
     "SESSION_NOT_YET_STARTED_INFO": "Die Session ist noch nicht gestartet",
+    "SESSION_DOES_NOT_EXIST_INFO": "Die Session existiert nicht",
     "SESSION_CLOSED_INFO": "Die Session ist beendet",
     "SIDEBAR": {
       "SESSION_HEADER": "Freigaben",

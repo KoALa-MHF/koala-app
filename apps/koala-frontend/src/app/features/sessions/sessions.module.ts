@@ -74,6 +74,8 @@ import { AnnotationTextCommentComponent } from './components/annotation-text-com
 import { AnnotationAudioCommentComponent } from './components/annotation-audio-comment/annotation-audio-comment.component';
 import { AnnotationTextCommentListComponent } from './components/annotation-text-comment-list/annotation-text-comment-list.component';
 import { OrderByDatePipe } from './pipes/order-by-date.pipe';
+import { SessionNotFoundPage } from './pages/session-not-found/session-not-found.page';
+import { SessionNotActivePage } from './pages/session-not-active/session-not-active.page';
 
 @NgModule({
   declarations: [
@@ -113,6 +115,8 @@ import { OrderByDatePipe } from './pipes/order-by-date.pipe';
     AnnotationTextCommentComponent,
     AnnotationAudioCommentComponent,
     AnnotationTextCommentListComponent,
+    SessionNotFoundPage,
+    SessionNotActivePage,
   ],
   imports: [
     SharedModule,
