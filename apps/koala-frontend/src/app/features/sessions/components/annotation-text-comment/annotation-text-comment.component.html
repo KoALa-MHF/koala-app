@@ -9,25 +9,15 @@
   ></textarea>
   <div *ngIf="displayMode === DisplayMode.DISPLAY" class="comment-info">
     {{ comment.createdAt | date : 'short' }}
-    <button
-      pButton
-      *ngIf="comment.owner?.id === userId"
-      label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.EDIT_BTN' | translate }}"
-      class="p-button-link"
-      (click)="onEdit()"
-    ></button>
   </div>
   <div *ngIf="displayMode === DisplayMode.DISPLAY" class="comment" [class.own]="comment.owner?.id === userId">
     <span>{{ comment.text }}</span>
     <span *ngIf="comment.owner?.id === userId">
-      <button
-        pButton
-        pRipple
-        class="p-button-text remove-button"
-        (click)="onDelete()"
-        icon="pi pi-times-circle"
-      ></button
-    ></span>
+      <i class="pi pi-pencil comment-button" (click)="onEdit()"></i>
+    </span>
+    <span *ngIf="comment.owner?.id === userId">
+      <i class="pi pi-times-circle comment-button" (click)="onDelete($event)"></i>
+    </span>
   </div>
 </div>
 

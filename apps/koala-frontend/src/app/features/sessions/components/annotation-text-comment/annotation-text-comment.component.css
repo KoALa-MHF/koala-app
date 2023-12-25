@@ -7,6 +7,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  gap: 10px;
 }
 
 .full-width {
@@ -18,12 +19,18 @@
   color: #fff;
 }
 
-.remove-button {
+.comment-button {
   color: darkblue;
+}
+
+.comment-button:hover {
+  color: white;
 }
 
 .comment-info {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: flex-start;
+  align-items: center;
+  min-width: 200px;
 }
