@@ -1,6 +1,8 @@
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Marker } from '../../types/marker.entity';
+import { TranslateService } from '@ngx-translate/core';
+import { ConfirmationService } from 'primeng/api';
 
 export enum ToolbarMode {
   Maintenance,
@@ -24,7 +26,11 @@ export class MarkerToolbarComponent {
   dragActive = false;
   draggedMarker: Marker | null = null;
   ToolbarMode = ToolbarMode;
-  showDeleteConfirm = false;
+
+  constructor(
+    private readonly translateService: TranslateService,
+    private readonly confirmationService: ConfirmationService
+  ) {}
 
   dropped(event: { previousIndex: number; currentIndex: number }) {
     const tempMarker = [
@@ -42,9 +48,20 @@ export class MarkerToolbarComponent {
     }
   }
 
-  onDeleteRequested(event: any) {
+  onDelete(event: any) {
     if (event.isPointerOverContainer) {
-      this.showDeleteConfirm = true;
+      this.confirmationService.confirm({
+        message: this.translateService.instant('SESSION.MAINTAIN.MARKER.DELETE_CONFIRM_DIALOG.EXPLANATION', {
+          markerName: this.draggedMarker?.name,
+        }),
+        header: this.translateService.instant('SESSION.MAINTAIN.MARKER.DELETE_CONFIRM_DIALOG.TITLE'),
+        icon: 'pi pi-exclamation-triangle',
+        rejectLabel: this.translateService.instant('SESSION.DELETE_CONFIRM_DIALOG.CANCEL_BTN'),
+        acceptLabel: this.translateService.instant('SESSION.DELETE_CONFIRM_DIALOG.CONFIRM_BTN'),
+        accept: () => {
+          this.removeMarker();
+        },
+      });
 
       this.dragActive = false;
     }
@@ -59,19 +76,10 @@ export class MarkerToolbarComponent {
     this.dragActive = false;
   }
 
-  onDelete() {
-    this.removeMarker();
-  }
-
-  onDeleteCancel() {
-    this.showDeleteConfirm = false;
-  }
-
   private removeMarker() {
     this.markers = this.markers.filter((marker) => marker.id !== this.draggedMarker?.id);
     this.sortChange.emit(this.markers);
 
     this.draggedMarker = null;
-    this.showDeleteConfirm = false;
   }
 }
