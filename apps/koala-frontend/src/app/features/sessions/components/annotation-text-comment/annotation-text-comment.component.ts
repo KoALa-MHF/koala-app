@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DisplayMode } from '../../types/display-mode.enum';
 import { Comment } from '../../types/comment.entity';
 import { AuthService } from '../../../auth/services/auth.service';
+import { ConfirmationService } from 'primeng/api';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'koala-annotation-text-comment',
@@ -36,7 +38,11 @@ export class AnnotationTextCommentComponent {
   displayMode = DisplayMode.DISPLAY;
   DisplayMode = DisplayMode;
 
-  constructor(private readonly authService: AuthService) {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly confirmationService: ConfirmationService,
+    private readonly translateService: TranslateService
+  ) {
     this.authService.me().subscribe({
       next: (data) => {
         this.userId = data.id;
@@ -63,7 +69,16 @@ export class AnnotationTextCommentComponent {
   }
 
   onDelete() {
-    this.delete.emit(this.comment.id);
+    this.confirmationService.confirm({
+      message: this.translateService.instant('SESSION.ANNOTATION.DETAIL_OVERLAY.DELETE_CONFIRM_DIALOG_MESSAGE'),
+      header: this.translateService.instant('SESSION.ANNOTATION.DETAIL_OVERLAY.DELETE_CONFIRM_DIALOG_TITLE'),
+      icon: 'pi pi-exclamation-triangle',
+      rejectLabel: this.translateService.instant('SESSION.ANNOTATION.DETAIL_OVERLAY.DELETE_CONFIRM_DIALOG_REJECT'),
+      acceptLabel: this.translateService.instant('SESSION.ANNOTATION.DETAIL_OVERLAY.DELETE_CONFIRM_DIALOG_CONFIRM'),
+      accept: () => {
+        this.delete.emit(this.comment.id);
+      },
+    });
   }
 
   onEdit() {

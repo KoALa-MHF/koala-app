@@ -25,6 +25,7 @@ import { AuthModule } from './features/auth/auth.module';
 import { LayoutComponent } from './layout.component';
 import { ToastModule } from 'primeng/toast';
 import { MessageService, ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { AuthInterceptor } from './features/auth/http-interceptors/auth-interceptor';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { OperationDefinitionNode } from 'graphql';
@@ -59,6 +60,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       },
     }),
     ToastModule,
+    ConfirmDialogModule,
   ],
   providers: [
     [
