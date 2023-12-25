@@ -1,3 +1,17 @@
 .full-width {
   width: 100%;
 }
+
+.box {
+  width: 20px;
+  height: 20px;
+  position: relative;
+}
+
+.own-comment-legend {
+  background-color: #248bf5;
+}
+
+.other-comment-legend {
+  background-color: #e5e5ea;
+}

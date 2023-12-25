@@ -24,6 +24,9 @@
         [currentTime]="currentAudioTime"
         [d3ContainerID]="userSession.id"
         [displayMode]="true"
+        (annotationTextCommentCreate)="onAnnotationTextCommentCreate($event)"
+        (annotationTextCommentUpdate)="onAnnotationTextCommentUpdate($event)"
+        (annotationTextCommentRemove)="onAnnotationTextCommentRemove($event)"
       ></koala-app-annotation>
     </div>
   </div>
