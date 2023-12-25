@@ -223,7 +223,9 @@
         "DELETE_CONFIRM_DIALOG_TITLE": "Kommentar Löschen",
         "DELETE_CONFIRM_DIALOG_MESSAGE": "Wollen Sie den ausgewählten Kommentar löschen?",
         "DELETE_CONFIRM_DIALOG_CONFIRM": "Löschen",
-        "DELETE_CONFIRM_DIALOG_REJECT": "Abbrechen"
+        "DELETE_CONFIRM_DIALOG_REJECT": "Abbrechen",
+        "OWN_COMMENT_LEGEND": "Ich",
+        "OTHER_COMMENT_LEGEND": "Sessioneigentümer"
       }
     }
   },

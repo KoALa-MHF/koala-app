@@ -18,8 +18,15 @@
   </div>
 </div>
 
-<div style="margin-top: 20px; margin-bottom: 30px" *ngIf="comments?.length ? true : false">
+<div
+  style="margin-top: 20px; margin-bottom: 30px; display: flex; align-items: center; gap: 10px"
+  *ngIf="comments?.length ? true : false"
+>
   <h3>{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.ALL_COMMENTS_TITLE' | translate }}</h3>
+  <div class="box own-comment-legend"></div>
+  {{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.OWN_COMMENT_LEGEND' | translate }}
+  <div class="box other-comment-legend"></div>
+  {{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.OTHER_COMMENT_LEGEND' | translate }}
 </div>
 
 <!--Existing Comments List-->

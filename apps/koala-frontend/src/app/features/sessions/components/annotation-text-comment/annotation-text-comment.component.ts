@@ -68,7 +68,7 @@ export class AnnotationTextCommentComponent {
     }
   }
 
-  onDelete(event: any) {
+  onDelete() {
     this.confirmationService.confirm({
       message: this.translateService.instant('SESSION.ANNOTATION.DETAIL_OVERLAY.DELETE_CONFIRM_DIALOG_MESSAGE'),
       header: this.translateService.instant('SESSION.ANNOTATION.DETAIL_OVERLAY.DELETE_CONFIRM_DIALOG_TITLE'),

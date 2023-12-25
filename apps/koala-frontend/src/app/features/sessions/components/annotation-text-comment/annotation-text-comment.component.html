@@ -16,7 +16,7 @@
       <i class="pi pi-pencil comment-button" (click)="onEdit()"></i>
     </span>
     <span *ngIf="comment.owner?.id === userId">
-      <i class="pi pi-times-circle comment-button" (click)="onDelete($event)"></i>
+      <i class="pi pi-times-circle comment-button" (click)="onDelete()"></i>
     </span>
   </div>
 </div>
