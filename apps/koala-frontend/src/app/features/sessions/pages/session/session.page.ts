@@ -119,6 +119,8 @@ export class SessionPage implements OnInit, OnDestroy {
           this.myUserSession,
         ]);
 
+        this.updateMediaControlSettings();
+
         if (!session.isSessionOwner && session.isAudioSession && !session.enablePlayer) {
           this.mediaControlService.setPosition(session.playPosition || 0);
           this.currentAudioTime = session.playPosition || 0;
@@ -193,6 +195,8 @@ export class SessionPage implements OnInit, OnDestroy {
         this.waveContainer = `waveContainer-${focusSession.id}`;
 
         await this.loadMediaData(focusSession.media.id);
+
+        this.updateMediaControlSettings();
       } else {
         this.isBusy = false;
       }
@@ -214,6 +218,13 @@ export class SessionPage implements OnInit, OnDestroy {
     this.toolbarUpdatedSubscription?.unsubscribe();
     this.timerSubscription?.unsubscribe();
     this.mediaControlService.destroy();
+  }
+
+  private updateMediaControlSettings() {
+    const focusSession = this.sessionService.getFocusSession();
+    if (focusSession && !focusSession.isSessionOwner) {
+      this.mediaControlService.setInteraction(focusSession.enablePlayer ? true : false);
+    }
   }
 
   private loadMediaData(id: string): Promise<void> {
