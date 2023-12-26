@@ -243,6 +243,13 @@ export class MediaControlService {
     }
   }
 
+  public setInteraction(enabled: boolean) {
+    const wavesurfer = this.getWave();
+    wavesurfer.setOptions({
+      interact: enabled,
+    });
+  }
+
   public addEventHandler(eventName: keyof WaveSurferEvents, handler: EventHandler) {
     try {
       const w = this.getWave();
