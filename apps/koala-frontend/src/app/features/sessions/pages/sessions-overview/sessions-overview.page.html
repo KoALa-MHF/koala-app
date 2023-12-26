@@ -110,13 +110,4 @@
   </ng-template>
 </p-dialog>
 
-<koala-delete-confirm-dialog
-  *ngIf="showDeleteConfirm"
-  [objectIdentifier]="selectedSessions"
-  title="{{ 'SESSION.DELETE_CONFIRM_DIALOG.TITLE' | translate }}"
-  confirmText="{{ selectedSessions?.length === 1 ? ( 'SESSION.DELETE_CONFIRM_DIALOG.EXPLANATION' | translate: { sessionName:  selectedSession?.name } ) : ( 'SESSION.DELETE_CONFIRM_DIALOG.EXPLANATION_MULTI_SESSION' | translate: { sessionCount:  selectedSessions?.length } ) }}"
-  (cancel)="onSessionDeleteCancel()"
-  (confirm)="onSessionDeleteConfirmed($event)"
-></koala-delete-confirm-dialog>
-
 <koala-session-qrcode [(visible)]="qrCodeVisible" [session]="selectedSession"></koala-session-qrcode>

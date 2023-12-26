@@ -6,7 +6,7 @@ import { SessionsService } from '../../services/sessions.service';
 import { Subscription } from 'rxjs';
 import { UserSessionService } from '../../services/user-session.service';
 import { saveAs } from 'file-saver';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../../auth/services/auth.service';
 import { Role, SessionStatus } from '../../../../graphql/generated/graphql';
@@ -26,7 +26,6 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
   routeSubscription: Subscription | undefined;
   createSessionModal = false;
   createSessionForm!: FormGroup;
-  showDeleteConfirm = false;
   selectedSessions?: Session[];
   selectedSession?: Session;
   userRole = Role.Guest;
@@ -40,7 +39,8 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
     private readonly userSessionService: UserSessionService,
     private readonly messageService: MessageService,
     private readonly authService: AuthService,
-    private readonly translateService: TranslateService
+    private readonly translateService: TranslateService,
+    private readonly confirmationService: ConfirmationService
   ) {}
 
   ngOnInit(): void {
@@ -147,22 +147,34 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
     this.selectedSessions = sessions;
     this.selectedSession = sessions[0];
 
-    this.showDeleteConfirm = true;
-  }
-
-  public onSessionDeleteCancel() {
-    this.selectedSessions = [];
-    this.showDeleteConfirm = false;
-  }
-
-  public onSessionDeleteConfirmed(sessions: Session[]) {
-    sessions.forEach((session) => {
-      this.sessionService.delete(parseInt(session.id)).subscribe({
-        next: () => {
-          this.showDeleteConfirm = false;
-          this.loadSessions();
-        },
-      });
+    const singleSessionMessage = this.translateService.instant('SESSION.DELETE_CONFIRM_DIALOG.EXPLANATION', {
+      sessionName: this.selectedSession?.name,
+    });
+    const multiSessionMessage = this.translateService.instant(
+      'SESSION.DELETE_CONFIRM_DIALOG.EXPLANATION_MULTI_SESSION',
+      { sessionCount: this.selectedSessions?.length }
+    );
+    this.confirmationService.confirm({
+      message: this.selectedSessions?.length === 1 ? singleSessionMessage : multiSessionMessage,
+      header: this.translateService.instant('SESSION.DELETE_CONFIRM_DIALOG.TITLE'),
+      icon: 'pi pi-exclamation-triangle',
+      rejectLabel: this.translateService.instant('SESSION.DELETE_CONFIRM_DIALOG.CANCEL_BTN'),
+      acceptLabel: this.translateService.instant('SESSION.DELETE_CONFIRM_DIALOG.CONFIRM_BTN'),
+      accept: () => {
+        if (this.selectedSessions) {
+          sessions.forEach((session) => {
+            this.sessionService.delete(parseInt(session.id)).subscribe({
+              next: () => {
+                this.loadSessions();
+              },
+            });
+          });
+          this.selectedSessions = [];
+        }
+      },
+      reject: () => {
+        this.selectedSessions = [];
+      },
     });
   }
 
