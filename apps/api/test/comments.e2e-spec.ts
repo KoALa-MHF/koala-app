@@ -36,7 +36,7 @@ const CREATE_COMMENT = gql`
   }
 `;
 
-const UPDADTE_COMMENT = gql`
+const UPDATE_COMMENT = gql`
   mutation UpdateComment($id: Int!, $updateCommentInput: UpdateCommentInput!) {
     updateComment(id: $id, updateCommentInput: $updateCommentInput) {
       text
@@ -214,7 +214,7 @@ describe('Comments (e2e)', () => {
   describe('Update Comment', () => {
     it('Not authenticated user should get "Unauthorized" error', async () => {
       const { errors } = await request(app.getHttpServer())
-        .mutate(UPDADTE_COMMENT)
+        .mutate(UPDATE_COMMENT)
         .variables(UPDATE_COMMENT_VARIABLES_SESSION_OWNER);
 
       expect(errors).toHaveLength(1);
@@ -224,7 +224,7 @@ describe('Comments (e2e)', () => {
     it('Session Owner can update its own comment', async () => {
       const { data } = await request(app.getHttpServer())
         .auth(`${UsersData.sessionOwner1.id}`, { type: 'bearer' })
-        .mutate(UPDADTE_COMMENT)
+        .mutate(UPDATE_COMMENT)
         .variables(UPDATE_COMMENT_VARIABLES_SESSION_OWNER)
         .expectNoErrors();
 
@@ -234,7 +234,7 @@ describe('Comments (e2e)', () => {
     it('Annoation Owner can update its own comment', async () => {
       const { data } = await request(app.getHttpServer())
         .auth(`${UsersData.sessionParticipant1.id}`, { type: 'bearer' })
-        .mutate(UPDADTE_COMMENT)
+        .mutate(UPDATE_COMMENT)
         .variables(UPDATE_COMMENT_VARIABLES_ANNOTATION_OWNER)
         .expectNoErrors();
 
@@ -244,17 +244,17 @@ describe('Comments (e2e)', () => {
     it('Annoation Owner cannot update session owners comment', async () => {
       const { errors } = await request(app.getHttpServer())
         .auth(`${UsersData.sessionParticipant1.id}`, { type: 'bearer' })
-        .mutate(UPDADTE_COMMENT)
+        .mutate(UPDATE_COMMENT)
         .variables(UPDATE_COMMENT_VARIABLES_SESSION_OWNER);
 
       expect(errors).toHaveLength(1);
       expect(errors[0].message).toBe('Forbidden');
     });
 
-    it('Session Owner cannot update session owners comment', async () => {
+    it('Session Owner cannot update annotation owners comment', async () => {
       const { errors } = await request(app.getHttpServer())
         .auth(`${UsersData.sessionOwner1.id}`, { type: 'bearer' })
-        .mutate(UPDADTE_COMMENT)
+        .mutate(UPDATE_COMMENT)
         .variables(UPDATE_COMMENT_VARIABLES_ANNOTATION_OWNER);
 
       expect(errors).toHaveLength(1);
@@ -264,7 +264,7 @@ describe('Comments (e2e)', () => {
     it('Authenticated user who is participant in the session but not the annotation owner should not be allowed to update a comment', async () => {
       const { errors } = await request(app.getHttpServer())
         .auth(`${UsersData.sessionParticipant2.id}`, { type: 'bearer' })
-        .mutate(UPDADTE_COMMENT)
+        .mutate(UPDATE_COMMENT)
         .variables(UPDATE_COMMENT_VARIABLES_ANNOTATION_OWNER);
 
       expect(errors).toHaveLength(1);
