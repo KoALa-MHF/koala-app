@@ -132,20 +132,6 @@ export class UserSessionsService {
     });
   }
 
-  async findOne(id: number, user?: User): Promise<UserSession> {
-    const userSession = await this.userSessionsRepository.findOneBy({ id });
-
-    if (!userSession) {
-      throw new NotFoundException();
-    }
-
-    if (user && userSession.ownerId !== user.id) {
-      throw new ForbiddenException();
-    }
-
-    return userSession;
-  }
-
   findOneByCode(code: string): Promise<UserSession> {
     return this.userSessionsRepository.findOneByOrFail({ code });
   }
@@ -161,7 +147,7 @@ export class UserSessionsService {
   }
 
   async remove(id: number, user: User) {
-    const userSession = await this.findOneWithSessionData(id);
+    const userSession = await this.findOne(id);
 
     if (userSession.session.ownerId !== user.id && userSession.ownerId !== user.id) {
       //only the session owner or the userSession owner are allowed to delete the user session
@@ -175,19 +161,14 @@ export class UserSessionsService {
     return userSession;
   }
 
-  private async findOneWithSessionData(id: number, user?: User) {
-    const userSession = await this.userSessionsRepository.findOne({
-      where: { id },
-      relations: {
-        session: true,
-      },
-    });
+  async findOne(id: number, user?: User): Promise<UserSession> {
+    const userSession = await this.userSessionsRepository.findOne({ where: { id }, relations: { session: true } });
 
     if (!userSession) {
       throw new NotFoundException();
     }
 
-    if (user && userSession.ownerId !== user.id) {
+    if (user && userSession.ownerId !== user.id && userSession.session.ownerId !== user.id) {
       throw new ForbiddenException();
     }
 

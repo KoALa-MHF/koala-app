@@ -36,7 +36,7 @@
           icon="pi pi-trash"
           class="p-button-text"
           attr.aria-label="{{ 'SESSION.MAINTAIN.PARTICIPANTS.ACC.DELETE_BTN_ACC' | translate }}"
-          (click)="onDeleteRequested(participant)"
+          (click)="onDelete(participant)"
         ></button>
       </td>
     </tr>
@@ -93,18 +93,3 @@
     ></button>
   </ng-template>
 </p-dialog>
-
-<koala-delete-confirm-dialog
-  *ngIf="showDeleteConfirm"
-  [objectIdentifier]="selectedParticipant"
-  title="{{ 'SESSION.MAINTAIN.PARTICIPANTS.DELETE_CONFIRM_DIALOG.TITLE' | translate }}"
-  confirmText="{{
-    selectedParticipant?.owner?.email
-      ? ('SESSION.MAINTAIN.PARTICIPANTS.DELETE_CONFIRM_DIALOG.EXPLANATION'
-        | translate : { email: selectedParticipant?.owner?.email })
-      : ('SESSION.MAINTAIN.PARTICIPANTS.DELETE_CONFIRM_DIALOG.EXPLANATION_NAME'
-        | translate : { participantName: selectedParticipant?.owner?.displayName })
-  }}"
-  (cancel)="onDeleteCancel()"
-  (confirm)="onDelete($event)"
-></koala-delete-confirm-dialog>

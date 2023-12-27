@@ -27,19 +27,8 @@
     class="delete-zone"
     [class]="dragActive ? 'delete-zone-visible' : 'delete-zone-hidden'"
     cdkDropList
-    (cdkDropListDropped)="onDeleteRequested($event)"
+    (cdkDropListDropped)="onDelete($event)"
   >
     <span class="pi pi-trash delete-zone__icon"></span>
   </div>
 </div>
-
-<koala-delete-confirm-dialog
-  *ngIf="showDeleteConfirm"
-  [objectIdentifier]="draggedMarker"
-  title="{{ 'SESSION.MAINTAIN.MARKER.DELETE_CONFIRM_DIALOG.TITLE' | translate }}"
-  confirmText="{{
-    'SESSION.MAINTAIN.MARKER.DELETE_CONFIRM_DIALOG.EXPLANATION' | translate: { markerName: draggedMarker?.name }
-  }}"
-  (cancel)="onDeleteCancel()"
-  (confirm)="onDelete()"
-></koala-delete-confirm-dialog>
