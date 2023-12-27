@@ -16,6 +16,8 @@ import { NavigationService } from '../../services/navigation.service';
 import { ToolbarsService } from '../../services/toolbars.service';
 import { UserSession } from '../../types/user-session.entity';
 import { CheckboxChangeEvent } from 'primeng/checkbox';
+import { CreateAnnotationTextComment } from '../../components/annotation-text-comment-list/annotation-text-comment-list.component';
+import { Comment } from '../../types/comment.entity';
 
 export interface AnnotationData {
   AnnotationData: Map<number, Array<DataPoint>>;
@@ -329,5 +331,38 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
         }
         break;
     }
+  }
+
+  onAnnotationTextCommentCreate(createComment: CreateAnnotationTextComment) {
+    this.annotationService.createComment(createComment.annotationId, createComment.text).subscribe({
+      next: () => {
+        this.sessionService.setFocusSession(parseInt(this.sessionService.getFocusSession()?.id || '0')).subscribe();
+      },
+      error: () => {
+        console.log('Error in Comment Creation');
+      },
+    });
+  }
+
+  onAnnotationTextCommentUpdate(comment: Comment) {
+    this.annotationService.updateComment(comment.id, comment.text).subscribe({
+      next: () => {
+        this.sessionService.setFocusSession(parseInt(this.sessionService.getFocusSession()?.id || '0')).subscribe();
+      },
+      error: () => {
+        console.log('Error in Comment Update');
+      },
+    });
+  }
+
+  onAnnotationTextCommentRemove(commentId: number) {
+    this.annotationService.removeComment(commentId).subscribe({
+      next: () => {
+        this.sessionService.setFocusSession(parseInt(this.sessionService.getFocusSession()?.id || '0')).subscribe();
+      },
+      error: () => {
+        console.log('Error in Comment Removal');
+      },
+    });
   }
 }

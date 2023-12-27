@@ -102,7 +102,7 @@ export class MediaControlService {
       this.addEventHandler('seeking', (newTime) => {
         if (this.sessionService.getFocusSession()?.isSessionOwner) {
           this.sessionService
-            .setPlayPosition(parseInt(this.sessionService.getFocusSession()?.id || '0'), w.getDuration() * newTime)
+            .setPlayPosition(parseInt(this.sessionService.getFocusSession()?.id || '0'), newTime)
             .subscribe();
         }
       });

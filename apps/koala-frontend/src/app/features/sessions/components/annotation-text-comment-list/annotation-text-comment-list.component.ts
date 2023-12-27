@@ -46,5 +46,6 @@ export class AnnotationTextCommentListComponent implements AfterViewInit {
 
   onTextCommentCreate() {
     this.create.emit(this.commentText);
+    this.commentText = '';
   }
 }
