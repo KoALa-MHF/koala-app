@@ -1,0 +1,51 @@
+import { MarkerType } from '../../markers/entities/marker.entity';
+import { UsersData } from './users.data';
+
+export const MarkersData = [
+  {
+    id: 1,
+    type: MarkerType.EVENT,
+    name: 'Marker 1',
+    abbreviation: 'M1',
+    description: 'Marker 1 Description',
+    color: '#000000',
+    icon: 'icon1',
+    owner: UsersData.sessionOwner1,
+    contentColor: '#FFFFFF',
+  },
+  {
+    id: 2,
+    type: MarkerType.RANGE,
+    name: 'Marker 2',
+    abbreviation: 'M2',
+    description: 'Marker 2 Description',
+    color: '#000000',
+    icon: 'icon2',
+    owner: UsersData.sessionOwner1,
+    contentColor: '#FFFFFF',
+  },
+  {
+    id: 3,
+    type: MarkerType.SLIDER,
+    name: 'Marker 3',
+    abbreviation: 'M3',
+    description: 'Marker 3 Description',
+    color: '#000000',
+    icon: 'icon3',
+    rangeFrom: -5,
+    rangeTo: 5,
+    owner: UsersData.sessionOwner1,
+    contentColor: '#FFFFFF',
+  },
+  {
+    id: 4,
+    type: MarkerType.EVENT,
+    name: 'Marker 4',
+    abbreviation: 'M4',
+    description: 'Marker 4 Description',
+    color: '#000000',
+    icon: 'icon4',
+    owner: UsersData.sessionOwner2,
+    contentColor: '#FFFFFF',
+  },
+];

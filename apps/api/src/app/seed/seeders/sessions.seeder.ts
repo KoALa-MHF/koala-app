@@ -23,9 +23,6 @@ export class SessionsSeeder implements SeederInterface<Session> {
 
       const session = {
         ...sessionData,
-        toolbars: [
-          new Toolbar(),
-        ],
         userSessions: [
           userSession,
         ],
