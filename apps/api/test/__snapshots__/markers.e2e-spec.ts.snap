@@ -1,0 +1,188 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Markers (e2e) Create Markers SAML Authenticated user can create a new marker 1`] = `
+{
+  "createMarker": {
+    "color": "#000000",
+    "description": "Event Marker Description",
+    "icon": "icon1",
+    "id": 5,
+    "name": "Event Marker",
+    "type": "EVENT",
+  },
+}
+`;
+
+exports[`Markers (e2e) Query Markers Participating user should get list of all markers 1`] = `
+{
+  "markers": [
+    {
+      "color": "#000000",
+      "description": "Marker 1 Description",
+      "icon": "icon1",
+      "id": 1,
+      "name": "Marker 1",
+      "type": "EVENT",
+    },
+    {
+      "color": "#000000",
+      "description": "Marker 2 Description",
+      "icon": "icon2",
+      "id": 2,
+      "name": "Marker 2",
+      "type": "RANGE",
+    },
+    {
+      "color": "#000000",
+      "description": "Marker 3 Description",
+      "icon": "icon3",
+      "id": 3,
+      "name": "Marker 3",
+      "type": "SLIDER",
+    },
+    {
+      "color": "#000000",
+      "description": "Marker 4 Description",
+      "icon": "icon4",
+      "id": 4,
+      "name": "Marker 4",
+      "type": "EVENT",
+    },
+  ],
+}
+`;
+
+exports[`Markers (e2e) Query Markers Session owner should get list of all markers, even of markers of other owners 1`] = `
+{
+  "markers": [
+    {
+      "color": "#000000",
+      "description": "Marker 1 Description",
+      "icon": "icon1",
+      "id": 1,
+      "name": "Marker 1",
+      "type": "EVENT",
+    },
+    {
+      "color": "#000000",
+      "description": "Marker 2 Description",
+      "icon": "icon2",
+      "id": 2,
+      "name": "Marker 2",
+      "type": "RANGE",
+    },
+    {
+      "color": "#000000",
+      "description": "Marker 3 Description",
+      "icon": "icon3",
+      "id": 3,
+      "name": "Marker 3",
+      "type": "SLIDER",
+    },
+    {
+      "color": "#000000",
+      "description": "Marker 4 Description",
+      "icon": "icon4",
+      "id": 4,
+      "name": "Marker 4",
+      "type": "EVENT",
+    },
+  ],
+}
+`;
+
+exports[`Markers (e2e) Remove Marker Marker Owner can remove a marker 1`] = `
+{
+  "markers": [
+    {
+      "color": "#000000",
+      "description": "Marker 1 Description",
+      "icon": "icon1",
+      "id": 1,
+      "name": "Marker 1",
+      "type": "EVENT",
+    },
+    {
+      "color": "#000000",
+      "description": "Marker 2 Description",
+      "icon": "icon2",
+      "id": 2,
+      "name": "Marker 2",
+      "type": "RANGE",
+    },
+    {
+      "color": "#000000",
+      "description": "Marker 3 Description",
+      "icon": "icon3",
+      "id": 3,
+      "name": "Marker 3",
+      "type": "SLIDER",
+    },
+    {
+      "color": "#000000",
+      "description": "Marker 4 Description",
+      "icon": "icon4",
+      "id": 4,
+      "name": "Marker 4",
+      "type": "EVENT",
+    },
+  ],
+}
+`;
+
+exports[`Markers (e2e) Remove Marker Marker Owner can remove a marker 2`] = `
+{
+  "removeMarker": {
+    "color": "#000000",
+    "description": "Marker 2 Description",
+    "icon": "icon2",
+    "id": 2,
+    "name": "Marker 2",
+    "type": "RANGE",
+  },
+}
+`;
+
+exports[`Markers (e2e) Remove Marker Marker Owner can remove a marker 3`] = `
+{
+  "markers": [
+    {
+      "color": "#000000",
+      "description": "Marker 1 Description",
+      "icon": "icon1",
+      "id": 1,
+      "name": "Marker 1",
+      "type": "EVENT",
+    },
+    {
+      "color": "#000000",
+      "description": "Marker 3 Description",
+      "icon": "icon3",
+      "id": 3,
+      "name": "Marker 3",
+      "type": "SLIDER",
+    },
+    {
+      "color": "#000000",
+      "description": "Marker 4 Description",
+      "icon": "icon4",
+      "id": 4,
+      "name": "Marker 4",
+      "type": "EVENT",
+    },
+  ],
+}
+`;
+
+exports[`Markers (e2e) Update Marker Marker Owner can update a marker 1`] = `
+{
+  "updateMarker": {
+    "color": "#FFFFFF",
+    "description": "Event Marker Description Updated",
+    "icon": "icon2",
+    "id": 1,
+    "name": "Event Marker Updated",
+    "type": "EVENT",
+  },
+}
+`;
