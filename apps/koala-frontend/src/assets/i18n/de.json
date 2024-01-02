@@ -219,7 +219,13 @@
         "ANNOTATION_TIME_LABEL": "Zeit:",
         "AUDIO_COMMENT_TAB_TITLE": "Audio",
         "TEXT_COMMENT_TAB_TITLE": "Text",
-        "ALL_COMMENTS_TITLE": "Alle Kommentare"
+        "ALL_COMMENTS_TITLE": "Alle Kommentare",
+        "DELETE_CONFIRM_DIALOG_TITLE": "Kommentar Löschen",
+        "DELETE_CONFIRM_DIALOG_MESSAGE": "Wollen Sie den ausgewählten Kommentar löschen?",
+        "DELETE_CONFIRM_DIALOG_CONFIRM": "Löschen",
+        "DELETE_CONFIRM_DIALOG_REJECT": "Abbrechen",
+        "OWN_COMMENT_LEGEND": "Ich",
+        "OTHER_COMMENT_LEGEND": "Sessioneigentümer"
       }
     }
   },

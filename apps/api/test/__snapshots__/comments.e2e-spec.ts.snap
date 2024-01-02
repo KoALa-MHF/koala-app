@@ -1,0 +1,321 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Comments (e2e) Create Comment Annotation owner can create a new comment 1`] = `
+{
+  "createComment": {
+    "text": "New comment from the annoation owner",
+  },
+}
+`;
+
+exports[`Comments (e2e) Create Comment Annotation owner can create a new comment 2`] = `
+{
+  "annotation": {
+    "comments": [
+      {
+        "id": 1,
+        "owner": {
+          "email": "session-participant-1@koala-app.de",
+          "id": "3",
+        },
+        "text": "This is a comment from the Participant",
+      },
+      {
+        "id": 2,
+        "owner": {
+          "email": "session-owner-1@koala-app.de",
+          "id": "1",
+        },
+        "text": "This is a comment from the Owner",
+      },
+      {
+        "id": 3,
+        "owner": {
+          "email": "session-participant-1@koala-app.de",
+          "id": "3",
+        },
+        "text": "New comment from the annoation owner",
+      },
+    ],
+    "id": 1,
+    "note": "",
+    "userSession": {
+      "id": 6,
+      "owner": {
+        "email": "session-participant-1@koala-app.de",
+        "id": "3",
+      },
+    },
+  },
+}
+`;
+
+exports[`Comments (e2e) Create Comment Session owner can create a new comment 1`] = `
+{
+  "annotation": {
+    "comments": [
+      {
+        "id": 1,
+        "owner": {
+          "email": "session-participant-1@koala-app.de",
+          "id": "3",
+        },
+        "text": "This is a comment from the Participant",
+      },
+      {
+        "id": 2,
+        "owner": {
+          "email": "session-owner-1@koala-app.de",
+          "id": "1",
+        },
+        "text": "This is a comment from the Owner",
+      },
+      {
+        "id": 3,
+        "owner": {
+          "email": "session-owner-1@koala-app.de",
+          "id": "1",
+        },
+        "text": "New comment from a session owner",
+      },
+    ],
+    "id": 1,
+    "note": "",
+    "userSession": {
+      "id": 6,
+      "owner": {
+        "email": "session-participant-1@koala-app.de",
+        "id": "3",
+      },
+    },
+  },
+}
+`;
+
+exports[`Comments (e2e) Create Comment Session owner can create a new comment 2`] = `
+{
+  "createComment": {
+    "text": "New comment from a session owner",
+  },
+}
+`;
+
+exports[`Comments (e2e) Query Annotation Comments Annotation Owner user should get list of all comments 1`] = `
+{
+  "annotation": {
+    "comments": [
+      {
+        "id": 1,
+        "owner": {
+          "email": "session-participant-1@koala-app.de",
+          "id": "3",
+        },
+        "text": "This is a comment from the Participant",
+      },
+      {
+        "id": 2,
+        "owner": {
+          "email": "session-owner-1@koala-app.de",
+          "id": "1",
+        },
+        "text": "This is a comment from the Owner",
+      },
+    ],
+    "id": 1,
+    "note": "",
+    "userSession": {
+      "id": 6,
+      "owner": {
+        "email": "session-participant-1@koala-app.de",
+        "id": "3",
+      },
+    },
+  },
+}
+`;
+
+exports[`Comments (e2e) Query Annotation Comments Session Owner user should get list of all comments 1`] = `
+{
+  "annotation": {
+    "comments": [
+      {
+        "id": 1,
+        "owner": {
+          "email": "session-participant-1@koala-app.de",
+          "id": "3",
+        },
+        "text": "This is a comment from the Participant",
+      },
+      {
+        "id": 2,
+        "owner": {
+          "email": "session-owner-1@koala-app.de",
+          "id": "1",
+        },
+        "text": "This is a comment from the Owner",
+      },
+    ],
+    "id": 1,
+    "note": "",
+    "userSession": {
+      "id": 6,
+      "owner": {
+        "email": "session-participant-1@koala-app.de",
+        "id": "3",
+      },
+    },
+  },
+}
+`;
+
+exports[`Comments (e2e) Remove Comment Annotation Owner can remove own comment 1`] = `
+{
+  "annotation": {
+    "comments": [
+      {
+        "id": 1,
+        "owner": {
+          "email": "session-participant-1@koala-app.de",
+          "id": "3",
+        },
+        "text": "This is a comment from the Participant",
+      },
+      {
+        "id": 2,
+        "owner": {
+          "email": "session-owner-1@koala-app.de",
+          "id": "1",
+        },
+        "text": "This is a comment from the Owner",
+      },
+    ],
+    "id": 1,
+    "note": "",
+    "userSession": {
+      "id": 6,
+      "owner": {
+        "email": "session-participant-1@koala-app.de",
+        "id": "3",
+      },
+    },
+  },
+}
+`;
+
+exports[`Comments (e2e) Remove Comment Annotation Owner can remove own comment 2`] = `
+{
+  "removeComment": {
+    "id": 1,
+  },
+}
+`;
+
+exports[`Comments (e2e) Remove Comment Annotation Owner can remove own comment 3`] = `
+{
+  "annotation": {
+    "comments": [
+      {
+        "id": 2,
+        "owner": {
+          "email": "session-owner-1@koala-app.de",
+          "id": "1",
+        },
+        "text": "This is a comment from the Owner",
+      },
+    ],
+    "id": 1,
+    "note": "",
+    "userSession": {
+      "id": 6,
+      "owner": {
+        "email": "session-participant-1@koala-app.de",
+        "id": "3",
+      },
+    },
+  },
+}
+`;
+
+exports[`Comments (e2e) Remove Comment Session Owner can remove own comment 1`] = `
+{
+  "annotation": {
+    "comments": [
+      {
+        "id": 1,
+        "owner": {
+          "email": "session-participant-1@koala-app.de",
+          "id": "3",
+        },
+        "text": "This is a comment from the Participant",
+      },
+      {
+        "id": 2,
+        "owner": {
+          "email": "session-owner-1@koala-app.de",
+          "id": "1",
+        },
+        "text": "This is a comment from the Owner",
+      },
+    ],
+    "id": 1,
+    "note": "",
+    "userSession": {
+      "id": 6,
+      "owner": {
+        "email": "session-participant-1@koala-app.de",
+        "id": "3",
+      },
+    },
+  },
+}
+`;
+
+exports[`Comments (e2e) Remove Comment Session Owner can remove own comment 2`] = `
+{
+  "removeComment": {
+    "id": 2,
+  },
+}
+`;
+
+exports[`Comments (e2e) Remove Comment Session Owner can remove own comment 3`] = `
+{
+  "annotation": {
+    "comments": [
+      {
+        "id": 1,
+        "owner": {
+          "email": "session-participant-1@koala-app.de",
+          "id": "3",
+        },
+        "text": "This is a comment from the Participant",
+      },
+    ],
+    "id": 1,
+    "note": "",
+    "userSession": {
+      "id": 6,
+      "owner": {
+        "email": "session-participant-1@koala-app.de",
+        "id": "3",
+      },
+    },
+  },
+}
+`;
+
+exports[`Comments (e2e) Update Comment Annoation Owner can update its own comment 1`] = `
+{
+  "updateComment": {
+    "text": "Updated comment annotation owner",
+  },
+}
+`;
+
+exports[`Comments (e2e) Update Comment Session Owner can update its own comment 1`] = `
+{
+  "updateComment": {
+    "text": "Updated comment session owner",
+  },
+}
+`;

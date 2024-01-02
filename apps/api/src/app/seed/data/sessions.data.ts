@@ -1,12 +1,33 @@
 import { SessionStatus } from '../../sessions/entities/session.entity';
 import { UsersData } from './users.data';
 
+const toolbar = {
+  markers: [
+    {
+      markerId: 1,
+      visible: true,
+    },
+    {
+      markerId: 2,
+      visible: true,
+    },
+    {
+      markerId: 3,
+      visible: true,
+    },
+  ],
+};
+
 export const SessionsData = [
   {
     id: 1,
     name: 'Session 1',
     owner: UsersData.sessionOwner1,
     status: SessionStatus.OPEN,
+    toolbars: [
+      toolbar,
+    ],
+
     media: {
       id: 1,
     },
@@ -16,6 +37,9 @@ export const SessionsData = [
     name: 'Session 2',
     owner: UsersData.sessionOwner2,
     status: SessionStatus.CLOSED,
+    toolbars: [
+      toolbar,
+    ],
   },
   {
     id: 3,
@@ -24,6 +48,9 @@ export const SessionsData = [
     status: SessionStatus.IN_PREPARATION,
     start: Date.now(),
     end: Date.now() + 1000000,
+    toolbars: [
+      toolbar,
+    ],
   },
   {
     id: 4,
@@ -32,11 +59,17 @@ export const SessionsData = [
     status: SessionStatus.OPEN,
     start: Date.now() - 2000,
     end: Date.now() - 1000,
+    toolbars: [
+      toolbar,
+    ],
   },
   {
     id: 5,
     name: 'Session 5',
     owner: UsersData.sessionOwner1,
     status: SessionStatus.ARCHIVED,
+    toolbars: [
+      toolbar,
+    ],
   },
 ];

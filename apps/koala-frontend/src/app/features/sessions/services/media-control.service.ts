@@ -102,7 +102,7 @@ export class MediaControlService {
       this.addEventHandler('seeking', (newTime) => {
         if (this.sessionService.getFocusSession()?.isSessionOwner) {
           this.sessionService
-            .setPlayPosition(parseInt(this.sessionService.getFocusSession()?.id || '0'), w.getDuration() * newTime)
+            .setPlayPosition(parseInt(this.sessionService.getFocusSession()?.id || '0'), newTime)
             .subscribe();
         }
       });
@@ -241,6 +241,13 @@ export class MediaControlService {
       console.error(error);
       throw new Error(`cannot mute/unmute audio file: ${error}`);
     }
+  }
+
+  public setInteraction(enabled: boolean) {
+    const wavesurfer = this.getWave();
+    wavesurfer.setOptions({
+      interact: enabled,
+    });
   }
 
   public addEventHandler(eventName: keyof WaveSurferEvents, handler: EventHandler) {

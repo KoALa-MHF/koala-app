@@ -53,7 +53,6 @@ import { SessionParticipantsOverviewComponent } from './components/session-parti
 import { SessionParticipantsInvitationComponent } from './components/session-participants-invitation/session-participants-invitation.component';
 import { AnnotationService } from './services/annotation.service';
 import { MarkerToolbarComponent } from './components/marker-toolbar/marker-toolbar.component';
-import { DeleteConfirmDialogComponent } from './components/delete-confirm-dialog/delete-confirm-dialog.component';
 import { UserSessionService } from './services/user-session.service';
 import { AnnotationComponent } from './components/annotation/annotation.component';
 import { SessionQrcodeComponent } from './components/session-qrcode/session-qrcode.component';
@@ -96,7 +95,6 @@ import { SessionNotActivePage } from './pages/session-not-active/session-not-act
     SessionParticipantsOverviewComponent,
     SessionParticipantsInvitationComponent,
     MarkerToolbarComponent,
-    DeleteConfirmDialogComponent,
     AnnotationComponent,
     SessionQrcodeComponent,
     SessionMarkerLibraryComponent,

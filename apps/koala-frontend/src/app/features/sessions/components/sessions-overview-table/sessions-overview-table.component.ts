@@ -62,6 +62,7 @@ export class SessionsOverviewTableComponent {
 
   public onSessionDelete() {
     this.sessionDelete.emit(this.selectedSessions);
+    this.selectedSessions = [];
   }
 
   public onSessionCreate() {

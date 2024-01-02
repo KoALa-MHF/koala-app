@@ -3,6 +3,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { UserSession } from '../../types/user-session.entity';
 import { SessionsService } from '../../services/sessions.service';
 import { Session } from '../../types/session.entity';
+import { ConfirmationService } from 'primeng/api';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'koala-session-participants-overview',
@@ -19,8 +21,6 @@ export class SessionParticipantsOverviewComponent implements OnInit, OnDestroy {
   @Output() participantAdd = new EventEmitter<UserSession>();
 
   addParticipantModal = false;
-  showDeleteConfirm = false;
-  selectedParticipant?: UserSession;
 
   participantForm!: FormGroup;
   sessionOwnerId = '0';
@@ -29,7 +29,12 @@ export class SessionParticipantsOverviewComponent implements OnInit, OnDestroy {
     (session: Session) => (this.sessionOwnerId = session.owner?.id || '0')
   );
 
-  constructor(private readonly formBuilder: FormBuilder, private readonly sessionService: SessionsService) {}
+  constructor(
+    private readonly formBuilder: FormBuilder,
+    private readonly sessionService: SessionsService,
+    private readonly confirmationService: ConfirmationService,
+    private readonly translateService: TranslateService
+  ) {}
 
   ngOnInit(): void {
     this.participantForm = this.formBuilder.group({
@@ -43,15 +48,23 @@ export class SessionParticipantsOverviewComponent implements OnInit, OnDestroy {
     this.focusSession$.unsubscribe();
   }
 
-  onDeleteRequested(particpant: UserSession) {
-    this.selectedParticipant = particpant;
-    this.showDeleteConfirm = true;
-  }
-
   onDelete(particpant: UserSession) {
-    this.participantRemove.emit(particpant);
-    delete this.selectedParticipant;
-    this.showDeleteConfirm = false;
+    this.confirmationService.confirm({
+      message: particpant?.owner?.email
+        ? this.translateService.instant('SESSION.MAINTAIN.PARTICIPANTS.DELETE_CONFIRM_DIALOG.EXPLANATION', {
+            email: particpant?.owner?.email,
+          })
+        : this.translateService.instant('SESSION.MAINTAIN.PARTICIPANTS.DELETE_CONFIRM_DIALOG.EXPLANATION_NAME', {
+            participantName: particpant?.owner?.displayName,
+          }),
+      header: this.translateService.instant('SESSION.MAINTAIN.PARTICIPANTS.DELETE_CONFIRM_DIALOG.TITLE'),
+      icon: 'pi pi-exclamation-triangle',
+      rejectLabel: this.translateService.instant('SESSION.DELETE_CONFIRM_DIALOG.CANCEL_BTN'),
+      acceptLabel: this.translateService.instant('SESSION.DELETE_CONFIRM_DIALOG.CONFIRM_BTN'),
+      accept: () => {
+        this.participantRemove.emit(particpant);
+      },
+    });
   }
 
   onAddParticipantRequested() {
@@ -73,10 +86,5 @@ export class SessionParticipantsOverviewComponent implements OnInit, OnDestroy {
   onCancel() {
     this.participantForm.reset();
     this.addParticipantModal = false;
-  }
-
-  onDeleteCancel() {
-    delete this.selectedParticipant;
-    this.showDeleteConfirm = false;
   }
 }
