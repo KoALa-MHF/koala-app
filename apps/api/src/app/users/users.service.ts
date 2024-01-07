@@ -29,7 +29,7 @@ export class UsersService {
     if (!displayName) {
       displayName = `${profile.givenName} ${profile.sn}`;
     }
-    const samlId = profile.uid as string;
+    const samlId = profile.uid ? (profile.uid as string) : profile.nameID;
     let email = '';
 
     if (Array.isArray(profile.mail)) {
