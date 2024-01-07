@@ -18,7 +18,8 @@ export class UsersService {
   }
 
   findByEmail(email: string) {
-    return email ? this.usersRespository.findOneBy({ email }) : null;
+    const lowerCaseEmail = email.toLowerCase();
+    return lowerCaseEmail ? this.usersRespository.findOneBy({ email: lowerCaseEmail }) : null;
   }
 
   findBySamlId(samlId: string) {

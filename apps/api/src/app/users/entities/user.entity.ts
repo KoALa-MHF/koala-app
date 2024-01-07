@@ -1,5 +1,5 @@
 import { ObjectType, Field, ID, registerEnumType } from '@nestjs/graphql';
-import { AfterLoad, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, AfterLoad, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '../../core/base.entity';
 
 export enum Role {
@@ -45,6 +45,20 @@ export class User extends BaseEntity {
   async updateDefaultValues() {
     this.displayName = this.displayName || '';
     this.role = this.samlId ? Role.USER : Role.GUEST;
+  }
+
+  @BeforeInsert()
+  transformEmailBeforeInsert() {
+    this.email = this.transformEmail(this.email);
+  }
+
+  @BeforeUpdate()
+  transformEmailBeforeUpdate() {
+    this.email = this.transformEmail(this.email);
+  }
+
+  transformEmail(email: string) {
+    return email.toLowerCase();
   }
 
   isRegistered() {
