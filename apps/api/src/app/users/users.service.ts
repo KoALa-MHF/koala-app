@@ -31,18 +31,28 @@ export class UsersService {
     if (!displayName) {
       displayName = `${profile[samlConfig.lastnamePropertyName]} ${profile[samlConfig.firstnamePropertyName]}`;
     }
+
     const samlId = profile[samlConfig.samlIdPropertyName] as string;
-    let email = '';
+    let emails;
 
     if (Array.isArray(profile[samlConfig.emailPropertyName])) {
-      email = profile[samlConfig.emailPropertyName][0];
+      emails = profile[samlConfig.emailPropertyName];
     } else {
-      email = profile[samlConfig.emailPropertyName].toString().split(';')[0];
+      emails = profile[samlConfig.emailPropertyName].toString().split(';');
     }
+
+    const email = emails[0];
 
     let user = await this.findBySamlId(samlId);
     if (!user) {
-      user = await this.findByEmail(email);
+      //check all available email addresses, if a user already exists, for consistency to email changes/adjustments,
+      //but still store the first
+      for (let i = 0; i < emails.length; i++) {
+        user = await this.findByEmail(emails[i]);
+        if (user) {
+          break;
+        }
+      }
     }
 
     if (user) {
