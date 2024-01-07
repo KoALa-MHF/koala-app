@@ -4,8 +4,6 @@ import { Repository } from 'typeorm';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user.entity';
 import { Profile } from '@node-saml/passport-saml';
-import { selectConfig } from 'nest-typed-config';
-import { ConfigModule } from '../config/config.module';
 import { SamlConfig } from '../config/config';
 
 @Injectable()
