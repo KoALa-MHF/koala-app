@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user.entity';
 import { Profile } from '@node-saml/passport-saml';
+import { SamlConfig } from '../config/config';
 
 @Injectable()
 export class UsersService {
@@ -24,18 +25,18 @@ export class UsersService {
     return this.usersRespository.findOneBy({ samlId });
   }
 
-  async upsertBySamlProfile(profile: Profile): Promise<User> {
+  async upsertBySamlProfile(profile: Profile, samlConfig: SamlConfig): Promise<User> {
     let displayName = profile.displayName as string;
     if (!displayName) {
-      displayName = `${profile.givenName} ${profile.sn}`;
+      displayName = `${profile[samlConfig.lastnamePropertyName]} ${profile[samlConfig.firstnamePropertyName]}`;
     }
-    const samlId = profile.uid ? (profile.uid as string) : profile.nameID;
+    const samlId = profile[samlConfig.samlIdPropertyName] as string;
     let email = '';
 
-    if (Array.isArray(profile.mail)) {
-      email = profile.mail[0];
+    if (Array.isArray(profile[samlConfig.emailPropertyName])) {
+      email = profile[samlConfig.emailPropertyName][0];
     } else {
-      email = profile.mail.split(';')[0];
+      email = profile[samlConfig.emailPropertyName].toString().split(';')[0];
     }
 
     let user = await this.findBySamlId(samlId);
