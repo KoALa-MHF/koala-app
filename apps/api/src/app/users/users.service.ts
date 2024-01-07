@@ -30,7 +30,13 @@ export class UsersService {
       displayName = `${profile.givenName} ${profile.sn}`;
     }
     const samlId = profile.uid as string;
-    const email = profile.mail.split(';')[0];
+    let email = '';
+
+    if (Array.isArray(profile.mail)) {
+      email = profile.mail[0];
+    } else {
+      email = profile.mail.split(';')[0];
+    }
 
     let user = await this.findBySamlId(samlId);
     if (!user) {

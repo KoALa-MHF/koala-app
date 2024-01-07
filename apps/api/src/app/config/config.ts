@@ -1,6 +1,6 @@
 import { ValidateInResponseTo } from '@node-saml/passport-saml';
 import { Type } from 'class-transformer';
-import { IsBoolean, IsNumber, IsOptional, IsString, IsUrl, ValidateNested, ValidationOptions } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsString, IsUrl, ValidateNested } from 'class-validator';
 
 export class MailConfig {
   @IsString()

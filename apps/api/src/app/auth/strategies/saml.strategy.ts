@@ -15,6 +15,7 @@ export function createSamlConfig(config: SamlConfig): SamlOptions {
     entryPoint: config.entryPoint,
     audience: config.audience,
     wantAuthnResponseSigned: config.wantAuthnResponseSigned,
+    wantAssertionsSigned: config.wantAssertionsSigned,
     signatureAlgorithm: config.signatureAlgorithm,
     identifierFormat: config.identifierFormat,
     acceptedClockSkewMs: config.acceptedClockSkewMs,
