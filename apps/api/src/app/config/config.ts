@@ -97,6 +97,18 @@ export class SamlConfig {
   @IsString()
   @IsOptional()
   public readonly identifierFormat: string | null;
+
+  @IsString()
+  public readonly samlIdPropertyName: string = 'uid';
+
+  @IsString()
+  public readonly emailPropertyName: string = 'mail';
+
+  @IsString()
+  public readonly firstnamePropertyName: string = 'givenName';
+
+  @IsString()
+  public readonly lastnamePropertyName: string = 'sn';
 }
 
 export class AuthConfig {
