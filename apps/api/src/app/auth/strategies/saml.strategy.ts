@@ -15,6 +15,7 @@ export function createSamlConfig(config: SamlConfig): SamlOptions {
     entryPoint: config.entryPoint,
     audience: config.audience,
     wantAuthnResponseSigned: config.wantAuthnResponseSigned,
+    wantAssertionsSigned: config.wantAssertionsSigned,
     signatureAlgorithm: config.signatureAlgorithm,
     identifierFormat: config.identifierFormat,
     acceptedClockSkewMs: config.acceptedClockSkewMs,
@@ -37,8 +38,7 @@ export class SamlStrategy extends PassportStrategy(Strategy, 'saml') {
 
   async validate(profile: Profile) {
     try {
-      console.log(profile);
-      return this.usersService.upsertBySamlProfile(profile);
+      return this.usersService.upsertBySamlProfile(profile, this.config.saml);
     } catch (error) {
       throw new UnauthorizedException();
     }

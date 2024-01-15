@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user.entity';
 import { Profile } from '@node-saml/passport-saml';
+import { SamlConfig } from '../config/config';
 
 @Injectable()
 export class UsersService {
@@ -17,24 +18,41 @@ export class UsersService {
   }
 
   findByEmail(email: string) {
-    return email ? this.usersRespository.findOneBy({ email }) : null;
+    const lowerCaseEmail = email.toLowerCase();
+    return lowerCaseEmail ? this.usersRespository.findOneBy({ email: lowerCaseEmail }) : null;
   }
 
   findBySamlId(samlId: string) {
     return this.usersRespository.findOneBy({ samlId });
   }
 
-  async upsertBySamlProfile(profile: Profile): Promise<User> {
+  async upsertBySamlProfile(profile: Profile, samlConfig: SamlConfig): Promise<User> {
     let displayName = profile.displayName as string;
     if (!displayName) {
-      displayName = `${profile.givenName} ${profile.sn}`;
+      displayName = `${profile[samlConfig.lastnamePropertyName]} ${profile[samlConfig.firstnamePropertyName]}`;
     }
-    const samlId = profile.uid as string;
-    const email = profile.mail.split(';')[0];
+
+    const samlId = profile[samlConfig.samlIdPropertyName] as string;
+    let emails;
+
+    if (Array.isArray(profile[samlConfig.emailPropertyName])) {
+      emails = profile[samlConfig.emailPropertyName];
+    } else {
+      emails = profile[samlConfig.emailPropertyName].toString().split(';');
+    }
+
+    const email = emails[0];
 
     let user = await this.findBySamlId(samlId);
     if (!user) {
-      user = await this.findByEmail(email);
+      //check all available email addresses, if a user already exists, for consistency to email changes/adjustments,
+      //but still store the first
+      for (let i = 0; i < emails.length; i++) {
+        user = await this.findByEmail(emails[i]);
+        if (user) {
+          break;
+        }
+      }
     }
 
     if (user) {

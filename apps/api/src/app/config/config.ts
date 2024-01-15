@@ -1,6 +1,6 @@
 import { ValidateInResponseTo } from '@node-saml/passport-saml';
 import { Type } from 'class-transformer';
-import { IsBoolean, IsNumber, IsOptional, IsString, IsUrl, ValidateNested, ValidationOptions } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsString, IsUrl, ValidateNested } from 'class-validator';
 
 export class MailConfig {
   @IsString()
@@ -97,6 +97,18 @@ export class SamlConfig {
   @IsString()
   @IsOptional()
   public readonly identifierFormat: string | null;
+
+  @IsString()
+  public readonly samlIdPropertyName: string = 'uid';
+
+  @IsString()
+  public readonly emailPropertyName: string = 'mail';
+
+  @IsString()
+  public readonly firstnamePropertyName: string = 'givenName';
+
+  @IsString()
+  public readonly lastnamePropertyName: string = 'sn';
 }
 
 export class AuthConfig {

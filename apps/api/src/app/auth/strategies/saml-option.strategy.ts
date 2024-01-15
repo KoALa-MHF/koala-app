@@ -13,7 +13,7 @@ export class SamlOptionStrategy extends PassportStrategy(Strategy, 'samlOption')
 
   async validate(profile: Profile) {
     try {
-      return this.usersService.upsertBySamlProfile(profile);
+      return this.usersService.upsertBySamlProfile(profile, this.config.samlOption);
     } catch (error) {
       throw new UnauthorizedException();
     }
