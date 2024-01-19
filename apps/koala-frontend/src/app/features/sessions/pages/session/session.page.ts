@@ -114,13 +114,7 @@ export class SessionPage implements OnInit, OnDestroy {
           .getFocusSession()
           ?.userSessions?.filter((userSession) => userSession.owner?.id === this.userID.toString())[0];
         this.setSidePanelFormData(session);
-
-        this.loadAnnotations([
-          this.myUserSession,
-        ]);
-
         this.updateMediaControlSettings();
-
         if (!session.isSessionOwner && session.isAudioSession && !session.enablePlayer) {
           this.mediaControlService.setPosition(session.playPosition || 0);
           this.currentAudioTime = session.playPosition || 0;
@@ -137,6 +131,14 @@ export class SessionPage implements OnInit, OnDestroy {
           }
         } else {
           this.audioTimerSubscription?.unsubscribe();
+        }
+
+        if (session.playMode !== PlayMode.Running) {
+          if (session.playPosition == 0) {
+            this.loadAnnotations([
+              this.myUserSession,
+            ]);
+          }
         }
 
         if (session.liveSessionStart && session.playMode === PlayMode.Running) {
@@ -463,14 +465,7 @@ export class SessionPage implements OnInit, OnDestroy {
           } else {
             this.endActiveSliders(this.currentAudioTime);
             this.sessionControlService.pauseSession().subscribe();
-            this.sessionService.setFocusSession(this.sessionId).subscribe((focusSession: Session) => {
-              const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
-              if (userSessions) {
-                this.loadAnnotations(userSessions);
-                this.appRef.tick();
-                window.dispatchEvent(new Event('resize'));
-              }
-            });
+            this.sessionService.setFocusSession(this.sessionId);
           }
         } catch (error) {
           this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
@@ -480,14 +475,7 @@ export class SessionPage implements OnInit, OnDestroy {
         try {
           this.endActiveSliders(this.currentAudioTime);
           this.sessionControlService.stopSession().subscribe();
-          this.sessionService.setFocusSession(this.sessionId).subscribe((focusSession: Session) => {
-            const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
-            if (userSessions) {
-              this.loadAnnotations(userSessions);
-              this.appRef.tick();
-              window.dispatchEvent(new Event('resize'));
-            }
-          });
+          this.sessionService.setFocusSession(this.sessionId);
           this.currentAudioTime = 0;
         } catch (error) {
           this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
