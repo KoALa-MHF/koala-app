@@ -1,4 +1,4 @@
-import { ApplicationRef, Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ApplicationRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
 import { MediaControlService, MediaEvent, MediaActions } from '../../services/media-control.service';
@@ -18,6 +18,8 @@ import { UserSession } from '../../types/user-session.entity';
 import { CheckboxChangeEvent } from 'primeng/checkbox';
 import { CreateAnnotationTextComment } from '../../components/annotation-text-comment-list/annotation-text-comment-list.component';
 import { Comment } from '../../types/comment.entity';
+import { AnnotationAudioComment } from '../../components/annotation-audio-comment/annotation-audio-comment.component';
+import { MediaService } from '../../services/media.service';
 
 export interface AnnotationData {
   AnnotationData: Map<number, Array<DataPoint>>;
@@ -57,7 +59,8 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
     private readonly toolbarService: ToolbarsService,
     private readonly translateService: TranslateService,
     private readonly navigationService: NavigationService,
-    private appRef: ApplicationRef
+    private appRef: ApplicationRef,
+    private readonly mediaService: MediaService
   ) {}
 
   async ngOnInit() {
@@ -211,6 +214,8 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
               strength: annotation.value,
               display: annotation.end == 0 ? Display.Circle : Display.Rect,
               color: annotation.marker.color,
+              mediaId: annotation.media?.id,
+              comments: annotation.comments,
             });
         }
       }
@@ -224,6 +229,59 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
         );
       }
     }
+  }
+
+  onAnnotationAudioComment(annotationAudioComment: AnnotationAudioComment) {
+    this.mediaService
+      .create({
+        file: new File(
+          [
+            annotationAudioComment.comment,
+          ],
+          `Annotation_Audio_${annotationAudioComment.annotationId}`
+        ),
+      })
+      .subscribe({
+        next: (response) => {
+          const mediaId = response.data?.createMedia.id;
+          if (mediaId) {
+            //always is there, because otherwise mediaService would return error
+            this.annotationService.updateMedia(annotationAudioComment.annotationId, parseInt(mediaId)).subscribe({
+              next: (response) => {
+                this.sessionService.setFocusSession(this.sessionId).subscribe((focusSession: Session) => {
+                  const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
+                  if (userSessions) {
+                    this.loadAnnotations(userSessions);
+                  }
+                });
+              },
+              error: (error) => {
+                console.log(error);
+              },
+            });
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+  }
+
+  onAnnotationAudioCommentDelete(annotationId: number) {
+    this.annotationService.removeMedia(annotationId).subscribe({
+      next: () => {
+        this.sessionService.setFocusSession(this.sessionId).subscribe((focusSession: Session) => {
+          const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
+          if (userSessions) {
+            this.loadAnnotations(userSessions);
+          }
+        });
+        console.log('Audio Successfully Removed');
+      },
+      error: (error) => {
+        console.log('Error Annotation Audio Removal');
+      },
+    });
   }
 
   onSidebarHide() {
@@ -336,7 +394,13 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
   onAnnotationTextCommentCreate(createComment: CreateAnnotationTextComment) {
     this.annotationService.createComment(createComment.annotationId, createComment.text).subscribe({
       next: () => {
-        this.sessionService.setFocusSession(parseInt(this.sessionService.getFocusSession()?.id || '0')).subscribe();
+        this.sessionService
+          .setFocusSession(parseInt(this.sessionService.getFocusSession()?.id || '0'))
+          .subscribe((session: Session) => {
+            if (session.userSessions) {
+              this.loadAnnotations(session.userSessions);
+            }
+          });
       },
       error: () => {
         console.log('Error in Comment Creation');
@@ -347,7 +411,13 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
   onAnnotationTextCommentUpdate(comment: Comment) {
     this.annotationService.updateComment(comment.id, comment.text).subscribe({
       next: () => {
-        this.sessionService.setFocusSession(parseInt(this.sessionService.getFocusSession()?.id || '0')).subscribe();
+        this.sessionService
+          .setFocusSession(parseInt(this.sessionService.getFocusSession()?.id || '0'))
+          .subscribe((session: Session) => {
+            if (session.userSessions) {
+              this.loadAnnotations(session.userSessions);
+            }
+          });
       },
       error: () => {
         console.log('Error in Comment Update');
@@ -358,7 +428,13 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
   onAnnotationTextCommentRemove(commentId: number) {
     this.annotationService.removeComment(commentId).subscribe({
       next: () => {
-        this.sessionService.setFocusSession(parseInt(this.sessionService.getFocusSession()?.id || '0')).subscribe();
+        this.sessionService
+          .setFocusSession(parseInt(this.sessionService.getFocusSession()?.id || '0'))
+          .subscribe((session: Session) => {
+            if (session.userSessions) {
+              this.loadAnnotations(session.userSessions);
+            }
+          });
       },
       error: () => {
         console.log('Error in Comment Removal');
