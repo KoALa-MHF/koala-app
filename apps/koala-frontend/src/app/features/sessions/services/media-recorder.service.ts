@@ -42,7 +42,7 @@ export class MediaRecorderService {
       if (this.mediaRecorder) {
         this.mediaRecorder.onstop = () => {
           this.stream?.getTracks().forEach((track) => track.stop());
-          resolve(new Blob(this.chunks, { type: 'audio/ogg; codecs=opus' }));
+          resolve(new Blob(this.chunks, { type: 'audio/mp3' }));
         };
 
         this.mediaRecorder.stop();
