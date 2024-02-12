@@ -18,6 +18,9 @@ export class UsersService {
   }
 
   findByEmail(email: string) {
+    if (!email) {
+      return null;
+    }
     const lowerCaseEmail = email.toLowerCase();
     return lowerCaseEmail ? this.usersRespository.findOneBy({ email: lowerCaseEmail }) : null;
   }

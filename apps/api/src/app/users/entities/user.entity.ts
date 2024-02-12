@@ -58,7 +58,7 @@ export class User extends BaseEntity {
   }
 
   transformEmail(email: string) {
-    return email.toLowerCase();
+    return email ? email.toLowerCase() : email;
   }
 
   isRegistered() {
