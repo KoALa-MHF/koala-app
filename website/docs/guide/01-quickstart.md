@@ -8,7 +8,7 @@ sidebar_position: 1
 
 Klicken Sie auf Login und melden Sie sich über Ihren Hochschulaccount an. Der Login geschieht über die [Shibboleth](/docs/terms/Shibboleth.md)-Login Seite.
 
-:::info Hinweis für externe Nutzer*innen
+:::tip Hinweis für externe Nutzer*innen
 Falls Sie keinen Account der Hochschule für Musik Freiburg besitzen, kontaktieren Sie uns bitte, wir können Ihnen zu Testzwecken einen Account einrichten. Falls Sie die *koala\*-Anwendung dauerhaft nutzen wollen, empfehlen wir Ihnen (bzw. ihrer Institution) eine eigne Installation der Anwendung. Wir unterstützen hier gerne bei der Installation.
 :::
 
