@@ -16,10 +16,9 @@ Mehr Infos zu den Login-Möglichkeiten bei _koala_ finden Sie uim [Handbuch -> L
 
 #### Schritt 2 – Session anlegen
 
-- Nach der Anmeldung öffnet sich das Fenster _Meine Sessions_. Klicken Sie hier auf _Neue Session_, um eine Session anzulegen.
-- Unter dem Reiter [Audio](/docs/terms/Audio.md) können Sie eine Audio-Datei wählen und hochladen. Wenn Sie keine Datei hochladen, können Sie eine [Live-Annotation](/docs/terms/Live-Annotation.md) innerhalb der Session starten.
+- Nach der Anmeldung öffnet sich das Fenster _Meine Sessions_. Klicken Sie hier auf _Neue Session_, um eine Session anzulegen. Sie werden zunächst nach einem Namen für die neue Session gefragt und anschließend zu den Einstellungen weitergeleitet.
 - In den [Session Einstellungen](/docs/guide/02-Handbuch/02-Session_anlegen/01-Sessioneinstellungen.md) geben Sie zunächst einen Namen und eine Beschreibung für die Session ein und definieren Freigaben und Verfügbarkeit der Session.
-- Im Reiter „Audio“ können Sie eine Aufnahme für die Session hochladen.
+- Unter dem Reiter [Audio](/docs/terms/Audio.md) können Sie eine Audio-Datei wählen und hochladen. Wenn Sie keine Datei hochladen, können Sie eine [Live-Annotation](/docs/terms/Live-Annotation.md) innerhalb der Session starten.
 - Anschließend erstellen Sie noch die Marker für Ihre Session:
   Wählen Sie zunächst den gewünschten Markertyp:
   - [Event Marker](/docs/terms/Event-Marker.md)
