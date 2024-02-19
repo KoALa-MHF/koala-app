@@ -30,7 +30,7 @@ Sie können:
 
 Innerhalb eine Tabellenzeile agieren Sie mit dieser Session. Sie können
 
-- die [Einstellungen](./02-Session_anlegen/01-Sessioneinstellungen.md) bearbeiten,
+- die [Einstellungen](./02-Session%20anlegen/01-Sessioneinstellungen.md) bearbeiten,
 - sich den QR-Code und Link ansehen, mit dem sie Teilnehmer zu dieser
   Session einladen können,
 - die Session duplizieren und
