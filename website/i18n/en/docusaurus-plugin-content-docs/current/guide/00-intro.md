@@ -6,7 +6,7 @@ sidebar_position: 1
 
 Welcome to the user manual of the collaborative annotation and learning application _koala_! Here you will find detailed information and instructions to make the most of the app's diverse functions.
 
-### [Quick Start Guide](/docs/guide/01-quickstart.md)
+### [Quick Start Guide](./01-quickstart.md)
 
 Here you will get a brief overview of the functions of the _koala_ app. You will learn how to sign up, create sessions and markers, invite users, and conduct sessions.
 
@@ -14,7 +14,7 @@ Here you will get a brief overview of the functions of the _koala_ app. You will
 
 In this section, you will find comprehensive documentation for the _koala_ app. You will learn how to sign up, create a session, and make important settings. You will also learn how to upload audio and invite participants to the session. The management and execution of a session are also covered in detail, including the use of annotations and the evaluation of results. In addition, the manual covers advanced functions, such as conducting live sessions and exporting annotation data options.
 
-### [Case Studies](/docs/guide/03-Fallbeispiele/fallbeispiel-1.md)
+### Case Studies [tbd]
 
 This section presents various applications and case studies for using _koala_. You will learn how the app can be used in music lessons for training purposes, listening and analysis exercises, and how _koala_ can help finding a direct dive-in to music. In addition, possible applications in musical practice (e.g., in rehearsals, instrumental lessons, and improvisations) are presented.
 
