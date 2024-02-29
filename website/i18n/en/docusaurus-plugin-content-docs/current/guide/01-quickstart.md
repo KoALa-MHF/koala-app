@@ -17,7 +17,7 @@ For more information on _koala_ login options, please refer to the [Manual -> Lo
 ### Step 2 - Create a Session
 
 - After logging in, the _My Sessions_ window opens. Click on _New Session_ to create a session. You wil be asked for a name of the new session. Afterwards you will be directed to the session's settings panel.
-- In the [Session Settings](/docs/guide/02-Handbuch/02-Session_anlegen/01-Sessioneinstellungen.md), first enter a name and a description for the session and define the session's behaviour and availability.
+- In the [Session Settings](/docs/guide/02-Handbuch/02-Session%20anlegen/01-Sessioneinstellungen.md), first enter a name and a description for the session and define the session's behaviour and availability.
 - Under the [Audio](/docs/terms/Audio.md) tab, you can select and upload an audio file. If you do not upload a file, you can start a [Live Annotation](/docs/terms/Live-Annotation.md) within the session.
 - Then, create the markers for your session:
   First, select the desired marker type: - [Event Marker](/docs/terms/Event-Marker.md) - [Range Marker](/docs/terms/Range-Marker.md) - [Slider Marker](/docs/terms/Slider-Marker.md)
@@ -35,7 +35,7 @@ If you do not want to invite the members in advance, or do not know their e-mail
 ### Step 4 - Annotate
 
 - To open the session, click in the _My Sessions_ window either on the session name or on the Join icon on the far right in the session line.
-  ![../../static/img/arrow-circle-right.svg](../../static/img/arrow-circle-right.svg)
+  ![../../static/img/arrow-circle-right.svg](../../../../../static/img/arrow-circle-right.svg)
 - As soon as you start the player, the audio file will be played and you can start annotating by clicking on the respective markers below the player or moving the slider marker. If you want to annotate together with participants in a teaching situation, for example, you must first check the _Editing_ box under releases. Only then is an annotation possible for participants.
 
 ### Step 5 - Evaluate
