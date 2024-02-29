@@ -6,8 +6,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Koala App',
-  tagline: 'Willkommen!',
+  title: 'Willkommen bei der Koala App',
+  tagline: 'Die App für kollaboratives Musikhören und -analysieren!',
   url: 'https://koala-mhf.github.io/',
   baseUrl: '/koala-app/',
   onBrokenLinks: 'throw',
@@ -26,7 +26,6 @@ const config = {
     defaultLocale: 'de',
     locales: [
       'en',
-      'fr',
       'de',
     ],
   },
