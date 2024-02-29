@@ -15,7 +15,7 @@ Hier erhalten Sie einen kurzen Überblick über die Funktionen der _koala_-App. 
 
 In diesem Abschnitt finden Sie die ausführliche Dokumentation zur _koala_-App. Sie erfahren, wie Sie sich anmelden, eine Session erstellen und wichtige Einstellungen vornehmen können. Zudem lernen Sie, wie Sie Audio hochladen und Teilnehmer zur Session einladen können. Die Verwaltung und Durchführung einer Session wird ebenfalls ausführlich behandelt, inklusive der Nutzung von Annotationen und der Auswertung von Ergebnissen. Darüber hinaus werden im Handbuch erweiterte Funktionen behandelt, z.B. die Durchführung von Live-Sessions und die Möglichkeiten eines Exports der Annotationsdaten.
 
-#### [Anwendungen / Fallbeispiele](/docs/guide/03-Fallbeispiele/fallbeispiel-1.md)
+#### [Anwendungen / Fallbeispiele](/docs/guide/03-Fallbeispiele/01-fallbeispiel.md)
 
 In diesem Abschnitt werden verschiedene Anwendungen und Fallbeispiele für die Nutzung von _koala_ vorgestellt. Sie erfahren, wie die App im Musikunterricht für Training, Hör- und Analyseübungen sowie einem assoziativen Zugang zur Musik eingesetzt werden kann. Zudem werden Anwendungsmöglichkeiten in der musikalischen Praxis (z.B. in Proben, im Instrumentalunterricht und bei Improvisationen) vorgestellt.
 
