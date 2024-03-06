@@ -18,6 +18,13 @@ const QUERY_SESSIONS = gql`
       }
       toolbars {
         id
+        markers {
+          marker {
+            id
+            name
+          }
+          visible
+        }
       }
       userSessions {
         id

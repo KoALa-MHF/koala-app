@@ -9,6 +9,7 @@ import { User } from '../users/entities/user.entity';
 import { PubSub } from 'graphql-subscriptions';
 import { SetToolbarMarkerVisibilityInput } from './dto/set-toolbar-marker-visible.input';
 import { Toolbar } from './dto/toolbar';
+import { MarkersService } from '../markers/markers.service';
 
 const pubSub = new PubSub();
 
@@ -17,7 +18,8 @@ export class ToolbarsResolver {
   constructor(
     private readonly toolbarsService: ToolbarsService,
     @Inject(forwardRef(() => SessionsService))
-    private readonly sessionService: SessionsService
+    private readonly sessionService: SessionsService,
+    private readonly markersService: MarkersService
   ) {}
 
   @Mutation(() => Toolbar)
@@ -51,6 +53,22 @@ export class ToolbarsResolver {
   async session(@Parent() toolbar: Toolbar, @CurrentUser() user: User) {
     const { session } = toolbar;
     return this.sessionService.findOne(session.id, user);
+  }
+
+  @ResolveField()
+  @UseGuards(AuthGuard)
+  async markers(@Parent() toolbar: Toolbar) {
+    const { markers: toolbarMarkers } = toolbar;
+    const ids = toolbarMarkers.map((toolbarMarker: any) => toolbarMarker.markerId);
+    const markers = await this.markersService.findAll(ids);
+    const returnToolbarMarkers = [];
+    toolbarMarkers.forEach((toolbarMarker: any) => {
+      const marker = markers.find((marker) => marker.id == toolbarMarker.markerId);
+      if (marker) {
+        returnToolbarMarkers.push({ marker, visible: toolbarMarker ? toolbarMarker.visible : true });
+      }
+    });
+    return returnToolbarMarkers;
   }
 
   @Subscription((returns) => Toolbar, {

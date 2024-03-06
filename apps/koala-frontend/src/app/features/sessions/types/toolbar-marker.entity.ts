@@ -1,4 +1,6 @@
+import { Marker } from './marker.entity';
+
 export interface ToolbarMarker {
-  markerId: string;
+  marker: Marker;
   visible: boolean;
 }
