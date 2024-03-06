@@ -34,6 +34,29 @@ exports[`Sessions (e2e) Query Sessions Owner user should get list of all owned s
       "toolbars": [
         {
           "id": "1",
+          "markers": [
+            {
+              "marker": {
+                "id": 1,
+                "name": "Marker 1",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 2,
+                "name": "Marker 2",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 3,
+                "name": "Marker 3",
+              },
+              "visible": true,
+            },
+          ],
         },
       ],
       "userSessions": [
@@ -82,6 +105,29 @@ exports[`Sessions (e2e) Query Sessions Owner user should get list of all owned s
       "toolbars": [
         {
           "id": "3",
+          "markers": [
+            {
+              "marker": {
+                "id": 1,
+                "name": "Marker 1",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 2,
+                "name": "Marker 2",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 3,
+                "name": "Marker 3",
+              },
+              "visible": true,
+            },
+          ],
         },
       ],
       "userSessions": [
@@ -120,6 +166,29 @@ exports[`Sessions (e2e) Query Sessions Owner user should get list of all owned s
       "toolbars": [
         {
           "id": "4",
+          "markers": [
+            {
+              "marker": {
+                "id": 1,
+                "name": "Marker 1",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 2,
+                "name": "Marker 2",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 3,
+                "name": "Marker 3",
+              },
+              "visible": true,
+            },
+          ],
         },
       ],
       "userSessions": [
@@ -148,6 +217,29 @@ exports[`Sessions (e2e) Query Sessions Owner user should get list of all owned s
       "toolbars": [
         {
           "id": "5",
+          "markers": [
+            {
+              "marker": {
+                "id": 1,
+                "name": "Marker 1",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 2,
+                "name": "Marker 2",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 3,
+                "name": "Marker 3",
+              },
+              "visible": true,
+            },
+          ],
         },
       ],
       "userSessions": [
@@ -183,6 +275,29 @@ exports[`Sessions (e2e) Query Sessions Participating user should get list of all
       "toolbars": [
         {
           "id": "1",
+          "markers": [
+            {
+              "marker": {
+                "id": 1,
+                "name": "Marker 1",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 2,
+                "name": "Marker 2",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 3,
+                "name": "Marker 3",
+              },
+              "visible": true,
+            },
+          ],
         },
       ],
       "userSessions": [
@@ -218,6 +333,29 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 1`] = 
       "toolbars": [
         {
           "id": "1",
+          "markers": [
+            {
+              "marker": {
+                "id": 1,
+                "name": "Marker 1",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 2,
+                "name": "Marker 2",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 3,
+                "name": "Marker 3",
+              },
+              "visible": true,
+            },
+          ],
         },
       ],
       "userSessions": [
@@ -266,6 +404,29 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 1`] = 
       "toolbars": [
         {
           "id": "3",
+          "markers": [
+            {
+              "marker": {
+                "id": 1,
+                "name": "Marker 1",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 2,
+                "name": "Marker 2",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 3,
+                "name": "Marker 3",
+              },
+              "visible": true,
+            },
+          ],
         },
       ],
       "userSessions": [
@@ -304,6 +465,29 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 1`] = 
       "toolbars": [
         {
           "id": "4",
+          "markers": [
+            {
+              "marker": {
+                "id": 1,
+                "name": "Marker 1",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 2,
+                "name": "Marker 2",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 3,
+                "name": "Marker 3",
+              },
+              "visible": true,
+            },
+          ],
         },
       ],
       "userSessions": [
@@ -332,6 +516,29 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 1`] = 
       "toolbars": [
         {
           "id": "5",
+          "markers": [
+            {
+              "marker": {
+                "id": 1,
+                "name": "Marker 1",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 2,
+                "name": "Marker 2",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 3,
+                "name": "Marker 3",
+              },
+              "visible": true,
+            },
+          ],
         },
       ],
       "userSessions": [
@@ -378,6 +585,29 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 3`] = 
       "toolbars": [
         {
           "id": "3",
+          "markers": [
+            {
+              "marker": {
+                "id": 1,
+                "name": "Marker 1",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 2,
+                "name": "Marker 2",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 3,
+                "name": "Marker 3",
+              },
+              "visible": true,
+            },
+          ],
         },
       ],
       "userSessions": [
@@ -416,6 +646,29 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 3`] = 
       "toolbars": [
         {
           "id": "4",
+          "markers": [
+            {
+              "marker": {
+                "id": 1,
+                "name": "Marker 1",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 2,
+                "name": "Marker 2",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 3,
+                "name": "Marker 3",
+              },
+              "visible": true,
+            },
+          ],
         },
       ],
       "userSessions": [
@@ -444,6 +697,29 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 3`] = 
       "toolbars": [
         {
           "id": "5",
+          "markers": [
+            {
+              "marker": {
+                "id": 1,
+                "name": "Marker 1",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 2,
+                "name": "Marker 2",
+              },
+              "visible": true,
+            },
+            {
+              "marker": {
+                "id": 3,
+                "name": "Marker 3",
+              },
+              "visible": true,
+            },
+          ],
         },
       ],
       "userSessions": [

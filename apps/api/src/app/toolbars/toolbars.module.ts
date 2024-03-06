@@ -4,6 +4,7 @@ import { ToolbarsResolver } from './toolbars.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Toolbar } from './entities/toolbar.entity';
 import { SessionsModule } from '../sessions/sessions.module';
+import { MarkersModule } from '../markers/markers.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { SessionsModule } from '../sessions/sessions.module';
       Toolbar,
     ]),
     forwardRef(() => SessionsModule),
+    MarkersModule,
   ],
   providers: [
     ToolbarsResolver,

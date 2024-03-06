@@ -41,7 +41,17 @@ const GET_SESSIONS = gql`
       toolbars {
         id
         markers {
-          markerId
+          marker {
+            id
+            name
+            abbreviation
+            description
+            color
+            contentColor
+            icon
+            valueRangeFrom
+            valueRangeTo
+          }
           visible
         }
         createdAt
@@ -91,7 +101,17 @@ const GET_ONE_SESSION = gql`
       toolbars {
         id
         markers {
-          markerId
+          marker {
+            id
+            name
+            abbreviation
+            description
+            color
+            contentColor
+            icon
+            valueRangeFrom
+            valueRangeTo
+          }
           visible
         }
         createdAt
@@ -258,7 +278,17 @@ const GET_SESSION_FOR_CSV_EXPORT = gql`
       toolbars {
         id
         markers {
-          markerId
+          marker {
+            id
+            name
+            abbreviation
+            description
+            color
+            contentColor
+            icon
+            valueRangeFrom
+            valueRangeTo
+          }
           visible
         }
         createdAt

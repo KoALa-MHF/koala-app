@@ -24,7 +24,17 @@ const SUBSCRIBE_SESSION_UPDATED = gql`
       toolbars {
         id
         markers {
-          markerId
+          marker {
+            id
+            name
+            abbreviation
+            description
+            color
+            contentColor
+            icon
+            valueRangeFrom
+            valueRangeTo
+          }
           visible
         }
         createdAt
@@ -47,7 +57,17 @@ const SUBSCRIBE_TOOLBAR_UPDATED = gql`
     toolbarUpdated(id: $toolbarId) {
       id
       markers {
-        markerId
+        marker {
+          id
+          name
+          abbreviation
+          description
+          color
+          contentColor
+          icon
+          valueRangeFrom
+          valueRangeTo
+        }
         visible
       }
       createdAt

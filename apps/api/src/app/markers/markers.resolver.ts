@@ -27,6 +27,7 @@ export class MarkersResolver {
     ],
     { name: 'markers' }
   )
+  @UseGuards(RegisteredUserGuard)
   findAll(
     @Args('ids', {
       type: () => [
@@ -40,6 +41,7 @@ export class MarkersResolver {
   }
 
   @Query(() => Marker, { name: 'marker' })
+  @UseGuards(RegisteredUserGuard)
   findOne(@Args('id', { type: () => Int }) id: number) {
     return this.markersService.findOne(id);
   }

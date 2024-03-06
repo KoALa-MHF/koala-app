@@ -499,8 +499,8 @@ export type Toolbar = {
 
 export type ToolbarMarker = {
   __typename?: 'ToolbarMarker';
-  /** Marker ID */
-  markerId: Scalars['ID']['output'];
+  /** Marker */
+  marker: Marker;
   visible: Scalars['Boolean']['output'];
 };
 
@@ -644,7 +644,22 @@ export type CreateNewSessionMutation = {
       id: string;
       createdAt: any;
       updatedAt: any;
-      markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+      markers?: Array<{
+        __typename?: 'ToolbarMarker';
+        visible: boolean;
+        marker: {
+          __typename?: 'Marker';
+          id: number;
+          name: string;
+          abbreviation?: string | null;
+          description?: string | null;
+          color: string;
+          contentColor: string;
+          icon?: string | null;
+          valueRangeFrom?: number | null;
+          valueRangeTo?: number | null;
+        };
+      }> | null;
     }>;
   };
 };
@@ -722,7 +737,22 @@ export type UpdateToolbarMutation = {
   updateToolbar: {
     __typename?: 'Toolbar';
     id: string;
-    markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+    markers?: Array<{
+      __typename?: 'ToolbarMarker';
+      visible: boolean;
+      marker: {
+        __typename?: 'Marker';
+        id: number;
+        name: string;
+        abbreviation?: string | null;
+        description?: string | null;
+        color: string;
+        contentColor: string;
+        icon?: string | null;
+        valueRangeFrom?: number | null;
+        valueRangeTo?: number | null;
+      };
+    }> | null;
   };
 };
 
@@ -736,7 +766,22 @@ export type SetMarkerVisibilityInToolbarMutation = {
   setMarkerVisible: {
     __typename?: 'Toolbar';
     id: string;
-    markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+    markers?: Array<{
+      __typename?: 'ToolbarMarker';
+      visible: boolean;
+      marker: {
+        __typename?: 'Marker';
+        id: number;
+        name: string;
+        abbreviation?: string | null;
+        description?: string | null;
+        color: string;
+        contentColor: string;
+        icon?: string | null;
+        valueRangeFrom?: number | null;
+        valueRangeTo?: number | null;
+      };
+    }> | null;
   };
 };
 
@@ -842,7 +887,22 @@ export type SetPlayModeMutation = {
       id: string;
       createdAt: any;
       updatedAt: any;
-      markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+      markers?: Array<{
+        __typename?: 'ToolbarMarker';
+        visible: boolean;
+        marker: {
+          __typename?: 'Marker';
+          id: number;
+          name: string;
+          abbreviation?: string | null;
+          description?: string | null;
+          color: string;
+          contentColor: string;
+          icon?: string | null;
+          valueRangeFrom?: number | null;
+          valueRangeTo?: number | null;
+        };
+      }> | null;
     }>;
     userSessions: Array<{
       __typename?: 'UserSession';
@@ -908,7 +968,22 @@ export type SetPlayPositionMutation = {
       id: string;
       createdAt: any;
       updatedAt: any;
-      markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+      markers?: Array<{
+        __typename?: 'ToolbarMarker';
+        visible: boolean;
+        marker: {
+          __typename?: 'Marker';
+          id: number;
+          name: string;
+          abbreviation?: string | null;
+          description?: string | null;
+          color: string;
+          contentColor: string;
+          icon?: string | null;
+          valueRangeFrom?: number | null;
+          valueRangeTo?: number | null;
+        };
+      }> | null;
     }>;
     userSessions: Array<{
       __typename?: 'UserSession';
@@ -1073,7 +1148,22 @@ export type GetSessionsQuery = {
       id: string;
       createdAt: any;
       updatedAt: any;
-      markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+      markers?: Array<{
+        __typename?: 'ToolbarMarker';
+        visible: boolean;
+        marker: {
+          __typename?: 'Marker';
+          id: number;
+          name: string;
+          abbreviation?: string | null;
+          description?: string | null;
+          color: string;
+          contentColor: string;
+          icon?: string | null;
+          valueRangeFrom?: number | null;
+          valueRangeTo?: number | null;
+        };
+      }> | null;
     }>;
     owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
   }>;
@@ -1114,7 +1204,22 @@ export type GetOneSessionQuery = {
       id: string;
       createdAt: any;
       updatedAt: any;
-      markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+      markers?: Array<{
+        __typename?: 'ToolbarMarker';
+        visible: boolean;
+        marker: {
+          __typename?: 'Marker';
+          id: number;
+          name: string;
+          abbreviation?: string | null;
+          description?: string | null;
+          color: string;
+          contentColor: string;
+          icon?: string | null;
+          valueRangeFrom?: number | null;
+          valueRangeTo?: number | null;
+        };
+      }> | null;
     }>;
     userSessions: Array<{
       __typename?: 'UserSession';
@@ -1269,7 +1374,22 @@ export type SessionCsvExportQuery = {
       id: string;
       createdAt: any;
       updatedAt: any;
-      markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+      markers?: Array<{
+        __typename?: 'ToolbarMarker';
+        visible: boolean;
+        marker: {
+          __typename?: 'Marker';
+          id: number;
+          name: string;
+          abbreviation?: string | null;
+          description?: string | null;
+          color: string;
+          contentColor: string;
+          icon?: string | null;
+          valueRangeFrom?: number | null;
+          valueRangeTo?: number | null;
+        };
+      }> | null;
     }>;
     userSessions: Array<{
       __typename?: 'UserSession';
@@ -1333,7 +1453,22 @@ export type OnSessionUpdatedSubscription = {
       id: string;
       createdAt: any;
       updatedAt: any;
-      markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+      markers?: Array<{
+        __typename?: 'ToolbarMarker';
+        visible: boolean;
+        marker: {
+          __typename?: 'Marker';
+          id: number;
+          name: string;
+          abbreviation?: string | null;
+          description?: string | null;
+          color: string;
+          contentColor: string;
+          icon?: string | null;
+          valueRangeFrom?: number | null;
+          valueRangeTo?: number | null;
+        };
+      }> | null;
     }>;
     userSessions: Array<{
       __typename?: 'UserSession';
@@ -1354,7 +1489,22 @@ export type OnToolbarUpdatedSubscription = {
     id: string;
     createdAt: any;
     updatedAt: any;
-    markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
+    markers?: Array<{
+      __typename?: 'ToolbarMarker';
+      visible: boolean;
+      marker: {
+        __typename?: 'Marker';
+        id: number;
+        name: string;
+        abbreviation?: string | null;
+        description?: string | null;
+        color: string;
+        contentColor: string;
+        icon?: string | null;
+        valueRangeFrom?: number | null;
+        valueRangeTo?: number | null;
+      };
+    }> | null;
   };
 };
 
@@ -1386,7 +1536,17 @@ export const CreateNewSessionDocument = gql`
       toolbars {
         id
         markers {
-          markerId
+          marker {
+            id
+            name
+            abbreviation
+            description
+            color
+            contentColor
+            icon
+            valueRangeFrom
+            valueRangeTo
+          }
           visible
         }
         createdAt
@@ -1526,7 +1686,17 @@ export const UpdateToolbarDocument = gql`
     updateToolbar(id: $id, updateToolbarInput: $updateToolbarInput) {
       id
       markers {
-        markerId
+        marker {
+          id
+          name
+          abbreviation
+          description
+          color
+          contentColor
+          icon
+          valueRangeFrom
+          valueRangeTo
+        }
         visible
       }
     }
@@ -1548,7 +1718,17 @@ export const SetMarkerVisibilityInToolbarDocument = gql`
     setMarkerVisible(id: $id, updateToolbarMarkerVisible: $setToolbarMarkerVisibilityInput) {
       id
       markers {
-        markerId
+        marker {
+          id
+          name
+          abbreviation
+          description
+          color
+          contentColor
+          icon
+          valueRangeFrom
+          valueRangeTo
+        }
         visible
       }
     }
@@ -1736,7 +1916,17 @@ export const SetPlayModeDocument = gql`
       toolbars {
         id
         markers {
-          markerId
+          marker {
+            id
+            name
+            abbreviation
+            description
+            color
+            contentColor
+            icon
+            valueRangeFrom
+            valueRangeTo
+          }
           visible
         }
         createdAt
@@ -1827,7 +2017,17 @@ export const SetPlayPositionDocument = gql`
       toolbars {
         id
         markers {
-          markerId
+          marker {
+            id
+            name
+            abbreviation
+            description
+            color
+            contentColor
+            icon
+            valueRangeFrom
+            valueRangeTo
+          }
           visible
         }
         createdAt
@@ -2110,7 +2310,17 @@ export const GetSessionsDocument = gql`
       toolbars {
         id
         markers {
-          markerId
+          marker {
+            id
+            name
+            abbreviation
+            description
+            color
+            contentColor
+            icon
+            valueRangeFrom
+            valueRangeTo
+          }
           visible
         }
         createdAt
@@ -2170,7 +2380,17 @@ export const GetOneSessionDocument = gql`
       toolbars {
         id
         markers {
-          markerId
+          marker {
+            id
+            name
+            abbreviation
+            description
+            color
+            contentColor
+            icon
+            valueRangeFrom
+            valueRangeTo
+          }
           visible
         }
         createdAt
@@ -2390,7 +2610,17 @@ export const SessionCsvExportDocument = gql`
       toolbars {
         id
         markers {
-          markerId
+          marker {
+            id
+            name
+            abbreviation
+            description
+            color
+            contentColor
+            icon
+            valueRangeFrom
+            valueRangeTo
+          }
           visible
         }
         createdAt
@@ -2463,7 +2693,17 @@ export const OnSessionUpdatedDocument = gql`
       toolbars {
         id
         markers {
-          markerId
+          marker {
+            id
+            name
+            abbreviation
+            description
+            color
+            contentColor
+            icon
+            valueRangeFrom
+            valueRangeTo
+          }
           visible
         }
         createdAt
@@ -2499,7 +2739,17 @@ export const OnToolbarUpdatedDocument = gql`
     toolbarUpdated(id: $toolbarId) {
       id
       markers {
-        markerId
+        marker {
+          id
+          name
+          abbreviation
+          description
+          color
+          contentColor
+          icon
+          valueRangeFrom
+          valueRangeTo
+        }
         visible
       }
       createdAt

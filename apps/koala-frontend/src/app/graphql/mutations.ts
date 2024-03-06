@@ -28,7 +28,17 @@ const CREATE_SESSION = gql`
       toolbars {
         id
         markers {
-          markerId
+          marker {
+            id
+            name
+            abbreviation
+            description
+            color
+            contentColor
+            icon
+            valueRangeFrom
+            valueRangeTo
+          }
           visible
         }
         createdAt
@@ -108,7 +118,17 @@ const UPDATE_TOOLBAR = gql`
     updateToolbar(id: $id, updateToolbarInput: $updateToolbarInput) {
       id
       markers {
-        markerId
+        marker {
+          id
+          name
+          abbreviation
+          description
+          color
+          contentColor
+          icon
+          valueRangeFrom
+          valueRangeTo
+        }
         visible
       }
     }
@@ -120,7 +140,17 @@ const SET_MARKER_VISIBILITY_IN_TOOLBAR = gql`
     setMarkerVisible(id: $id, updateToolbarMarkerVisible: $setToolbarMarkerVisibilityInput) {
       id
       markers {
-        markerId
+        marker {
+          id
+          name
+          abbreviation
+          description
+          color
+          contentColor
+          icon
+          valueRangeFrom
+          valueRangeTo
+        }
         visible
       }
     }
@@ -223,7 +253,17 @@ const SET_PLAY_MODE = gql`
       toolbars {
         id
         markers {
-          markerId
+          marker {
+            id
+            name
+            abbreviation
+            description
+            color
+            contentColor
+            icon
+            valueRangeFrom
+            valueRangeTo
+          }
           visible
         }
         createdAt
@@ -304,7 +344,17 @@ const SET_PLAY_POSITION = gql`
       toolbars {
         id
         markers {
-          markerId
+          marker {
+            id
+            name
+            abbreviation
+            description
+            color
+            contentColor
+            icon
+            valueRangeFrom
+            valueRangeTo
+          }
           visible
         }
         createdAt

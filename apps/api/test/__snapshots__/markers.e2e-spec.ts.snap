@@ -13,46 +13,7 @@ exports[`Markers (e2e) Create Markers SAML Authenticated user can create a new m
 }
 `;
 
-exports[`Markers (e2e) Query Markers Participating user should get list of all markers 1`] = `
-{
-  "markers": [
-    {
-      "color": "#000000",
-      "description": "Marker 1 Description",
-      "icon": "icon1",
-      "id": 1,
-      "name": "Marker 1",
-      "type": "EVENT",
-    },
-    {
-      "color": "#000000",
-      "description": "Marker 2 Description",
-      "icon": "icon2",
-      "id": 2,
-      "name": "Marker 2",
-      "type": "RANGE",
-    },
-    {
-      "color": "#000000",
-      "description": "Marker 3 Description",
-      "icon": "icon3",
-      "id": 3,
-      "name": "Marker 3",
-      "type": "SLIDER",
-    },
-    {
-      "color": "#000000",
-      "description": "Marker 4 Description",
-      "icon": "icon4",
-      "id": 4,
-      "name": "Marker 4",
-      "type": "EVENT",
-    },
-  ],
-}
-`;
-
-exports[`Markers (e2e) Query Markers Session owner should get list of all markers, even of markers of other owners 1`] = `
+exports[`Markers (e2e) Query Markers Session owner should get list of all markers 1`] = `
 {
   "markers": [
     {

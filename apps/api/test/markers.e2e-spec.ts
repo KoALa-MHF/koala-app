@@ -101,7 +101,7 @@ describe('Markers (e2e)', () => {
       expect(errors[0].message).toBe('Unauthorized');
     });
 
-    it('Session owner should get list of all markers, even of markers of other owners', async () => {
+    it('Session owner should get list of all markers', async () => {
       const { data } = await request(app.getHttpServer())
         .auth(`${UsersData.sessionOwner1.id}`, { type: 'bearer' })
         .query(QUERY_MARKERS)
@@ -110,13 +110,13 @@ describe('Markers (e2e)', () => {
       expect(data).toMatchSnapshot();
     });
 
-    it('Participating user should get list of all markers', async () => {
-      const { data } = await request(app.getHttpServer())
+    it('None SAML Authenticated user / Participating user should not get list of all markers (as they can only access the markers via the session toolbar)', async () => {
+      const { errors } = await request(app.getHttpServer())
         .auth(`${UsersData.sessionParticipant1.id}`, { type: 'bearer' })
-        .query(QUERY_MARKERS)
-        .expectNoErrors();
+        .query(QUERY_MARKERS);
 
-      expect(data).toMatchSnapshot();
+      expect(errors).toHaveLength(1);
+      expect(errors[0].message).toBe('Forbidden resource');
     });
   });
 
@@ -167,7 +167,7 @@ describe('Markers (e2e)', () => {
       expect(data).toMatchSnapshot();
     });
 
-    it('Marker Owner of another marker cannot update a marker and should get "Not Found" error', async () => {
+    it('SAML Authenticatated user cannot update a marker another user has created and should get "Not Found" error', async () => {
       const { errors } = await request(app.getHttpServer())
         .auth(`${UsersData.sessionOwner2.id}`, { type: 'bearer' })
         .mutate(UPDATE_MARKER)
