@@ -158,6 +158,6 @@ export class AnnotationsService {
       },
     });
 
-    return annotation.comments;
+    return annotation ? annotation.comments : [];
   }
 }

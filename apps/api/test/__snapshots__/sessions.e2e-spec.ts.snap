@@ -38,6 +38,7 @@ exports[`Sessions (e2e) Query Sessions Owner user should get list of all owned s
       ],
       "userSessions": [
         {
+          "annotations": [],
           "id": 1,
           "owner": {
             "email": "session-owner-1@koala-app.de",
@@ -48,6 +49,19 @@ exports[`Sessions (e2e) Query Sessions Owner user should get list of all owned s
           },
         },
         {
+          "annotations": [
+            {
+              "comments": [
+                {
+                  "id": 1,
+                },
+                {
+                  "id": 2,
+                },
+              ],
+              "id": 1,
+            },
+          ],
           "id": 6,
           "owner": {
             "email": "session-participant-1@koala-app.de",
@@ -58,6 +72,7 @@ exports[`Sessions (e2e) Query Sessions Owner user should get list of all owned s
           },
         },
         {
+          "annotations": [],
           "id": 7,
           "owner": {
             "email": "session-participant-2@koala-app.de",
@@ -86,6 +101,7 @@ exports[`Sessions (e2e) Query Sessions Owner user should get list of all owned s
       ],
       "userSessions": [
         {
+          "annotations": [],
           "id": 3,
           "owner": {
             "email": "session-owner-1@koala-app.de",
@@ -96,6 +112,7 @@ exports[`Sessions (e2e) Query Sessions Owner user should get list of all owned s
           },
         },
         {
+          "annotations": [],
           "id": 9,
           "owner": {
             "email": "session-participant-2@koala-app.de",
@@ -124,6 +141,7 @@ exports[`Sessions (e2e) Query Sessions Owner user should get list of all owned s
       ],
       "userSessions": [
         {
+          "annotations": [],
           "id": 4,
           "owner": {
             "email": "session-owner-1@koala-app.de",
@@ -152,6 +170,7 @@ exports[`Sessions (e2e) Query Sessions Owner user should get list of all owned s
       ],
       "userSessions": [
         {
+          "annotations": [],
           "id": 5,
           "owner": {
             "email": "session-owner-1@koala-app.de",
@@ -167,7 +186,7 @@ exports[`Sessions (e2e) Query Sessions Owner user should get list of all owned s
 }
 `;
 
-exports[`Sessions (e2e) Query Sessions Participating user should get list of all sessions participating and see only own user sessions 1`] = `
+exports[`Sessions (e2e) Query Sessions Participating user should get list of all sessions participating and see only own user sessions and sample solution 1`] = `
 {
   "sessions": [
     {
@@ -187,6 +206,30 @@ exports[`Sessions (e2e) Query Sessions Participating user should get list of all
       ],
       "userSessions": [
         {
+          "annotations": [],
+          "id": 1,
+          "owner": {
+            "email": "session-owner-1@koala-app.de",
+          },
+          "session": {
+            "id": "1",
+            "name": "Session 1",
+          },
+        },
+        {
+          "annotations": [
+            {
+              "comments": [
+                {
+                  "id": 1,
+                },
+                {
+                  "id": 2,
+                },
+              ],
+              "id": 1,
+            },
+          ],
           "id": 6,
           "owner": {
             "email": "session-participant-1@koala-app.de",
@@ -222,6 +265,7 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 1`] = 
       ],
       "userSessions": [
         {
+          "annotations": [],
           "id": 1,
           "owner": {
             "email": "session-owner-1@koala-app.de",
@@ -232,6 +276,19 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 1`] = 
           },
         },
         {
+          "annotations": [
+            {
+              "comments": [
+                {
+                  "id": 1,
+                },
+                {
+                  "id": 2,
+                },
+              ],
+              "id": 1,
+            },
+          ],
           "id": 6,
           "owner": {
             "email": "session-participant-1@koala-app.de",
@@ -242,6 +299,7 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 1`] = 
           },
         },
         {
+          "annotations": [],
           "id": 7,
           "owner": {
             "email": "session-participant-2@koala-app.de",
@@ -270,6 +328,7 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 1`] = 
       ],
       "userSessions": [
         {
+          "annotations": [],
           "id": 3,
           "owner": {
             "email": "session-owner-1@koala-app.de",
@@ -280,6 +339,7 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 1`] = 
           },
         },
         {
+          "annotations": [],
           "id": 9,
           "owner": {
             "email": "session-participant-2@koala-app.de",
@@ -308,6 +368,7 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 1`] = 
       ],
       "userSessions": [
         {
+          "annotations": [],
           "id": 4,
           "owner": {
             "email": "session-owner-1@koala-app.de",
@@ -336,6 +397,7 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 1`] = 
       ],
       "userSessions": [
         {
+          "annotations": [],
           "id": 5,
           "owner": {
             "email": "session-owner-1@koala-app.de",
@@ -382,6 +444,7 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 3`] = 
       ],
       "userSessions": [
         {
+          "annotations": [],
           "id": 3,
           "owner": {
             "email": "session-owner-1@koala-app.de",
@@ -392,6 +455,7 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 3`] = 
           },
         },
         {
+          "annotations": [],
           "id": 9,
           "owner": {
             "email": "session-participant-2@koala-app.de",
@@ -420,6 +484,7 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 3`] = 
       ],
       "userSessions": [
         {
+          "annotations": [],
           "id": 4,
           "owner": {
             "email": "session-owner-1@koala-app.de",
@@ -448,6 +513,7 @@ exports[`Sessions (e2e) Remove Session Session Owner can remove a session 3`] = 
       ],
       "userSessions": [
         {
+          "annotations": [],
           "id": 5,
           "owner": {
             "email": "session-owner-1@koala-app.de",

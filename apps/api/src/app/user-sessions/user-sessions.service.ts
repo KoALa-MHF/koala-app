@@ -115,14 +115,18 @@ export class UserSessionsService {
     });
   }
 
-  findAllBySession(sessionId: number, user?: User): Promise<UserSession[]> {
-    return this.userSessionsRepository.find({
+  async findAllBySession(sessionId: number, user?: User): Promise<UserSession[]> {
+    // Get the session the user is a participant or the owner of
+    const session = await this.sessionsService.findOne(sessionId, user);
+    const userSessions = await this.userSessionsRepository.find({
       where: [
         {
+          // either the user is allowed to see all user sessions where he is the owner
           sessionId: sessionId,
           ownerId: user?.id,
         },
         {
+          // or the session owner is allowed to see all user sessions
           sessionId: sessionId,
           session: {
             ownerId: user?.id,
@@ -130,6 +134,19 @@ export class UserSessionsService {
         },
       ],
     });
+    // if the user is not the owner of the session and is part of the session, then the user is allowed to see the sample solution
+    if (session.ownerId !== user.id && userSessions.length > 0 && session.displaySampleSolution) {
+      const sampleSolutionUserSession = await this.userSessionsRepository.findOne({
+        where: {
+          sessionId: sessionId,
+          ownerId: session.ownerId,
+        },
+      });
+      if (sampleSolutionUserSession) {
+        userSessions.unshift(sampleSolutionUserSession);
+      }
+    }
+    return userSessions;
   }
 
   findOneByCode(code: string): Promise<UserSession> {
