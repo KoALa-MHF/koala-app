@@ -318,7 +318,11 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     let time = 1;
     if (this.getPositionXRatio() !== Infinity) {
-      time = this.currentTime * this.getPositionXRatio() < 1 ? 1 : this.currentTime * this.getPositionXRatio();
+      time = this.currentTime * this.getPositionXRatio() < 1 ? 2 : this.currentTime * this.getPositionXRatio();
+    }
+
+    if (this.currentTime >= this.totalTime) {
+      time = this.getContainerWidth() - 1;
     }
 
     line.attr('x1', time);

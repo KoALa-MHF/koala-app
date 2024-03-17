@@ -1,5 +1,5 @@
 import { Component, Input, EventEmitter, Output, OnInit } from '@angular/core';
-import { MediaActions, MediaEvent } from '../../services/media-control.service';
+import { MediaControlService, MediaActions, MediaEvent } from '../../services/media-control.service';
 
 @Component({
   selector: 'koala-audio-player',
@@ -14,6 +14,8 @@ export class AudioPlayerComponent implements OnInit {
   @Input() metadata: MediaMetadata | undefined;
   @Output() mediaEvent: EventEmitter<MediaEvent> = new EventEmitter<MediaEvent>();
 
+  constructor(private readonly mediaControlService: MediaControlService) {}
+
   playing = false;
   playIcon = 'pi pi-play';
 
@@ -24,6 +26,18 @@ export class AudioPlayerComponent implements OnInit {
 
     navigator.mediaSession.setActionHandler('pause', () => {
       this.onPlay();
+    });
+
+    navigator.mediaSession.setActionHandler('stop', () => {
+      this.onStop();
+    });
+
+    this.mediaControlService.mediaPlayStateChanged$.subscribe({
+      next: (mediaAction) => {
+        if (mediaAction == MediaActions.Finish) {
+          this.onStop();
+        }
+      },
     });
   }
 
