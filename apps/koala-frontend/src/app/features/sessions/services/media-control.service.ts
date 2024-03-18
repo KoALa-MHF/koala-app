@@ -15,6 +15,8 @@ export enum MediaActions {
   Stop,
   Mute,
   Ready,
+  Finish,
+  Seeking,
 }
 
 export interface MediaEvent {
@@ -75,6 +77,12 @@ export class MediaControlService {
       });
       this.addEventHandler('play', () => {
         this.mediaPlayStateChangedSubject.next(MediaActions.Play);
+      });
+      this.addEventHandler('finish', () => {
+        this.mediaPlayStateChangedSubject.next(MediaActions.Finish);
+      });
+      this.addEventHandler('seeking', () => {
+        this.mediaPlayStateChangedSubject.next(MediaActions.Seeking);
       });
       this.addEventHandler('ready', () => {
         this.createTimelinePlugin();
