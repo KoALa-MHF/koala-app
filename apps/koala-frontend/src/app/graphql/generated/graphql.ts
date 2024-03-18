@@ -142,7 +142,7 @@ export type CreateSessionInput = {
   mediaId?: InputMaybe<Scalars['Int']['input']>;
   name: Scalars['String']['input'];
   start?: InputMaybe<Scalars['DateTime']['input']>;
-  status?: SessionStatus;
+  status?: InputMaybe<SessionStatus>;
 };
 
 export type CreateUserInput = {
