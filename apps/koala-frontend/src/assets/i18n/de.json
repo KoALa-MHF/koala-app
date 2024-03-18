@@ -26,6 +26,7 @@
     "SESSION_NOT_YET_STARTED_INFO": "Die Session ist noch nicht gestartet",
     "SESSION_DOES_NOT_EXIST_INFO": "Die Session existiert nicht",
     "SESSION_CLOSED_INFO": "Die Session ist beendet",
+    "UNSAVED_CHNAGES_WARNING": "Es gbt ungesicherte Änderungen. Wollen Sie die Seite wirklich verlassen?",
     "SIDEBAR": {
       "SESSION_HEADER": "Freigaben",
       "SESSION_GENERAL_SETTINGS_TITLE": "Elemente",

@@ -6,6 +6,7 @@ import { SessionPage } from './pages/session/session.page';
 import { SessionInfoPage } from './pages/session-info/session-info.page';
 import { SessionAnalysisPage } from './pages/session-analysis/session-analysis.page';
 import { sessionOpenGuard } from './guards/session-open.guard';
+import { UnsavedChangesGuard } from './guards/session-unsaved-changes.guard';
 import { SessionNotFoundPage } from './pages/session-not-found/session-not-found.page';
 import { SessionNotActivePage } from './pages/session-not-active/session-not-active.page';
 
@@ -20,6 +21,9 @@ const routes: Routes = [
     component: SessionPage,
     canActivate: [
       sessionOpenGuard,
+    ],
+    canDeactivate: [
+      UnsavedChangesGuard,
     ],
   },
   {
