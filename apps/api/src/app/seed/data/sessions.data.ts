@@ -24,6 +24,7 @@ export const SessionsData = [
     name: 'Session 1',
     owner: UsersData.sessionOwner1,
     status: SessionStatus.OPEN,
+    displaySampleSolution: true,
     toolbars: [
       toolbar,
     ],
