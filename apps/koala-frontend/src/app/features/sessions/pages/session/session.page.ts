@@ -266,6 +266,10 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
           this.endActiveSliders(this.totalAudioTime);
         });
 
+        this.mediaControlService.addEventHandler('seeking', (time) => {
+          this.currentAudioTime = time;
+        });
+
         this.mediaControlService.mediaPlayStateChanged$
           .pipe(filter((mediaAction) => mediaAction === MediaActions.Stop))
           .subscribe({
