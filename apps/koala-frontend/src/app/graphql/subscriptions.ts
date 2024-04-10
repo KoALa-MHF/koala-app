@@ -21,44 +21,6 @@ const SUBSCRIBE_SESSION_UPDATED = gql`
       currentSessionServerTime
       isSessionOwner
       isAudioSession
-      toolbars {
-        id
-        markers {
-          markerId
-          visible
-        }
-        createdAt
-        updatedAt
-      }
-      userSessions {
-        id
-        owner {
-          id
-          email
-          displayName
-        }
-        annotations {
-          id
-          start
-          end
-          value
-          media {
-            id
-          }
-          marker {
-            id
-            type
-            name
-            abbreviation
-            description
-            color
-            contentColor
-            icon
-            valueRangeFrom
-            valueRangeTo
-          }
-        }
-      }
     }
   }
 `;

@@ -210,4 +210,18 @@ export class Session extends BaseEntity {
   async generateCode() {
     this.code = await nanoid();
   }
+
+  @AfterLoad()
+  fillCurrentSessionServerTime() {
+    this.currentSessionServerTime = Date.now();
+  }
+
+  @AfterLoad()
+  fillIsAudioSession() {
+    if (this.mediaId) {
+      this.isAudioSession = true;
+    } else {
+      this.isAudioSession = false;
+    }
+  }
 }

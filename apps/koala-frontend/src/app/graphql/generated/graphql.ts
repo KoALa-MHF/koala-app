@@ -658,6 +658,7 @@ export type UpdateSessionMutation = {
   __typename?: 'Mutation';
   updateSession: {
     __typename?: 'Session';
+    id: string;
     name: string;
     description?: string | null;
     status?: SessionStatus | null;
@@ -1328,39 +1329,6 @@ export type OnSessionUpdatedSubscription = {
     currentSessionServerTime: number;
     isSessionOwner: boolean;
     isAudioSession: boolean;
-    toolbars: Array<{
-      __typename?: 'Toolbar';
-      id: string;
-      createdAt: any;
-      updatedAt: any;
-      markers?: Array<{ __typename?: 'ToolbarMarker'; markerId: string; visible: boolean }> | null;
-    }>;
-    userSessions: Array<{
-      __typename?: 'UserSession';
-      id: number;
-      owner: { __typename?: 'User'; id: string; email?: string | null; displayName?: string | null };
-      annotations: Array<{
-        __typename?: 'Annotation';
-        id: number;
-        start: number;
-        end?: number | null;
-        value?: number | null;
-        media?: { __typename?: 'Media'; id: string } | null;
-        marker: {
-          __typename?: 'Marker';
-          id: number;
-          type: MarkerType;
-          name: string;
-          abbreviation?: string | null;
-          description?: string | null;
-          color: string;
-          contentColor: string;
-          icon?: string | null;
-          valueRangeFrom?: number | null;
-          valueRangeTo?: number | null;
-        };
-      }>;
-    }>;
   };
 };
 
@@ -1432,6 +1400,7 @@ export class CreateNewSessionGQL extends Apollo.Mutation<CreateNewSessionMutatio
 export const UpdateSessionDocument = gql`
   mutation updateSession($id: Int!, $session: UpdateSessionInput!) {
     updateSession(id: $id, updateSessionInput: $session) {
+      id
       name
       description
       status
@@ -2481,44 +2450,6 @@ export const OnSessionUpdatedDocument = gql`
       currentSessionServerTime
       isSessionOwner
       isAudioSession
-      toolbars {
-        id
-        markers {
-          markerId
-          visible
-        }
-        createdAt
-        updatedAt
-      }
-      userSessions {
-        id
-        owner {
-          id
-          email
-          displayName
-        }
-        annotations {
-          id
-          start
-          end
-          value
-          media {
-            id
-          }
-          marker {
-            id
-            type
-            name
-            abbreviation
-            description
-            color
-            contentColor
-            icon
-            valueRangeFrom
-            valueRangeTo
-          }
-        }
-      }
     }
   }
 `;
