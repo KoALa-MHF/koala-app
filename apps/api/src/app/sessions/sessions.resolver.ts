@@ -15,9 +15,7 @@ import { RegisteredUserGuard } from '../core/guards/registerd-user.guard';
 import { PubSub } from 'graphql-subscriptions';
 import { SetPlayModeInput } from './dto/set-play-mode.input';
 import { SetPlayPositionInput } from './dto/set-play-position.input';
-import { ServerTimeInterceptor } from './server-time.interceptor';
 import { SessionOwnerInterceptor } from './session-owner.interceptor';
-import { AudioSessionInterceptor } from './audio-session.interceptor';
 
 const pubSub = new PubSub();
 
@@ -35,7 +33,7 @@ export class SessionsResolver {
 
   @Mutation(() => Session)
   @UseGuards(AuthGuard, RegisteredUserGuard)
-  @UseInterceptors(ServerTimeInterceptor, SessionOwnerInterceptor, AudioSessionInterceptor)
+  @UseInterceptors(SessionOwnerInterceptor)
   createSession(@Args('createSessionInput') createSessionInput: CreateSessionInput, @CurrentUser() user: User) {
     return this.sessionsService.create(createSessionInput, user);
   }
@@ -47,21 +45,21 @@ export class SessionsResolver {
     { name: 'sessions' }
   )
   @UseGuards(AuthGuard)
-  @UseInterceptors(ServerTimeInterceptor, SessionOwnerInterceptor, AudioSessionInterceptor)
+  @UseInterceptors(SessionOwnerInterceptor)
   findAll(@CurrentUser() user: User) {
     return this.sessionsService.findAll(user);
   }
 
   @Query(() => Session, { name: 'session' })
   @UseGuards(AuthGuard)
-  @UseInterceptors(ServerTimeInterceptor, SessionOwnerInterceptor, AudioSessionInterceptor)
+  @UseInterceptors(SessionOwnerInterceptor)
   findOne(@Args('id', { type: () => Int }) id: number, @CurrentUser() user: User) {
     return this.sessionsService.findOne(id, user);
   }
 
   @Query(() => Session, { name: 'sessionByCode' })
   @UseGuards(AuthGuard)
-  @UseInterceptors(ServerTimeInterceptor, SessionOwnerInterceptor, AudioSessionInterceptor)
+  @UseInterceptors(SessionOwnerInterceptor)
   async findOneBySessionCode(@Args('code', { type: () => String }) code: string) {
     let session = await this.sessionsService.findOneByCode(code);
 
@@ -74,20 +72,23 @@ export class SessionsResolver {
 
   @Mutation(() => Session)
   @UseGuards(AuthGuard, RegisteredUserGuard)
-  @UseInterceptors(ServerTimeInterceptor, SessionOwnerInterceptor, AudioSessionInterceptor)
-  updateSession(
+  @UseInterceptors(SessionOwnerInterceptor)
+  async updateSession(
     @Args('id', { type: () => Int }) id: number,
     @Args('updateSessionInput') updateSessionInput: UpdateSessionInput,
     @CurrentUser() user: User
   ) {
-    const session = this.sessionsService.update(id, updateSessionInput, user);
+    const session = await this.sessionsService.update(id, updateSessionInput, user);
+
+    session.isSessionOwner = user.id === session.ownerId;
+
     pubSub.publish('sessionUpdated', { sessionUpdated: session });
     return session;
   }
 
   @Mutation(() => Session)
   @UseGuards(AuthGuard, RegisteredUserGuard)
-  @UseInterceptors(ServerTimeInterceptor, SessionOwnerInterceptor, AudioSessionInterceptor)
+  @UseInterceptors(SessionOwnerInterceptor)
   setPlayMode(
     @Args('id', { type: () => Int }) id: number,
     @Args('setPlayModeInput') setPlayModeInput: SetPlayModeInput,
@@ -100,7 +101,7 @@ export class SessionsResolver {
 
   @Mutation(() => Session)
   @UseGuards(AuthGuard, RegisteredUserGuard)
-  @UseInterceptors(ServerTimeInterceptor, SessionOwnerInterceptor, AudioSessionInterceptor)
+  @UseInterceptors(SessionOwnerInterceptor)
   setPlayPosition(
     @Args('id', { type: () => Int }) id: number,
     @Args('setPlayPositionInput') setPlayPositionInput: SetPlayPositionInput,

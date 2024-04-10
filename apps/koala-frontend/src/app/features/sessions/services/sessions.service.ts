@@ -138,10 +138,7 @@ export class SessionsService {
       )
       .subscribe({
         next: (session?: Session) => {
-          this.focusSession = session;
-          if (this.focusSession) {
-            this.focusSessionSubject.next(this.focusSession);
-          }
+          this.setFocusSession(parseInt(session?.id || '0')).subscribe();
         },
       });
   }
