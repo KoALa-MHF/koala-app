@@ -11,6 +11,7 @@ export class MediaRecorderService {
   record(): Promise<void> {
     return new Promise((resolve, reject) => {
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        this.chunks = [];
         navigator.mediaDevices
           .getUserMedia({ audio: true })
           .then((stream) => {
