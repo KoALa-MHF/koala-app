@@ -12,6 +12,12 @@ export interface SessionOverviewActions {
   leaveSession: boolean;
 }
 
+export interface SessionOverviewColumns {
+  participantsCount: boolean;
+  createdAt: boolean;
+  changedAt: boolean;
+}
+
 export enum ExportType {
   json,
   csv,
@@ -37,6 +43,11 @@ export class SessionsOverviewTableComponent {
     displaySessionCode: true,
     leaveSession: false,
   };
+  @Input() visibleColumns: SessionOverviewColumns = {
+    participantsCount: true,
+    createdAt: true,
+    changedAt: true,
+  };
 
   @Output() sessionDelete = new EventEmitter<Session[]>();
   @Output() sessionCreate = new EventEmitter<void>();
@@ -48,17 +59,6 @@ export class SessionsOverviewTableComponent {
   @Output() sessionLeave = new EventEmitter<Session>();
 
   selectedSessions: Session[] = [];
-
-  displayedColumns: string[] = [
-    'name',
-    'createdAt',
-    'participants',
-    'updatedAt',
-    'settings',
-    'sessionCode',
-    'copy',
-    'enter',
-  ];
 
   public onSessionDelete() {
     this.sessionDelete.emit(this.selectedSessions);

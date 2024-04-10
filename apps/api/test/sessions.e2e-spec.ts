@@ -24,6 +24,12 @@ const QUERY_SESSIONS = gql`
         owner {
           email
         }
+        annotations {
+          id
+          comments {
+            id
+          }
+        }
         session {
           id
           name
@@ -157,7 +163,7 @@ describe('Sessions (e2e)', () => {
       expect(data).toMatchSnapshot();
     });
 
-    it('Participating user should get list of all sessions participating and see only own user sessions', async () => {
+    it('Participating user should get list of all sessions participating and see only own user sessions and sample solution', async () => {
       const { data } = await request(app.getHttpServer())
         .auth(`${UsersData.sessionParticipant1.id}`, { type: 'bearer' })
         .query(QUERY_SESSIONS)

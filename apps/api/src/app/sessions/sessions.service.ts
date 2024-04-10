@@ -58,10 +58,12 @@ export class SessionsService {
     const session = await this.sessionsRepository.findOne({
       where: [
         {
+          // either the user is the session owner
           id,
           ownerId: user.id,
         },
         {
+          // or the user is a participant
           id,
           userSessions: {
             ownerId: user.id,

@@ -1,6 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
@@ -19,13 +20,9 @@ function HomepageHeader() {
             KoALa Tutorial - 5min ⏱️
           </Link>
         </div>
-        <div className="{styles.buttons} button_start">
-          <Link
-            className="button button--secondary button--lg"
-            to="https://docs.google.com/forms/d/e/1FAIpQLSdRNeZu8K-_CENwJQYS6LPGbJ3kD8F9qHXNxItHXBtYbKm2BA/viewform?fbzx=9118902381424291925"
-          >
-            Zum Newsletter anmelden
-          </Link>
+        <div className="stilLogo">
+          <div>Die Entwicklung von Koala wurde gefördert von der Stiftung Innovation in der Hochschullehre.</div>
+          <img src={useBaseUrl('/img/Logo_Stiftung_Hochschullehre.svg')} alt="Logo StIL" style={{ width: '250px' }} />
         </div>
       </div>
     </header>

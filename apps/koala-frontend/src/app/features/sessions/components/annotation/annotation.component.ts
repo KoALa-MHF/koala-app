@@ -55,6 +55,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input() displayMode = false;
   @Input() enableAnnotationDelete = false;
   @Input() deactivateAnnotationDelete = false;
+  @Input() disableComments = false;
 
   @Output() deleteAnnotations = new EventEmitter<Marker>();
   @Output() annotationTextCommentCreate = new EventEmitter<CreateAnnotationTextComment>();
@@ -186,7 +187,10 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
     let i = 0;
     this.annotationData?.forEach((_, row) => {
       this.drawAnnotations(row, i, this.markers[i]);
-      this.drawNotifications(row, i, this.markers[i]);
+
+      if (!this.disableComments) {
+        this.drawNotifications(row, i, this.markers[i]);
+      }
       i++;
     });
   }
@@ -204,9 +208,12 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
     };
     const click = (d: any, ev: any) => {
       this.selectedDataPoint = d;
-      this.annotationDetailOverlay.show(null, ev.target);
-      this.annotationDetailOverlayStyle.top = ev.target.getBoundingClientRect().y + 10 + 'px';
-      this.annotationDetailOverlayStyle.left = ev.target.getBoundingClientRect().x + 'px';
+
+      if (!this.disableComments) {
+        this.annotationDetailOverlay.show(null, ev.target);
+        this.annotationDetailOverlayStyle.top = ev.target.getBoundingClientRect().y + 10 + 'px';
+        this.annotationDetailOverlayStyle.left = ev.target.getBoundingClientRect().x + 'px';
+      }
     };
     const mouseleave = (d: any, ev: any) => {
       if (!d.transparent) {
@@ -318,7 +325,11 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     let time = 1;
     if (this.getPositionXRatio() !== Infinity) {
-      time = this.currentTime * this.getPositionXRatio() < 1 ? 1 : this.currentTime * this.getPositionXRatio();
+      time = this.currentTime * this.getPositionXRatio() < 1 ? 2 : this.currentTime * this.getPositionXRatio();
+    }
+
+    if (this.currentTime >= this.totalTime) {
+      time = this.getContainerWidth() - 1;
     }
 
     line.attr('x1', time);

@@ -84,13 +84,13 @@
       <th id="SessionOverviewTableHeaderNameColumn">
         {{ 'SESSION.OVERVIEW.TABLE_HEADER.NAME_COL_LABEL' | translate }}
       </th>
-      <th id="SessionOverviewTableHeaderCreationDateColumn">
+      <th id="SessionOverviewTableHeaderCreationDateColumn" *ngIf="visibleColumns.createdAt">
         {{ 'SESSION.OVERVIEW.TABLE_HEADER.CREATION_DATE_COL_LABEL' | translate }}
       </th>
-      <th id="SessionOverviewTableHeaderParticipantsColumn">
+      <th id="SessionOverviewTableHeaderParticipantsColumn" *ngIf="visibleColumns.participantsCount">
         {{ 'SESSION.OVERVIEW.TABLE_HEADER.PARTICIPANTS_COL_LABEL' | translate }}
       </th>
-      <th id="SessionOverviewTableHeaderLastChangedDateColumn">
+      <th id="SessionOverviewTableHeaderLastChangedDateColumn" *ngIf="visibleColumns.changedAt">
         {{ 'SESSION.OVERVIEW.TABLE_HEADER.CHANGED_DATE_COL_LABEL' | translate }}
       </th>
       <th id="SessionOverviewTableHeaderSettingsColumn" *ngIf="supportedActions.updateSession">
@@ -120,15 +120,19 @@
         <span class="p-column-title">{{ 'SESSION.OVERVIEW.TABLE_HEADER.NAME_COL_LABEL' | translate }}</span
         >{{ session.name }}
       </td>
-      <td data-column="createdAt" data-cy="session-overview-created-at-col">
+      <td data-column="createdAt" data-cy="session-overview-created-at-col" *ngIf="visibleColumns.createdAt">
         <span class="p-column-title">{{ 'SESSION.OVERVIEW.TABLE_HEADER.CREATION_DATE_COL_LABEL' | translate }}</span
         >{{ session.createdAt | localizedDate }}
       </td>
-      <td data-column="participants" data-cy="session-overview-participants-col">
+      <td
+        data-column="participants"
+        data-cy="session-overview-participants-col"
+        *ngIf="visibleColumns.participantsCount"
+      >
         <span class="p-column-title">{{ 'SESSION.OVERVIEW.TABLE_HEADER.PARTICIPANTS_COL_LABEL' | translate }}</span
         >{{ session.userSessions?.length || 0 }}
       </td>
-      <td data-column="updatedAt" data-cy="session-overview-updated-at-col">
+      <td data-column="updatedAt" data-cy="session-overview-updated-at-col" *ngIf="visibleColumns.changedAt">
         <span class="p-column-title">{{ 'SESSION.OVERVIEW.TABLE_HEADER.CHANGED_DATE_COL_LABEL' | translate }}</span
         >{{ session.updatedAt | localizedDate }}
       </td>

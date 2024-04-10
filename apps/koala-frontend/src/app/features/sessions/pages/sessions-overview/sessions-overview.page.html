@@ -35,6 +35,11 @@
         updateSession: false,
         displaySessionCode: false,
         leaveSession: true}"
+        [visibleColumns]="{
+            participantsCount: false,
+            createdAt: true,
+            changedAt: false
+        }"
       ></koala-sessions-overview-table>
     </p-accordionTab>
 
@@ -55,6 +60,11 @@
           updateSession: false,
           displaySessionCode: false,
           leaveSession: false}"
+        [visibleColumns]="{
+            participantsCount: false,
+            createdAt: true,
+            changedAt: false
+        }"
       ></koala-sessions-overview-table>
     </p-accordionTab>
   </p-accordion>
