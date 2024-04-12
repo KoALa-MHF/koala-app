@@ -6,8 +6,6 @@ import { getFilePath, getFileSize } from './media.util';
 import { EntityNotFoundError } from 'typeorm';
 import { AuthGuard } from '@nestjs/passport';
 import { UseGuards } from '@nestjs/common';
-import { CurrentUser } from '../core/decorators/user.decorator';
-import { User } from '../users/entities/user.entity';
 
 @Controller('media')
 export class MediaController {

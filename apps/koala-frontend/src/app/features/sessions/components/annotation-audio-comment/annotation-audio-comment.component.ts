@@ -63,6 +63,7 @@ export class AnnotationAudioCommentComponent implements OnDestroy {
     this.loadingForRecordingService = false;
     this.recording = true;
     this.recordingStartDate = Date.now();
+    this.recordingTime = new Date(Date.now() - this.recordingStartDate);
 
     this.recordingTimerSubscription = timer(1000, 1000).subscribe(() => {
       if (this.recordingStartDate) {

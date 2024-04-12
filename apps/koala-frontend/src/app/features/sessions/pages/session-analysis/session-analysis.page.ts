@@ -238,7 +238,10 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
           [
             annotationAudioComment.comment,
           ],
-          `Annotation_Audio_${annotationAudioComment.annotationId}`
+          `Annotation_Audio_${annotationAudioComment.annotationId}.mp3`,
+          {
+            type: 'audio/mp3',
+          }
         ),
       })
       .subscribe({

@@ -638,7 +638,10 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
           [
             annotationAudioComment.comment,
           ],
-          `Annotation_Audio_${annotationAudioComment.annotationId}`
+          `Annotation_Audio_${annotationAudioComment.annotationId}.mp3`,
+          {
+            type: 'audio/mp3',
+          }
         ),
       })
       .subscribe({
