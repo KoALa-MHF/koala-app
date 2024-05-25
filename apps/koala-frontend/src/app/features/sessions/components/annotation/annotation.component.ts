@@ -211,8 +211,8 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
 
       if (!this.disableComments) {
         this.annotationDetailOverlay.show(null, ev.target);
-        this.annotationDetailOverlayStyle.top = ev.target.getBoundingClientRect().y + 10 + 'px';
-        this.annotationDetailOverlayStyle.left = ev.target.getBoundingClientRect().x + 'px';
+        this.annotationDetailOverlayStyle.top = ev.target.getBoundingClientRect().y + window.scrollY + 10 + 'px';
+        this.annotationDetailOverlayStyle.left = ev.target.getBoundingClientRect().x + window.scrollX + 'px';
       }
     };
     const mouseleave = (d: any, ev: any) => {
