@@ -13,7 +13,6 @@ import { environment } from '../../../../../environments/environment';
 import { Marker } from '../../types/marker.entity';
 import { filter } from 'rxjs';
 import { NavigationService } from '../../services/navigation.service';
-import { ToolbarsService } from '../../services/toolbars.service';
 import { UserSession } from '../../types/user-session.entity';
 import { CheckboxChangeEvent } from 'primeng/checkbox';
 import { CreateAnnotationTextComment } from '../../components/annotation-text-comment-list/annotation-text-comment-list.component';
@@ -56,7 +55,6 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly mediaControlService: MediaControlService,
     private readonly messageService: MessageService,
-    private readonly toolbarService: ToolbarsService,
     private readonly translateService: TranslateService,
     private readonly navigationService: NavigationService,
     private appRef: ApplicationRef,
@@ -285,6 +283,10 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
         console.log('Error Annotation Audio Removal');
       },
     });
+  }
+
+  onAnnotationSelected(annotationId: number) {
+    this.annotationService.setSelected(annotationId);
   }
 
   onSidebarHide() {

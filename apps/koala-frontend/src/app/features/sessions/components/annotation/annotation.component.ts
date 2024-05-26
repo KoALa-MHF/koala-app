@@ -18,6 +18,9 @@ import * as d3 from 'd3';
 import { AnnotationAudioComment } from '../annotation-audio-comment/annotation-audio-comment.component';
 import { AnnotationDetailComponent } from '../annotation-detail/annotation-detail.component';
 import { CreateAnnotationTextComment } from '../annotation-text-comment-list/annotation-text-comment-list.component';
+import { OverlayPanel } from 'primeng/overlaypanel';
+import { AnnotationService } from '../../services/annotation.service';
+import { Subscription } from 'rxjs';
 
 export enum Display {
   Rect = 'rect',
@@ -63,6 +66,7 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Output() annotationTextCommentRemove = new EventEmitter<number>();
   @Output() annotationAudioComment = new EventEmitter<AnnotationAudioComment>();
   @Output() annotationAudioCommentDelete = new EventEmitter<number>();
+  @Output() annotationSelected = new EventEmitter<number>();
 
   @ViewChild('annotationDetail') annotationDetail!: AnnotationDetailComponent;
 
@@ -71,15 +75,21 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
   d3Labels = 'd3-labels-';
   d3tooltip: any;
 
-  @ViewChild('annotationDetailOverlay') annotationDetailOverlay: any;
+  @ViewChild('annotationDetailOverlay') annotationDetailOverlay?: OverlayPanel;
   annotationDetailOverlayStyle = { top: '0px', left: '0px' };
   selectedDataPoint: DataPoint | null = null;
+  private annotationSelectedSubscription: Subscription | undefined;
 
   constructor(
     private readonly markerService: MarkerService,
     private confirmationService: ConfirmationService,
-    private readonly translateService: TranslateService
-  ) {}
+    private readonly translateService: TranslateService,
+    private readonly annotationService: AnnotationService
+  ) {
+    this.annotationSelectedSubscription = this.annotationService.annotationSelected$.subscribe(() => {
+      this.annotationDetailOverlay?.hide();
+    });
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes) {
@@ -117,6 +127,8 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
     svgC.selectAll('circle').remove();
     svgC.selectAll('line.marker').remove();
     svgL.selectAll('text').remove();
+
+    this.annotationSelectedSubscription?.unsubscribe();
   }
 
   public addDataPoint(id: number, value: DataPoint) {
@@ -206,16 +218,17 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
         d3.select(ev.target).style('stroke', 'black').style('opacity', 1);
       }
     };
-    const click = (d: any, ev: any) => {
+    const click = (d: DataPoint, ev: any) => {
       this.selectedDataPoint = d;
+      this.annotationSelected.emit(d.id);
 
       if (!this.disableComments) {
-        this.annotationDetailOverlay.show(null, ev.target);
-        this.annotationDetailOverlayStyle.top = ev.target.getBoundingClientRect().y + 10 + 'px';
-        this.annotationDetailOverlayStyle.left = ev.target.getBoundingClientRect().x + 'px';
+        this.annotationDetailOverlay?.show(null, ev.target);
+        this.annotationDetailOverlayStyle.top = ev.target.getBoundingClientRect().y + window.scrollY + 10 + 'px';
+        this.annotationDetailOverlayStyle.left = ev.target.getBoundingClientRect().x + window.scrollX + 'px';
       }
     };
-    const mouseleave = (d: any, ev: any) => {
+    const mouseleave = (d: DataPoint, ev: any) => {
       if (!d.transparent) {
         d3.select(ev.target).style('stroke', 'none').style('opacity', 1);
       }
