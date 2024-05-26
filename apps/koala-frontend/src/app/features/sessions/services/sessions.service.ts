@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MutationResult } from 'apollo-angular';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import {
   CreateNewSessionGQL,
@@ -20,6 +20,7 @@ import {
   SessionExportGQL,
   SessionCsvExportGQL,
   MarkerType,
+  PlayMode,
 } from '../../../graphql/generated/graphql';
 import { Session } from '../types/session.entity';
 import { ToolbarsService } from './toolbars.service';
@@ -55,6 +56,7 @@ const csvNewLine = '\n';
   providedIn: 'root',
 })
 export class SessionsService {
+  private localPlayMode = PlayMode.Paused;
   private focusSession?: Session;
 
   private focusSessionSubject = new Subject<Session>();
@@ -191,16 +193,23 @@ export class SessionsService {
   }
 
   setPlayMode(sessionId: number, playModeInput: SetPlayModeInput) {
-    return this.setPlayModeGQL.mutate({ sessionId, setPlayModeInput: playModeInput }).pipe(
-      map((response) => {
-        const session = response.data?.setPlayMode;
-        if (session) {
-          return session;
-        } else {
-          throw new Error('Session Response Empty After SetPlayMode');
-        }
-      })
-    );
+    if (this.focusSession?.enablePlayer) {
+      //local player management, no global playMode change
+      this.localPlayMode = playModeInput.playMode || PlayMode.Paused;
+      return of({ ...this.focusSession, playMode: PlayMode.Running } as Session);
+    } else {
+      this.localPlayMode = PlayMode.Paused;
+      return this.setPlayModeGQL.mutate({ sessionId, setPlayModeInput: playModeInput }).pipe(
+        map((response) => {
+          const session = response.data?.setPlayMode;
+          if (session) {
+            return session as Session;
+          } else {
+            throw new Error('Session Response Empty After SetPlayMode');
+          }
+        })
+      );
+    }
   }
 
   setPlayPosition(sessionId: number, playPosition: number) {
@@ -220,6 +229,10 @@ export class SessionsService {
     return this.getOne(sessionId).pipe(
       tap((session: Session) => {
         this.focusSession = session;
+        if (this.focusSession?.enablePlayer) {
+          //mix in local play mode
+          this.focusSession.playMode = this.localPlayMode;
+        }
         this.focusSessionSubject.next(this.focusSession);
       })
     );

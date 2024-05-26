@@ -489,8 +489,8 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
           } else {
             this.endActiveSliders(this.currentAudioTime);
             this.sessionControlService.pauseSession().subscribe();
-            this.sessionService.setFocusSession(this.sessionId);
           }
+          this.sessionService.setFocusSession(this.sessionId).subscribe();
         } catch (error) {
           this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
         }
@@ -499,7 +499,7 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
         try {
           this.endActiveSliders(this.currentAudioTime);
           this.sessionControlService.stopSession().subscribe();
-          this.sessionService.setFocusSession(this.sessionId);
+          this.sessionService.setFocusSession(this.sessionId).subscribe();
           this.currentAudioTime = 0;
         } catch (error) {
           this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
