@@ -25,11 +25,13 @@
         [d3ContainerID]="userSession.id"
         [displayMode]="true"
         [enableAnnotationDelete]="false"
+        [disableComments]="userSession.owner?.id === session.owner?.id"
         (annotationTextCommentCreate)="onAnnotationTextCommentCreate($event)"
         (annotationTextCommentUpdate)="onAnnotationTextCommentUpdate($event)"
         (annotationTextCommentRemove)="onAnnotationTextCommentRemove($event)"
         (annotationAudioComment)="onAnnotationAudioComment($event)"
         (annotationAudioCommentDelete)="onAnnotationAudioCommentDelete($event)"
+        (annotationSelected)="onAnnotationSelected($event)"
       ></koala-app-annotation>
     </div>
   </div>

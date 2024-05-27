@@ -43,6 +43,7 @@ const CREATE_SESSION = gql`
 const UPDATE_SESSION = gql`
   mutation updateSession($id: Int!, $session: UpdateSessionInput!) {
     updateSession(id: $id, updateSessionInput: $session) {
+      id
       name
       description
       status

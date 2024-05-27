@@ -10,9 +10,14 @@ import {
   UpdateAnnotationCommentGQL,
   UpdateAnnotationNoteGQL,
 } from '../../../graphql/generated/graphql';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class AnnotationService {
+  private selectedAnnotationId: number | undefined;
+  private annotationSelectedSubject = new Subject<number>();
+  public annotationSelected$ = this.annotationSelectedSubject.asObservable();
+
   constructor(
     private readonly createAnnotationGQL: CreateAnnotationGQL,
     private readonly deleteAnnotationGQL: DeleteAnnotationGQL,
@@ -54,5 +59,10 @@ export class AnnotationService {
 
   removeComment(commentId: number) {
     return this.removeAnnotationCommentGQL.mutate({ commentId });
+  }
+
+  setSelected(annotationId: number) {
+    this.selectedAnnotationId = annotationId;
+    this.annotationSelectedSubject.next(this.selectedAnnotationId);
   }
 }

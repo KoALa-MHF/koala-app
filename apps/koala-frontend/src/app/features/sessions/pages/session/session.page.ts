@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ApplicationRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, ApplicationRef, HostListener } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
 import { MarkerService } from '../../../markers/services/marker.service';
@@ -24,6 +24,7 @@ import { AnnotationAudioComment } from '../../components/annotation-audio-commen
 import { MediaService } from '../../services/media.service';
 import { Comment } from '../../types/comment.entity';
 import { CreateAnnotationTextComment } from '../../components/annotation-text-comment-list/annotation-text-comment-list.component';
+import { BlockNavigationIfUnsavedChanges } from '../../guards/session-unsaved-changes.guard';
 
 @Component({
   selector: 'koala-app-session',
@@ -32,7 +33,7 @@ import { CreateAnnotationTextComment } from '../../components/annotation-text-co
     './session.page.scss',
   ],
 })
-export class SessionPage implements OnInit, OnDestroy {
+export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedChanges {
   sidePanelForm: FormGroup;
   ToolbarMode = ToolbarMode;
   PlayMode = PlayMode;
@@ -212,6 +213,25 @@ export class SessionPage implements OnInit, OnDestroy {
     this.sessionUpdatedSubscription = this.sessionService.subscribeUpdated(this.sessionId);
   }
 
+  hasUnsavedChanges(): boolean {
+    const ids = Array.from(this.AnnotationData.keys());
+    return ids.some((id) => {
+      return this.AnnotationData.get(id)?.some((annotation) => {
+        if (annotation.active && annotation.display !== Display.Circle) {
+          return true;
+        }
+        return false;
+      });
+    });
+  }
+
+  @HostListener('window:beforeunload', [
+    '$event',
+  ])
+  beforeUnloadHander() {
+    return !this.hasUnsavedChanges();
+  }
+
   ngOnDestroy(): void {
     if (this.sessionService.getFocusSession()?.isAudioSession) {
       this.sessionControlService.stopSession();
@@ -244,6 +264,10 @@ export class SessionPage implements OnInit, OnDestroy {
 
         this.mediaControlService.addEventHandler('finish', () => {
           this.endActiveSliders(this.totalAudioTime);
+        });
+
+        this.mediaControlService.addEventHandler('seeking', (time) => {
+          this.currentAudioTime = time;
         });
 
         this.mediaControlService.mediaPlayStateChanged$
@@ -465,8 +489,8 @@ export class SessionPage implements OnInit, OnDestroy {
           } else {
             this.endActiveSliders(this.currentAudioTime);
             this.sessionControlService.pauseSession().subscribe();
-            this.sessionService.setFocusSession(this.sessionId);
           }
+          this.sessionService.setFocusSession(this.sessionId).subscribe();
         } catch (error) {
           this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
         }
@@ -475,7 +499,7 @@ export class SessionPage implements OnInit, OnDestroy {
         try {
           this.endActiveSliders(this.currentAudioTime);
           this.sessionControlService.stopSession().subscribe();
-          this.sessionService.setFocusSession(this.sessionId);
+          this.sessionService.setFocusSession(this.sessionId).subscribe();
           this.currentAudioTime = 0;
         } catch (error) {
           this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.MEDIA_CONTROLS', 'SESSION.ERROR_DIALOG.ERRORS.SUMMARY');
@@ -614,7 +638,10 @@ export class SessionPage implements OnInit, OnDestroy {
           [
             annotationAudioComment.comment,
           ],
-          `Annotation_Audio_${annotationAudioComment.annotationId}`
+          `Annotation_Audio_${annotationAudioComment.annotationId}.mp3`,
+          {
+            type: 'audio/mp3',
+          }
         ),
       })
       .subscribe({
