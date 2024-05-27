@@ -75,6 +75,7 @@ import { AnnotationTextCommentListComponent } from './components/annotation-text
 import { OrderByDatePipe } from './pipes/order-by-date.pipe';
 import { SessionNotFoundPage } from './pages/session-not-found/session-not-found.page';
 import { SessionNotActivePage } from './pages/session-not-active/session-not-active.page';
+import { SessionExportService } from './services/session-export.service';
 
 @NgModule({
   declarations: [
@@ -152,6 +153,7 @@ import { SessionNotActivePage } from './pages/session-not-active/session-not-act
     ToolbarsService,
     UserSessionService,
     AnnotationService,
+    SessionExportService,
   ],
 })
 export class SessionsModule {}

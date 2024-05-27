@@ -11,6 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../../auth/services/auth.service';
 import { Role, SessionStatus } from '../../../../graphql/generated/graphql';
 import { ExportType } from '../../components/sessions-overview-table/sessions-overview-table.component';
+import { SessionExportService } from '../../services/session-export.service';
 
 @Component({
   selector: 'koala-sessions-overview',
@@ -40,7 +41,8 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
     private readonly messageService: MessageService,
     private readonly authService: AuthService,
     private readonly translateService: TranslateService,
-    private readonly confirmationService: ConfirmationService
+    private readonly confirmationService: ConfirmationService,
+    private readonly sessionExportService: SessionExportService
   ) {}
 
   ngOnInit(): void {
@@ -108,7 +110,7 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
   public onSessionExport({ exportType, sessions }: { exportType: ExportType; sessions: Session[] }) {
     sessions.forEach(async (session) => {
       if (exportType === ExportType.json) {
-        this.sessionService.createSessionJSON(parseInt(session.id)).subscribe({
+        this.sessionExportService.createSessionJSON(parseInt(session.id)).subscribe({
           next: (result) => {
             const blob = new Blob(
               [
@@ -129,7 +131,7 @@ export class SessionsOverviewPage implements OnInit, OnDestroy {
           },
         });
       } else {
-        const result = await this.sessionService.createSessionCSV(parseInt(session.id));
+        const result = await this.sessionExportService.createSessionCSV(parseInt(session.id));
 
         const blob = new Blob(
           [
