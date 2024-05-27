@@ -6,6 +6,7 @@ import { AboutPage } from './pages/about/about.page';
 const routes: Routes = [
   { path: 'imprint', component: ImprintPage },
   { path: 'about', component: AboutPage },
+  { path: 'github', component: AboutPage },
 ];
 
 @NgModule({
