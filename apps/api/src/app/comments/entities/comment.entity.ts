@@ -28,7 +28,7 @@ export class Comment extends BaseEntity {
   ownerId: number;
 
   @ManyToOne(() => Annotation, (annotation) => annotation.comments, { onDelete: 'CASCADE' })
-  @Field((type) => Annotation, { description: 'Associated Annotation' })
+  @Field((type) => Annotation, { description: 'Associated Annotation', nullable: true })
   @IsNotEmpty()
   annotation: Annotation;
 

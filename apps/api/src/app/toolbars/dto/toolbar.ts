@@ -9,7 +9,7 @@ export class Toolbar extends BaseEntity {
   @Field(() => ID, { description: 'ID for Media' })
   id: number;
 
-  @Field((type) => Session, { description: 'Associated Session' })
+  @Field((type) => Session, { description: 'Associated Session', nullable: true })
   @IsNotEmpty()
   session: Session;
 

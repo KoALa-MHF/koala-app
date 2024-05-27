@@ -7,7 +7,7 @@ import { Marker } from '../types/marker.entity';
 import { UserSession } from '../types/user-session.entity';
 import { MarkerService } from '../../markers/services/marker.service';
 
-interface AnnotationCSVExport {
+export interface AnnotationCSVExport {
   timestamp: number;
   value: number;
   markerType: MarkerType;
@@ -15,7 +15,7 @@ interface AnnotationCSVExport {
   userIndex: number;
 }
 
-interface CSVColumn {
+export interface CSVColumn {
   title: string;
   markerId: number;
   userIndex: number;
@@ -41,13 +41,13 @@ export class SessionExportService {
     private readonly markerService: MarkerService
   ) {}
 
-  createSessionJSON(sessionId: number): Observable<Session> {
+  public createSessionJSON(sessionId: number): Observable<Session> {
     return this.sessionExportGQL
       .fetch({ sessionId }, { fetchPolicy: 'no-cache' })
       .pipe(map((data) => data.data.session));
   }
 
-  createSessionCSV(sessionId: number): Promise<string> {
+  public createSessionCSV(sessionId: number): Promise<string> {
     return new Promise((resolve, reject) => {
       this.sessionCSVExportGQL
         .fetch({ sessionId }, { fetchPolicy: 'no-cache' })
@@ -78,7 +78,7 @@ export class SessionExportService {
             resolve(csvString);
           },
           error: () => {
-            reject();
+            reject(new Error('Server Issue'));
           },
         });
     });

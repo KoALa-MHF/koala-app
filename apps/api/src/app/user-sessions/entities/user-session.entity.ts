@@ -59,7 +59,7 @@ export class UserSession extends BaseEntity {
   note?: string;
 
   @ManyToOne(() => Session)
-  @Field((type) => Session, { description: 'Associated Session' })
+  @Field((type) => Session, { description: 'Associated Session', nullable: true })
   @IsNotEmpty()
   session: Session;
 

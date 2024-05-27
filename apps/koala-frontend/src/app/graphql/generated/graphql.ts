@@ -32,7 +32,7 @@ export type Annotation = {
   /** ID for Annotation */
   id: Scalars['Int']['output'];
   /** Associated Marker */
-  marker: Marker;
+  marker?: Maybe<Marker>;
   /** Associated Media File */
   media?: Maybe<Media>;
   /** Annotation Note */
@@ -42,7 +42,7 @@ export type Annotation = {
   /** Date of Last Update */
   updatedAt: Scalars['DateTime']['output'];
   /** Associated UserSession */
-  userSession: UserSession;
+  userSession?: Maybe<UserSession>;
   /** Annotation Value */
   value?: Maybe<Scalars['Int']['output']>;
 };
@@ -68,7 +68,7 @@ export type Authentication = {
 export type Comment = {
   __typename?: 'Comment';
   /** Associated Annotation */
-  annotation: Annotation;
+  annotation?: Maybe<Annotation>;
   /** Creation Date */
   createdAt: Scalars['DateTime']['output'];
   /** ID for Comment */
@@ -492,7 +492,7 @@ export type Toolbar = {
   id: Scalars['ID']['output'];
   markers?: Maybe<Array<ToolbarMarker>>;
   /** Associated Session */
-  session: Session;
+  session?: Maybe<Session>;
   /** Date of Last Update */
   updatedAt: Scalars['DateTime']['output'];
 };
@@ -600,7 +600,7 @@ export type UserSession = {
   /** Associated User */
   owner: User;
   /** Associated Session */
-  session: Session;
+  session?: Maybe<Session>;
   /** User Session Status */
   status: UserSessionStatus;
   /** Date of Last Update */
@@ -805,8 +805,8 @@ export type CreateAnnotationMutation = {
     start: number;
     end?: number | null;
     value?: number | null;
-    marker: { __typename?: 'Marker'; id: number; type: MarkerType; name: string };
-    userSession: { __typename?: 'UserSession'; id: number };
+    marker?: { __typename?: 'Marker'; id: number; type: MarkerType; name: string } | null;
+    userSession?: { __typename?: 'UserSession'; id: number } | null;
   };
 };
 
@@ -863,14 +863,14 @@ export type SetPlayModeMutation = {
           owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
         }>;
         media?: { __typename?: 'Media'; id: string } | null;
-        marker: {
+        marker?: {
           __typename?: 'Marker';
           id: number;
           type: MarkerType;
           name: string;
           color: string;
           contentColor: string;
-        };
+        } | null;
       }>;
     }>;
     owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
@@ -929,14 +929,14 @@ export type SetPlayPositionMutation = {
           owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
         }>;
         media?: { __typename?: 'Media'; id: string } | null;
-        marker: {
+        marker?: {
           __typename?: 'Marker';
           id: number;
           type: MarkerType;
           name: string;
           color: string;
           contentColor: string;
-        };
+        } | null;
       }>;
     }>;
     owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
@@ -1135,14 +1135,14 @@ export type GetOneSessionQuery = {
           owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
         }>;
         media?: { __typename?: 'Media'; id: string } | null;
-        marker: {
+        marker?: {
           __typename?: 'Marker';
           id: number;
           name: string;
           type: MarkerType;
           color: string;
           contentColor: string;
-        };
+        } | null;
       }>;
     }>;
     owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
@@ -1231,7 +1231,7 @@ export type SessionExportQuery = {
           owner: { __typename?: 'User'; id: string; role: Role; createdAt: any; updatedAt: any };
         }>;
         media?: { __typename?: 'Media'; id: string } | null;
-        marker: {
+        marker?: {
           __typename?: 'Marker';
           id: number;
           type: MarkerType;
@@ -1243,7 +1243,7 @@ export type SessionExportQuery = {
           icon?: string | null;
           valueRangeFrom?: number | null;
           valueRangeTo?: number | null;
-        };
+        } | null;
       }>;
     }>;
   };
@@ -1285,7 +1285,7 @@ export type SessionCsvExportQuery = {
         end?: number | null;
         value?: number | null;
         media?: { __typename?: 'Media'; id: string } | null;
-        marker: {
+        marker?: {
           __typename?: 'Marker';
           id: number;
           type: MarkerType;
@@ -1297,7 +1297,7 @@ export type SessionCsvExportQuery = {
           icon?: string | null;
           valueRangeFrom?: number | null;
           valueRangeTo?: number | null;
-        };
+        } | null;
       }>;
     }>;
   };

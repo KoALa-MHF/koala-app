@@ -30,7 +30,7 @@ export class Annotation extends BaseEntity {
   value?: number;
 
   @ManyToOne(() => Marker)
-  @Field((type) => Marker, { description: 'Associated Marker' })
+  @Field((type) => Marker, { description: 'Associated Marker', nullable: true })
   @IsNotEmpty()
   marker: Marker;
 
@@ -38,7 +38,7 @@ export class Annotation extends BaseEntity {
   markerId: number;
 
   @ManyToOne(() => UserSession)
-  @Field((type) => UserSession, { description: 'Associated UserSession' })
+  @Field((type) => UserSession, { description: 'Associated UserSession', nullable: true })
   @IsNotEmpty()
   userSession: UserSession;
 
