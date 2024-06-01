@@ -1,1 +1,441 @@
-{}
+{
+  "KOALA_PROJECT_TITLE": "Projet Koala",
+  "LOGIN_NAV_BTN": "Se connecter",
+  "LOGIN_OPTION_NAV_BTN": "Connectez-vous avec OneLogin",
+  "LANGUAGE_SELECTION": {
+    "LANG_GERMAN_LABEL": "Deutsch",
+    "LANG_ENGLISH_LABEL": "English",
+    "LANG_FRENCH_LABEL": "Français"
+  },
+  "ABOUT": {
+    "TITLE": "À propos de Koala",
+    "INTRO": "Koala est un développement de <a href=\"https://mh-freiburg.de\" target=\"_blank\">Hochschule für Musik Freiburg</a> et de la <a href=\"https://www.hmdk-stuttgart.de/\" target=\"_blank\">HMDK Stuttgart</a>. Koala a reçu un financement important de la <a href=\"https://stiftung-hochschullehre.de/\" target=\"_blank\">Stiftung Innovation in der Hochschullehre</a> et du <a href=\"https://www.stifterverband.org/\" target=\"_blank\">Stifterverband</a>.",
+    "KOALA_FEATURES_TITLE": "Que peuvent faire avec Koala?",
+    "KOALA_FEATURES_BODY": {
+      "INTRO": "Koala…",
+      "FIRST_BULLET": "…peut être utilisé de manière flexible dans les cours de musique pour travailler ensemble sur des morceaux.",
+      "SECOND_BULLET": "…offre la possibilité de placer différents types d'annotations au cours d'une pièce, ou d'ajouter des commentaires à un point précis d'une pièce.",
+      "THIRD_BULLET": "…est conçu de manière à s'intégrer le plus harmonieusement possible dans différentes formes de travail (petits groupes, grands groupes, contextes hybrides, travail individuel, devoirs, etc…).",
+      "CLOSING": "Pour plus d'informations, consultez les pages de manuel et de documentation sur Github."
+    },
+    "KOALA_USAGE_TITLE": "Comment puis-je utiliser Koala?",
+    "KOALA_USAGE_BODY": {
+      "INTRO": "Ce site Internet est l'instance Koala de la HfM Freiburg. ",
+      "SECOND_PARAGRAPH": "Si vous n'êtes pas membre de la HfM Freiburg et que votre institution ne possède pas encore de Koala, vous trouverez le logiciel et la documentation ici :",
+      "FIRST_BULLET": "<a href=\"https://github.com/KoALa-MHF/koala-app\" target=\"_blank\">Logiciel : https://github.com/KoALa-MHF/koala-app</a>",
+      "SECOND_BULLET": "<a href=\"https://koala-mhf.github.io/koala-app/\" target=\"_blank\">Documentation : https://koala-mhf.github.io/koala-app/</a>",
+      "CLOSING": "Vous pouvez également trouver de l'aide pour l'installation dans le <a href=\"https://koala-mhf.github.io/koala-app/\" target=\"_blank\">Documentation</a>."
+    }
+  },
+  "FOOTER": {
+    "COPYRIGHT": "© Application Koala 2023/2024",
+    "IMPRINT": "Mentions légales & Protection des données",
+    "ABOUT": "À propos de Koala",
+    "DOCS": "Manuel"
+  },
+  "SESSION": {
+    "CREATE_SESSION_MENU_LABEL": "Nouvelle séance",
+    "EXPORT_SESSIONS_MENU_LABEL": "Exporter la séance",
+    "EXPORT_SESSIONS_JSON_MENU_LABEL": "Exporter la session au format JSON",
+    "EXPORT_SESSIONS_CSV_MENU_LABEL": "Exporter la session au format CSV",
+    "EXPORT_SESSION_ERROR_TITLE": "L'exportation n'a pas réussi",
+    "EXPORT_SESSION_ERROR_MESSAGE": "Exportation de session'{{sessionName}}'n'a pas pu être exécuté",
+    "DELETE_SESSIONS_MENU_LABEL": "Supprimer la séance",
+    "DUPLICATE_SESSION_MENU_LABEL": "Séance en double",
+    "ENTER_SESSION_MENU_LABEL": "Rejoindre la séance",
+    "SESSION_SETTINGS_BTN": "Préferences",
+    "SESSION_ANALYSIS_SETTINGS_BTN": "Avis",
+    "MY_SESSIONS_NAV_BTN": "Mes séances",
+    "MARKERS_OVERVIEW_NAV_BTN": "marqueurs",
+    "ANALYSIS_NAV_BTN": "Évaluation",
+    "INFO_NAV_BTN": "Informations sur la séance",
+    "SESSION_NOT_YET_STARTED_INFO": "La séance n'a pas encore commencé",
+    "SESSION_DOES_NOT_EXIST_INFO": "La séance n'existe pas",
+    "SESSION_CLOSED_INFO": "La séance est terminée",
+    "UNSAVED_CHNAGES_WARNING": "Il y a des modifications non enregistrées. ",
+    "SIDEBAR": {
+      "SESSION_HEADER": "Autorisations",
+      "SESSION_GENERAL_SETTINGS_TITLE": "Éléments",
+      "MARKER_TITLE": "Marqueurs",
+      "PARTICIPANTS_TITLE": "Membres",
+      "SELECT_ALL_CHECKBOX": "Tous",
+      "ANALYSIS_HEADER": "Avis"
+    },
+    "CREATE_DIALOG": {
+      "TITLE": "Créer une nouvelle séance",
+      "NAME_INPUT_LABEL": "Nom de la séance*",
+      "NAME_INPUT_EXPLANATION": "Donnez un nom à la séance.",
+      "CREATE_BTN": "Créer",
+      "CANCEL_BTN": "Annuler"
+    },
+    "TABS": {
+      "EVALUATION": "Évaluation"
+    },
+    "ERROR_DIALOG": {
+      "SUMMARY": "Veuillez réessayer plus tard",
+      "MEDIA_CONTROLS": "Erreur de lecture du fichier audio",
+      "NO_AUDIO_FILE": "Aucun fichier audio trouvé",
+      "NO_AUDIO_FILE_SUM": "Veuillez d'abord enregistrer un fichier audio",
+      "BROKEN_AUDIO_FILE": "Le fichier audio n'a pas pu être chargé",
+      "NO_USER_SESSION": "Aucune session utilisateur n'a pu être trouvée",
+      "NO_USER_SESSION_SUM": "Veuillez créer une session utilisateur",
+      "ANNOTATION_ERROR": "L'annotation n'a pas pu être enregistrée"
+    },
+    "OVERVIEW": {
+      "OWN_SESSIONS_TITLE": "Mes séances",
+      "OTHER_SESSIONS_TITLE": "Autres séances",
+      "CLOSED_SESSIONS_TITLE": "Séances terminées",
+      "TABLE_HEADER": {
+        "NAME_COL_LABEL": "Nom de famille",
+        "CREATION_DATE_COL_LABEL": "Date de création",
+        "PARTICIPANTS_COL_LABEL": "Nombre de membres",
+        "CHANGED_DATE_COL_LABEL": "Dernier accès",
+        "SETTINGS_COL_LABEL": "Paramètres",
+        "LINK_COL_LABEL": "Lien/Code QR",
+        "COPY_COL_LABEL": "Dupliquer",
+        "ENTER_COL_LABEL": "Rejoindre",
+        "LEAVE_COL_LABEL": "Sortie"
+      },
+      "QRCODE": {
+        "DIALOG_TITLE": "Rejoindre la session",
+        "COPY_SUCCESS": "{{copiedObject}} copié",
+        "COPY_ERROR": "{{copiedObject}} Impossible de copier",
+        "SESSION_URL_COPIED_OBJECT": "URL",
+        "SESSION_CODE_COPIED_OBJECT": "Code de séance"
+      },
+      "ACC": {
+        "CREATE": "Créer une session"
+      }
+    },
+    "MAINTAIN": {
+      "TABS": {
+        "SETTINGS": "Paramètres de session",
+        "AUDIO": "l'audio",
+        "MARKER": "marqueur",
+        "PARTICIPANTS": "membres"
+      },
+      "SECTION_HEADINGS": {
+        "SETTINGS": "Paramètres de session",
+        "GENERAL_DATA": "informations générales",
+        "AUDIO": "l'audio",
+        "AVAILABILITY": "Disponibilité",
+        "DETAILS": "Autorisations",
+        "MARKER": "Marqueurs",
+        "CREATE_MARKER": "Créer un marqueur",
+        "MARKER_PREVIEW": "Aperçu",
+        "MARKER_LIBRARY": "Du magasin de la bibliothèque",
+        "MARKER_PLACEMENT": "Placement",
+        "PARTICIPANTS": "Ajouter des membres",
+        "INVITED_PARTICIPANTS": "Membres de la séance",
+        "PARTICIPANT_INVITATION": "Invitation"
+      },
+      "SESSION_SETTINGS": {
+        "SESSION_NAME_INPUT_LABEL": "Nom de famille",
+        "SESSION_NAME_INPUT_EXPLANATION": "Veuillez donner un nom à la session.",
+        "SESSION_DESCRIPTION_INPUT_LABEL": "Description",
+        "SESSION_DESCRIPTION_INPUT_EXPLANATION": "Si nécessaire, ajoutez une description ou une tâche à la session.",
+        "SESSION_AVAILABILITY_EXPLANATION": "Les utilisateurs ne peuvent accéder à la session que lorsqu'elle est en ligne. ",
+        "SESSION_STATUS_LABEL": "Statut",
+        "SESSION_START_DATE_INPUT_LABEL": "Commencer",
+        "SESSION_END_DATE_INPUT_LABEL": "Fin",
+        "SESSION_DETAILS_EXPLANATION": "Ici, vous spécifiez à l'avance quelles fonctions seront disponibles/visibles pour les utilisateurs. ",
+        "EDIT_ENABLED_LABEL": "édition",
+        "PLAYER_ENABLED_LABEL": "Joueurs",
+        "SAMPLE_SOLUTION_ENABLED_LABEL": "Exemple de solution",
+        "ANNOTATION_DELETE_LOCKED_LABEL": "Annotations Supprimer le verrouillage",
+        "ANALYSIS_ENABLED_LABEL": "Évaluation",
+        "SAVE_BTN": "Sauvegarder",
+        "CANCEL_BTN": "Annuler",
+        "SAVE_ERROR_MESSAGE_TITLE": "Les modifications apportées à la session n'ont pas pu être enregistrées",
+        "SAVE_SUCCESS_MESSAGE_TITLE": "Modifications de la session{{sessionName}}' ont été enregistrés",
+        "STATUS": {
+          "IN_PREPARATION_LABEL": "En cours de construction",
+          "OPEN_LABEL": "En ligne",
+          "CLOSED_LABEL": "Fermé",
+          "ARCHIVED_LABEL": "Archivé"
+        }
+      },
+      "AUDIO": {
+        "AUDIO_UPLOAD_EXPLANATION": "Ici, vous pouvez sélectionner et télécharger un fichier audio. ",
+        "MAX_UPLOAD_SIZE_EXPLANATION": "Taille maximale de téléchargement : 100 Mo",
+        "ALLOWED_FILE_TYPES_EXPLANATION": "Types de fichiers autorisés : .mp3, .wav",
+        "CHOOSE_BTN": "Choisir le fichier",
+        "UPLOAD_SUCCESS_MESSAGE_TITLE": "Téléchargement du fichier réussi",
+        "UPLOAD_SUCCESS_MESSAGE": "Le fichier a été téléchargé avec succès et attribué à la session",
+        "UPLOAD_ERROR_MESSAGE_TITLE": "Échec du téléchargement du fichier",
+        "UPLOAD_ERROR_MESSAGE": "Le fichier n'a pas pu être téléchargé. ",
+        "TITLE_UPLOAD_AREA": "Fichier audio sélectionné :"
+      },
+      "MARKER": {
+        "MARKER_PREVIEW_EXPLANATION": "Ici vous pouvez voir un aperçu de votre marqueur.",
+        "MARKER_ADD_BTN": "Ajouter un marqueur",
+        "MARKER_RESET_BTN": "Réinitialiser aux valeurs par défaut",
+        "MARKER_LIBRARY_EXPLANATION": "Ici, vous pouvez charger des barres d'outils enregistrées ou des marqueurs individuels.",
+        "MARKER_PLACEMENT_EXPLANATION": "Les marqueurs peuvent être disposés individuellement par glisser-déposer.",
+        "MARKER_CREATION_SUCCESS_MESSAGE_TITLE": "Marqueur créé et ajouté avec succès à la session",
+        "MARKER_CREATION_ERROR_MESSAGE_TITLE": "La création du marqueur a échoué",
+        "LOAD_MARKER_BTN": "Magasin de marqueurs",
+        "MARKER_EVENT_TYPE": "Événement",
+        "MARKER_RANGE_TYPE": "Région",
+        "MARKER_SLIDER_TYPE": "Slider",
+        "DELETE_CONFIRM_DIALOG": {
+          "TITLE": "Supprimer le marqueur de la session",
+          "EXPLANATION": "Veux-tu vraiment retirer le marqueur'{{markerName}}' de la séance ?",
+          "CONFIRM_BTN": "Retirer",
+          "CANCEL_BTN": "Annuler"
+        },
+        "LOAD_MARKER_DIALOG": {
+          "LOAD_MARKER_DIALOG_TITLE": "Bibliothèque de marqueurs",
+          "SEARCH_CLEAR_BTN": "Réinitialiser",
+          "SEARCH_INPUT_PLACEHOLDER": "terme de recherche",
+          "ADD_MARKER": "Ajouter un marqueur"
+        }
+      },
+      "PARTICIPANTS": {
+        "PARTICIPANT_EXPLANATION": "Vous pouvez ajouter de nouveaux membres à votre session en envoyant des liens d'invitation par e-mail.",
+        "ADD_BTN": "+",
+        "EMAIL_COL": "Adresse e-mail/nom d'affichage",
+        "DELETE_COL": "Retirer",
+        "ADD_DIALOG": {
+          "TITLE": "Ajouter un participant",
+          "EMAIL_INPUT_LABEL": "Adresse e-mail",
+          "EMAIL_INPUT_EXPLANATION": "Ajoutez une adresse e-mail par ligne."
+        },
+        "INVITATION_TEXT_LABEL": "Nouvelles",
+        "INVITATION_TEXT_EXPLANATION": "Ici, vous pouvez, si nécessaire, insérer un message aux personnes invitées, qui sera envoyé avec le lien d'invitation.",
+        "INVITE_BTN": "Inviter",
+        "ACC": {
+          "DELETE_BTN_ACC": "Retirer"
+        },
+        "INVITATION_SUCCESS_MESSAGE_TITLE": "Invitation envoyée",
+        "INVITATION_SUCCESS_MESSAGE": "Les invitations ont été envoyées aux adresses e-mail",
+        "INVITATION_ERROR_MESSAGE_TITLE": "Erreur d'invitation",
+        "INVITATION_ERROR_MESSAGE": "Les invitations n'ont pas pu être envoyées",
+        "DELETE_CONFIRM_DIALOG": {
+          "TITLE": "Supprimer des participants",
+          "EXPLANATION": "Voulez-vous vraiment que le participant avec l'adresse e-mail '{{email}}' Supprimer de la session ?",
+          "EXPLANATION_NAME": "Voulez-vous vraiment que le participant{{participantName}}' Supprimer de la session ?",
+          "CONFIRM_BTN": "Retirer",
+          "CANCEL_BTN": "Annuler"
+        },
+        "ADD_ERROR_MESSAGE_TITLE": "Erreur - Ajouter un participant",
+        "ADD_ERROR_MESSAGE": "Malheureusement, le participant n'a pas pu être ajouté. ",
+        "REMOVE_ERROR_MESSAGE_TITLE": "Erreur - Supprimer un participant",
+        "REMOVE_ERROR_MESSAGE": "Malheureusement, le participant n'a pas pu être retiré de la session. "
+      }
+    },
+    "DELETE_CONFIRM_DIALOG": {
+      "TITLE": "Supprimer",
+      "EXPLANATION": "Veux-tu vraiment la séance'{{sessionName}}' supprimer?",
+      "EXPLANATION_MULTI_SESSION": "Voulez-vous ceux {{sessionCount}} supprimer les sessions sélectionnées ?",
+      "CONFIRM_BTN": "Supprimer",
+      "CANCEL_BTN": "Annuler"
+    },
+    "ANNOTATION": {
+      "DELETE": {
+        "CONFIRM_MESSAGE_TITLE": "Voulez-vous vraiment toutes les annotations du marqueur ?{{markerName}}' supprimer?",
+        "HEADER": "Supprimer les annotations",
+        "ACCEPT_LABEL": "Oui",
+        "REJECT_LABEL": "Non"
+      },
+      "DETAIL_OVERLAY": {
+        "SAVE_BTN": "Sauvegarder",
+        "CANCEL_BTN": "jeter",
+        "EDIT_BTN": "Modifier",
+        "DELETE_BTN": "Supprimer le commentaire",
+        "ANNOTATION_TIME_LABEL": "Temps:",
+        "AUDIO_COMMENT_TAB_TITLE": "l'audio",
+        "TEXT_COMMENT_TAB_TITLE": "texte",
+        "ALL_COMMENTS_TITLE": "Tous les commentaires",
+        "DELETE_CONFIRM_DIALOG_TITLE": "Supprimer le commentaire",
+        "DELETE_CONFIRM_DIALOG_MESSAGE": "Voulez-vous supprimer le commentaire sélectionné ?",
+        "DELETE_CONFIRM_DIALOG_CONFIRM": "Supprimer",
+        "DELETE_CONFIRM_DIALOG_REJECT": "Annuler",
+        "OWN_COMMENT_LEGEND": "je",
+        "OTHER_COMMENT_LEGEND": "Propriétaire de la session"
+      }
+    }
+  },
+  "ICONS": {
+    "arrow-down": "Flèche vers le bas",
+    "arrow-down-left": " Flèche vers le bas à gauche",
+    "arrow-down-right": "Flèche vers le bas à droite",
+    "arrow-left": "Flèche gauche",
+    "arrow-right": "flèche vers la droite",
+    "arrow-right-arrow-left": "Flèches dans les deux sens",
+    "arrow-up": "flèche vers le haut",
+    "arrow-up-left": "Flèche vers le haut à gauche",
+    "arrow-up-right": "Flèche vers le haut vers la droite",
+    "arrows-alt": "Flèche croisée",
+    "arrows-h": "Flèche pointant horizontalement dans les deux sens",
+    "arrows-v": "Flèche pointant verticalement dans les deux sens",
+    "ban": "Interdire",
+    "bell": "cloche",
+    "caret-down": "Triangle vers le bas",
+    "caret-left": "Triangle à gauche",
+    "caret-right": "Triangle à droite",
+    "caret-up": "Triangle vers le haut",
+    "check": "Crochet",
+    "circle": "Cercle",
+    "circle-fill": "Cercle rempli",
+    "eye": "Œil",
+    "flag": "drapeau",
+    "flag-fill": "Drapeau rempli",
+    "heart": "Cœur",
+    "key": "Clé",
+    "moon": "lune",
+    "palette": "Palette de couleurs",
+    "refresh": "Rafraîchir",
+    "replay": "Répéter",
+    "reply": "Répondre",
+    "search": "Chercher",
+    "spinner": "modèle de maintien",
+    "star": "étoile",
+    "stop": "Arrêt",
+    "stop-circle": "Arrêtez-vous en rond",
+    "sun": "Soleil",
+    "tag": "Signe",
+    "thumbs-down": "pouces vers le bas",
+    "thumbs-up": "pouces vers le haut",
+    "times-circle": "Annuler",
+    "trash": "poubelle",
+    "volume-off": "Muet",
+    "angle-double-down": "Double flèche vers le bas",
+    "angle-double-left": "Double flèche vers la gauche",
+    "angle-double-right": "Double flèche vers la droite",
+    "angle-double-up": "Double flèche vers le haut",
+    "angle-down": "Flèche unique vers le bas",
+    "angle-left": "Flèche unique vers la gauche",
+    "angle-right": "Flèche unique vers la droite",
+    "angle-up": "Flèche unique vers le haut",
+    "arrow-circle-down": "Flèche vers le bas dans le cercle",
+    "arrow-circle-left": "Flèche dans un cercle vers la gauche",
+    "arrow-circle-right": "Flèche dans un cercle vers la droite",
+    "arrow-circle-up": "Flèche dans un cercle pointant vers le haut",
+    "backward": "Dos",
+    "bolt": "foudre",
+    "bookmark": "signet",
+    "comment": "commentaire",
+    "comments": "commentaires",
+    "exclamation-circle": "point d'exclamation",
+    "home": "À la maison",
+    "megaphone": "mégaphone",
+    "question": "Demander",
+    "times": "Annuler",
+    "undo": "Défait",
+    "copy": "Copie",
+    "eye-slash": "Oeil barré",
+    "quarter_note": "Note du trimestre",
+    "eighth_note": "Huitième note",
+    "sixteenth_note": "double croche",
+    "eighth_beam_note": "Croches avec poutres",
+    "flat_sign": "Notation musicale b",
+    "natural_sign": "Signe de résolution",
+    "sharp_sign": "Croix de notation musicale",
+    "piano_sign": "piano",
+    "forte_sign": "Forte",
+    "crescendo": "crescendo",
+    "decrescendo": "Décrescendo",
+    "G_clef": "clé de sol",
+    "F_clef": "Clé de fa",
+    "Fermata": "Fermata",
+    "half_note": "Demi-note",
+    "full_note": "Catégorie entière",
+    "breve_note": "Brévis",
+    "sixteenth_beam_note": "Doubles croches avec ligatures",
+    "grinning_face": "Emoji riant",
+    "slightly_smiling_face": "Emoji légèrement riant",
+    "neutral_face": "Emoji neutre",
+    "worried_face": "Emoji inquiet",
+    "slightly_frowning_face": "Emoji triste",
+    "crying_face": "Emoji qui pleure",
+    "loudly_crying_face": "Emoji qui pleure fort",
+    "weary_face": "Emoji fatigué",
+    "smiling_face_w_hearts": "Emoji riant avec des yeux de coeur",
+    "smiling_face_w_sunglasses": "Emoji riant avec des lunettes de soleil",
+    "disappointed_face": "Emoji déçu",
+    "yawning_face": "Emoji bâillant",
+    "sleeping_face": "Emoji endormi",
+    "astonished_face": "Emoji étonné",
+    "confused_face": "Emoji confus",
+    "exploding_face": "Emoji explosif",
+    "fire": "Feu",
+    "snowflake": "Flocon de neige",
+    "celebration": "Fête",
+    "thumbs_up": "pouces vers le haut",
+    "thumbs_down": "pouces vers le bas",
+    "shamrock": "Trèfle",
+    "bird": "Oiseau",
+    "skull": "Crâne",
+    "koala": "Koala"
+  },
+  "AUTH": {
+    "MENU_ACTION": {
+      "LOGOUT": "Se déconnecter",
+      "PROFILE_EDIT": "profil"
+    },
+    "DISPLAY_NAME_INPUT_LABEL": "Afficher un nom",
+    "DISPLAY_NAME_INPUT_EXPLANATION": "Ici, vous pouvez modifier le nom affiché sur l'écran de session",
+    "PROFILE_DIALOG_TITLE": "Maintenir le profil",
+    "LOGIN": {
+      "SESSION_CODE_PLACEHOLDER": "Code de séance",
+      "SESSION_CODE_LOGIN_ERROR_MESSAGE": "La connexion avec le code de session n'a pas réussi"
+    }
+  },
+  "MARKER": {
+    "TYPE": {
+      "EVENT": "Événement",
+      "RANGE": "Région",
+      "SLIDER": "Slider"
+    },
+    "OVERVIEW": {
+      "TYPE_FILTER_PLACEHOLDER": "Type de marqueur",
+      "FILTER_CLEAR_BTN": "",
+      "SEARCH_INPUT_PLACEHOLDER": "",
+      "COLUMN_TITLE": {
+        "NAME": "Nom de famille",
+        "ABBREVIATION": "abréviation",
+        "ICON": "Icône",
+        "DESCRIPTION": "Description",
+        "TYPE": "Type de marqueur",
+        "CONTENT_COLOR": "Texte noir",
+        "COLOR": "Couleur"
+      },
+      "ACTIONS": {
+        "CREATE": "Créer un marqueur",
+        "CHANGE": "Changer de marqueur"
+      },
+      "CREATE": {
+        "DIALOG_TITLE": "Créer un marqueur",
+        "CREATE_BTN": "Investir",
+        "RESET_BTN": "Réinitialiser aux valeurs par défaut"
+      }
+    },
+    "MAINTAIN": {
+      "MARKER_TYPE_LABEL": "Type de marqueur*",
+      "MARKER_TYPE_EXPLANATION": "Sélectionnez le type de marqueur souhaité.",
+      "MARKER_NAME_INPUT_LABEL": "Nom du marqueur*",
+      "MARKER_NAME_INPUT_EXPLANATION": "Donnez un nom au marqueur.",
+      "MARKER_DESCRIPTION_INPUT_LABEL": "Description",
+      "MARKER_DESCRIPTION_INPUT_EXPLANATION": "Si nécessaire, ajoutez une description au marqueur.",
+      "MARKER_ABBREVIATION_INPUT_LABEL": "abréviation",
+      "MARKER_ABBREVIATION_INPUT_LABEL_MANDATORY": "Abréviation*",
+      "MARKER_ABBREVIATION_INPUT_EXPLANATION": "Choisissez une abréviation et/ou une icône pour le marqueur.",
+      "MARKER_ABBREVIATION_INPUT_EXPLANATION_MANDATORY": "Choisissez une abréviation pour le marqueur.",
+      "MARKER_RANGE_FROM_INPUT_LABEL": "Valeur minimum",
+      "MARKER_RANGE_FROM_INPUT_EXPLANATION": "Choisissez une valeur minimale pour le curseur.",
+      "MARKER_RANGE_TO_INPUT_LABEL": "Valeur maximum",
+      "MARKER_RANGE_TO_INPUT_EXPLANATION": "Choisissez une valeur maximale pour le curseur.",
+      "MARKER_COLOR_INPUT_LABEL": "Couleur",
+      "MARKER_CONTENT_COLOR_INPUT_LABEL": "Texte noir",
+      "MARKER_CONTENT_COLOR_INPUT_SLIDER_LABEL": "Curseur noir",
+      "MARKER_COLOR_INPUT_EXPLANATION": "Choisissez une couleur pour votre marqueur.",
+      "MARKER_ICON_INPUT_LABEL": "Icône",
+      "MARKER_ICON_INPUT_EXPLANATION": "Choisissez une abréviation et/ou une icône pour le marqueur.",
+      "ABBREVIATION_ICON_ERROR_MESSAGE_TITLE": "Les modifications ne peuvent pas être enregistrées",
+      "ABBREVIATION_ICON_ERROR_MESSAGE": "L'abréviation ou une icône doit être conservée.",
+      "NAME_ERROR_MESSAGE_TITLE": "Les modifications ne peuvent pas être enregistrées",
+      "NAME_ERROR_MESSAGE": "Le nom du marqueur ne peut pas être vide"
+    }
+  }
+}
