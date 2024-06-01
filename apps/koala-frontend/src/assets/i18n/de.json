@@ -27,6 +27,12 @@
       "CLOSING": "Hilfen bei der Installation finden Sie ebenfalls in der <a href=\"https://koala-mhf.github.io/koala-app/\" target=\"_blank\">Dokumentation</a>."
     }
   },
+  "FOOTER": {
+    "COPYRIGHT": "© Koala App 2023/2024",
+    "IMPRINT": "Impressum & Datenschutz",
+    "ABOUT": "Über Koala",
+    "DOCS": "Handbuch"
+  },
   "SESSION": {
     "CREATE_SESSION_MENU_LABEL": "Neue Session",
     "EXPORT_SESSIONS_MENU_LABEL": "Session Exportieren",

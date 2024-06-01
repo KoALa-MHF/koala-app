@@ -1,1 +1,441 @@
-{}
+{
+  "KOALA_PROJECT_TITLE": "Koala project",
+  "LOGIN_NAV_BTN": "Log in",
+  "LOGIN_OPTION_NAV_BTN": "Login with OneLogin",
+  "LANGUAGE_SELECTION": {
+    "LANG_GERMAN_LABEL": "Deutsch",
+    "LANG_ENGLISH_LABEL": "English",
+    "LANG_FRENCH_LABEL": "Français"
+  },
+  "ABOUT": {
+    "TITLE": "About Koala",
+    "INTRO": "Koala is startet as a project of <a href=\"https://mh-freiburg.de\" target=\"_blank\">Freiburg University of Music</a> and the <a href=\"https://www.hmdk-stuttgart.de/\" target=\"_blank\">Stuttgart University of Music and Performing Arts</a>. It was funded by a programme of the <a href=\"https://stiftung-hochschullehre.de/\" target=\"_blank\">Stiftung Innovation in der Hochschullehre (StIL)</a>.",
+    "KOALA_FEATURES_TITLE": "What can you do with Koala?",
+    "KOALA_FEATURES_BODY": {
+      "INTRO": "The Koala App…",
+      "FIRST_BULLET": "…can be used flexibly in music lessons to listen music together and work on pieces in class.",
+      "SECOND_BULLET": "…offers the possibility of placing different types of annotations over the timeline of a piece, or adding comments to a specific point in a piece.",
+      "THIRD_BULLET": "…is designed in a way that it can be integrated seamlessly into different classroom situations (small groups, large groups, hybrid settings, individual work, homework, etc...).",
+      "CLOSING": "For more information, see the manual and documentation pages on Github."
+    },
+    "KOALA_USAGE_TITLE": "How can I use Koala?",
+    "KOALA_USAGE_BODY": {
+      "INTRO": "This website is the Koala instance of the HfM Freiburg.",
+      "SECOND_PARAGRAPH": "If you are not a member of the HfM Freiburg and your institution does not yet have a Koala, you can find the software and documentation here:",
+      "FIRST_BULLET": "<a href=\"https://github.com/KoALa-MHF/koala-app\" target=\"_blank\">Software: https://github.com/KoALa-MHF/koala-app</a>",
+      "SECOND_BULLET": "<a href=\"https://koala-mhf.github.io/koala-app/\" target=\"_blank\">Documentation: https://koala-mhf.github.io/koala-app/</a>",
+      "CLOSING": "You can also find help with installation in the <a href=\"https://koala-mhf.github.io/koala-app/\" target=\"_blank\">documentation</a>."
+    }
+  },
+  "FOOTER": {
+    "COPYRIGHT": "© Koala App 2023/2024",
+    "IMPRINT": "Imprint & Privacy policies",
+    "ABOUT": "About Koala",
+    "DOCS": "Documentation"
+  },
+  "SESSION": {
+    "CREATE_SESSION_MENU_LABEL": "New session",
+    "EXPORT_SESSIONS_MENU_LABEL": "Export session",
+    "EXPORT_SESSIONS_JSON_MENU_LABEL": "Export session as JSON",
+    "EXPORT_SESSIONS_CSV_MENU_LABEL": "Export session as CSV",
+    "EXPORT_SESSION_ERROR_TITLE": "Export not successful",
+    "EXPORT_SESSION_ERROR_MESSAGE": "Export of session'{{sessionName}}' could not be executed",
+    "DELETE_SESSIONS_MENU_LABEL": "Delete session",
+    "DUPLICATE_SESSION_MENU_LABEL": "Duplicate Session",
+    "ENTER_SESSION_MENU_LABEL": "Join session",
+    "SESSION_SETTINGS_BTN": "Shared options",
+    "SESSION_ANALYSIS_SETTINGS_BTN": "View",
+    "MY_SESSIONS_NAV_BTN": "My sessions",
+    "MARKERS_OVERVIEW_NAV_BTN": "marker",
+    "ANALYSIS_NAV_BTN": "Evaluation",
+    "INFO_NAV_BTN": "Session info",
+    "SESSION_NOT_YET_STARTED_INFO": "The session has not started yet",
+    "SESSION_DOES_NOT_EXIST_INFO": "The session does not exist",
+    "SESSION_CLOSED_INFO": "The session is over",
+    "UNSAVED_CHNAGES_WARNING": "There are unsaved changes. ",
+    "SIDEBAR": {
+      "SESSION_HEADER": "Shared options",
+      "SESSION_GENERAL_SETTINGS_TITLE": "Elements",
+      "MARKER_TITLE": "Markers",
+      "PARTICIPANTS_TITLE": "Members",
+      "SELECT_ALL_CHECKBOX": "All",
+      "ANALYSIS_HEADER": "View"
+    },
+    "CREATE_DIALOG": {
+      "TITLE": "Create new session",
+      "NAME_INPUT_LABEL": "Session Name*",
+      "NAME_INPUT_EXPLANATION": "Give the session a name.",
+      "CREATE_BTN": "Create",
+      "CANCEL_BTN": "Cancel"
+    },
+    "TABS": {
+      "EVALUATION": "Evaluation"
+    },
+    "ERROR_DIALOG": {
+      "SUMMARY": "Please try again later",
+      "MEDIA_CONTROLS": "Error playing the audio file",
+      "NO_AUDIO_FILE": "No audio file found",
+      "NO_AUDIO_FILE_SUM": "Please save an audio file first",
+      "BROKEN_AUDIO_FILE": "Audio file could not be loaded",
+      "NO_USER_SESSION": "No user session could be found",
+      "NO_USER_SESSION_SUM": "Please create a user session",
+      "ANNOTATION_ERROR": "Annotation could not be saved"
+    },
+    "OVERVIEW": {
+      "OWN_SESSIONS_TITLE": "My sessions",
+      "OTHER_SESSIONS_TITLE": "Other sessions",
+      "CLOSED_SESSIONS_TITLE": "Completed sessions",
+      "TABLE_HEADER": {
+        "NAME_COL_LABEL": "Surname",
+        "CREATION_DATE_COL_LABEL": "Creation Date",
+        "PARTICIPANTS_COL_LABEL": "Number of members",
+        "CHANGED_DATE_COL_LABEL": "Last access",
+        "SETTINGS_COL_LABEL": "Settings",
+        "LINK_COL_LABEL": "Link/QR Code",
+        "COPY_COL_LABEL": "Duplicate",
+        "ENTER_COL_LABEL": "Join",
+        "LEAVE_COL_LABEL": "Leave"
+      },
+      "QRCODE": {
+        "DIALOG_TITLE": "Join session",
+        "COPY_SUCCESS": "{{copiedObject}} copied",
+        "COPY_ERROR": "{{copiedObject}} Could not be copied",
+        "SESSION_URL_COPIED_OBJECT": "URL",
+        "SESSION_CODE_COPIED_OBJECT": "Session code"
+      },
+      "ACC": {
+        "CREATE": "Create session"
+      }
+    },
+    "MAINTAIN": {
+      "TABS": {
+        "SETTINGS": "Session settings",
+        "AUDIO": "Audio",
+        "MARKER": "Markers",
+        "PARTICIPANTS": "Members"
+      },
+      "SECTION_HEADINGS": {
+        "SETTINGS": "Session settings",
+        "GENERAL_DATA": "General information",
+        "AUDIO": "Audio",
+        "AVAILABILITY": "Availability",
+        "DETAILS": "Shared options",
+        "MARKER": "Markers",
+        "CREATE_MARKER": "Create marker",
+        "MARKER_PREVIEW": "Preview",
+        "MARKER_LIBRARY": "From library",
+        "MARKER_PLACEMENT": "Placement",
+        "PARTICIPANTS": "Add members",
+        "INVITED_PARTICIPANTS": "Members of the session",
+        "PARTICIPANT_INVITATION": "Invitation"
+      },
+      "SESSION_SETTINGS": {
+        "SESSION_NAME_INPUT_LABEL": "Surname",
+        "SESSION_NAME_INPUT_EXPLANATION": "Please give the session a name.",
+        "SESSION_DESCRIPTION_INPUT_LABEL": "Description",
+        "SESSION_DESCRIPTION_INPUT_EXPLANATION": "If necessary, add a description or task to the session.",
+        "SESSION_AVAILABILITY_EXPLANATION": "Users can only access the session when it is online. ",
+        "SESSION_STATUS_LABEL": "Status",
+        "SESSION_START_DATE_INPUT_LABEL": "Begin",
+        "SESSION_END_DATE_INPUT_LABEL": "End",
+        "SESSION_DETAILS_EXPLANATION": "Here you specify in advance which functions will be available/visible to users. ",
+        "EDIT_ENABLED_LABEL": "Editing",
+        "PLAYER_ENABLED_LABEL": "Players",
+        "SAMPLE_SOLUTION_ENABLED_LABEL": "Sample solution",
+        "ANNOTATION_DELETE_LOCKED_LABEL": "Prohibite Annotations deletions",
+        "ANALYSIS_ENABLED_LABEL": "See evaluation",
+        "SAVE_BTN": "Save",
+        "CANCEL_BTN": "Cancel",
+        "SAVE_ERROR_MESSAGE_TITLE": "Changes to the session could not be saved",
+        "SAVE_SUCCESS_MESSAGE_TITLE": "Changes to Session'{{sessionName}}' have been saved",
+        "STATUS": {
+          "IN_PREPARATION_LABEL": "Under construction",
+          "OPEN_LABEL": "Online",
+          "CLOSED_LABEL": "Closed",
+          "ARCHIVED_LABEL": "Archived"
+        }
+      },
+      "AUDIO": {
+        "AUDIO_UPLOAD_EXPLANATION": "Here you can select and upload an audio file.",
+        "MAX_UPLOAD_SIZE_EXPLANATION": "Maximum upload size: 100 MB",
+        "ALLOWED_FILE_TYPES_EXPLANATION": "Allowed file type: .mp3, .wav",
+        "CHOOSE_BTN": "Choose file",
+        "UPLOAD_SUCCESS_MESSAGE_TITLE": "File upload successful",
+        "UPLOAD_SUCCESS_MESSAGE": "The file was successfully uploaded and assigned to the session",
+        "UPLOAD_ERROR_MESSAGE_TITLE": "File upload failed",
+        "UPLOAD_ERROR_MESSAGE": "The file could not be uploaded. ",
+        "TITLE_UPLOAD_AREA": "Selected audio file:"
+      },
+      "MARKER": {
+        "MARKER_PREVIEW_EXPLANATION": "Here you can see a preview of your marker.",
+        "MARKER_ADD_BTN": "Add marker",
+        "MARKER_RESET_BTN": "Reset to default",
+        "MARKER_LIBRARY_EXPLANATION": "Here you can load saved toolbars or individual markers.",
+        "MARKER_PLACEMENT_EXPLANATION": "The markers can be arranged individually using drag and drop.",
+        "MARKER_CREATION_SUCCESS_MESSAGE_TITLE": "Marker successfully created and added to session",
+        "MARKER_CREATION_ERROR_MESSAGE_TITLE": "Marker creation failed",
+        "LOAD_MARKER_BTN": "Marker library",
+        "MARKER_EVENT_TYPE": "event",
+        "MARKER_RANGE_TYPE": "range",
+        "MARKER_SLIDER_TYPE": "Sliders",
+        "DELETE_CONFIRM_DIALOG": {
+          "TITLE": "Remove marker from session",
+          "EXPLANATION": "Do you really want the marker'{{markerName}}' remove from the session?",
+          "CONFIRM_BTN": "Remove",
+          "CANCEL_BTN": "Cancel"
+        },
+        "LOAD_MARKER_DIALOG": {
+          "LOAD_MARKER_DIALOG_TITLE": "Marker library",
+          "SEARCH_CLEAR_BTN": "Reset",
+          "SEARCH_INPUT_PLACEHOLDER": "search term",
+          "ADD_MARKER": "Add marker"
+        }
+      },
+      "PARTICIPANTS": {
+        "PARTICIPANT_EXPLANATION": "You can add new members to your session by sending invitation links via email.",
+        "ADD_BTN": "+",
+        "EMAIL_COL": "Email address / display name",
+        "DELETE_COL": "Remove",
+        "ADD_DIALOG": {
+          "TITLE": "Add participant",
+          "EMAIL_INPUT_LABEL": "E-mail address",
+          "EMAIL_INPUT_EXPLANATION": "Add one email address per line."
+        },
+        "INVITATION_TEXT_LABEL": "News",
+        "INVITATION_TEXT_EXPLANATION": "Here you can, if necessary, insert a message to the invited people, which will be sent with the invitation link.",
+        "INVITE_BTN": "Invite",
+        "ACC": {
+          "DELETE_BTN_ACC": "Remove"
+        },
+        "INVITATION_SUCCESS_MESSAGE_TITLE": "Invitation sent",
+        "INVITATION_SUCCESS_MESSAGE": "The invitations were sent to the email addresses",
+        "INVITATION_ERROR_MESSAGE_TITLE": "Invitation error",
+        "INVITATION_ERROR_MESSAGE": "The invitations could not be sent",
+        "DELETE_CONFIRM_DIALOG": {
+          "TITLE": "Remove participants",
+          "EXPLANATION": "Do you really want the participant with the email address '{{email}}' remove from the session?",
+          "EXPLANATION_NAME": "Do you really want the participant'{{participantName}}' remove from the session?",
+          "CONFIRM_BTN": "Remove",
+          "CANCEL_BTN": "Cancel"
+        },
+        "ADD_ERROR_MESSAGE_TITLE": "Error - Add participant",
+        "ADD_ERROR_MESSAGE": "Unfortunately the participant could not be added. ",
+        "REMOVE_ERROR_MESSAGE_TITLE": "Error - Remove participant",
+        "REMOVE_ERROR_MESSAGE": "Unfortunately, the participant could not be removed from the session. "
+      }
+    },
+    "DELETE_CONFIRM_DIALOG": {
+      "TITLE": "Delete",
+      "EXPLANATION": "Do you really want the session'{{sessionName}}' delete?",
+      "EXPLANATION_MULTI_SESSION": "Do you want those {{sessionCount}} delete selected sessions?",
+      "CONFIRM_BTN": "Delete",
+      "CANCEL_BTN": "Cancel"
+    },
+    "ANNOTATION": {
+      "DELETE": {
+        "CONFIRM_MESSAGE_TITLE": "Do you really want all the marker's annotations?{{markerName}}' delete?",
+        "HEADER": "Delete annotations",
+        "ACCEPT_LABEL": "Yes",
+        "REJECT_LABEL": "No"
+      },
+      "DETAIL_OVERLAY": {
+        "SAVE_BTN": "Save",
+        "CANCEL_BTN": "discard",
+        "EDIT_BTN": "Edit",
+        "DELETE_BTN": "Delete comment",
+        "ANNOTATION_TIME_LABEL": "Time:",
+        "AUDIO_COMMENT_TAB_TITLE": "Audio",
+        "TEXT_COMMENT_TAB_TITLE": "text",
+        "ALL_COMMENTS_TITLE": "All comments",
+        "DELETE_CONFIRM_DIALOG_TITLE": "Delete comment",
+        "DELETE_CONFIRM_DIALOG_MESSAGE": "Do you want to delete the selected comment?",
+        "DELETE_CONFIRM_DIALOG_CONFIRM": "Delete",
+        "DELETE_CONFIRM_DIALOG_REJECT": "Cancel",
+        "OWN_COMMENT_LEGEND": "I",
+        "OTHER_COMMENT_LEGEND": "Session owner"
+      }
+    }
+  },
+  "ICONS": {
+    "arrow-down": "Down arrow",
+    "arrow-down-left": " Down left arrow",
+    "arrow-down-right": "Down arrow right",
+    "arrow-left": "Left arrow",
+    "arrow-right": "arrow to the right",
+    "arrow-right-arrow-left": "Arrows in both directions",
+    "arrow-up": "up arrow",
+    "arrow-up-left": "Up left arrow",
+    "arrow-up-right": "Up right arrow",
+    "arrows-alt": "Arrow cross",
+    "arrows-h": "Arrow pointing horizontally in both directions",
+    "arrows-v": "Arrow pointing vertically in both directions",
+    "ban": "Ban",
+    "bell": "Bell jar",
+    "caret-down": "Triangle down",
+    "caret-left": "Triangle to the left",
+    "caret-right": "Triangle to the right",
+    "caret-up": "Triangle up",
+    "check": "Hook",
+    "circle": "Circle",
+    "circle-fill": "Filled circle",
+    "eye": "Eye",
+    "flag": "flag",
+    "flag-fill": "Filled flag",
+    "heart": "Heart",
+    "key": "Key",
+    "moon": "moon",
+    "palette": "Color palette",
+    "refresh": "Refresh",
+    "replay": "Repeat",
+    "reply": "Answer",
+    "search": "Seek",
+    "spinner": "holding pattern",
+    "star": "star",
+    "stop": "Stop",
+    "stop-circle": "Stop in circles",
+    "sun": "Sun",
+    "tag": "Sign",
+    "thumbs-down": "thumbs down",
+    "thumbs-up": "thumbs up",
+    "times-circle": "Cancel",
+    "trash": "garbage can",
+    "volume-off": "Mute",
+    "angle-double-down": "Double arrow down",
+    "angle-double-left": "Double arrow to the left",
+    "angle-double-right": "Double arrow to the right",
+    "angle-double-up": "Double arrow up",
+    "angle-down": "Single arrow down",
+    "angle-left": "Single arrow to the left",
+    "angle-right": "Single arrow to the right",
+    "angle-up": "Single arrow up",
+    "arrow-circle-down": "Down arrow in circle",
+    "arrow-circle-left": "Arrow in a circle to the left",
+    "arrow-circle-right": "Arrow in a circle to the right",
+    "arrow-circle-up": "Arrow in a circle pointing up",
+    "backward": "Back",
+    "bolt": "lightning",
+    "bookmark": "bookmark",
+    "comment": "comment",
+    "comments": "Comments",
+    "exclamation-circle": "exclamation mark",
+    "home": "At home",
+    "megaphone": "megaphone",
+    "question": "Ask",
+    "times": "Cancel",
+    "undo": "Undone",
+    "copy": "Copy",
+    "eye-slash": "Crossed out eye",
+    "quarter_note": "Quarter note",
+    "eighth_note": "Eighth note",
+    "sixteenth_note": "sixteenth note",
+    "eighth_beam_note": "Eighth notes with beams",
+    "flat_sign": "Musical notation b",
+    "natural_sign": "Resolution sign",
+    "sharp_sign": "Music notation cross",
+    "piano_sign": "piano",
+    "forte_sign": "Forte",
+    "crescendo": "crescendo",
+    "decrescendo": "Decrescendo",
+    "G_clef": "treble clef",
+    "F_clef": "Bass clef",
+    "Fermata": "Fermata",
+    "half_note": "Half note",
+    "full_note": "Whole grade",
+    "breve_note": "Brevis",
+    "sixteenth_beam_note": "Sixteenth notes with beams",
+    "grinning_face": "Laughing emoji",
+    "slightly_smiling_face": "Slightly laughing emoji",
+    "neutral_face": "Neutral emoji",
+    "worried_face": "Worried emoji",
+    "slightly_frowning_face": "Sad emoji",
+    "crying_face": "Crying emoji",
+    "loudly_crying_face": "Strong crying emoji",
+    "weary_face": "Tired emoji",
+    "smiling_face_w_hearts": "Laughing emoji with heart eyes",
+    "smiling_face_w_sunglasses": "Laughing emoji with sunglasses",
+    "disappointed_face": "Disappointed emoji",
+    "yawning_face": "Yawning emoji",
+    "sleeping_face": "Sleeping emoji",
+    "astonished_face": "Astonished emoji",
+    "confused_face": "Confused emoji",
+    "exploding_face": "Exploding emoji",
+    "fire": "Fire",
+    "snowflake": "Snowflake",
+    "celebration": "Celebration",
+    "thumbs_up": "thumbs up",
+    "thumbs_down": "thumbs down",
+    "shamrock": "Shamrock",
+    "bird": "Bird",
+    "skull": "Skull",
+    "koala": "Koala"
+  },
+  "AUTH": {
+    "MENU_ACTION": {
+      "LOGOUT": "Log out",
+      "PROFILE_EDIT": "My profile"
+    },
+    "DISPLAY_NAME_INPUT_LABEL": "Display name",
+    "DISPLAY_NAME_INPUT_EXPLANATION": "Here you can change the name that is displayed in the session screen",
+    "PROFILE_DIALOG_TITLE": "Maintain profile",
+    "LOGIN": {
+      "SESSION_CODE_PLACEHOLDER": "Session code",
+      "SESSION_CODE_LOGIN_ERROR_MESSAGE": "Login with session code not successful"
+    }
+  },
+  "MARKER": {
+    "TYPE": {
+      "EVENT": "Event",
+      "RANGE": "Range",
+      "SLIDER": "Slider"
+    },
+    "OVERVIEW": {
+      "TYPE_FILTER_PLACEHOLDER": "Marker type",
+      "FILTER_CLEAR_BTN": "",
+      "SEARCH_INPUT_PLACEHOLDER": "",
+      "COLUMN_TITLE": {
+        "NAME": "Surname",
+        "ABBREVIATION": "Abbreviation",
+        "ICON": "Icon",
+        "DESCRIPTION": "Description",
+        "TYPE": "Marker type",
+        "CONTENT_COLOR": "Black text",
+        "COLOR": "Color"
+      },
+      "ACTIONS": {
+        "CREATE": "Create marker",
+        "CHANGE": "Change marker"
+      },
+      "CREATE": {
+        "DIALOG_TITLE": "Create marker",
+        "CREATE_BTN": "Invest",
+        "RESET_BTN": "Reset to default"
+      }
+    },
+    "MAINTAIN": {
+      "MARKER_TYPE_LABEL": "Marker type*",
+      "MARKER_TYPE_EXPLANATION": "Select the desired marker type.",
+      "MARKER_NAME_INPUT_LABEL": "Marker name*",
+      "MARKER_NAME_INPUT_EXPLANATION": "Give the marker a name.",
+      "MARKER_DESCRIPTION_INPUT_LABEL": "Description",
+      "MARKER_DESCRIPTION_INPUT_EXPLANATION": "If necessary, add a description to the marker.",
+      "MARKER_ABBREVIATION_INPUT_LABEL": "Abbreviation",
+      "MARKER_ABBREVIATION_INPUT_LABEL_MANDATORY": "Abbreviation*",
+      "MARKER_ABBREVIATION_INPUT_EXPLANATION": "Choose an abbreviation and/or an icon for the marker.",
+      "MARKER_ABBREVIATION_INPUT_EXPLANATION_MANDATORY": "Choose an abbreviation for the marker.",
+      "MARKER_RANGE_FROM_INPUT_LABEL": "Minimum value",
+      "MARKER_RANGE_FROM_INPUT_EXPLANATION": "Choose a minimum value for the slider.",
+      "MARKER_RANGE_TO_INPUT_LABEL": "Maximum value",
+      "MARKER_RANGE_TO_INPUT_EXPLANATION": "Choose a maximum value for the slider.",
+      "MARKER_COLOR_INPUT_LABEL": "Color",
+      "MARKER_CONTENT_COLOR_INPUT_LABEL": "Black text",
+      "MARKER_CONTENT_COLOR_INPUT_SLIDER_LABEL": "Black slider",
+      "MARKER_COLOR_INPUT_EXPLANATION": "Choose a color for your marker.",
+      "MARKER_ICON_INPUT_LABEL": "Icon",
+      "MARKER_ICON_INPUT_EXPLANATION": "Choose an abbreviation and/or an icon for the marker.",
+      "ABBREVIATION_ICON_ERROR_MESSAGE_TITLE": "Changes cannot be saved",
+      "ABBREVIATION_ICON_ERROR_MESSAGE": "The abbreviation or an icon must be maintained.",
+      "NAME_ERROR_MESSAGE_TITLE": "Changes cannot be saved",
+      "NAME_ERROR_MESSAGE": "The marker name cannot be empty"
+    }
+  }
+}
