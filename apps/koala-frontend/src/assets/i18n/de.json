@@ -7,6 +7,26 @@
     "LANG_ENGLISH_LABEL": "English",
     "LANG_FRENCH_LABEL": "Français"
   },
+  "ABOUT": {
+    "TITLE": "Über Koala",
+    "INTRO": "Koala ist eine Entwicklung der <a href=\"https://mh-freiburg.de\" target=\"_blank\">Hochschule für Musik Freiburg</a> und der <a href=\"https://www.hmdk-stuttgart.de/\" target=\"_blank\">Hochschule für Musik und Darstellende Kunst Stuttgart</a>. Die Entwicklung der App wurde von der <a href=\"https://stiftung-hochschullehre.de/\" target=\"_blank\">Stiftung Innovation in der Hochschullehre</a> gefördert.",
+    "KOALA_FEATURES_TITLE": "Was kann Koala?",
+    "KOALA_FEATURES_BODY": {
+      "INTRO": "Koala…",
+      "FIRST_BULLET": "…lässt sich im Musikunterricht flexibel einsetzen, um gemeinsam an Stücken zu arbeiten.",
+      "SECOND_BULLET": "…bietet die Möglichkeit, verschiedene Arten von Annotationen im Verlauf eines Stückes zu setzen, oder Kommentare zu einer bestimmten Stelle in einem Stück zu setzen.",
+      "THIRD_BULLET": "…ist so gestaltet, dass es sich möglichst nahtlos in unterschiedlichen Arbeitsformen integrieren lässt (Kleingruppen, Großgruppen, hybride Settings, Einzelarbeit, Hausaufgaben, etc…).",
+      "CLOSING": "Weitere Informationen finden Sie im Handbuch und auf den Dokumentationsseiten auf Github. Sollten Sie Koala nutzen wollen und nicht Mitglied der HfM Freiburg sein, lesen Sie bitte unten die Hinweise. Koala ist freie Software und steht allen zur Verfügung."
+    },
+    "KOALA_USAGE_TITLE": "Wie kann ich Koala nutzen?",
+    "KOALA_USAGE_BODY": {
+      "INTRO": "Diese Webseite ist die Koala-Instanz der HfM Freiburg. Wenn Sie Mitglied der HfM Freiburg sind, können Sie sich oben einfach anmelden (Klick auf „Login“).",
+      "SECOND_PARAGRAPH": "Wenn Sie kein Mitglied der HfM Freiburg sind und ihre Institution noch kein Koala hat, können Sie die Software und Dokumentation hier finden:",
+      "FIRST_BULLET": "<a href=\"https://github.com/KoALa-MHF/koala-app\" target=\"_blank\">Software: https://github.com/KoALa-MHF/koala-app</a>",
+      "SECOND_BULLET": "<a href=\"https://koala-mhf.github.io/koala-app/\" target=\"_blank\">Dokumentation: https://koala-mhf.github.io/koala-app/</a>",
+      "CLOSING": "Hilfen bei der Installation finden Sie ebenfalls in der <a href=\"https://koala-mhf.github.io/koala-app/\" target=\"_blank\">Dokumentation</a>."
+    }
+  },
   "SESSION": {
     "CREATE_SESSION_MENU_LABEL": "Neue Session",
     "EXPORT_SESSIONS_MENU_LABEL": "Session Exportieren",

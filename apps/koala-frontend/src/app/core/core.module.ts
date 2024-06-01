@@ -9,6 +9,7 @@ import { MenuModule } from 'primeng/menu';
 import { SharedModule } from '../shared/shared.module';
 import { ImageModule } from 'primeng/image';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { PanelModule } from 'primeng/panel';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { SidebarModule } from 'primeng/sidebar';
@@ -31,6 +32,7 @@ import { CoreRoutingModule } from './core-routing.module';
     SharedModule,
     ImageModule,
     OverlayPanelModule,
+    PanelModule,
     ToggleButtonModule,
     SidebarModule,
     CoreRoutingModule,

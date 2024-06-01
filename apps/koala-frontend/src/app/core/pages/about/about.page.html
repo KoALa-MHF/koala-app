@@ -1,1 +1,24 @@
-About
+<h1 innerHTML="{{ 'ABOUT.TITLE' | translate }}"></h1>
+
+<p innerHTML="{{ 'ABOUT.INTRO' | translate }}"></p>
+<br />
+<p-panel header="{{ 'ABOUT.KOALA_FEATURES_TITLE' | translate }}">
+  <div innerHTML="{{ 'ABOUT.KOALA_FEATURES_BODY.INTRO' | translate }}"></div>
+
+  <ul>
+    <li innerHTML="{{ 'ABOUT.KOALA_FEATURES_BODY.FIRST_BULLET' | translate }}"></li>
+    <li innerHTML="{{ 'ABOUT.KOALA_FEATURES_BODY.SECOND_BULLET' | translate }}"></li>
+    <li innerHTML="{{ 'ABOUT.KOALA_FEATURES_BODY.THIRD_BULLET' | translate }}"></li>
+  </ul>
+  <p innerHTML="{{ 'ABOUT.KOALA_FEATURES_BODY.CLOSING' | translate }}"></p>
+</p-panel>
+<p-divider></p-divider>
+<p-panel header="{{ 'ABOUT.KOALA_USAGE_TITLE' | translate }}">
+  <div innerHTML="{{ 'ABOUT.KOALA_USAGE_BODY.INTRO' | translate }}"></div>
+  <p innerHTML="{{ 'ABOUT.KOALA_USAGE_BODY.SECOND_PARAGRAPH' | translate }}"></p>
+  <ul>
+    <li innerHTML="{{ 'ABOUT.KOALA_USAGE_BODY.FIRST_BULLET' | translate }}"></li>
+    <li innerHTML="{{ 'ABOUT.KOALA_USAGE_BODY.SECOND_BULLET' | translate }}"></li>
+  </ul>
+  <p innerHTML="{{ 'ABOUT.KOALA_USAGE_BODY.CLOSING' | translate }}"></p>
+</p-panel>
