@@ -20,7 +20,7 @@
       #fileUpload
       [customUpload]="true"
       (uploadHandler)="onFileUpload($event, fileUpload)"
-      accept="audio/mpeg"
+      accept="audio/mpeg,audio/wav,video/mp4"
       [maxFileSize]="250000000"
       [auto]="true"
       chooseLabel="{{ 'SESSION.MAINTAIN.AUDIO.CHOOSE_BTN' | translate }}"

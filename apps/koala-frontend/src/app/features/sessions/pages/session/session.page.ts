@@ -25,6 +25,7 @@ import { MediaService } from '../../services/media.service';
 import { Comment } from '../../types/comment.entity';
 import { CreateAnnotationTextComment } from '../../components/annotation-text-comment-list/annotation-text-comment-list.component';
 import { BlockNavigationIfUnsavedChanges } from '../../guards/session-unsaved-changes.guard';
+import { Media } from '../../types/media.entity';
 
 @Component({
   selector: 'koala-app-session',
@@ -197,7 +198,7 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
         this.mediaControlService.uuid = focusSession.id;
         this.waveContainer = `waveContainer-${focusSession.id}`;
 
-        await this.loadMediaData(focusSession.media.id);
+        await this.loadMediaData(focusSession.media);
 
         this.updateMediaControlSettings();
       } else {
@@ -249,9 +250,9 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
     }
   }
 
-  private loadMediaData(id: string): Promise<void> {
+  private loadMediaData(media: Media): Promise<void> {
     return this.mediaControlService
-      .load(`${this.mediaUri}/${id}`, this.waveContainer)
+      .load(`${this.mediaUri}/${media.id}`, media.mimeType, this.waveContainer)
       .then(() => {
         this.mediaControlService.addEventHandler('audioprocess', (time) => {
           // to reduce update frequency

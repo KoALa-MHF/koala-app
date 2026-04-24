@@ -41,8 +41,8 @@ import { SharedModule } from '../../shared/shared.module';
 import { SessionDetailsComponent } from './components/session-details/session-details.component';
 import { SessionDatesComponent } from './components/session-dates/session-dates.component';
 import { SessionAudioComponent } from './components/session-audio/session-audio.component';
-import { AudioWaveComponent } from './components/audio-wave/audio-wave.component';
-import { AudioPlayerComponent } from './components/audio-player/audio-player.component';
+import { MediaWaveComponent } from './components/media-wave/media-wave.component';
+import { MediaPlayerComponent } from './components/media-player/media-player.component';
 import { MediaService } from './services/media.service';
 import { SessionDataComponent } from './components/session-data/session-data.component';
 import { SessionMarkerDataComponent } from './components/session-marker-data/session-marker-data.component';
@@ -89,8 +89,8 @@ import { SessionNotActivePage } from './pages/session-not-active/session-not-act
     SessionDataComponent,
     SessionMarkerDataComponent,
     MarkerPlacementComponent,
-    AudioWaveComponent,
-    AudioPlayerComponent,
+    MediaWaveComponent,
+    MediaPlayerComponent,
     SessionParticipantsComponent,
     SessionParticipantsOverviewComponent,
     SessionParticipantsInvitationComponent,

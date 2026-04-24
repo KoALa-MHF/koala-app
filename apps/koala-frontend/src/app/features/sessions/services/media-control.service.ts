@@ -41,18 +41,27 @@ export class MediaControlService {
     private readonly accessTokenService: AccessTokenService
   ) {}
 
-  async load(trackurl: string, uuid: string) {
+  async load(trackurl: string, mediaType: string, uuid: string) {
     this.uuid = uuid;
-    let audioBlob: Blob = new Blob();
+    let mediaBlob: Blob = new Blob();
 
     try {
-      audioBlob = await this.fetchAudioBlob(trackurl);
+      mediaBlob = await this.fetchMediaBlob(trackurl);
     } catch (e) {
-      throw new Error('error fetching audio file');
+      throw new Error('error fetching media file');
     }
-    const audio = new Audio();
-    audio.src = URL.createObjectURL(audioBlob);
-    this.createMediadata(audioBlob);
+
+    let media;
+    if (mediaType.startsWith('video/')) {
+      console.log('Video created');
+      media = new HTMLVideoElement();
+      document.getElementById('testWave')?.appendChild(media);
+    } else {
+      media = new Audio();
+    }
+    media.src = URL.createObjectURL(mediaBlob);
+    this.createMediadata(mediaBlob);
+
     this.waves.set(
       this.uuid,
       WaveSurfer.create({
@@ -65,7 +74,7 @@ export class MediaControlService {
         normalize: true,
         hideScrollbar: false,
         height: 100,
-        media: audio,
+        media: media,
         plugins: [],
       })
     );
@@ -150,7 +159,7 @@ export class MediaControlService {
     });
   }
 
-  private async fetchAudioBlob(url: string) {
+  private async fetchMediaBlob(url: string) {
     const resp = await fetch(url, {
       headers: {
         Authorization: `Bearer ${this.accessTokenService.getAccessToken()}`,

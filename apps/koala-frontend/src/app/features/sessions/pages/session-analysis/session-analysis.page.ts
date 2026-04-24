@@ -19,6 +19,7 @@ import { CreateAnnotationTextComment } from '../../components/annotation-text-co
 import { Comment } from '../../types/comment.entity';
 import { AnnotationAudioComment } from '../../components/annotation-audio-comment/annotation-audio-comment.component';
 import { MediaService } from '../../services/media.service';
+import { Media } from '../../types/media.entity';
 
 export interface AnnotationData {
   AnnotationData: Map<number, Array<DataPoint>>;
@@ -96,7 +97,7 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
         this.mediaControlService.uuid = this.session.id;
         this.waveContainer = `waveContainer-${this.session.id}`;
 
-        await this.loadMediaData(this.session.media.id);
+        await this.loadMediaData(this.session.media);
       } else {
         if (this.session.liveSessionStart && this.session.liveSessionEnd) {
           this.totalAudioTime =
@@ -123,9 +124,9 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
     }
   }
 
-  private loadMediaData(id: string): Promise<void> {
+  private loadMediaData(media: Media): Promise<void> {
     return this.mediaControlService
-      .load(`${this.mediaUri}/${id}`, this.waveContainer)
+      .load(`${this.mediaUri}/${media.id}`, media.mimeType || 'audio/mpeg', this.waveContainer)
       .then(() => {
         this.mediaControlService.addEventHandler('audioprocess', (time) => {
           // to reduce update frequency
