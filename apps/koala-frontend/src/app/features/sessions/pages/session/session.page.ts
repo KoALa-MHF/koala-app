@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ApplicationRef, HostListener } from '@angular/core';
+import { Component, OnDestroy, OnInit, ApplicationRef, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
 import { MarkerService } from '../../../markers/services/marker.service';
@@ -35,6 +35,8 @@ import { Media } from '../../types/media.entity';
   ],
 })
 export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedChanges {
+  @ViewChild('sessionVideo', { static: true }) sessionVideo!: ElementRef<HTMLMediaElement>;
+
   sidePanelForm: FormGroup;
   ToolbarMode = ToolbarMode;
   PlayMode = PlayMode;
@@ -252,7 +254,7 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
 
   private loadMediaData(media: Media): Promise<void> {
     return this.mediaControlService
-      .load(`${this.mediaUri}/${media.id}`, media.mimeType, this.waveContainer)
+      .load(`${this.mediaUri}/${media.id}`, this.waveContainer)
       .then(() => {
         this.mediaControlService.addEventHandler('audioprocess', (time) => {
           // to reduce update frequency

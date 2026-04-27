@@ -1,4 +1,4 @@
-import { ApplicationRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ApplicationRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
 import { MediaControlService, MediaEvent, MediaActions } from '../../services/media-control.service';
@@ -126,7 +126,7 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
 
   private loadMediaData(media: Media): Promise<void> {
     return this.mediaControlService
-      .load(`${this.mediaUri}/${media.id}`, media.mimeType || 'audio/mpeg', this.waveContainer)
+      .load(`${this.mediaUri}/${media.id}`, this.waveContainer)
       .then(() => {
         this.mediaControlService.addEventHandler('audioprocess', (time) => {
           // to reduce update frequency

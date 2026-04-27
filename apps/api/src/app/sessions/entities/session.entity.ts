@@ -128,7 +128,7 @@ export class Session extends BaseEntity {
   @IsOptional()
   lockAnnotationDelete?: boolean;
 
-  @ManyToOne(() => Media, { nullable: true })
+  @ManyToOne(() => Media, { nullable: true, eager: true })
   @Field((type) => Media, {
     nullable: true,
     description: 'Associated Media File',

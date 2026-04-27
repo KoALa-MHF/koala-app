@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { ElementRef, Injectable } from '@angular/core';
 import { WaveSurferEvents } from 'wavesurfer.js';
 import WaveSurfer from 'wavesurfer.js';
 import TimelinePlugin from 'wavesurfer.js/dist/plugins/timeline.js';
@@ -41,7 +41,7 @@ export class MediaControlService {
     private readonly accessTokenService: AccessTokenService
   ) {}
 
-  async load(trackurl: string, mediaType: string, uuid: string) {
+  async load(trackurl: string, uuid: string) {
     this.uuid = uuid;
     let mediaBlob: Blob = new Blob();
 
@@ -52,10 +52,9 @@ export class MediaControlService {
     }
 
     let media;
-    if (mediaType.startsWith('video/')) {
-      console.log('Video created');
-      media = new HTMLVideoElement();
-      document.getElementById('testWave')?.appendChild(media);
+    if (this.sessionService.getFocusSession()?.isVideoSession) {
+      media = document.createElement('video');
+      document.getElementById('sessionVideo')?.appendChild(media);
     } else {
       media = new Audio();
     }

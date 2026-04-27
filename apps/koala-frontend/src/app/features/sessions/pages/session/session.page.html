@@ -9,7 +9,6 @@
   </div>
 
   <div class="content">
-    <div id="testWave"></div>
     <div style="display: flex; justify-content: center" *ngIf="!session.isAudioSession">
       <span *ngIf="session.playMode === PlayMode.Paused">
         {{session.liveSessionStart ? ('SESSION.SESSION_CLOSED_INFO'|translate) : (
@@ -29,6 +28,8 @@
         (playModeChanged)="onPlayModeChange($event)"
       ></koala-session-timer>
     </div>
+
+    <div id="sessionVideo" style="display: flex; justify-content: center" *ngIf="session.isVideoSession"></div>
 
     <koala-app-media-wave *ngIf="session.isAudioSession" [waveContainer]="waveContainer"> </koala-app-media-wave>
     <koala-app-annotation

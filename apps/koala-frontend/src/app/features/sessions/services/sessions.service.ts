@@ -229,6 +229,10 @@ export class SessionsService {
     return this.getOne(sessionId).pipe(
       tap((session: Session) => {
         this.focusSession = session;
+        if (this.focusSession?.media?.mimeType?.startsWith('video/')) {
+          this.focusSession.isVideoSession = true;
+        }
+
         if (this.focusSession?.enablePlayer) {
           //mix in local play mode
           this.focusSession.playMode = this.localPlayMode;
