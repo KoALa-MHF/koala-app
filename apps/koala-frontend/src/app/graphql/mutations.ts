@@ -92,6 +92,14 @@ const CREATE_MEDIA = gql`
   }
 `;
 
+const DELETE_MEDIA = gql`
+  mutation deleteMedia($id: Float!) {
+    deleteMedia(id: $id) {
+      id
+    }
+  }
+`;
+
 const CREATE_MARKER = gql`
   mutation createMarker($createMarker: CreateMarkerInput!) {
     createMarker(createMarkerInput: $createMarker) {

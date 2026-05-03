@@ -53,4 +53,30 @@ export class MediaService {
       })
       .pipe(tap(() => this.mediaUploadState.next(MediaUploadState.completed)));
   }
+
+  //delete media by id
+  delete(id: number): Observable<void> {
+    const graphQLEndpoint = `${environment.graphqlBaseUrl}/graphql`;
+
+    return this.http.post<void>(
+      graphQLEndpoint,
+      {
+        query: `
+          mutation deleteMedia($id: Float!) {
+            deleteMedia(id: $id) {
+              id
+            }
+          }
+        `,
+        variables: {
+          id,
+        },
+      },
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+      }
+    );
+  }
 }

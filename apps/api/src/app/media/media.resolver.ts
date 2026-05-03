@@ -15,4 +15,10 @@ export class MediaResolver {
   createMedia(@Args('createMediaInput') createMediaInput: CreateMediaInput) {
     return this.mediaService.create(createMediaInput);
   }
+
+  @Mutation(() => Media)
+  @UseGuards(AuthGuard, RegisteredUserGuard)
+  deleteMedia(@Args('id') id: number) {
+    return this.mediaService.remove(id);
+  }
 }

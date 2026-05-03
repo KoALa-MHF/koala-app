@@ -228,6 +228,7 @@ export type Mutation = {
   createMedia: Media;
   createSession: Session;
   createUserSession: UserSession;
+  deleteMedia: Media;
   inviteUserSession: Array<UserSession>;
   removeAnnotation: Annotation;
   removeAnnotationMedia: Annotation;
@@ -277,6 +278,10 @@ export type MutationCreateSessionArgs = {
 
 export type MutationCreateUserSessionArgs = {
   createUserSessionInput: CreateUserSessionInput;
+};
+
+export type MutationDeleteMediaArgs = {
+  id: Scalars['Float']['input'];
 };
 
 export type MutationInviteUserSessionArgs = {
@@ -696,6 +701,12 @@ export type CreateMediaMutationVariables = Exact<{
 }>;
 
 export type CreateMediaMutation = { __typename?: 'Mutation'; createMedia: { __typename?: 'Media'; id: string } };
+
+export type DeleteMediaMutationVariables = Exact<{
+  id: Scalars['Float']['input'];
+}>;
+
+export type DeleteMediaMutation = { __typename?: 'Mutation'; deleteMedia: { __typename?: 'Media'; id: string } };
 
 export type CreateMarkerMutationVariables = Exact<{
   createMarker: CreateMarkerInput;
@@ -1484,6 +1495,24 @@ export const CreateMediaDocument = gql`
 })
 export class CreateMediaGQL extends Apollo.Mutation<CreateMediaMutation, CreateMediaMutationVariables> {
   override document = CreateMediaDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const DeleteMediaDocument = gql`
+  mutation deleteMedia($id: Float!) {
+    deleteMedia(id: $id) {
+      id
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DeleteMediaGQL extends Apollo.Mutation<DeleteMediaMutation, DeleteMediaMutationVariables> {
+  override document = DeleteMediaDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

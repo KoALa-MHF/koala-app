@@ -8,7 +8,11 @@
       ></koala-session-data>
     </p-tabPanel>
     <p-tabPanel header="{{ 'SESSION.MAINTAIN.TABS.AUDIO' | translate }}">
-      <koala-session-audio [media]="session?.media" (fileUpload)="onFileUpload($event)"></koala-session-audio>
+      <koala-session-media
+        [media]="session?.media"
+        (fileUpload)="onFileUpload($event)"
+        (deleteMediaEvent)="onDeleteMedia()"
+      ></koala-session-media>
     </p-tabPanel>
     <p-tabPanel header="{{ 'SESSION.MAINTAIN.TABS.MARKER' | translate }}">
       <koala-session-marker-data

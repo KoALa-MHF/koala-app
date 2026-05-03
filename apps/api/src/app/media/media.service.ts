@@ -6,6 +6,7 @@ import { CreateMediaInput } from './dto/create-media.input';
 import { Media } from './entities/media.entity';
 import { FileUpload } from 'graphql-upload';
 import { ensureMediaFolder, getFilePath } from './media.util';
+import { unlink } from 'node:fs/promises';
 
 @Injectable()
 export class MediaService {
@@ -54,7 +55,35 @@ export class MediaService {
     return this.mediaRepository.findOneByOrFail({ id });
   }
 
-  remove(id: number) {
-    return this.mediaRepository.delete(id);
+  async remove(id: number) {
+    const media = await this.findOne(id);
+    await this.deleteMediaFile(id, media.name);
+
+    await this.mediaRepository.delete(id);
+
+    return media;
+  }
+
+  private async deleteMediaFile(id: number, filename: string): Promise<void> {
+    return new Promise(async (resolve, reject) => {
+      const filePath = getFilePath(id, filename);
+
+      try {
+        await unlink(filePath);
+
+        console.log(`Successfully deleted ${filePath}`);
+
+        resolve();
+      } catch (error: any) {
+        if (error.code === 'ENOENT') {
+          console.log(`File ${filePath} does not exist, skipping deletion.`);
+
+          resolve();
+        } else {
+          console.error(`Error deleting file ${filePath}:`, error);
+          reject(new BadRequestException('Could not delete file'));
+        }
+      }
+    });
   }
 }

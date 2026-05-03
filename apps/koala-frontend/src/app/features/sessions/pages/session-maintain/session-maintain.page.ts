@@ -583,6 +583,27 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
+  public onDeleteMedia() {
+    if (this.session?.media) {
+      this.mediaService.delete(parseInt(this.session.media.id)).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: this.translateService.instant('SESSION.MAINTAIN.AUDIO.DELETE_SUCCESS_MESSAGE_TITLE'),
+            detail: this.translateService.instant('SESSION.MAINTAIN.AUDIO.DELETE_SUCCESS_MESSAGE'),
+          });
+          this.loadSessionData(parseInt(this.session?.id || '0'));
+        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: this.translateService.instant('SESSION.MAINTAIN.AUDIO.DELETE_ERROR_MESSAGE_TITLE'),
+            detail: this.translateService.instant('SESSION.MAINTAIN.AUDIO.DELETE_ERROR_MESSAGE'),
+          });
+        },
+      });
+    }
+  }
   /*---------------------------
   Session Participants Handling
   -----------------------------*/

@@ -27,5 +27,14 @@
       mode="basic"
       [disabled]="(mediaUploadStateChanged$ | async) !== MediaUploadState.completed"
     ></p-fileUpload>
+
+    <button
+      pButton
+      type="button"
+      label="{{ 'SESSION.MAINTAIN.AUDIO.DELETE_BTN' | translate }}"
+      class="p-button-danger"
+      (click)="deleteMedia()"
+      [disabled]="!media || (mediaUploadStateChanged$ | async) === MediaUploadState.started"
+    ></button>
   </div>
 </div>

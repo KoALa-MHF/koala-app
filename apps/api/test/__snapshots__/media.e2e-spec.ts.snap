@@ -1,5 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Media (e2e) - GraphQL Delete Media Authenticated user should be able to delete a media item 1`] = `
+{
+  "deleteMedia": {
+    "id": "1",
+    "mimeType": "audio/mpeg",
+    "name": "test.mp3",
+  },
+}
+`;
+
+exports[`Media (e2e) - GraphQL Delete Media Authenticated user should be able to delete a media item even if the file is already missing and session still references it 1`] = `
+{
+  "deleteMedia": {
+    "id": "1",
+    "mimeType": "audio/mpeg",
+    "name": "test.mp3",
+  },
+}
+`;
+
 exports[`Media (e2e) - REST Media GET Authenticated user should get media file 1`] = `
 {
   "data": [

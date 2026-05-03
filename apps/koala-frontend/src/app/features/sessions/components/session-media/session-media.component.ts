@@ -3,16 +3,17 @@ import { Media } from '../../../../graphql/generated/graphql';
 import { MediaService, MediaUploadState } from '../../services/media.service';
 
 @Component({
-  selector: 'koala-session-audio',
-  templateUrl: './session-audio.component.html',
+  selector: 'koala-session-media',
+  templateUrl: './session-media.component.html',
   styleUrls: [
-    './session-audio.component.scss',
+    './session-media.component.scss',
     '../../session-common.scss',
   ],
 })
-export class SessionAudioComponent {
+export class SessionMediaComponent {
   @Input() media: Media | null | undefined;
   @Output() fileUpload: EventEmitter<File> = new EventEmitter<File>();
+  @Output() deleteMediaEvent: EventEmitter<void> = new EventEmitter<void>();
 
   mediaUploadStateChanged$ = this.mediaService.mediaUploadStateChanged$;
   MediaUploadState = MediaUploadState;
@@ -23,5 +24,9 @@ export class SessionAudioComponent {
     this.fileUpload.emit(event.files[0]);
 
     fileUploadElement.clear();
+  }
+
+  public deleteMedia() {
+    this.deleteMediaEvent.emit();
   }
 }

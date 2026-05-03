@@ -13,7 +13,7 @@ export class MediaController {
 
   @Get(':id')
   @UseGuards(AuthGuard('jwt'))
-  async getMedia(@Param() params, @Res() res: Response): Promise<void> {
+  async getMedia(@Param() params: { id: number }, @Res() res: Response): Promise<void> {
     try {
       const media = await this.mediaService.findOne(params.id);
       if (media) {

@@ -40,7 +40,7 @@ import { SessionBasicDataComponent } from './components/session-basic-data/sessi
 import { SharedModule } from '../../shared/shared.module';
 import { SessionDetailsComponent } from './components/session-details/session-details.component';
 import { SessionDatesComponent } from './components/session-dates/session-dates.component';
-import { SessionAudioComponent } from './components/session-audio/session-audio.component';
+import { SessionMediaComponent } from './components/session-media/session-media.component';
 import { MediaWaveComponent } from './components/media-wave/media-wave.component';
 import { MediaPlayerComponent } from './components/media-player/media-player.component';
 import { MediaService } from './services/media.service';
@@ -85,7 +85,7 @@ import { SessionNotActivePage } from './pages/session-not-active/session-not-act
     SessionBasicDataComponent,
     SessionDetailsComponent,
     SessionDatesComponent,
-    SessionAudioComponent,
+    SessionMediaComponent,
     SessionDataComponent,
     SessionMarkerDataComponent,
     MarkerPlacementComponent,
