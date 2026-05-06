@@ -92,6 +92,14 @@ const CREATE_MEDIA = gql`
   }
 `;
 
+const CREATE_EXTERNAL_MEDIA = gql`
+  mutation createExternalMedia($media: CreateExternalMediaInput!) {
+    createExternalMedia(createExternalMediaInput: $media) {
+      id
+    }
+  }
+`;
+
 const DELETE_MEDIA = gql`
   mutation deleteMedia($id: Float!) {
     deleteMedia(id: $id) {

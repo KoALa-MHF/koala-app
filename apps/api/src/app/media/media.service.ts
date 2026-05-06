@@ -7,6 +7,7 @@ import { Media } from './entities/media.entity';
 import { FileUpload } from 'graphql-upload';
 import { ensureMediaFolder, getFilePath } from './media.util';
 import { unlink } from 'node:fs/promises';
+import { CreateExternalMediaInput } from './dto/create-external-media.input';
 
 @Injectable()
 export class MediaService {
@@ -25,6 +26,16 @@ export class MediaService {
     const media = await this.mediaRepository.save(newMedia);
 
     await this.writeMediaFile(media.id, file);
+
+    return media;
+  }
+
+  async createExternal(createExternalMediaInput: CreateExternalMediaInput): Promise<Media> {
+    const newMedia = this.mediaRepository.create();
+    newMedia.name = createExternalMediaInput.url;
+    newMedia.mimeType = 'external';
+
+    const media = await this.mediaRepository.save(newMedia);
 
     return media;
   }

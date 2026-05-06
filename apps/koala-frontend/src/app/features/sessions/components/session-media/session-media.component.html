@@ -9,7 +9,7 @@
 <div>
   <div style="margin-bottom: 10px">{{ 'SESSION.MAINTAIN.AUDIO.TITLE_UPLOAD_AREA' | translate }}</div>
   <div style="display: flex; align-items: center; gap: 10px">
-    <input type="text" pInputText [disabled]="true" [value]="media?.name" />
+    <input type="text" pInputText [disabled]="true" [value]="media?.mimeType !== 'external' ? media?.name : ''" />
 
     <p-progressSpinner
       *ngIf="(mediaUploadStateChanged$ | async) === MediaUploadState.started"
@@ -25,7 +25,7 @@
       [auto]="true"
       chooseLabel="{{ 'SESSION.MAINTAIN.AUDIO.CHOOSE_BTN' | translate }}"
       mode="basic"
-      [disabled]="(mediaUploadStateChanged$ | async) !== MediaUploadState.completed"
+      [disabled]="(mediaUploadStateChanged$ | async) !== MediaUploadState.completed || media?.mimeType === 'external'"
     ></p-fileUpload>
 
     <button
@@ -34,7 +34,30 @@
       label="{{ 'SESSION.MAINTAIN.AUDIO.DELETE_BTN' | translate }}"
       class="p-button-danger"
       (click)="deleteMedia()"
-      [disabled]="!media || (mediaUploadStateChanged$ | async) === MediaUploadState.started"
+      [disabled]="
+        !media || (mediaUploadStateChanged$ | async) === MediaUploadState.started || media.mimeType === 'external'
+      "
     ></button>
   </div>
 </div>
+
+<form [formGroup]="mediaForm" class="form">
+  <div>
+    <span class="p-float-label">
+      <input
+        id="session-media-url-input"
+        formControlName="url"
+        type="text"
+        pInputText
+        data-cy="session-media-url-input"
+        [readonly]="
+          !media || (mediaUploadStateChanged$ | async) === MediaUploadState.started || media.mimeType !== 'external'
+        "
+      />
+      <label for="session-media-url-input">{{ 'SESSION.MAINTAIN.AUDIO.MEDIA_URL_INPUT_LABEL' | translate }}</label>
+    </span>
+    <small id="session-name-help" class="field-explanation">
+      {{ 'SESSION.MAINTAIN.AUDIO.MEDIA_URL_INPUT_EXPLANATION' | translate }}
+    </small>
+  </div>
+</form>

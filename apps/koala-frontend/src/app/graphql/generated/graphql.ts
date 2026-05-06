@@ -105,6 +105,10 @@ export type CreateCommentInput = {
   text: Scalars['String']['input'];
 };
 
+export type CreateExternalMediaInput = {
+  url: Scalars['String']['input'];
+};
+
 export type CreateMarkerInput = {
   /** Marker Name Abbreviation (e.g. for small screen sizes */
   abbreviation?: InputMaybe<Scalars['String']['input']>;
@@ -224,6 +228,7 @@ export type Mutation = {
   authenticateUserSession: Authentication;
   createAnnotation: Annotation;
   createComment: Comment;
+  createExternalMedia: Media;
   createMarker: Marker;
   createMedia: Media;
   createSession: Session;
@@ -262,6 +267,10 @@ export type MutationCreateAnnotationArgs = {
 
 export type MutationCreateCommentArgs = {
   createCommentInput: CreateCommentInput;
+};
+
+export type MutationCreateExternalMediaArgs = {
+  createExternalMediaInput: CreateExternalMediaInput;
 };
 
 export type MutationCreateMarkerArgs = {
@@ -701,6 +710,15 @@ export type CreateMediaMutationVariables = Exact<{
 }>;
 
 export type CreateMediaMutation = { __typename?: 'Mutation'; createMedia: { __typename?: 'Media'; id: string } };
+
+export type CreateExternalMediaMutationVariables = Exact<{
+  media: CreateExternalMediaInput;
+}>;
+
+export type CreateExternalMediaMutation = {
+  __typename?: 'Mutation';
+  createExternalMedia: { __typename?: 'Media'; id: string };
+};
 
 export type DeleteMediaMutationVariables = Exact<{
   id: Scalars['Float']['input'];
@@ -1495,6 +1513,27 @@ export const CreateMediaDocument = gql`
 })
 export class CreateMediaGQL extends Apollo.Mutation<CreateMediaMutation, CreateMediaMutationVariables> {
   override document = CreateMediaDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateExternalMediaDocument = gql`
+  mutation createExternalMedia($media: CreateExternalMediaInput!) {
+    createExternalMedia(createExternalMediaInput: $media) {
+      id
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateExternalMediaGQL extends Apollo.Mutation<
+  CreateExternalMediaMutation,
+  CreateExternalMediaMutationVariables
+> {
+  override document = CreateExternalMediaDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

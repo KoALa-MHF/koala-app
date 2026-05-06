@@ -10,12 +10,14 @@ import { PlayMode, Session, SessionStatus } from './entities/session.entity';
 import { SetPlayModeInput } from './dto/set-play-mode.input';
 import { SetPlayPositionInput } from './dto/set-play-position.input';
 import { UserSession } from '../user-sessions/entities/user-session.entity';
+import { MediaService } from '../media/media.service';
 
 @Injectable()
 export class SessionsService {
   constructor(
     @InjectRepository(Session)
-    private sessionsRepository: Repository<Session>
+    private sessionsRepository: Repository<Session>,
+    private mediaService: MediaService
   ) {}
 
   async create(createSessionInput: CreateSessionInput, owner: User): Promise<Session> {
@@ -112,6 +114,12 @@ export class SessionsService {
 
   async update(id: number, updateSessionInput: UpdateSessionInput, owner: User): Promise<Session> {
     const session = await this.findOneOfOwner(id, owner);
+
+    if (updateSessionInput.mediaId !== null && updateSessionInput.mediaId !== session.mediaId) {
+      this.mediaService.remove(session.mediaId!).catch((err) => {
+        console.log(err);
+      });
+    }
 
     this.sessionsRepository.merge(session, {
       name: updateSessionInput.name,

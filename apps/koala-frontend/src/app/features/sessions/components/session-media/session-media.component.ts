@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Media } from '../../../../graphql/generated/graphql';
 import { MediaService, MediaUploadState } from '../../services/media.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'koala-session-media',
@@ -12,6 +13,7 @@ import { MediaService, MediaUploadState } from '../../services/media.service';
 })
 export class SessionMediaComponent {
   @Input() media: Media | null | undefined;
+  @Input() mediaForm!: FormGroup;
   @Output() fileUpload: EventEmitter<File> = new EventEmitter<File>();
   @Output() deleteMediaEvent: EventEmitter<void> = new EventEmitter<void>();
 
