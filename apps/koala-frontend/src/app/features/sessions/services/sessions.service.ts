@@ -229,7 +229,10 @@ export class SessionsService {
     return this.getOne(sessionId).pipe(
       tap((session: Session) => {
         this.focusSession = session;
-        if (this.focusSession?.media?.mimeType?.startsWith('video/')) {
+        if (
+          this.focusSession?.media?.mimeType?.startsWith('video/') ||
+          this.focusSession?.media?.mimeType === 'external'
+        ) {
           this.focusSession.isVideoSession = true;
         }
 

@@ -9,6 +9,7 @@ import MP3Tag from 'mp3tag.js';
 import { Subject } from 'rxjs';
 import { SessionsService } from './sessions.service';
 import { AccessTokenService } from '../../auth/services/access-token.service';
+import { SwitchTubeWaveSurferMock } from './switchtube-wavesurfer.mock';
 
 export enum MediaActions {
   Play = 1,
@@ -29,7 +30,7 @@ export interface MediaEvent {
 })
 export class MediaControlService {
   uuid!: string | HTMLElement;
-  private waves = new Map<string | HTMLElement, WaveSurfer>();
+  private waves = new Map<string | HTMLElement, WaveSurfer | SwitchTubeWaveSurferMock>();
 
   private lastPlayPositionUpdate = -1;
 
@@ -51,32 +52,51 @@ export class MediaControlService {
       throw new Error('error fetching media file');
     }
 
-    let media;
+    let mediaElement;
+    let mediaIFrame: HTMLIFrameElement;
+    const media = this.sessionService.getFocusSession()?.media;
+
     if (this.sessionService.getFocusSession()?.isVideoSession) {
-      media = document.createElement('video');
-      document.getElementById('sessionVideo')?.appendChild(media);
+      if (media?.name.includes('embed')) {
+        mediaIFrame = document.createElement('iframe');
+        mediaIFrame.width = '640';
+        mediaIFrame.height = '360';
+        mediaIFrame.src = media?.name || '';
+        mediaIFrame.frameBorder = '0';
+        mediaIFrame.allow = 'fullscreen';
+
+        document.getElementById('sessionVideo')?.appendChild(mediaIFrame);
+      } else {
+        mediaElement = document.createElement('video');
+        document.getElementById('sessionVideo')?.appendChild(mediaElement);
+        mediaElement.src = URL.createObjectURL(mediaBlob);
+      }
     } else {
-      media = new Audio();
+      mediaElement = new Audio();
+      mediaElement.src = URL.createObjectURL(mediaBlob);
     }
-    media.src = URL.createObjectURL(mediaBlob);
+
     this.createMediadata(mediaBlob);
 
     this.waves.set(
       this.uuid,
-      WaveSurfer.create({
-        container: `#${this.uuid}`,
-        cursorColor: 'rgba(73,157,255,.95)',
-        cursorWidth: 2,
-        progressColor: 'rgba(0,0,0,.9)',
-        waveColor: 'rgba(73,157,158,1)',
-        autoCenter: true,
-        normalize: true,
-        hideScrollbar: false,
-        height: 100,
-        media: media,
-        plugins: [],
-      })
+      media?.name.includes('embed')
+        ? new SwitchTubeWaveSurferMock(mediaIFrame!)
+        : WaveSurfer.create({
+            container: `#${this.uuid}`,
+            cursorColor: 'rgba(73,157,255,.95)',
+            cursorWidth: 2,
+            progressColor: 'rgba(0,0,0,.9)',
+            waveColor: 'rgba(73,157,158,1)',
+            autoCenter: true,
+            normalize: true,
+            hideScrollbar: false,
+            height: 100,
+            media: mediaElement,
+            plugins: [],
+          })
     );
+
     try {
       const w = this.getWave();
 
@@ -167,7 +187,7 @@ export class MediaControlService {
     return resp.blob();
   }
 
-  private getWave(): WaveSurfer {
+  private getWave(): WaveSurfer | SwitchTubeWaveSurferMock {
     const w = this.waves.get(this.uuid);
     if (w == undefined) {
       throw Error('no wavesurfer instance');

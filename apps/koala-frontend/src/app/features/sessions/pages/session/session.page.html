@@ -29,7 +29,11 @@
       ></koala-session-timer>
     </div>
 
-    <div id="sessionVideo" style="display: flex; justify-content: center" *ngIf="session.isVideoSession"></div>
+    <div
+      id="sessionVideo"
+      style="display: flex; justify-content: center; max-height: 300px; max-width: 800px; width: 100%"
+      *ngIf="session.isVideoSession"
+    ></div>
 
     <koala-app-media-wave *ngIf="session.isAudioSession" [waveContainer]="waveContainer"> </koala-app-media-wave>
     <koala-app-annotation

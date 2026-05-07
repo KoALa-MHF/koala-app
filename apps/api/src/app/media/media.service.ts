@@ -68,6 +68,11 @@ export class MediaService {
 
   async remove(id: number) {
     const media = await this.findOne(id);
+
+    if (!media) {
+      throw new BadRequestException('Media not found');
+    }
+
     await this.deleteMediaFile(id, media.name);
 
     await this.mediaRepository.delete(id);

@@ -51,7 +51,8 @@
         pInputText
         data-cy="session-media-url-input"
         [readonly]="
-          !media || (mediaUploadStateChanged$ | async) === MediaUploadState.started || media.mimeType !== 'external'
+          (mediaUploadStateChanged$ | async) === MediaUploadState.started ||
+          (media?.mimeType !== 'external' && media?.mimeType !== null)
         "
       />
       <label for="session-media-url-input">{{ 'SESSION.MAINTAIN.AUDIO.MEDIA_URL_INPUT_LABEL' | translate }}</label>
