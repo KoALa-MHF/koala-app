@@ -63,7 +63,7 @@ export class MediaControlService {
         mediaIFrame.height = '360';
         mediaIFrame.src = media?.name || '';
         mediaIFrame.frameBorder = '0';
-        mediaIFrame.allow = 'fullscreen';
+        mediaIFrame.allow = 'autoplay; fullscreen';
 
         document.getElementById('sessionVideo')?.appendChild(mediaIFrame);
       } else {

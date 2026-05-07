@@ -15,6 +15,7 @@ const FINISH_EPSILON_S = 0.5;
 
 export class SwitchTubeWaveSurferMock {
   private readonly iframe: HTMLIFrameElement;
+  private readonly targetOrigin: string;
   private readonly handlers = new Map<string, Set<Handler>>();
 
   private duration = 0;
@@ -32,6 +33,7 @@ export class SwitchTubeWaveSurferMock {
 
   constructor(iframe: HTMLIFrameElement) {
     this.iframe = iframe;
+    this.targetOrigin = resolveOrigin(iframe);
     this.bootstrap();
   }
 
@@ -53,19 +55,11 @@ export class SwitchTubeWaveSurferMock {
 
   play(): Promise<void> {
     this.post({ action: 'play' });
-    if (!this.playing) {
-      this.playing = true;
-      this.emit('play');
-    }
     return Promise.resolve();
   }
 
   pause(): void {
     this.post({ action: 'pause' });
-    if (this.playing) {
-      this.playing = false;
-      this.emit('pause');
-    }
   }
 
   stop(): void {
@@ -94,7 +88,6 @@ export class SwitchTubeWaveSurferMock {
     this.post({ action: 'seek', to: seconds });
     this.currentTime = seconds;
     this.lastPolledTime = seconds;
-    this.emit('seeking', seconds);
   }
 
   setVolume(volume: number): void {
@@ -151,10 +144,23 @@ export class SwitchTubeWaveSurferMock {
       });
     };
 
-    if (this.iframe.contentWindow) {
+    // Always wait for `load`: contentWindow exists immediately as about:blank
+    // at the parent's origin, but posting to the cross-origin targetOrigin
+    // before the SwitchTube document is loaded throws a DOMException.
+    if (this.isIframeLoaded()) {
       start();
     } else {
       this.iframe.addEventListener('load', start, { once: true });
+    }
+  }
+
+  private isIframeLoaded(): boolean {
+    // Cross-origin: contentDocument access throws or returns null after the
+    // iframe has navigated to its cross-origin src — treat that as loaded.
+    try {
+      return this.iframe.contentDocument === null;
+    } catch {
+      return true;
     }
   }
 
@@ -241,7 +247,7 @@ export class SwitchTubeWaveSurferMock {
   private post(message: SwitchTubeMessage): void {
     const target = this.iframe.contentWindow;
     if (!target) return;
-    target.postMessage(message, '*');
+    target.postMessage(message, this.targetOrigin);
   }
 
   private request<T>(message: SwitchTubeMessage): Promise<T> {
@@ -261,10 +267,20 @@ export class SwitchTubeWaveSurferMock {
         resolve(event.data as T);
       };
 
-      target.postMessage(message, '*', [
+      target.postMessage(message, this.targetOrigin, [
         channel.port2,
       ]);
     });
+  }
+}
+
+function resolveOrigin(iframe: HTMLIFrameElement): string {
+  const src = iframe.getAttribute('src');
+  if (!src) return '*';
+  try {
+    return new URL(src, window.location.href).origin;
+  } catch {
+    return '*';
   }
 }
 
