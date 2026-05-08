@@ -34,29 +34,22 @@ export class MediaPlayerComponent implements OnInit {
 
     this.mediaControlService.mediaPlayStateChanged$.subscribe({
       next: (mediaAction) => {
-        if (mediaAction == MediaActions.Finish) {
-          this.onStop();
+        if (mediaAction === MediaActions.Play) {
+          this.playing = true;
+          this.playIcon = 'pi pi-pause';
+        } else if (mediaAction === MediaActions.Stop || mediaAction === MediaActions.Finish) {
+          this.playing = false;
+          this.playIcon = 'pi pi-play';
         }
       },
     });
   }
 
   onPlay() {
-    if (!this.playing) {
-      this.playIcon = 'pi pi-pause';
-      this.playing = true;
-    } else {
-      this.playIcon = 'pi pi-play';
-      this.playing = false;
-    }
     this.mediaEvent.emit({ actions: MediaActions.Play });
   }
 
   onStop() {
-    if (this.playing) {
-      this.playIcon = 'pi pi-play';
-      this.playing = false;
-    }
     this.mediaEvent.emit({ actions: MediaActions.Stop });
   }
 }

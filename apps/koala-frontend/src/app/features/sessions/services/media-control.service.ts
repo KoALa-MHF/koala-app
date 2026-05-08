@@ -10,6 +10,7 @@ import { Subject } from 'rxjs';
 import { SessionsService } from './sessions.service';
 import { AccessTokenService } from '../../auth/services/access-token.service';
 import { SwitchTubeWaveSurferMock } from './switchtube-wavesurfer.mock';
+import { YouTubeWaveSurferMock } from './youtube-wavesurfer.mock';
 
 export enum MediaActions {
   Play = 1,
@@ -30,7 +31,7 @@ export interface MediaEvent {
 })
 export class MediaControlService {
   uuid!: string | HTMLElement;
-  private waves = new Map<string | HTMLElement, WaveSurfer | SwitchTubeWaveSurferMock>();
+  private waves = new Map<string | HTMLElement, WaveSurfer | SwitchTubeWaveSurferMock | YouTubeWaveSurferMock>();
 
   private lastPlayPositionUpdate = -1;
 
@@ -57,11 +58,11 @@ export class MediaControlService {
     const media = this.sessionService.getFocusSession()?.media;
 
     if (this.sessionService.getFocusSession()?.isVideoSession) {
-      if (media?.name.includes('embed')) {
+      if (media?.mimeType === 'external/switchtube' || media?.mimeType === 'external/youtube') {
         mediaIFrame = document.createElement('iframe');
         mediaIFrame.width = '640';
         mediaIFrame.height = '360';
-        mediaIFrame.src = media?.name || '';
+        mediaIFrame.src = media?.name + '?enablejsapi=1' || '';
         mediaIFrame.frameBorder = '0';
         mediaIFrame.allow = 'autoplay; fullscreen';
 
@@ -80,8 +81,10 @@ export class MediaControlService {
 
     this.waves.set(
       this.uuid,
-      media?.name.includes('embed')
+      media?.mimeType === 'external/switchtube'
         ? new SwitchTubeWaveSurferMock(mediaIFrame!)
+        : media?.mimeType === 'external/youtube'
+        ? new YouTubeWaveSurferMock(mediaIFrame!)
         : WaveSurfer.create({
             container: `#${this.uuid}`,
             cursorColor: 'rgba(73,157,255,.95)',
@@ -187,7 +190,7 @@ export class MediaControlService {
     return resp.blob();
   }
 
-  private getWave(): WaveSurfer | SwitchTubeWaveSurferMock {
+  private getWave(): WaveSurfer | SwitchTubeWaveSurferMock | YouTubeWaveSurferMock {
     const w = this.waves.get(this.uuid);
     if (w == undefined) {
       throw Error('no wavesurfer instance');

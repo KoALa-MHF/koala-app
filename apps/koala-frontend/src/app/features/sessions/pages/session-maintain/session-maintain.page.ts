@@ -207,14 +207,14 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
           (oldUrl && newUrl !== oldUrl)
         ) {
           if (newUrl === null || newUrl === undefined || newUrl === '') {
-            this.mediaService.delete(parseInt(this.session?.media?.id || '0')).subscribe({
+            /*this.mediaService.delete(parseInt(this.session?.media?.id || '0')).subscribe({
               next: () => {
                 this.loadSessionData(parseInt(this.session?.id || '0'));
               },
               error: (err) => {
                 console.log(err);
               },
-            });
+            });*/
           } else {
             this.mediaService.createExternal(newUrl).subscribe({
               next: (value) => {
@@ -428,7 +428,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private setSessionMediaDataForm(session: Session) {
-    if (session.media?.mimeType === 'external') {
+    if (session.media?.mimeType.startsWith('external')) {
       this.maintainSessionForm.get('media')?.get('url')?.setValue(session.media.name, { emitEvent: true });
     } else {
       this.maintainSessionForm.get('media')?.get('url')?.reset();

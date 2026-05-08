@@ -231,7 +231,7 @@ export class SessionsService {
         this.focusSession = session;
         if (
           this.focusSession?.media?.mimeType?.startsWith('video/') ||
-          this.focusSession?.media?.mimeType === 'external'
+          this.focusSession?.media?.mimeType.startsWith('external')
         ) {
           this.focusSession.isVideoSession = true;
         }

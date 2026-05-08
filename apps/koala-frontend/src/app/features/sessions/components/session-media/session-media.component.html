@@ -9,7 +9,12 @@
 <div>
   <div style="margin-bottom: 10px">{{ 'SESSION.MAINTAIN.AUDIO.TITLE_UPLOAD_AREA' | translate }}</div>
   <div style="display: flex; align-items: center; gap: 10px">
-    <input type="text" pInputText [disabled]="true" [value]="media?.mimeType !== 'external' ? media?.name : ''" />
+    <input
+      type="text"
+      pInputText
+      [disabled]="true"
+      [value]="!media?.mimeType?.startsWith('external') ? media?.name : ''"
+    />
 
     <p-progressSpinner
       *ngIf="(mediaUploadStateChanged$ | async) === MediaUploadState.started"
@@ -25,7 +30,9 @@
       [auto]="true"
       chooseLabel="{{ 'SESSION.MAINTAIN.AUDIO.CHOOSE_BTN' | translate }}"
       mode="basic"
-      [disabled]="(mediaUploadStateChanged$ | async) !== MediaUploadState.completed || media?.mimeType === 'external'"
+      [disabled]="
+        (mediaUploadStateChanged$ | async) !== MediaUploadState.completed || media?.mimeType?.startsWith('external')
+      "
     ></p-fileUpload>
 
     <button
@@ -35,7 +42,9 @@
       class="p-button-danger"
       (click)="deleteMedia()"
       [disabled]="
-        !media || (mediaUploadStateChanged$ | async) === MediaUploadState.started || media.mimeType === 'external'
+        !media ||
+        (mediaUploadStateChanged$ | async) === MediaUploadState.started ||
+        media.mimeType?.startsWith('external')
       "
     ></button>
   </div>
@@ -52,7 +61,7 @@
         data-cy="session-media-url-input"
         [readonly]="
           (mediaUploadStateChanged$ | async) === MediaUploadState.started ||
-          (media?.mimeType !== 'external' && media?.mimeType !== null)
+          (!media?.mimeType?.startsWith('external') && media?.mimeType !== null)
         "
       />
       <label for="session-media-url-input">{{ 'SESSION.MAINTAIN.AUDIO.MEDIA_URL_INPUT_LABEL' | translate }}</label>
