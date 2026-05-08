@@ -207,29 +207,21 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
           (oldUrl && newUrl !== oldUrl)
         ) {
           if (newUrl === null || newUrl === undefined || newUrl === '') {
-            /*this.mediaService.delete(parseInt(this.session?.media?.id || '0')).subscribe({
-              next: () => {
-                this.loadSessionData(parseInt(this.session?.id || '0'));
-              },
-              error: (err) => {
-                console.log(err);
-              },
-            });*/
+            if (this.session?.media) {
+              this.mediaService.delete(parseInt(this.session.media.id)).subscribe({
+                next: () => {
+                  this.loadSessionData(parseInt(this.session?.id || '0'));
+                },
+                error: (err) => {
+                  console.log(err);
+                },
+              });
+            }
           } else {
             this.mediaService.createExternal(newUrl).subscribe({
               next: (value) => {
                 this.sessionService
                   .update(parseInt(this.session?.id || '0'), {
-                    description: this.session?.description,
-                    displaySampleSolution: this.session?.displaySampleSolution,
-                    editable: this.session?.editable,
-                    enableLiveAnalysis: this.session?.enableLiveAnalysis,
-                    lockAnnotationDelete: this.session?.lockAnnotationDelete,
-                    enablePlayer: this.session?.enablePlayer,
-                    end: this.session?.end,
-                    name: this.session?.name,
-                    start: this.session?.start,
-                    status: this.session?.status,
                     mediaId: parseInt(value.data?.createExternalMedia.id || '0'),
                   })
                   .subscribe({
@@ -401,7 +393,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
 
   private setSessionGeneralDataForm(session: Session) {
     this.maintainSessionForm.get('basicData')?.get('name')?.setValue(session.name, { emitEvent: false });
-    this.maintainSessionForm.get('basicData')?.get('description')?.setValue(session.description);
+    this.maintainSessionForm.get('basicData')?.get('description')?.setValue(session.description, { emitEvent: false });
     this.maintainSessionForm.get('details')?.get('editable')?.setValue(session.editable, { emitEvent: false });
     this.maintainSessionForm.get('details')?.get('enablePlayer')?.setValue(session.enablePlayer, { emitEvent: false });
     this.maintainSessionForm
@@ -429,7 +421,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
 
   private setSessionMediaDataForm(session: Session) {
     if (session.media?.mimeType.startsWith('external')) {
-      this.maintainSessionForm.get('media')?.get('url')?.setValue(session.media.name, { emitEvent: true });
+      this.maintainSessionForm.get('media')?.get('url')?.setValue(session.media.name, { emitEvent: false });
     } else {
       this.maintainSessionForm.get('media')?.get('url')?.reset();
     }
@@ -617,16 +609,6 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
         next: (value) => {
           this.sessionService
             .update(parseInt(this.session?.id || '0'), {
-              description: this.session?.description,
-              displaySampleSolution: this.session?.displaySampleSolution,
-              editable: this.session?.editable,
-              enableLiveAnalysis: this.session?.enableLiveAnalysis,
-              lockAnnotationDelete: this.session?.lockAnnotationDelete,
-              enablePlayer: this.session?.enablePlayer,
-              end: this.session?.end,
-              name: this.session?.name,
-              start: this.session?.start,
-              status: this.session?.status,
               mediaId: parseInt(value.data?.createMedia.id || '0'),
             })
             .subscribe({
