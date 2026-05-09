@@ -45,6 +45,12 @@
   overflow: hidden;
 }
 
+.video-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
 :host ::ng-deep .p-sidebar-header {
   background-color: #246584;
 }

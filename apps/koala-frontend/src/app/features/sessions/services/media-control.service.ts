@@ -1,4 +1,4 @@
-import { ElementRef, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { WaveSurferEvents } from 'wavesurfer.js';
 import WaveSurfer from 'wavesurfer.js';
 import TimelinePlugin from 'wavesurfer.js/dist/plugins/timeline.js';
@@ -71,6 +71,7 @@ export class MediaControlService {
         mediaElement = document.createElement('video');
         mediaElement.style.width = '100%';
         mediaElement.style.height = '100%';
+        mediaElement.controls = true;
         document.getElementById('sessionVideo')?.appendChild(mediaElement);
         mediaElement.src = URL.createObjectURL(mediaBlob);
       }
@@ -103,8 +104,6 @@ export class MediaControlService {
     );
 
     try {
-      const w = this.getWave();
-
       this.addEventHandler('pause', () => {
         this.mediaPlayStateChangedSubject.next(MediaActions.Stop);
       });
