@@ -45,6 +45,10 @@ export class CreateSessionInput {
   @IsOptional()
   lockAnnotationDelete?: boolean;
 
+  @Field({ nullable: true })
+  @IsOptional()
+  isLiveSession?: boolean;
+
   @Field(() => Int, { nullable: true, description: 'Assigned Media' })
   @IsOptional()
   mediaId?: number;

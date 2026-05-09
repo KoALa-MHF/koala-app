@@ -141,6 +141,7 @@ export type CreateSessionInput = {
   enableLiveAnalysis?: InputMaybe<Scalars['Boolean']['input']>;
   enablePlayer?: InputMaybe<Scalars['Boolean']['input']>;
   end?: InputMaybe<Scalars['DateTime']['input']>;
+  isLiveSession?: InputMaybe<Scalars['Boolean']['input']>;
   lockAnnotationDelete?: InputMaybe<Scalars['Boolean']['input']>;
   /** Assigned Media */
   mediaId?: InputMaybe<Scalars['Int']['input']>;
@@ -444,6 +445,8 @@ export type Session = {
   /** ID for Session */
   id: Scalars['ID']['output'];
   isAudioSession: Scalars['Boolean']['output'];
+  /** Indicates if this is a live session without media */
+  isLiveSession?: Maybe<Scalars['Boolean']['output']>;
   isSessionOwner: Scalars['Boolean']['output'];
   liveSessionEnd?: Maybe<Scalars['Float']['output']>;
   liveSessionStart?: Maybe<Scalars['Float']['output']>;
@@ -571,6 +574,7 @@ export type UpdateSessionInput = {
   enableLiveAnalysis?: InputMaybe<Scalars['Boolean']['input']>;
   enablePlayer?: InputMaybe<Scalars['Boolean']['input']>;
   end?: InputMaybe<Scalars['DateTime']['input']>;
+  isLiveSession?: InputMaybe<Scalars['Boolean']['input']>;
   liveSessionStart?: InputMaybe<Scalars['Float']['input']>;
   lockAnnotationDelete?: InputMaybe<Scalars['Boolean']['input']>;
   /** Assigned Media */
@@ -1111,6 +1115,7 @@ export type GetSessionsQuery = {
     currentSessionServerTime: number;
     isSessionOwner: boolean;
     isAudioSession: boolean;
+    isLiveSession?: boolean | null;
     code: string;
     createdAt: any;
     updatedAt: any;
@@ -1158,6 +1163,7 @@ export type GetOneSessionQuery = {
     currentSessionServerTime: number;
     isSessionOwner: boolean;
     isAudioSession: boolean;
+    isLiveSession?: boolean | null;
     code: string;
     createdAt: any;
     updatedAt: any;
@@ -1381,6 +1387,7 @@ export type OnSessionUpdatedSubscription = {
     currentSessionServerTime: number;
     isSessionOwner: boolean;
     isAudioSession: boolean;
+    isLiveSession?: boolean | null;
   };
 };
 
@@ -2191,6 +2198,7 @@ export const GetSessionsDocument = gql`
       currentSessionServerTime
       isSessionOwner
       isAudioSession
+      isLiveSession
       code
       userSessions {
         id
@@ -2261,6 +2269,7 @@ export const GetOneSessionDocument = gql`
       currentSessionServerTime
       isSessionOwner
       isAudioSession
+      isLiveSession
       code
       media {
         id
@@ -2562,6 +2571,7 @@ export const OnSessionUpdatedDocument = gql`
       currentSessionServerTime
       isSessionOwner
       isAudioSession
+      isLiveSession
     }
   }
 `;

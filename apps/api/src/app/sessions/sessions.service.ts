@@ -134,6 +134,7 @@ export class SessionsService {
       enableLiveAnalysis: updateSessionInput.enableLiveAnalysis,
       liveSessionStart: updateSessionInput.liveSessionStart,
       lockAnnotationDelete: updateSessionInput.lockAnnotationDelete,
+      isLiveSession: updateSessionInput.isLiveSession,
       ...(updateSessionInput.mediaId && { media: { id: updateSessionInput.mediaId } }),
     });
 

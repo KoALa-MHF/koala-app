@@ -21,6 +21,7 @@ const SUBSCRIBE_SESSION_UPDATED = gql`
       currentSessionServerTime
       isSessionOwner
       isAudioSession
+      isLiveSession
     }
   }
 `;

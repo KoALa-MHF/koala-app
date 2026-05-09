@@ -128,6 +128,11 @@ export class Session extends BaseEntity {
   @IsOptional()
   lockAnnotationDelete?: boolean;
 
+  @Column({ nullable: true, default: false })
+  @Field({ nullable: true, description: 'Indicates if this is a live session without media' })
+  @IsOptional()
+  isLiveSession?: boolean;
+
   @ManyToOne(() => Media, { nullable: true, eager: true, onDelete: 'SET NULL' })
   @Field((type) => Media, {
     nullable: true,

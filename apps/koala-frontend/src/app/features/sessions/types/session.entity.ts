@@ -15,6 +15,7 @@ export interface Session {
   displaySampleSolution?: boolean | null;
   enableLiveAnalysis?: boolean | null;
   lockAnnotationDelete?: boolean | null;
+  isLiveSession?: boolean | null;
   playMode?: PlayMode | null;
   playPosition?: number | null;
   mediaDuration?: number | null;

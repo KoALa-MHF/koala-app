@@ -128,6 +128,7 @@
         "SESSION_NAME_INPUT_EXPLANATION": "Geben Sie der Session bitte einen Namen.",
         "SESSION_DESCRIPTION_INPUT_LABEL": "Beschreibung",
         "SESSION_DESCRIPTION_INPUT_EXPLANATION": "Fügen Sie der Session ggf. eine Beschreibung oder eine Aufgabenstellung hinzu.",
+        "LIVE_SESSION_LABEL": "Live-Session",
         "SESSION_AVAILABILITY_EXPLANATION": "Nur wenn die Session online geschaltet ist, können Benutzer auf diese zugreifen. Wenn nicht, ist die Session nur für Sie als Administrator verfügbar.",
         "SESSION_STATUS_LABEL": "Status",
         "SESSION_START_DATE_INPUT_LABEL": "Start",

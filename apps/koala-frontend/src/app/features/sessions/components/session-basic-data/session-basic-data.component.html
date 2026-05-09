@@ -36,4 +36,14 @@
       {{ 'SESSION.MAINTAIN.SESSION_SETTINGS.SESSION_DESCRIPTION_INPUT_EXPLANATION' | translate }}
     </small>
   </div>
+
+  <div>
+    <p-checkbox
+      class="form-single-cell"
+      formControlName="isLiveSession"
+      [binary]="true"
+      data-cy="session-maintain-live-session-check"
+      label="{{ 'SESSION.MAINTAIN.SESSION_SETTINGS.LIVE_SESSION_LABEL' | translate }}"
+    ></p-checkbox>
+  </div>
 </form>

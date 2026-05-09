@@ -75,6 +75,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
         description: new FormControl<string>('', {
           updateOn: 'blur',
         }),
+        isLiveSession: new FormControl<boolean>(false),
       }),
       dates: this.formBuilder.group(
         {
@@ -120,6 +121,13 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
           (oldValues && newValues.description !== oldValues.description)
         ) {
           this.onSave('description', newValues.description);
+        }
+
+        if (
+          (!oldValues && this.maintainSessionForm.get('basicData')?.get('isLiveSession')?.dirty === true) ||
+          (oldValues && newValues.isLiveSession !== oldValues.isLiveSession)
+        ) {
+          this.onSave('isLiveSession', newValues.isLiveSession);
         }
       });
 
@@ -394,6 +402,10 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
   private setSessionGeneralDataForm(session: Session) {
     this.maintainSessionForm.get('basicData')?.get('name')?.setValue(session.name, { emitEvent: false });
     this.maintainSessionForm.get('basicData')?.get('description')?.setValue(session.description, { emitEvent: false });
+    this.maintainSessionForm
+      .get('basicData')
+      ?.get('isLiveSession')
+      ?.setValue(session.isLiveSession ?? false, { emitEvent: false });
     this.maintainSessionForm.get('details')?.get('editable')?.setValue(session.editable, { emitEvent: false });
     this.maintainSessionForm.get('details')?.get('enablePlayer')?.setValue(session.enablePlayer, { emitEvent: false });
     this.maintainSessionForm
