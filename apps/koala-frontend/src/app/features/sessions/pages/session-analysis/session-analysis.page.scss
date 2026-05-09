@@ -3,6 +3,29 @@
   margin-right: 30px;
 }
 
+.video-section {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+}
+
+.analysis-video {
+  align-self: center;
+  width: min(50%, calc(45cqh / 3 * 16 / 9));
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+/* Shift the timeline right to match the annotation content area.
+   The annotation rows have a vertical session-name label (~41 px) before the
+   annotation component, whose own labels SVG adds another 30 px — totalling
+   the same 71 px used for the audio waveform alignment above.
+   The right side mirrors the hidden delete-button column (≈ 60 px). */
+:host ::ng-deep .video-section .video-timeline-container {
+  margin-left: 71px;
+  width: calc(100% - 131px);
+}
+
 :host ::ng-deep .analysis div[role='toolbar'] {
   background: transparent;
 }

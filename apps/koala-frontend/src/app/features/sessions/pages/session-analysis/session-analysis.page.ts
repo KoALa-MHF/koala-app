@@ -86,18 +86,22 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
 
       if (!this.session.isLiveSession) {
         if (this.session.media == undefined) {
-          this.showErrorMessage(
-            'error',
-            'SESSION.ERROR_DIALOG.NO_AUDIO_FILE',
-            'SESSION.ERROR_DIALOG.NO_AUDIO_FILE_SUM'
-          );
-          return;
+          if (this.session.mediaDuration) {
+            this.totalAudioTime = this.session.mediaDuration;
+          } else {
+            this.showErrorMessage(
+              'error',
+              'SESSION.ERROR_DIALOG.NO_AUDIO_FILE',
+              'SESSION.ERROR_DIALOG.NO_AUDIO_FILE_SUM'
+            );
+            return;
+          }
+        } else {
+          this.mediaControlService.uuid = this.session.id;
+          this.waveContainer = `waveContainer-${this.session.id}`;
+
+          await this.loadMediaData(this.session.media);
         }
-
-        this.mediaControlService.uuid = this.session.id;
-        this.waveContainer = `waveContainer-${this.session.id}`;
-
-        await this.loadMediaData(this.session.media);
       } else {
         if (this.session.liveSessionStart && this.session.liveSessionEnd) {
           this.totalAudioTime =
@@ -118,7 +122,7 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (!this.session.isLiveSession) {
+    if (!this.session?.isLiveSession && this.session?.media) {
       this.mediaControlService.stop();
       this.mediaControlService.destroy();
     }
@@ -131,6 +135,10 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
         this.mediaControlService.addEventHandler('audioprocess', (time) => {
           // to reduce update frequency
           this.currentAudioTime = time.toFixed(2);
+        });
+
+        this.mediaControlService.addEventHandler('seeking', (time) => {
+          this.currentAudioTime = time;
         });
 
         this.mediaControlService.mediaPlayStateChanged$

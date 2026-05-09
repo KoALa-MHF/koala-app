@@ -1,10 +1,19 @@
 <div class="analysis-container">
-  <koala-app-media-wave [waveContainer]="waveContainer"> </koala-app-media-wave>
+  <koala-app-media-wave
+    *ngIf="!session?.isVideoSession && session?.media"
+    [waveContainer]="waveContainer"
+  ></koala-app-media-wave>
+
+  <div *ngIf="session?.isVideoSession" class="video-section">
+    <div *ngIf="session?.media" id="sessionVideo" class="analysis-video"></div>
+    <koala-video-timeline [totalTime]="totalAudioTime" [currentTime]="currentAudioTime"></koala-video-timeline>
+  </div>
+
   <p-toolbar class="analysis">
     <div class="p-toolbar-group-start"></div>
     <div class="p-toolbar-group-center">
       <div
-        *ngIf="( ( session?.enablePlayer || false ) || session?.isSessionOwner ) && session?.isAudioSession"
+        *ngIf="( ( session?.enablePlayer || false ) || session?.isSessionOwner ) && session?.isAudioSession && !session?.isVideoSession"
         class="p-toolbar-group-center"
       >
         <koala-media-player (mediaEvent)="onMediaEvent($event)"></koala-media-player>
