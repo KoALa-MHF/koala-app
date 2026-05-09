@@ -29,7 +29,7 @@
       ></koala-session-timer>
     </div>
 
-    <div *ngIf="session.isVideoSession">
+    <div *ngIf="session.isVideoSession" style="display: flex; flex-direction: column; align-items: center">
       <div id="sessionVideo"></div>
       <koala-video-timeline
         *ngIf="session.media?.mimeType?.startsWith('external')"
