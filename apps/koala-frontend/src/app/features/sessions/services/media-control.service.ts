@@ -45,20 +45,28 @@ export class MediaControlService {
 
   async load(trackurl: string, uuid: string) {
     this.uuid = uuid;
-    let mediaBlob: Blob = new Blob();
-
-    try {
-      mediaBlob = await this.fetchMediaBlob(trackurl);
-    } catch (e) {
-      throw new Error('error fetching media file');
-    }
 
     let mediaElement;
     let mediaIFrame: HTMLIFrameElement;
     const media = this.sessionService.getFocusSession()?.media;
 
+    const isExternalVideo = media?.mimeType === 'external/switchtube' || media?.mimeType === 'external/youtube';
+
+    let mediaBlob: Blob = new Blob();
+    if (!isExternalVideo) {
+      try {
+        mediaBlob = await this.fetchMediaBlob(trackurl);
+      } catch (e) {
+        throw new Error('error fetching media file');
+      }
+    } else {
+      // Yield one macrotask so Angular can render the *ngIf="session.isVideoSession"
+      // container before we try to append the iframe into it.
+      await new Promise<void>((resolve) => setTimeout(resolve));
+    }
+
     if (this.sessionService.getFocusSession()?.isVideoSession) {
-      if (media?.mimeType === 'external/switchtube' || media?.mimeType === 'external/youtube') {
+      if (isExternalVideo) {
         mediaIFrame = document.createElement('iframe');
         mediaIFrame.style.width = '100%';
         mediaIFrame.style.height = '100%';

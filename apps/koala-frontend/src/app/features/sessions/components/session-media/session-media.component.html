@@ -44,7 +44,7 @@
       [disabled]="
         !media ||
         (mediaUploadStateChanged$ | async) === MediaUploadState.started ||
-        media.mimeType?.startsWith('external')
+        media.mimeType.startsWith('external')
       "
     ></button>
   </div>
