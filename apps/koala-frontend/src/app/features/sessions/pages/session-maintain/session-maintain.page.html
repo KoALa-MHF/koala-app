@@ -7,7 +7,7 @@
         [sessionDetailsForm]="detailsFormGroup"
       ></koala-session-data>
     </p-tabPanel>
-    <p-tabPanel header="{{ 'SESSION.MAINTAIN.TABS.AUDIO' | translate }}">
+    <p-tabPanel *ngIf="!isLiveSession" header="{{ 'SESSION.MAINTAIN.TABS.AUDIO' | translate }}">
       <koala-session-media
         [mediaForm]="mediaFormGroup"
         [media]="session?.media"

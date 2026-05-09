@@ -128,6 +128,13 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
           (oldValues && newValues.isLiveSession !== oldValues.isLiveSession)
         ) {
           this.onSave('isLiveSession', newValues.isLiveSession);
+
+          if (newValues.isLiveSession) {
+            if (this.activeTabViewIndex === 1) {
+              this.activeTabViewIndex = 0;
+            }
+            this.onDeleteMedia();
+          }
         }
       });
 
@@ -738,6 +745,10 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
   /*-------------------------------------------------
   Getter for sub components to handle forms directly
   ---------------------------------------------------*/
+  get isLiveSession(): boolean {
+    return this.maintainSessionForm.get('basicData')?.get('isLiveSession')?.value ?? false;
+  }
+
   get basicDataFormGroup(): FormGroup {
     return this.maintainSessionForm.get('basicData') as FormGroup;
   }
