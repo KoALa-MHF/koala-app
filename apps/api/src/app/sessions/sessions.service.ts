@@ -9,6 +9,7 @@ import { UpdateSessionInput } from './dto/update-session.input';
 import { PlayMode, Session, SessionStatus } from './entities/session.entity';
 import { SetPlayModeInput } from './dto/set-play-mode.input';
 import { SetPlayPositionInput } from './dto/set-play-position.input';
+import { SetMediaDurationInput } from './dto/set-media-duration.input';
 import { UserSession } from '../user-sessions/entities/user-session.entity';
 import { MediaService } from '../media/media.service';
 
@@ -167,6 +168,12 @@ export class SessionsService {
       playPosition: setPlayModeInput.playPosition,
     });
 
+    return this.sessionsRepository.save(session);
+  }
+
+  async setMediaDuration(id: number, input: SetMediaDurationInput, owner: User): Promise<Session> {
+    const session = await this.findOneOfOwner(id, owner);
+    this.sessionsRepository.merge(session, { mediaDuration: input.mediaDuration });
     return this.sessionsRepository.save(session);
   }
 

@@ -15,6 +15,7 @@ import {
   GetOneSessionBySessionCodeGQL,
   SetPlayModeGQL,
   SetPlayPositionGQL,
+  SetMediaDurationGQL,
   SetPlayModeInput,
   ToolbarMarker,
   SessionExportGQL,
@@ -72,6 +73,7 @@ export class SessionsService {
     private readonly getOneSessionBySessionCodeGQL: GetOneSessionBySessionCodeGQL,
     private readonly setPlayModeGQL: SetPlayModeGQL,
     private readonly setPlayPositionGQL: SetPlayPositionGQL,
+    private readonly setMediaDurationGQL: SetMediaDurationGQL,
     private readonly toolbarService: ToolbarsService,
     private readonly sessionExportGQL: SessionExportGQL,
     private readonly sessionCSVExportGQL: SessionCsvExportGQL,
@@ -223,6 +225,10 @@ export class SessionsService {
         }
       })
     );
+  }
+
+  setMediaDuration(sessionId: number, mediaDuration: number) {
+    return this.setMediaDurationGQL.mutate({ sessionId, setMediaDurationInput: { mediaDuration } });
   }
 
   setFocusSession(sessionId: number) {

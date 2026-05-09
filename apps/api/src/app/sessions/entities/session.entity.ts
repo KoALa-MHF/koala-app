@@ -191,6 +191,10 @@ export class Session extends BaseEntity {
 
   @Field({ nullable: true })
   @Column({ nullable: true })
+  mediaDuration: number;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   liveSessionStart: number;
 
   @Field({ nullable: true })

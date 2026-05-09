@@ -29,7 +29,10 @@
       ></koala-session-timer>
     </div>
 
-    <div *ngIf="session.isVideoSession" style="display: flex; flex-direction: column; align-items: center">
+    <div
+      *ngIf="session.isVideoSession && (session.isSessionOwner || session.enablePlayer)"
+      style="display: flex; flex-direction: column; align-items: center"
+    >
       <div id="sessionVideo"></div>
       <koala-video-timeline
         *ngIf="session.media?.mimeType?.startsWith('external')"
@@ -38,13 +41,19 @@
       ></koala-video-timeline>
     </div>
 
+    <koala-video-timeline
+      *ngIf="session.isVideoSession && !session.isSessionOwner && !session.enablePlayer"
+      [totalTime]="totalAudioTime"
+      [currentTime]="currentAudioTime"
+    ></koala-video-timeline>
+
     <koala-app-media-wave
       *ngIf="session.isAudioSession && !session.isVideoSession && !session.media?.mimeType?.startsWith('external')"
       [waveContainer]="waveContainer"
     >
     </koala-app-media-wave>
     <koala-app-annotation
-      *ngIf="session.isAudioSession"
+      *ngIf="session.isAudioSession || session.mediaDuration"
       [annotationData]="AnnotationData"
       [markers]="markers"
       [totalTime]="totalAudioTime"

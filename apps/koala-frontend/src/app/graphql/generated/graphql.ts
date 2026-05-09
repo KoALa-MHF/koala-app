@@ -242,6 +242,7 @@ export type Mutation = {
   removeSession: Session;
   removeUserSession: UserSession;
   setMarkerVisible: Toolbar;
+  setMediaDuration: Session;
   setPlayMode: Session;
   setPlayPosition: Session;
   updateAnnotation: Annotation;
@@ -324,6 +325,11 @@ export type MutationRemoveUserSessionArgs = {
 export type MutationSetMarkerVisibleArgs = {
   id: Scalars['Int']['input'];
   updateToolbarMarkerVisible: SetToolbarMarkerVisibilityInput;
+};
+
+export type MutationSetMediaDurationArgs = {
+  id: Scalars['Int']['input'];
+  setMediaDurationInput: SetMediaDurationInput;
 };
 
 export type MutationSetPlayModeArgs = {
@@ -445,6 +451,7 @@ export type Session = {
   lockAnnotationDelete?: Maybe<Scalars['Boolean']['output']>;
   /** Associated Media File */
   media?: Maybe<Media>;
+  mediaDuration?: Maybe<Scalars['Float']['output']>;
   /** Session Name */
   name: Scalars['String']['output'];
   /** Associated User */
@@ -470,6 +477,10 @@ export enum SessionStatus {
   InPreparation = 'IN_PREPARATION',
   Open = 'OPEN',
 }
+
+export type SetMediaDurationInput = {
+  mediaDuration: Scalars['Float']['input'];
+};
 
 export type SetPlayModeInput = {
   playMode?: PlayMode;
@@ -1065,6 +1076,16 @@ export type RemoveAnnotationCommentMutation = {
   removeComment: { __typename?: 'Comment'; id: number };
 };
 
+export type SetMediaDurationMutationVariables = Exact<{
+  sessionId: Scalars['Int']['input'];
+  setMediaDurationInput: SetMediaDurationInput;
+}>;
+
+export type SetMediaDurationMutation = {
+  __typename?: 'Mutation';
+  setMediaDuration: { __typename?: 'Session'; id: string; mediaDuration?: number | null };
+};
+
 export type GetSessionsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetSessionsQuery = {
@@ -1084,6 +1105,7 @@ export type GetSessionsQuery = {
     lockAnnotationDelete?: boolean | null;
     playMode?: PlayMode | null;
     playPosition?: number | null;
+    mediaDuration?: number | null;
     liveSessionStart?: number | null;
     liveSessionEnd?: number | null;
     currentSessionServerTime: number;
@@ -1130,6 +1152,7 @@ export type GetOneSessionQuery = {
     lockAnnotationDelete?: boolean | null;
     playMode?: PlayMode | null;
     playPosition?: number | null;
+    mediaDuration?: number | null;
     liveSessionStart?: number | null;
     liveSessionEnd?: number | null;
     currentSessionServerTime: number;
@@ -2127,6 +2150,25 @@ export class RemoveAnnotationCommentGQL extends Apollo.Mutation<
     super(apollo);
   }
 }
+export const SetMediaDurationDocument = gql`
+  mutation setMediaDuration($sessionId: Int!, $setMediaDurationInput: SetMediaDurationInput!) {
+    setMediaDuration(id: $sessionId, setMediaDurationInput: $setMediaDurationInput) {
+      id
+      mediaDuration
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class SetMediaDurationGQL extends Apollo.Mutation<SetMediaDurationMutation, SetMediaDurationMutationVariables> {
+  override document = SetMediaDurationDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const GetSessionsDocument = gql`
   query GetSessions {
     sessions {
@@ -2143,6 +2185,7 @@ export const GetSessionsDocument = gql`
       lockAnnotationDelete
       playMode
       playPosition
+      mediaDuration
       liveSessionStart
       liveSessionEnd
       currentSessionServerTime
@@ -2212,6 +2255,7 @@ export const GetOneSessionDocument = gql`
       lockAnnotationDelete
       playMode
       playPosition
+      mediaDuration
       liveSessionStart
       liveSessionEnd
       currentSessionServerTime

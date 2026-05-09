@@ -16,6 +16,7 @@ const GET_SESSIONS = gql`
       lockAnnotationDelete
       playMode
       playPosition
+      mediaDuration
       liveSessionStart
       liveSessionEnd
       currentSessionServerTime
@@ -75,6 +76,7 @@ const GET_ONE_SESSION = gql`
       lockAnnotationDelete
       playMode
       playPosition
+      mediaDuration
       liveSessionStart
       liveSessionEnd
       currentSessionServerTime

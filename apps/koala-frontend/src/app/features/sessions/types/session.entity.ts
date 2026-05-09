@@ -17,6 +17,7 @@ export interface Session {
   lockAnnotationDelete?: boolean | null;
   playMode?: PlayMode | null;
   playPosition?: number | null;
+  mediaDuration?: number | null;
   liveSessionStart?: number | null;
   liveSessionEnd?: number | null;
   currentSessionServerTime?: number | null;

@@ -464,3 +464,12 @@ const REMOVE_ANNOTATION_COMMENT = gql`
     }
   }
 `;
+
+const SET_MEDIA_DURATION = gql`
+  mutation setMediaDuration($sessionId: Int!, $setMediaDurationInput: SetMediaDurationInput!) {
+    setMediaDuration(id: $sessionId, setMediaDurationInput: $setMediaDurationInput) {
+      id
+      mediaDuration
+    }
+  }
+`;
