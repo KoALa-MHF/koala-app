@@ -32,14 +32,17 @@ export class MediaService {
 
   async createExternal(createExternalMediaInput: CreateExternalMediaInput): Promise<Media> {
     const newMedia = this.mediaRepository.create();
-    newMedia.name = createExternalMediaInput.url;
+    const url = createExternalMediaInput.url;
 
-    if (newMedia.name.includes('youtube.com/embed')) {
+    const youtubeMatch = url.match(/youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/)([a-zA-Z0-9_-]+)/);
+    const switchtubeMatch = url.match(/tube\.switch\.ch\/(?:videos|embed)\/([a-zA-Z0-9_-]+)/);
+
+    if (youtubeMatch) {
+      newMedia.name = `https://www.youtube.com/embed/${youtubeMatch[1]}`;
       newMedia.mimeType = 'external/youtube';
-    } else if (newMedia.name.includes('tube.switch.ch/embed')) {
+    } else if (switchtubeMatch) {
+      newMedia.name = `https://tube.switch.ch/embed/${switchtubeMatch[1]}`;
       newMedia.mimeType = 'external/switchtube';
-    } else if (newMedia.name.includes('tube.switch.ch/external')) {
-      newMedia.mimeType = 'external/switchtubeExternal';
     } else {
       throw new BadRequestException('Unsupported media type');
     }

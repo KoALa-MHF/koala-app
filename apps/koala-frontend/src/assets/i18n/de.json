@@ -165,7 +165,7 @@
         "TITLE_UPLOAD_AREA": "Ausgewählte Audio / Video-Datei:",
         "DELETE_BTN": "Datei Löschen",
         "MEDIA_URL_INPUT_LABEL": "Youtube / SwitchTube URL",
-        "MEDIA_URL_INPUT_EXPLANATION": "Hier können Sie alternativ eine Youtube oder SwitchTube URL eingeben, um diese als Session-Medium zu verwenden. Bitte beachten Sie, dass die URL direkt auf ein Video verweisen muss (z.B. https://www.youtube.com/watch?v=dQw4w9WgXcQ) und nicht auf einen Kanal oder eine Playlist.",
+        "MEDIA_URL_INPUT_EXPLANATION": "Hier können Sie alternativ eine Youtube oder SwitchTube URL eingeben, um diese als Session-Medium zu verwenden. Fügen Sie einfach die URL aus der Adressleiste Ihres Browsers ein (z.B. https://www.youtube.com/watch?v=dQw4w9WgXcQ oder https://tube.switch.ch/videos/d42e0c7f). Die URL muss direkt auf ein Video verweisen und nicht auf einen Kanal oder eine Playlist.",
         "MEDIA_URL_UPDATE_ERROR_MESSAGE_TITLE": "URL konnte nicht gespeichert werden",
         "MEDIA_URL_UPDATE_ERROR_MESSAGE": "Die URL konnte nicht gespeichert werden. Bitte versuchen Sie es erneut."
       },
