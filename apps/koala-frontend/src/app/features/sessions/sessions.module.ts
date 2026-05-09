@@ -75,6 +75,7 @@ import { AnnotationTextCommentListComponent } from './components/annotation-text
 import { OrderByDatePipe } from './pipes/order-by-date.pipe';
 import { SessionNotFoundPage } from './pages/session-not-found/session-not-found.page';
 import { SessionNotActivePage } from './pages/session-not-active/session-not-active.page';
+import { VideoTimelineComponent } from './components/video-timeline/video-timeline.component';
 
 @NgModule({
   declarations: [
@@ -115,6 +116,7 @@ import { SessionNotActivePage } from './pages/session-not-active/session-not-act
     AnnotationTextCommentListComponent,
     SessionNotFoundPage,
     SessionNotActivePage,
+    VideoTimelineComponent,
   ],
   imports: [
     SharedModule,

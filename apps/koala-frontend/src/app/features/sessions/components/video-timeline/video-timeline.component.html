@@ -1,0 +1,31 @@
+<div #container class="video-timeline-container">
+  <svg *ngIf="svgWidth > 0" [attr.width]="svgWidth" height="20" style="display: block; overflow: hidden">
+    <!-- Baseline -->
+    <line x1="0" [attr.x2]="svgWidth" y1="19" y2="19" stroke="currentColor" stroke-width="1" opacity="0.25"></line>
+    <!-- Tick marks and labels -->
+    <ng-container *ngFor="let tick of ticks">
+      <line
+        [attr.x1]="tick.x"
+        [attr.x2]="tick.x"
+        y1="0"
+        [attr.y2]="tick.label ? 10 : 5"
+        stroke="currentColor"
+        stroke-width="1"
+        [attr.opacity]="tick.label ? '0.6' : '0.25'"
+      ></line>
+      <text *ngIf="tick.label" [attr.x]="tick.x + 3" y="18" font-size="10" fill="currentColor" opacity="0.6">
+        {{ tick.label }}
+      </text>
+    </ng-container>
+    <!-- Playback cursor -->
+    <line
+      *ngIf="totalTime > 0"
+      [attr.x1]="cursorX"
+      [attr.x2]="cursorX"
+      y1="0"
+      y2="20"
+      stroke="rgba(73, 157, 255, 0.95)"
+      stroke-width="2"
+    ></line>
+  </svg>
+</div>

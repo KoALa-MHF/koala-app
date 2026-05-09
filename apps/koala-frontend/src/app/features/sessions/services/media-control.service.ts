@@ -60,15 +60,17 @@ export class MediaControlService {
     if (this.sessionService.getFocusSession()?.isVideoSession) {
       if (media?.mimeType === 'external/switchtube' || media?.mimeType === 'external/youtube') {
         mediaIFrame = document.createElement('iframe');
-        mediaIFrame.width = '640';
-        mediaIFrame.height = '360';
+        mediaIFrame.style.width = '100%';
+        mediaIFrame.style.height = '100%';
+        mediaIFrame.style.border = 'none';
         mediaIFrame.src = media?.name + '?enablejsapi=1' || '';
-        mediaIFrame.frameBorder = '0';
         mediaIFrame.allow = 'autoplay; fullscreen';
 
         document.getElementById('sessionVideo')?.appendChild(mediaIFrame);
       } else {
         mediaElement = document.createElement('video');
+        mediaElement.style.width = '100%';
+        mediaElement.style.height = '100%';
         document.getElementById('sessionVideo')?.appendChild(mediaElement);
         mediaElement.src = URL.createObjectURL(mediaBlob);
       }
@@ -310,7 +312,8 @@ export class MediaControlService {
   }
 
   private createTimelinePlugin() {
-    const timelineContainer = document.getElementById(`${this.uuid}-timeline`)!;
+    const timelineContainer = document.getElementById(`${this.uuid}-timeline`);
+    if (!timelineContainer) return;
     const w = this.getWave();
     let interval = 5;
     const ratio = timelineContainer.getBoundingClientRect().width / (w.getDuration() / 10);
