@@ -154,7 +154,7 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
           }
         }
 
-        if (session.liveSessionStart && session.playMode === PlayMode.Running && !session.isAudioSession) {
+        if (session.isLiveSession && session.playMode === PlayMode.Running) {
           this.timerSubscription?.unsubscribe();
           this.timer = '0:00';
 
@@ -262,7 +262,12 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
 
   private updateMediaControlSettings() {
     const focusSession = this.sessionService.getFocusSession();
-    if (focusSession && !focusSession.isSessionOwner && (!focusSession.isVideoSession || focusSession.enablePlayer)) {
+    if (
+      focusSession &&
+      !focusSession.isLiveSession &&
+      !focusSession.isSessionOwner &&
+      (!focusSession.isVideoSession || focusSession.enablePlayer)
+    ) {
       this.mediaControlService.setInteraction(focusSession.enablePlayer ? true : false);
     }
   }

@@ -84,7 +84,7 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
         media: result.media,
       };
 
-      if (this.session.isAudioSession) {
+      if (!this.session.isLiveSession) {
         if (this.session.media == undefined) {
           this.showErrorMessage(
             'error',
@@ -118,7 +118,7 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.session.isAudioSession) {
+    if (!this.session.isLiveSession) {
       this.mediaControlService.stop();
       this.mediaControlService.destroy();
     }
