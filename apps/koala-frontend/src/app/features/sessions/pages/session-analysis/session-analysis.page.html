@@ -1,6 +1,6 @@
 <div class="analysis-container">
   <koala-app-media-wave
-    *ngIf="!session?.isVideoSession && session?.media"
+    *ngIf="(session?.isAudioSession || session?.media?.mimeType?.startsWith('video/')) && !session?.media?.mimeType?.startsWith('external') && session?.media"
     [waveContainer]="waveContainer"
   ></koala-app-media-wave>
 

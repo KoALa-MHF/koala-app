@@ -48,7 +48,7 @@
     ></koala-video-timeline>
 
     <koala-app-media-wave
-      *ngIf="session.isAudioSession && !session.isVideoSession && !session.media?.mimeType?.startsWith('external')"
+      *ngIf="(session.isAudioSession || session.media?.mimeType?.startsWith('video/')) && !session.media?.mimeType?.startsWith('external')"
       [waveContainer]="waveContainer"
     >
     </koala-app-media-wave>

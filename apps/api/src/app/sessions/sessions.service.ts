@@ -116,7 +116,13 @@ export class SessionsService {
   async update(id: number, updateSessionInput: UpdateSessionInput, owner: User): Promise<Session> {
     const session = await this.findOneOfOwner(id, owner);
 
-    if (updateSessionInput.mediaId !== null && updateSessionInput.mediaId !== session.mediaId) {
+    const archivingWithMedia = updateSessionInput.status === SessionStatus.ARCHIVED && session.mediaId;
+
+    if (archivingWithMedia) {
+      this.mediaService.remove(session.mediaId).catch((err) => {
+        console.log(err);
+      });
+    } else if (updateSessionInput.mediaId !== null && updateSessionInput.mediaId !== session.mediaId) {
       this.mediaService.remove(session.mediaId!).catch((err) => {
         console.log(err);
       });
@@ -135,7 +141,9 @@ export class SessionsService {
       liveSessionStart: updateSessionInput.liveSessionStart,
       lockAnnotationDelete: updateSessionInput.lockAnnotationDelete,
       isLiveSession: updateSessionInput.isLiveSession,
-      ...(updateSessionInput.mediaId && { media: { id: updateSessionInput.mediaId } }),
+      ...(archivingWithMedia
+        ? { media: null, mediaId: null }
+        : updateSessionInput.mediaId && { media: { id: updateSessionInput.mediaId } }),
     });
 
     return this.sessionsRepository.save(session);
