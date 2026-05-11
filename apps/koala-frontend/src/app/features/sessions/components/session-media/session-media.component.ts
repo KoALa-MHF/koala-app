@@ -22,6 +22,14 @@ export class SessionMediaComponent {
 
   constructor(private readonly mediaService: MediaService) {}
 
+  get isFileActive(): boolean {
+    return !!this.media && !!this.media.mimeType && !this.media.mimeType.startsWith('external');
+  }
+
+  get isUrlActive(): boolean {
+    return !!this.media?.mimeType?.startsWith('external');
+  }
+
   public onFileUpload(event: any, fileUploadElement: any) {
     this.fileUpload.emit(event.files[0]);
 

@@ -168,7 +168,14 @@
         "MEDIA_URL_INPUT_LABEL": "Youtube / SwitchTube URL",
         "MEDIA_URL_INPUT_EXPLANATION": "Hier können Sie alternativ eine Youtube oder SwitchTube URL eingeben, um diese als Session-Medium zu verwenden. Fügen Sie einfach die URL aus der Adressleiste Ihres Browsers ein (z.B. https://www.youtube.com/watch?v=dQw4w9WgXcQ oder https://tube.switch.ch/videos/d42e0c7f). Die URL muss direkt auf ein Video verweisen und nicht auf einen Kanal oder eine Playlist.",
         "MEDIA_URL_UPDATE_ERROR_MESSAGE_TITLE": "URL konnte nicht gespeichert werden",
-        "MEDIA_URL_UPDATE_ERROR_MESSAGE": "Die URL konnte nicht gespeichert werden. Bitte versuchen Sie es erneut."
+        "MEDIA_URL_UPDATE_ERROR_MESSAGE": "Die URL konnte nicht gespeichert werden. Bitte versuchen Sie es erneut.",
+        "FILE_UPLOAD_CARD_TITLE": "Datei hochladen",
+        "URL_CARD_TITLE": "Externe URL verwenden",
+        "STATUS_ACTIVE": "Aktiv",
+        "STATUS_LOCKED": "Gesperrt",
+        "OR_DIVIDER": "ODER",
+        "HINT_CLEAR_URL_TO_UPLOAD": "Entfernen Sie die URL, um stattdessen eine Datei hochzuladen",
+        "HINT_DELETE_FILE_TO_USE_URL": "Löschen Sie die hochgeladene Datei, um stattdessen eine URL zu verwenden"
       },
       "MARKER": {
         "MARKER_PREVIEW_EXPLANATION": "Hier sehen Sie eine Vorschau Ihres Markers.",
