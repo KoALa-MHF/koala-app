@@ -5,6 +5,8 @@ export const getPlayerCheckbox = () => cy.get('[data-cy="session-maintain-player
 export const getSampleSolutionCheckbox = () =>
   cy.get('[data-cy="session-maintain-sample-solution-check"]').find('.p-checkbox');
 export const getAnalysisCheckbox = () => cy.get('[data-cy="session-maintain-analysis-check"]').find('.p-checkbox');
+export const getLiveSessionCheckbox = () =>
+  cy.get('[data-cy="session-maintain-live-session-check"]').find('.p-checkbox');
 
 export const getOnlineCheckbox = () => cy.get('[data-cy="session-maintain-online-check"]').find('.p-checkbox');
 export const getStartDateInput = () => cy.get('[data-cy="session-maintain-start-date-input"]');

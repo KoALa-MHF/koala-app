@@ -1,16 +1,12 @@
 import { pressHomeButton } from '../support/header.po';
 import {
-  getGeneralDataSaveButton,
   getSessionDescriptionField,
   getSessionNameField,
-  pressGeneralDataSaveButton,
   getEditableCheckbox,
   getPlayerCheckbox,
   getSampleSolutionCheckbox,
   getAnalysisCheckbox,
-  getOnlineCheckbox,
-  getStartDateInput,
-  getEndDateInput,
+  getLiveSessionCheckbox,
 } from '../support/session-manage.po';
 import {
   pressCreateSessionButton,
@@ -28,14 +24,21 @@ import {
 
 describe('koala-frontend', () => {
   beforeEach(() => {
-    cy.intercept('/graphql').as('api');
-
-    cy.visit('/');
-
-    cy.wait([
-      '@api',
-    ]);
-
+    cy.intercept('/graphql', (req) => {
+      req.alias = 'api';
+      if ((req.body as { operationName?: string })?.operationName === 'GetSessions') {
+        req.alias = 'getSessions';
+      }
+    });
+    cy.task<string>('generateAuthToken', 1).then((token) => {
+      cy.visit('/', {
+        onBeforeLoad(win) {
+          win.sessionStorage.setItem('koala-user', JSON.stringify({ accessToken: token }));
+        },
+      });
+    });
+    // Wait specifically for GetSessions so the table is rendered before cleanup
+    cy.wait('@getSessions');
     pressAllDeleteSessionButtons();
   });
 
@@ -48,50 +51,25 @@ describe('koala-frontend', () => {
     getCreateSessionNameField().type('New Session');
     pressDialogCreateSessionButton();
 
-    getGeneralDataSaveButton().should('be.disabled');
-
-    getSessionNameField().clear();
-
-    getGeneralDataSaveButton().should('be.disabled');
-    getSessionNameField().type('Updated Session');
-    getGeneralDataSaveButton().should('be.enabled');
-
+    // Session maintain page opens after creation — fields are auto-saved on change
+    getSessionNameField().clear().type('Updated Session');
     getSessionDescriptionField().type('Session Description');
 
     getEditableCheckbox().click();
     getPlayerCheckbox().click();
     getSampleSolutionCheckbox().click();
     getAnalysisCheckbox().click();
-
-    //check online and dates behaviour
-    getOnlineCheckbox().click();
-    getStartDateInput().should('not.exist');
-    getEndDateInput().should('not.exist');
-
-    getOnlineCheckbox().click();
-    getStartDateInput().should('exist');
-    getEndDateInput().should('exist');
-
-    getStartDateInput().click().find('table').find('tr').eq(3).click();
-    //online checkbox should be disabled
-    getOnlineCheckbox().should('have.class', 'p-checkbox-disabled');
-    getEndDateInput().click().find('table').find('tr').eq(1).click();
-
-    getGeneralDataSaveButton().should('be.disabled');
-
-    getStartDateInput().click().find('table').find('tr').eq(1).click();
-    getEndDateInput().click().find('table').find('tr').eq(3).click();
-    getGeneralDataSaveButton().should('be.enabled');
-
-    pressGeneralDataSaveButton();
+    getLiveSessionCheckbox().click();
 
     pressHomeButton();
 
     getSessionOverviewTableRows().should((t) => expect(t.length).equal(2));
 
-    getSessionOverviewTableRow(1).find('[data-cy="session-overview-name-col"]').should('have.text', 'Updated Session');
+    getSessionOverviewTableRow(1)
+      .find('[data-cy="session-overview-name-col"]')
+      .should('contain.text', 'Updated Session');
     getSessionOverviewTableRow(1).find('[data-cy="session-overview-created-at-col"]').should('not.be.empty');
-    getSessionOverviewTableRow(1).find('[data-cy="session-overview-changed-at-col"]').should('not.be.empty');
+    getSessionOverviewTableRow(1).find('[data-cy="session-overview-updated-at-col"]').should('not.be.empty');
 
     //check if all data was stored correctly
     pressEditOnSession(0);
@@ -102,9 +80,7 @@ describe('koala-frontend', () => {
     getPlayerCheckbox().should('have.class', 'p-checkbox-checked');
     getSampleSolutionCheckbox().should('have.class', 'p-checkbox-checked');
     getAnalysisCheckbox().should('have.class', 'p-checkbox-checked');
-
-    getStartDateInput().should('not.be.empty');
-    getEndDateInput().should('not.be.empty');
+    getLiveSessionCheckbox().should('have.class', 'p-checkbox-checked');
 
     //update session
     getSessionNameField().clear().type('Second Updated Session');
@@ -114,17 +90,17 @@ describe('koala-frontend', () => {
     getPlayerCheckbox().click();
     getSampleSolutionCheckbox().click();
     getAnalysisCheckbox().click();
+    getLiveSessionCheckbox().click();
 
-    pressGeneralDataSaveButton();
     pressHomeButton();
 
     getSessionOverviewTableRows().should((t) => expect(t.length).equal(2));
 
     getSessionOverviewTableRow(1)
       .find('[data-cy="session-overview-name-col"]')
-      .should('have.text', 'Second Updated Session');
+      .should('contain.text', 'Second Updated Session');
     getSessionOverviewTableRow(1).find('[data-cy="session-overview-created-at-col"]').should('not.be.empty');
-    getSessionOverviewTableRow(1).find('[data-cy="session-overview-changed-at-col"]').should('not.be.empty');
+    getSessionOverviewTableRow(1).find('[data-cy="session-overview-updated-at-col"]').should('not.be.empty');
 
     //check if all data was stored correctly
     pressEditOnSession(0);
@@ -135,9 +111,7 @@ describe('koala-frontend', () => {
     getPlayerCheckbox().should('not.have.class', 'p-checkbox-checked');
     getSampleSolutionCheckbox().should('not.have.class', 'p-checkbox-checked');
     getAnalysisCheckbox().should('not.have.class', 'p-checkbox-checked');
-
-    getStartDateInput().should('not.be.empty');
-    getEndDateInput().should('not.be.empty');
+    getLiveSessionCheckbox().should('not.have.class', 'p-checkbox-checked');
   });
 
   /*it('Create session with markers', () => {
@@ -187,6 +161,7 @@ describe('koala-frontend', () => {
 
     getCreateSessionNameField().type('New To Be Deleted Session');
     pressDialogCreateSessionButton();
+    cy.url().should('include', '/sessions/update/');
 
     pressHomeButton();
 
