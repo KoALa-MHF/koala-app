@@ -7,6 +7,12 @@ import {
   getSampleSolutionCheckbox,
   getAnalysisCheckbox,
   getLiveSessionCheckbox,
+  getAudioVideoTab,
+  pressAudioTab,
+  getMediaDeleteButton,
+  pressMediaDeleteButton,
+  confirmMediaDelete,
+  cancelMediaDeleteConfirm,
 } from '../support/session-manage.po';
 import {
   pressCreateSessionButton,
@@ -155,6 +161,68 @@ describe('koala-frontend', () => {
 
     cy.contains('New Session - Update');
   });*/
+
+  it('Audio/Video tab is hidden when live session is checked and visible when unchecked', () => {
+    pressCreateSessionButton();
+    getCreateSessionNameField().type('Live Session Tab Test');
+    pressDialogCreateSessionButton();
+    cy.url().should('include', '/sessions/update/');
+
+    getAudioVideoTab().should('exist');
+
+    getLiveSessionCheckbox().click();
+    getAudioVideoTab().should('not.exist');
+
+    getLiveSessionCheckbox().click();
+    getAudioVideoTab().should('exist');
+  });
+
+  it('Delete media file confirmation dialog cancels and confirms correctly', () => {
+    // Intercept GetOneSession to inject fake media, and stub deleteMedia to succeed
+    cy.intercept('POST', '/graphql', (req) => {
+      const body = req.body as { operationName?: string; query?: string };
+      if (body?.operationName === 'GetOneSession') {
+        req.continue((res) => {
+          if (res.body?.data?.session) {
+            res.body.data.session.media = {
+              __typename: 'Media',
+              id: '1',
+              name: 'test-audio.mp3',
+              mimeType: 'audio/mpeg',
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            };
+          }
+        });
+      } else if (body?.query?.includes('deleteMedia')) {
+        req.alias = 'deleteMedia';
+        req.reply({ body: { data: { deleteMedia: { id: '1' } } } });
+      }
+    });
+
+    pressCreateSessionButton();
+    getCreateSessionNameField().type('Session With Media');
+    pressDialogCreateSessionButton();
+    cy.url().should('include', '/sessions/update/');
+    pressAudioTab();
+
+    // Delete button must be enabled (media was injected into the session response)
+    getMediaDeleteButton().should('not.be.disabled');
+
+    // Cancel path: dialog appears but cancel closes it without deletion
+    pressMediaDeleteButton();
+    cy.get('.p-confirm-dialog').should('be.visible');
+    cancelMediaDeleteConfirm();
+    cy.get('.p-confirm-dialog').should('not.exist');
+    getMediaDeleteButton().should('not.be.disabled');
+
+    // Confirm path: dialog appears and confirming triggers the delete API call
+    pressMediaDeleteButton();
+    cy.get('.p-confirm-dialog').should('be.visible');
+    confirmMediaDelete();
+    cy.wait('@deleteMedia');
+    cy.contains('Datei gelöscht').should('be.visible');
+  });
 
   it('Delete session', () => {
     pressCreateSessionButton();

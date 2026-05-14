@@ -175,7 +175,13 @@
         "STATUS_LOCKED": "Gesperrt",
         "OR_DIVIDER": "ODER",
         "HINT_CLEAR_URL_TO_UPLOAD": "Entfernen Sie die URL, um stattdessen eine Datei hochzuladen",
-        "HINT_DELETE_FILE_TO_USE_URL": "Löschen Sie die hochgeladene Datei, um stattdessen eine URL zu verwenden"
+        "HINT_DELETE_FILE_TO_USE_URL": "Löschen Sie die hochgeladene Datei, um stattdessen eine URL zu verwenden",
+        "DELETE_CONFIRM_DIALOG": {
+          "TITLE": "Audio/Video-Datei löschen",
+          "EXPLANATION": "Wollen Sie die Audio/Video-Datei wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+          "CONFIRM_BTN": "Löschen",
+          "CANCEL_BTN": "Abbrechen"
+        }
       },
       "MARKER": {
         "MARKER_PREVIEW_EXPLANATION": "Hier sehen Sie eine Vorschau Ihres Markers.",

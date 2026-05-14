@@ -51,6 +51,7 @@
           type="button"
           label="{{ 'SESSION.MAINTAIN.AUDIO.DELETE_BTN' | translate }}"
           class="p-button-danger"
+          data-cy="session-media-delete-btn"
           (click)="deleteMedia()"
           [disabled]="
             !media ||

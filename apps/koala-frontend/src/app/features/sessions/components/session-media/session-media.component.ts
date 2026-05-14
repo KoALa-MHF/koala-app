@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Media } from '../../../../graphql/generated/graphql';
 import { MediaService, MediaUploadState } from '../../services/media.service';
 import { FormGroup } from '@angular/forms';
+import { ConfirmationService } from 'primeng/api';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'koala-session-media',
@@ -20,7 +22,11 @@ export class SessionMediaComponent {
   mediaUploadStateChanged$ = this.mediaService.mediaUploadStateChanged$;
   MediaUploadState = MediaUploadState;
 
-  constructor(private readonly mediaService: MediaService) {}
+  constructor(
+    private readonly mediaService: MediaService,
+    private readonly confirmationService: ConfirmationService,
+    private readonly translateService: TranslateService
+  ) {}
 
   get isFileActive(): boolean {
     return !!this.media && !!this.media.mimeType && !this.media.mimeType.startsWith('external');
@@ -37,6 +43,15 @@ export class SessionMediaComponent {
   }
 
   public deleteMedia() {
-    this.deleteMediaEvent.emit();
+    this.confirmationService.confirm({
+      header: this.translateService.instant('SESSION.MAINTAIN.AUDIO.DELETE_CONFIRM_DIALOG.TITLE'),
+      message: this.translateService.instant('SESSION.MAINTAIN.AUDIO.DELETE_CONFIRM_DIALOG.EXPLANATION'),
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: this.translateService.instant('SESSION.MAINTAIN.AUDIO.DELETE_CONFIRM_DIALOG.CONFIRM_BTN'),
+      rejectLabel: this.translateService.instant('SESSION.MAINTAIN.AUDIO.DELETE_CONFIRM_DIALOG.CANCEL_BTN'),
+      accept: () => {
+        this.deleteMediaEvent.emit();
+      },
+    });
   }
 }

@@ -14,3 +14,11 @@ export const getEndDateInput = () => cy.get('[data-cy="session-maintain-end-date
 
 export const getGeneralDataSaveButton = () => cy.get('[data-cy="session-data-save-btn"]');
 export const pressGeneralDataSaveButton = () => getGeneralDataSaveButton().click();
+
+export const getAudioVideoTab = () => cy.get('[data-cy="session-maintain-audio-tab"]');
+export const pressAudioTab = () => cy.contains('.p-tabview-nav a', 'Audio / Video').click();
+
+export const getMediaDeleteButton = () => cy.get('[data-cy="session-media-delete-btn"]');
+export const pressMediaDeleteButton = () => getMediaDeleteButton().click();
+export const confirmMediaDelete = () => cy.get('.p-confirm-dialog-accept').click();
+export const cancelMediaDeleteConfirm = () => cy.get('.p-confirm-dialog-reject').click();
