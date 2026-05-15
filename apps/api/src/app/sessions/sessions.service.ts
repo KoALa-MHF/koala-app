@@ -122,8 +122,12 @@ export class SessionsService {
       this.mediaService.remove(session.mediaId).catch((err) => {
         console.log(err);
       });
-    } else if (updateSessionInput.mediaId !== null && updateSessionInput.mediaId !== session.mediaId) {
-      this.mediaService.remove(session.mediaId!).catch((err) => {
+    } else if (
+      updateSessionInput.mediaId !== null &&
+      session.mediaId != null &&
+      updateSessionInput.mediaId !== session.mediaId
+    ) {
+      this.mediaService.remove(session.mediaId).catch((err) => {
         console.log(err);
       });
     }
