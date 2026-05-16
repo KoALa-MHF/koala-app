@@ -70,7 +70,7 @@ export class UserSessionsService {
           });
           userSession.invitedAt = new Date();
         } catch (error) {
-          console.log("Invite User Session: Couldn't sent mail");
+          console.error("Invite User Session: Couldn't sent mail", error);
         }
       }
 

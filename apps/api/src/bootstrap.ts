@@ -1,6 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { GraphQLValidationPipe } from './app/core/pipes/graphql-validation.pipe';
 import { graphqlUploadExpress } from 'graphql-upload';
+import { config } from './app/config/config.module';
 import * as MailDev from 'maildev';
 import helmet from 'helmet';
 
@@ -20,7 +21,9 @@ export function setupApplication(app: INestApplication) {
 
 export function setupMailDevelopmentServer(): Promise<IMailDev> {
   return new Promise((resolve, reject) => {
-    const maildev = new MailDev({});
+    const maildev = new MailDev({
+      smtp: config.mail.port,
+    });
     maildev.listen((error) => {
       if (error) {
         reject(error);
