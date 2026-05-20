@@ -27,6 +27,36 @@ import {
   confirmDeleteSession,
   cancelDeleteConfirm,
 } from '../support/session-overview.po';
+import {
+  pressParticipantsTab,
+  getParticipantTableRows,
+  pressAddParticipantButton,
+  getParticipantEmailInput,
+  getParticipantDialogCreateButton,
+  pressParticipantDialogCreateButton,
+  pressParticipantDialogCancelButton,
+  pressParticipantDeleteButton,
+  confirmParticipantDelete,
+  cancelParticipantDeleteConfirm,
+} from '../support/participants.po';
+import {
+  pressMarkerTab,
+  selectMarkerType,
+  getMarkerNameInput,
+  getMarkerDescriptionInput,
+  getMarkerAbbreviationInput,
+  getMarkerValueRangeFromInput,
+  getMarkerValueRangeToInput,
+  getMarkerColorTextInput,
+  getMarkerContentColorSwitch,
+  selectFirstMarkerIcon,
+  getMarkerAddButton,
+  pressMarkerAddButton,
+  pressMarkerResetButton,
+  getMarkerToolbarItems,
+  getMarkerToolbarItem,
+  dragMarkerToolbarItem,
+} from '../support/marker.po';
 
 describe('koala-frontend', () => {
   beforeEach(() => {
@@ -222,6 +252,187 @@ describe('koala-frontend', () => {
     confirmMediaDelete();
     cy.wait('@deleteMedia');
     cy.contains('Datei gelöscht').should('be.visible');
+  });
+
+  it('Marker tab - create one marker of each type and verify sorting in the toolbar', () => {
+    cy.intercept('POST', '/graphql', (req) => {
+      const body = req.body as { operationName?: string };
+      if (body.operationName === 'createMarker') {
+        req.alias = 'createMarker';
+      }
+      if (body.operationName === 'updateToolbar') {
+        req.alias = 'updateToolbar';
+      }
+      if (body.operationName === 'GetMarkers') {
+        req.alias = 'getMarkers';
+      }
+    });
+
+    pressCreateSessionButton();
+    getCreateSessionNameField().type('Marker Test Session');
+    pressDialogCreateSessionButton();
+    cy.url().should('include', '/sessions/update/');
+
+    pressMarkerTab();
+
+    // ── EVENT marker ──────────────────────────────────────────────────
+    // Type dropdown opens and offers all three types
+    selectMarkerType('Event');
+    getMarkerNameInput().type('Event Marker');
+    getMarkerDescriptionInput().type('An event marker description');
+    getMarkerAbbreviationInput().type('EM'); // max 2 chars for EVENT
+    // Color hex input
+    getMarkerColorTextInput().clear().type('ff0000').trigger('change');
+    // Content-color (dark/light text) switch
+    getMarkerContentColorSwitch().click();
+    // Icon selection (icon dropdown is visible for EVENT/RANGE)
+    selectFirstMarkerIcon();
+    // Add button is enabled because the form is valid
+    getMarkerAddButton().should('not.be.disabled');
+    pressMarkerAddButton();
+    cy.wait('@createMarker');
+    cy.wait('@updateToolbar');
+    cy.wait('@getMarkers');
+    cy.contains('Marker erfolgreich erstellt und der Session hinzugefügt').should('be.visible');
+
+    // ── RANGE marker ──────────────────────────────────────────────────
+    selectMarkerType('Range');
+    getMarkerNameInput().type('Range Marker');
+    getMarkerAbbreviationInput().type('RNG'); // max 6 chars for RANGE
+    getMarkerAddButton().should('not.be.disabled');
+    pressMarkerAddButton();
+    cy.wait('@createMarker');
+    cy.wait('@updateToolbar');
+    cy.wait('@getMarkers');
+    cy.contains('Marker erfolgreich erstellt und der Session hinzugefügt').should('be.visible');
+
+    // ── SLIDER marker ─────────────────────────────────────────────────
+    selectMarkerType('Slider');
+    getMarkerNameInput().type('Slider Marker');
+    // Abbreviation is mandatory for Slider type (max 6 chars)
+    getMarkerAbbreviationInput().type('SLD');
+    // valueRangeFrom/To fields only appear for Slider
+    getMarkerValueRangeFromInput().clear().type('1');
+    getMarkerValueRangeToInput().clear().type('20');
+    getMarkerAddButton().should('not.be.disabled');
+    pressMarkerAddButton();
+    cy.wait('@createMarker');
+    cy.wait('@updateToolbar');
+    cy.wait('@getMarkers');
+    cy.contains('Marker erfolgreich erstellt und der Session hinzugefügt').should('be.visible');
+
+    // ── Reset button clears the form ──────────────────────────────────
+    selectMarkerType('Event');
+    getMarkerNameInput().type('Temp');
+    pressMarkerResetButton();
+    getMarkerNameInput().should('have.value', '');
+
+    // ── Toolbar shows all three markers in creation order ─────────────
+    getMarkerToolbarItems().should('have.length', 3);
+    // EVENT and RANGE markers render as buttons showing the abbreviation
+    getMarkerToolbarItem(0).should('contain.text', 'EM');
+    getMarkerToolbarItem(1).should('contain.text', 'RNG');
+    // SLIDER marker renders as a slider widget, not a text button
+    getMarkerToolbarItem(2).find('.marker-button-slider').should('exist');
+
+    // ── Drag item 0 (EM) away and verify the toolbar reordered ──────────
+    // The cy.intercept at the top of this test aliases every updateToolbar call.
+    // The three marker-creation steps above each consumed one '@updateToolbar',
+    // so the next cy.wait will match the sort-change request from the drag.
+    dragMarkerToolbarItem(0, 2);
+
+    cy.wait('@updateToolbar');
+    cy.wait('@getMarkers');
+
+    // After the sort the toolbar must still contain all three markers and
+    // EM must no longer occupy the first position.
+    getMarkerToolbarItems().should('have.length', 3);
+    getMarkerToolbarItem(0).should('not.contain.text', 'EM');
+  });
+
+  it('Participants tab - add participant and remove with confirmation', () => {
+    // `userSessions` is mutated by the stubs so each GetOneSession response reflects the latest state.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let userSessions: any[] = [];
+
+    cy.intercept('POST', '/graphql', (req) => {
+      const body = req.body as { operationName?: string };
+      if (body.operationName === 'GetOneSession') {
+        req.alias = 'getSession';
+        req.continue((res) => {
+          if (res.body?.data?.session) {
+            res.body.data.session.userSessions = userSessions;
+          }
+        });
+      } else if (body.operationName === 'createUserSession') {
+        req.alias = 'createParticipant';
+        userSessions = [
+          {
+            id: 1,
+            owner: { id: '99', email: 'test@example.com', displayName: null, role: 'KOALA_USER' },
+            annotations: [],
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            invitedAt: null,
+            note: null,
+            status: 'INITIAL',
+          },
+        ];
+        req.reply({
+          body: { data: { createUserSession: { id: 1, owner: { role: 'KOALA_USER', email: 'test@example.com' } } } },
+        });
+      } else if (body.operationName === 'removeUserSession') {
+        req.alias = 'removeParticipant';
+        userSessions = [];
+        req.reply({ body: { data: { removeUserSession: { id: 1 } } } });
+      }
+    });
+
+    pressCreateSessionButton();
+    getCreateSessionNameField().type('Participant Test Session');
+    pressDialogCreateSessionButton();
+    cy.url().should('include', '/sessions/update/');
+    cy.wait('@getSession');
+
+    pressParticipantsTab();
+
+    // Table is initially empty — no participant rows
+    getParticipantTableRows().should('have.length', 0);
+
+    // Open dialog: Create button disabled when email field is empty
+    pressAddParticipantButton();
+    getParticipantEmailInput().should('be.visible');
+    getParticipantDialogCreateButton().should('be.disabled');
+
+    // Cancel path: dialog closes without adding anyone
+    pressParticipantDialogCancelButton();
+    getParticipantEmailInput().should('not.exist');
+    getParticipantTableRows().should('have.length', 0);
+
+    // Add participant successfully
+    pressAddParticipantButton();
+    getParticipantEmailInput().type('test@example.com');
+    getParticipantDialogCreateButton().should('not.be.disabled');
+    pressParticipantDialogCreateButton();
+    cy.wait('@createParticipant');
+    cy.wait('@getSession');
+    getParticipantTableRows().should('have.length', 1);
+    getParticipantTableRows().first().should('contain.text', 'test@example.com');
+
+    // Delete — cancel: dialog appears but participant remains
+    pressParticipantDeleteButton(0);
+    cy.get('.p-confirm-dialog').should('be.visible');
+    cancelParticipantDeleteConfirm();
+    cy.get('.p-confirm-dialog').should('not.exist');
+    getParticipantTableRows().should('have.length', 1);
+
+    // Delete — confirm: participant is removed
+    pressParticipantDeleteButton(0);
+    cy.get('.p-confirm-dialog').should('be.visible');
+    confirmParticipantDelete();
+    cy.wait('@removeParticipant');
+    cy.wait('@getSession');
+    getParticipantTableRows().should('have.length', 0);
   });
 
   it('Delete session', () => {

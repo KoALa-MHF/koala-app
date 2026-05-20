@@ -1,5 +1,13 @@
-<div class="drag-drop-group" cdkDropListGroup mixedCdkDragDrop orientation="horizontal" (dropped)="dropped($event)">
+<div
+  data-cy="marker-toolbar"
+  class="drag-drop-group"
+  cdkDropListGroup
+  mixedCdkDragDrop
+  orientation="horizontal"
+  (dropped)="dropped($event)"
+>
   <span
+    data-cy="marker-toolbar-item"
     style="min-width: 64px; min-height: 64px"
     *ngFor="let marker of markers | visibleFilter"
     cdkDropList
