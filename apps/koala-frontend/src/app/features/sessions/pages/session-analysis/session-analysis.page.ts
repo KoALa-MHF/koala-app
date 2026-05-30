@@ -33,9 +33,7 @@ export interface AnnotationData {
   ],
 })
 export class SessionAnalysisPage implements OnInit, OnDestroy {
-  mediaUri: string = environment.production
-    ? 'https://koala.mh-freiburg.de/api/media'
-    : 'http://localhost:4200/api/media';
+  mediaUri: string = environment.mediaUrl;
   sessionId = 0;
   userID = -1;
   userSessionAnnotationData: Map<number, AnnotationData> = new Map<number, AnnotationData>();
