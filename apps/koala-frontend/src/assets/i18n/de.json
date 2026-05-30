@@ -73,10 +73,10 @@
     },
     "ERROR_DIALOG": {
       "SUMMARY": "Bitte versuchen sie es später noch einmal",
-      "MEDIA_CONTROLS": "Fehler beim abspielen der Audio Datei",
-      "NO_AUDIO_FILE": "Kein Audio File gefunden",
-      "NO_AUDIO_FILE_SUM": "Bitte speichern sie erst ein Audio File",
-      "BROKEN_AUDIO_FILE": "Audio Datei konnte nicht geladen werden",
+      "MEDIA_CONTROLS": "Fehler beim abspielen der Audio / Video Datei",
+      "NO_AUDIO_FILE": "Kein Audio / Video File gefunden",
+      "NO_AUDIO_FILE_SUM": "Bitte speichern sie erst ein Audio / Video File",
+      "BROKEN_AUDIO_FILE": "Audio / Video Datei konnte nicht geladen werden",
       "NO_USER_SESSION": "Es konnte keine Benutzer Session gefunden werden",
       "NO_USER_SESSION_SUM": "Bitte legen sie eine Benutzer Session an",
       "ANNOTATION_ERROR": "Annotation konnte nicht gespeichert werden"
@@ -110,14 +110,14 @@
     "MAINTAIN": {
       "TABS": {
         "SETTINGS": "Session Einstellungen",
-        "AUDIO": "Audio",
+        "AUDIO": "Audio / Video",
         "MARKER": "Marker",
         "PARTICIPANTS": "Mitglieder"
       },
       "SECTION_HEADINGS": {
         "SETTINGS": "Session Einstellungen",
         "GENERAL_DATA": "Allgemeine Informationen",
-        "AUDIO": "Audio",
+        "AUDIO": "Audio / Video",
         "AVAILABILITY": "Verfügbarkeit",
         "DETAILS": "Freigaben",
         "MARKER": "Marker",
@@ -134,6 +134,7 @@
         "SESSION_NAME_INPUT_EXPLANATION": "Geben Sie der Session bitte einen Namen.",
         "SESSION_DESCRIPTION_INPUT_LABEL": "Beschreibung",
         "SESSION_DESCRIPTION_INPUT_EXPLANATION": "Fügen Sie der Session ggf. eine Beschreibung oder eine Aufgabenstellung hinzu.",
+        "LIVE_SESSION_LABEL": "Live-Session",
         "SESSION_AVAILABILITY_EXPLANATION": "Nur wenn die Session online geschaltet ist, können Benutzer auf diese zugreifen. Wenn nicht, ist die Session nur für Sie als Administrator verfügbar.",
         "SESSION_STATUS_LABEL": "Status",
         "SESSION_START_DATE_INPUT_LABEL": "Start",
@@ -156,15 +157,37 @@
         }
       },
       "AUDIO": {
-        "AUDIO_UPLOAD_EXPLANATION": "Hier können Sie eine Audio-Datei wählen und hochladen. Wenn Sie keine Datei hochladen, können Sie eine Live-Annotation innerhalb der Session starten.",
-        "MAX_UPLOAD_SIZE_EXPLANATION": "Maximale Upload-Größe: 100 MB",
-        "ALLOWED_FILE_TYPES_EXPLANATION": "Erlaubter Dateityp: .mp3, .wav",
+        "AUDIO_UPLOAD_EXPLANATION": "Hier können Sie eine Audio / Video-Datei wählen und hochladen. Wenn Sie keine Datei hochladen, können Sie eine Live-Annotation innerhalb der Session starten.",
+        "MAX_UPLOAD_SIZE_EXPLANATION": "Maximale Upload-Größe: 250 MB",
+        "ALLOWED_FILE_TYPES_EXPLANATION": "Erlaubter Dateityp: .mp3, .wav, .mp4",
         "CHOOSE_BTN": "Datei wählen",
         "UPLOAD_SUCCESS_MESSAGE_TITLE": "Dateiupload Erfolgreich",
         "UPLOAD_SUCCESS_MESSAGE": "Die Datei wurde erfolgreich hochgeladen und der Session zugewiesen",
         "UPLOAD_ERROR_MESSAGE_TITLE": "Dateiupload Fehlerhaft",
         "UPLOAD_ERROR_MESSAGE": "Die Datei konnte nicht hochgeladen werden. Bitte versuche es erneut",
-        "TITLE_UPLOAD_AREA": "Ausgewählte Audio-Datei:"
+        "DELETE_SUCCESS_MESSAGE_TITLE": "Datei gelöscht",
+        "DELETE_SUCCESS_MESSAGE": "Die Datei wurde erfolgreich gelöscht",
+        "DELETE_ERROR_MESSAGE_TITLE": "Datei konnte nicht gelöscht werden",
+        "DELETE_ERROR_MESSAGE": "Die Datei konnte nicht gelöscht werden. Bitte versuche es erneut",
+        "TITLE_UPLOAD_AREA": "Ausgewählte Audio / Video-Datei:",
+        "DELETE_BTN": "Datei Löschen",
+        "MEDIA_URL_INPUT_LABEL": "Youtube / SwitchTube URL",
+        "MEDIA_URL_INPUT_EXPLANATION": "Hier können Sie alternativ eine Youtube oder SwitchTube URL eingeben, um diese als Session-Medium zu verwenden. Fügen Sie einfach die URL aus der Adressleiste Ihres Browsers ein (z.B. https://www.youtube.com/watch?v=dQw4w9WgXcQ oder https://tube.switch.ch/videos/d42e0c7f). Die URL muss direkt auf ein Video verweisen und nicht auf einen Kanal oder eine Playlist.",
+        "MEDIA_URL_UPDATE_ERROR_MESSAGE_TITLE": "URL konnte nicht gespeichert werden",
+        "MEDIA_URL_UPDATE_ERROR_MESSAGE": "Die URL konnte nicht gespeichert werden. Bitte versuchen Sie es erneut.",
+        "FILE_UPLOAD_CARD_TITLE": "Datei hochladen",
+        "URL_CARD_TITLE": "Externe URL verwenden",
+        "STATUS_ACTIVE": "Aktiv",
+        "STATUS_LOCKED": "Gesperrt",
+        "OR_DIVIDER": "ODER",
+        "HINT_CLEAR_URL_TO_UPLOAD": "Entfernen Sie die URL, um stattdessen eine Datei hochzuladen",
+        "HINT_DELETE_FILE_TO_USE_URL": "Löschen Sie die hochgeladene Datei, um stattdessen eine URL zu verwenden",
+        "DELETE_CONFIRM_DIALOG": {
+          "TITLE": "Audio/Video-Datei löschen",
+          "EXPLANATION": "Wollen Sie die Audio/Video-Datei wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+          "CONFIRM_BTN": "Löschen",
+          "CANCEL_BTN": "Abbrechen"
+        }
       },
       "MARKER": {
         "MARKER_PREVIEW_EXPLANATION": "Hier sehen Sie eine Vorschau Ihres Markers.",

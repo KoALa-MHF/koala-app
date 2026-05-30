@@ -1,0 +1,115 @@
+<h4 class="section-heading">{{ 'SESSION.MAINTAIN.SECTION_HEADINGS.AUDIO' | translate }}</h4>
+
+<div class="media-options">
+  <!-- File Upload Card -->
+  <div class="media-option-card" [class.is-active]="isFileActive" [class.is-locked]="isUrlActive">
+    <div class="media-option-card-header">
+      <span class="media-option-card-title">{{ 'SESSION.MAINTAIN.AUDIO.FILE_UPLOAD_CARD_TITLE' | translate }}</span>
+      <span *ngIf="isFileActive" class="media-status-badge media-status-active">
+        <i class="pi pi-check"></i> {{ 'SESSION.MAINTAIN.AUDIO.STATUS_ACTIVE' | translate }}
+      </span>
+      <span *ngIf="isUrlActive" class="media-status-badge media-status-locked">
+        <i class="pi pi-lock"></i> {{ 'SESSION.MAINTAIN.AUDIO.STATUS_LOCKED' | translate }}
+      </span>
+    </div>
+
+    <p>{{ 'SESSION.MAINTAIN.AUDIO.AUDIO_UPLOAD_EXPLANATION' | translate }}</p>
+    <p>{{ 'SESSION.MAINTAIN.AUDIO.MAX_UPLOAD_SIZE_EXPLANATION' | translate }}</p>
+    <p>{{ 'SESSION.MAINTAIN.AUDIO.ALLOWED_FILE_TYPES_EXPLANATION' | translate }}</p>
+
+    <div>
+      <div style="margin-bottom: 10px">{{ 'SESSION.MAINTAIN.AUDIO.TITLE_UPLOAD_AREA' | translate }}</div>
+      <div style="display: flex; align-items: center; gap: 10px">
+        <input
+          type="text"
+          pInputText
+          [disabled]="true"
+          [value]="!media?.mimeType?.startsWith('external') ? media?.name : ''"
+        />
+
+        <p-progressSpinner
+          *ngIf="(mediaUploadStateChanged$ | async) === MediaUploadState.started"
+          [style]="{ width: '50px', height: '50px' }"
+          strokeWidth="5"
+        ></p-progressSpinner>
+        <p-fileUpload
+          #fileUpload
+          [customUpload]="true"
+          (uploadHandler)="onFileUpload($event, fileUpload)"
+          accept="audio/mpeg,audio/wav,video/mp4"
+          [maxFileSize]="250000000"
+          [auto]="true"
+          chooseLabel="{{ 'SESSION.MAINTAIN.AUDIO.CHOOSE_BTN' | translate }}"
+          mode="basic"
+          [disabled]="
+            (mediaUploadStateChanged$ | async) !== MediaUploadState.completed || media?.mimeType?.startsWith('external')
+          "
+        ></p-fileUpload>
+
+        <button
+          pButton
+          type="button"
+          label="{{ 'SESSION.MAINTAIN.AUDIO.DELETE_BTN' | translate }}"
+          class="p-button-danger"
+          data-cy="session-media-delete-btn"
+          (click)="deleteMedia()"
+          [disabled]="
+            !media ||
+            (mediaUploadStateChanged$ | async) === MediaUploadState.started ||
+            media.mimeType.startsWith('external')
+          "
+        ></button>
+      </div>
+    </div>
+
+    <p *ngIf="isUrlActive" class="media-locked-hint">
+      <i class="pi pi-info-circle"></i>
+      {{ 'SESSION.MAINTAIN.AUDIO.HINT_CLEAR_URL_TO_UPLOAD' | translate }}
+    </p>
+  </div>
+
+  <!-- OR Divider -->
+  <div class="media-or-divider">
+    <span>{{ 'SESSION.MAINTAIN.AUDIO.OR_DIVIDER' | translate }}</span>
+  </div>
+
+  <!-- URL Card -->
+  <div class="media-option-card" [class.is-active]="isUrlActive" [class.is-locked]="isFileActive">
+    <div class="media-option-card-header">
+      <span class="media-option-card-title">{{ 'SESSION.MAINTAIN.AUDIO.URL_CARD_TITLE' | translate }}</span>
+      <span *ngIf="isUrlActive" class="media-status-badge media-status-active">
+        <i class="pi pi-check"></i> {{ 'SESSION.MAINTAIN.AUDIO.STATUS_ACTIVE' | translate }}
+      </span>
+      <span *ngIf="isFileActive" class="media-status-badge media-status-locked">
+        <i class="pi pi-lock"></i> {{ 'SESSION.MAINTAIN.AUDIO.STATUS_LOCKED' | translate }}
+      </span>
+    </div>
+
+    <form [formGroup]="mediaForm" class="form">
+      <div>
+        <span class="p-float-label">
+          <input
+            id="session-media-url-input"
+            formControlName="url"
+            type="text"
+            pInputText
+            data-cy="session-media-url-input"
+            [readonly]="
+              (mediaUploadStateChanged$ | async) === MediaUploadState.started ||
+              (!media?.mimeType?.startsWith('external') && media?.mimeType !== null)
+            "
+          />
+          <label for="session-media-url-input">{{ 'SESSION.MAINTAIN.AUDIO.MEDIA_URL_INPUT_LABEL' | translate }}</label>
+        </span>
+        <small id="session-name-help" class="field-explanation">
+          {{ 'SESSION.MAINTAIN.AUDIO.MEDIA_URL_INPUT_EXPLANATION' | translate }}
+        </small>
+      </div>
+    </form>
+
+    <p *ngIf="isFileActive" class="media-locked-hint">
+      <i class="pi pi-info-circle"></i>
+      {{ 'SESSION.MAINTAIN.AUDIO.HINT_DELETE_FILE_TO_USE_URL' | translate }}
+    </p>
+  </div>
+</div>

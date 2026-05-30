@@ -40,9 +40,9 @@ import { SessionBasicDataComponent } from './components/session-basic-data/sessi
 import { SharedModule } from '../../shared/shared.module';
 import { SessionDetailsComponent } from './components/session-details/session-details.component';
 import { SessionDatesComponent } from './components/session-dates/session-dates.component';
-import { SessionAudioComponent } from './components/session-audio/session-audio.component';
-import { AudioWaveComponent } from './components/audio-wave/audio-wave.component';
-import { AudioPlayerComponent } from './components/audio-player/audio-player.component';
+import { SessionMediaComponent } from './components/session-media/session-media.component';
+import { MediaWaveComponent } from './components/media-wave/media-wave.component';
+import { MediaPlayerComponent } from './components/media-player/media-player.component';
 import { MediaService } from './services/media.service';
 import { SessionDataComponent } from './components/session-data/session-data.component';
 import { SessionMarkerDataComponent } from './components/session-marker-data/session-marker-data.component';
@@ -75,6 +75,7 @@ import { AnnotationTextCommentListComponent } from './components/annotation-text
 import { OrderByDatePipe } from './pipes/order-by-date.pipe';
 import { SessionNotFoundPage } from './pages/session-not-found/session-not-found.page';
 import { SessionNotActivePage } from './pages/session-not-active/session-not-active.page';
+import { VideoTimelineComponent } from './components/video-timeline/video-timeline.component';
 
 @NgModule({
   declarations: [
@@ -85,12 +86,12 @@ import { SessionNotActivePage } from './pages/session-not-active/session-not-act
     SessionBasicDataComponent,
     SessionDetailsComponent,
     SessionDatesComponent,
-    SessionAudioComponent,
+    SessionMediaComponent,
     SessionDataComponent,
     SessionMarkerDataComponent,
     MarkerPlacementComponent,
-    AudioWaveComponent,
-    AudioPlayerComponent,
+    MediaWaveComponent,
+    MediaPlayerComponent,
     SessionParticipantsComponent,
     SessionParticipantsOverviewComponent,
     SessionParticipantsInvitationComponent,
@@ -115,6 +116,7 @@ import { SessionNotActivePage } from './pages/session-not-active/session-not-act
     AnnotationTextCommentListComponent,
     SessionNotFoundPage,
     SessionNotActivePage,
+    VideoTimelineComponent,
   ],
   imports: [
     SharedModule,

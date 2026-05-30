@@ -1,14 +1,14 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'koala-app-audio-wave',
-  templateUrl: './audio-wave.component.html',
+  selector: 'koala-app-media-wave',
+  templateUrl: './media-wave.component.html',
   styleUrls: [
-    './audio-wave.component.scss',
+    './media-wave.component.scss',
     '../../session-common.scss',
   ],
   providers: [],
 })
-export class AudioWaveComponent {
+export class MediaWaveComponent {
   @Input() waveContainer: string | undefined;
 }

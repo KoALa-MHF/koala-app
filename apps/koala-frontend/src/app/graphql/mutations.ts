@@ -92,6 +92,22 @@ const CREATE_MEDIA = gql`
   }
 `;
 
+const CREATE_EXTERNAL_MEDIA = gql`
+  mutation createExternalMedia($media: CreateExternalMediaInput!) {
+    createExternalMedia(createExternalMediaInput: $media) {
+      id
+    }
+  }
+`;
+
+const DELETE_MEDIA = gql`
+  mutation deleteMedia($id: Float!) {
+    deleteMedia(id: $id) {
+      id
+    }
+  }
+`;
+
 const CREATE_MARKER = gql`
   mutation createMarker($createMarker: CreateMarkerInput!) {
     createMarker(createMarkerInput: $createMarker) {
@@ -445,6 +461,15 @@ const REMOVE_ANNOTATION_COMMENT = gql`
   mutation removeAnnotationComment($commentId: Int!) {
     removeComment(id: $commentId) {
       id
+    }
+  }
+`;
+
+const SET_MEDIA_DURATION = gql`
+  mutation setMediaDuration($sessionId: Int!, $setMediaDurationInput: SetMediaDurationInput!) {
+    setMediaDuration(id: $sessionId, setMediaDurationInput: $setMediaDurationInput) {
+      id
+      mediaDuration
     }
   }
 `;

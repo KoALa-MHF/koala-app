@@ -21,7 +21,7 @@ import { datesStartEndValidator } from '../../../../shared/dates.validator';
 import { markerRangeValueValidator } from '../../../../shared/greater-than.validator';
 import { UserSessionService } from '../../services/user-session.service';
 import { TranslateService } from '@ngx-translate/core';
-import { Subscription, debounceTime, fromEvent, pairwise, startWith } from 'rxjs';
+import { Subscription, debounceTime, distinctUntilChanged, fromEvent, pairwise, startWith } from 'rxjs';
 import { TabView } from 'primeng/tabview';
 import { DomHandler } from 'primeng/dom';
 
@@ -51,6 +51,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
   basicDataChangeSubscription?: Subscription;
   detailsChangeSubscription?: Subscription;
   datesChangeSubscription?: Subscription;
+  mediaChangeSubscription?: Subscription;
 
   constructor(
     private readonly sessionService: SessionsService,
@@ -74,6 +75,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
         description: new FormControl<string>('', {
           updateOn: 'blur',
         }),
+        isLiveSession: new FormControl<boolean>(false),
       }),
       dates: this.formBuilder.group(
         {
@@ -93,8 +95,10 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
         enableLiveAnalysis: new FormControl<boolean>(false),
         lockAnnotationDelete: new FormControl<boolean>(false),
       }),
-      audio: this.formBuilder.group({
-        name: new FormControl<string>(''),
+      media: this.formBuilder.group({
+        url: new FormControl<string>('', {
+          updateOn: 'blur',
+        }),
       }),
     });
 
@@ -117,6 +121,20 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
           (oldValues && newValues.description !== oldValues.description)
         ) {
           this.onSave('description', newValues.description);
+        }
+
+        if (
+          (!oldValues && this.maintainSessionForm.get('basicData')?.get('isLiveSession')?.dirty === true) ||
+          (oldValues && newValues.isLiveSession !== oldValues.isLiveSession)
+        ) {
+          this.onSave('isLiveSession', newValues.isLiveSession);
+
+          if (newValues.isLiveSession) {
+            if (this.activeTabViewIndex === 1) {
+              this.activeTabViewIndex = 0;
+            }
+            this.onDeleteMedia();
+          }
         }
       });
 
@@ -192,6 +210,56 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
         }
       });
 
+    const mediaUrlForm = this.maintainSessionForm.get('media')?.get('url');
+    this.mediaChangeSubscription = mediaUrlForm?.valueChanges
+      .pipe(distinctUntilChanged(), startWith(mediaUrlForm?.value), pairwise())
+      .subscribe((valuesArray) => {
+        const newUrl = valuesArray[1];
+        const oldUrl = valuesArray[0];
+
+        if (
+          (!oldUrl && this.maintainSessionForm.get('media')?.get('url')?.dirty === true) ||
+          (oldUrl && newUrl !== oldUrl)
+        ) {
+          if (newUrl === null || newUrl === undefined || newUrl === '') {
+            if (this.session?.media) {
+              this.mediaService.delete(parseInt(this.session.media.id)).subscribe({
+                next: () => {
+                  this.loadSessionData(parseInt(this.session?.id || '0'));
+                },
+                error: (err) => {
+                  console.log(err);
+                },
+              });
+            }
+          } else {
+            this.mediaService.createExternal(newUrl).subscribe({
+              next: (value) => {
+                this.sessionService
+                  .update(parseInt(this.session?.id || '0'), {
+                    mediaId: parseInt(value.data?.createExternalMedia.id || '0'),
+                  })
+                  .subscribe({
+                    next: () => {
+                      this.loadSessionData(parseInt(this.session?.id || '0'));
+                    },
+                    error: (err) => {
+                      console.log(err);
+                    },
+                  });
+              },
+              error: () => {
+                this.messageService.add({
+                  severity: 'error',
+                  summary: this.translateService.instant('SESSION.MAINTAIN.AUDIO.MEDIA_URL_UPDATE_ERROR_MESSAGE_TITLE'),
+                  detail: this.translateService.instant('SESSION.MAINTAIN.AUDIO.MEDIA_URL_UPDATE_ERROR_MESSAGE'),
+                });
+              },
+            });
+          }
+        }
+      });
+
     this.maintainMarkerForm = this.formBuilder.group(
       {
         type: new FormControl<MarkerType | null>(null, [
@@ -245,6 +313,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
     this.basicDataChangeSubscription?.unsubscribe();
     this.detailsChangeSubscription?.unsubscribe();
     this.datesChangeSubscription?.unsubscribe();
+    this.mediaChangeSubscription?.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -339,7 +408,11 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
 
   private setSessionGeneralDataForm(session: Session) {
     this.maintainSessionForm.get('basicData')?.get('name')?.setValue(session.name, { emitEvent: false });
-    this.maintainSessionForm.get('basicData')?.get('description')?.setValue(session.description);
+    this.maintainSessionForm.get('basicData')?.get('description')?.setValue(session.description, { emitEvent: false });
+    this.maintainSessionForm
+      .get('basicData')
+      ?.get('isLiveSession')
+      ?.setValue(session.isLiveSession ?? false, { emitEvent: false });
     this.maintainSessionForm.get('details')?.get('editable')?.setValue(session.editable, { emitEvent: false });
     this.maintainSessionForm.get('details')?.get('enablePlayer')?.setValue(session.enablePlayer, { emitEvent: false });
     this.maintainSessionForm
@@ -365,6 +438,14 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  private setSessionMediaDataForm(session: Session) {
+    if (session.media?.mimeType.startsWith('external')) {
+      this.maintainSessionForm.get('media')?.get('url')?.setValue(session.media.name, { emitEvent: false });
+    } else {
+      this.maintainSessionForm.get('media')?.get('url')?.reset();
+    }
+  }
+
   private loadSessionData(sessionId: number) {
     this.sessionService.setFocusSession(sessionId).subscribe((session) => {
       this.session = { ...session };
@@ -376,6 +457,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
 
       if (this.session) {
         this.setSessionGeneralDataForm(this.session);
+        this.setSessionMediaDataForm(this.session);
 
         const sessionToolbars = this.session?.toolbars;
         if (sessionToolbars) {
@@ -546,16 +628,6 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
         next: (value) => {
           this.sessionService
             .update(parseInt(this.session?.id || '0'), {
-              description: this.session?.description,
-              displaySampleSolution: this.session?.displaySampleSolution,
-              editable: this.session?.editable,
-              enableLiveAnalysis: this.session?.enableLiveAnalysis,
-              lockAnnotationDelete: this.session?.lockAnnotationDelete,
-              enablePlayer: this.session?.enablePlayer,
-              end: this.session?.end,
-              name: this.session?.name,
-              start: this.session?.start,
-              status: this.session?.status,
               mediaId: parseInt(value.data?.createMedia.id || '0'),
             })
             .subscribe({
@@ -583,6 +655,27 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
+  public onDeleteMedia() {
+    if (this.session?.media) {
+      this.mediaService.delete(parseInt(this.session.media.id)).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: this.translateService.instant('SESSION.MAINTAIN.AUDIO.DELETE_SUCCESS_MESSAGE_TITLE'),
+            detail: this.translateService.instant('SESSION.MAINTAIN.AUDIO.DELETE_SUCCESS_MESSAGE'),
+          });
+          this.loadSessionData(parseInt(this.session?.id || '0'));
+        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: this.translateService.instant('SESSION.MAINTAIN.AUDIO.DELETE_ERROR_MESSAGE_TITLE'),
+            detail: this.translateService.instant('SESSION.MAINTAIN.AUDIO.DELETE_ERROR_MESSAGE'),
+          });
+        },
+      });
+    }
+  }
   /*---------------------------
   Session Participants Handling
   -----------------------------*/
@@ -652,6 +745,10 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
   /*-------------------------------------------------
   Getter for sub components to handle forms directly
   ---------------------------------------------------*/
+  get isLiveSession(): boolean {
+    return this.maintainSessionForm.get('basicData')?.get('isLiveSession')?.value ?? false;
+  }
+
   get basicDataFormGroup(): FormGroup {
     return this.maintainSessionForm.get('basicData') as FormGroup;
   }
@@ -664,7 +761,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
     return this.maintainSessionForm.get('details') as FormGroup;
   }
 
-  get audioFormGroup(): FormGroup {
-    return this.maintainSessionForm.get('audio') as FormGroup;
+  get mediaFormGroup(): FormGroup {
+    return this.maintainSessionForm.get('media') as FormGroup;
   }
 }

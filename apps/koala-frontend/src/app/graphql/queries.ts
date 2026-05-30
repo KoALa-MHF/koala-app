@@ -16,11 +16,13 @@ const GET_SESSIONS = gql`
       lockAnnotationDelete
       playMode
       playPosition
+      mediaDuration
       liveSessionStart
       liveSessionEnd
       currentSessionServerTime
       isSessionOwner
       isAudioSession
+      isLiveSession
       code
       userSessions {
         id
@@ -75,11 +77,13 @@ const GET_ONE_SESSION = gql`
       lockAnnotationDelete
       playMode
       playPosition
+      mediaDuration
       liveSessionStart
       liveSessionEnd
       currentSessionServerTime
       isSessionOwner
       isAudioSession
+      isLiveSession
       code
       media {
         id

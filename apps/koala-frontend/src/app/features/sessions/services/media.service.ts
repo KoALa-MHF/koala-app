@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CreateMediaInput, CreateMediaMutation } from '../../../graphql/generated/graphql';
+import { CreateExternalMediaMutation, CreateMediaInput, CreateMediaMutation } from '../../../graphql/generated/graphql';
 import { environment } from '../../../../environments/environment';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { MutationResult } from 'apollo-angular';
@@ -52,5 +52,58 @@ export class MediaService {
         }),
       })
       .pipe(tap(() => this.mediaUploadState.next(MediaUploadState.completed)));
+  }
+
+  createExternal(url: string): Observable<MutationResult<CreateExternalMediaMutation>> {
+    const graphQLEndpoint = `${environment.graphqlBaseUrl}/graphql`;
+
+    return this.http.post<MutationResult<CreateExternalMediaMutation>>(
+      graphQLEndpoint,
+      {
+        query: `
+        mutation createExternalMedia($media: CreateExternalMediaInput!) {
+          createExternalMedia(createExternalMediaInput: $media) {
+            id
+          }
+        }
+      `,
+        variables: {
+          media: {
+            url,
+          },
+        },
+      },
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+      }
+    );
+  }
+
+  //delete media by id
+  delete(id: number): Observable<void> {
+    const graphQLEndpoint = `${environment.graphqlBaseUrl}/graphql`;
+
+    return this.http.post<void>(
+      graphQLEndpoint,
+      {
+        query: `
+          mutation deleteMedia($id: Float!) {
+            deleteMedia(id: $id) {
+              id
+            }
+          }
+        `,
+        variables: {
+          id,
+        },
+      },
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+      }
+    );
   }
 }

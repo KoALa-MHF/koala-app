@@ -38,6 +38,19 @@
   margin-right: 60px;
 }
 
+#sessionVideo {
+  align-self: center;
+  width: min(100%, calc(100cqh / 3 * 16 / 9));
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.video-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
 :host ::ng-deep .p-sidebar-header {
   background-color: #246584;
 }

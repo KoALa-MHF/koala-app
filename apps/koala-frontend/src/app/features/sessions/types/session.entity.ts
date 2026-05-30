@@ -15,8 +15,10 @@ export interface Session {
   displaySampleSolution?: boolean | null;
   enableLiveAnalysis?: boolean | null;
   lockAnnotationDelete?: boolean | null;
+  isLiveSession?: boolean | null;
   playMode?: PlayMode | null;
   playPosition?: number | null;
+  mediaDuration?: number | null;
   liveSessionStart?: number | null;
   liveSessionEnd?: number | null;
   currentSessionServerTime?: number | null;
@@ -29,4 +31,5 @@ export interface Session {
   owner?: User;
   isSessionOwner?: boolean;
   isAudioSession?: boolean;
+  isVideoSession?: boolean;
 }

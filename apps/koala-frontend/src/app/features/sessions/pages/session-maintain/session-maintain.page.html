@@ -7,8 +7,17 @@
         [sessionDetailsForm]="detailsFormGroup"
       ></koala-session-data>
     </p-tabPanel>
-    <p-tabPanel header="{{ 'SESSION.MAINTAIN.TABS.AUDIO' | translate }}">
-      <koala-session-audio [media]="session?.media" (fileUpload)="onFileUpload($event)"></koala-session-audio>
+    <p-tabPanel
+      *ngIf="!isLiveSession"
+      data-cy="session-maintain-audio-tab"
+      header="{{ 'SESSION.MAINTAIN.TABS.AUDIO' | translate }}"
+    >
+      <koala-session-media
+        [mediaForm]="mediaFormGroup"
+        [media]="session?.media"
+        (fileUpload)="onFileUpload($event)"
+        (deleteMediaEvent)="onDeleteMedia()"
+      ></koala-session-media>
     </p-tabPanel>
     <p-tabPanel header="{{ 'SESSION.MAINTAIN.TABS.MARKER' | translate }}">
       <koala-session-marker-data

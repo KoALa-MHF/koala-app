@@ -1,4 +1,4 @@
-import { ApplicationRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ApplicationRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
 import { MediaControlService, MediaEvent, MediaActions } from '../../services/media-control.service';
@@ -19,6 +19,7 @@ import { CreateAnnotationTextComment } from '../../components/annotation-text-co
 import { Comment } from '../../types/comment.entity';
 import { AnnotationAudioComment } from '../../components/annotation-audio-comment/annotation-audio-comment.component';
 import { MediaService } from '../../services/media.service';
+import { Media } from '../../types/media.entity';
 
 export interface AnnotationData {
   AnnotationData: Map<number, Array<DataPoint>>;
@@ -83,20 +84,24 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
         media: result.media,
       };
 
-      if (this.session.isAudioSession) {
+      if (!this.session.isLiveSession) {
         if (this.session.media == undefined) {
-          this.showErrorMessage(
-            'error',
-            'SESSION.ERROR_DIALOG.NO_AUDIO_FILE',
-            'SESSION.ERROR_DIALOG.NO_AUDIO_FILE_SUM'
-          );
-          return;
+          if (this.session.mediaDuration) {
+            this.totalAudioTime = this.session.mediaDuration;
+          } else {
+            this.showErrorMessage(
+              'error',
+              'SESSION.ERROR_DIALOG.NO_AUDIO_FILE',
+              'SESSION.ERROR_DIALOG.NO_AUDIO_FILE_SUM'
+            );
+            return;
+          }
+        } else {
+          this.mediaControlService.uuid = this.session.id;
+          this.waveContainer = `waveContainer-${this.session.id}`;
+
+          await this.loadMediaData(this.session.media);
         }
-
-        this.mediaControlService.uuid = this.session.id;
-        this.waveContainer = `waveContainer-${this.session.id}`;
-
-        await this.loadMediaData(this.session.media.id);
       } else {
         if (this.session.liveSessionStart && this.session.liveSessionEnd) {
           this.totalAudioTime =
@@ -117,19 +122,23 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.session.isAudioSession) {
+    if (!this.session?.isLiveSession && this.session?.media) {
       this.mediaControlService.stop();
       this.mediaControlService.destroy();
     }
   }
 
-  private loadMediaData(id: string): Promise<void> {
+  private loadMediaData(media: Media): Promise<void> {
     return this.mediaControlService
-      .load(`${this.mediaUri}/${id}`, this.waveContainer)
+      .load(`${this.mediaUri}/${media.id}`, this.waveContainer)
       .then(() => {
         this.mediaControlService.addEventHandler('audioprocess', (time) => {
           // to reduce update frequency
           this.currentAudioTime = time.toFixed(2);
+        });
+
+        this.mediaControlService.addEventHandler('seeking', (time) => {
+          this.currentAudioTime = time;
         });
 
         this.mediaControlService.mediaPlayStateChanged$

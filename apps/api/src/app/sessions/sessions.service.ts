@@ -9,13 +9,16 @@ import { UpdateSessionInput } from './dto/update-session.input';
 import { PlayMode, Session, SessionStatus } from './entities/session.entity';
 import { SetPlayModeInput } from './dto/set-play-mode.input';
 import { SetPlayPositionInput } from './dto/set-play-position.input';
+import { SetMediaDurationInput } from './dto/set-media-duration.input';
 import { UserSession } from '../user-sessions/entities/user-session.entity';
+import { MediaService } from '../media/media.service';
 
 @Injectable()
 export class SessionsService {
   constructor(
     @InjectRepository(Session)
-    private sessionsRepository: Repository<Session>
+    private sessionsRepository: Repository<Session>,
+    private mediaService: MediaService
   ) {}
 
   async create(createSessionInput: CreateSessionInput, owner: User): Promise<Session> {
@@ -113,6 +116,22 @@ export class SessionsService {
   async update(id: number, updateSessionInput: UpdateSessionInput, owner: User): Promise<Session> {
     const session = await this.findOneOfOwner(id, owner);
 
+    const archivingWithMedia = updateSessionInput.status === SessionStatus.ARCHIVED && session.mediaId;
+
+    if (archivingWithMedia) {
+      this.mediaService.remove(session.mediaId).catch((err) => {
+        console.log(err);
+      });
+    } else if (
+      updateSessionInput.mediaId !== null &&
+      session.mediaId != null &&
+      updateSessionInput.mediaId !== session.mediaId
+    ) {
+      this.mediaService.remove(session.mediaId).catch((err) => {
+        console.log(err);
+      });
+    }
+
     this.sessionsRepository.merge(session, {
       name: updateSessionInput.name,
       description: updateSessionInput.description,
@@ -125,7 +144,10 @@ export class SessionsService {
       enableLiveAnalysis: updateSessionInput.enableLiveAnalysis,
       liveSessionStart: updateSessionInput.liveSessionStart,
       lockAnnotationDelete: updateSessionInput.lockAnnotationDelete,
-      ...(updateSessionInput.mediaId && { media: { id: updateSessionInput.mediaId } }),
+      isLiveSession: updateSessionInput.isLiveSession,
+      ...(archivingWithMedia
+        ? { media: null, mediaId: null }
+        : updateSessionInput.mediaId && { media: { id: updateSessionInput.mediaId } }),
     });
 
     return this.sessionsRepository.save(session);
@@ -159,6 +181,12 @@ export class SessionsService {
       playPosition: setPlayModeInput.playPosition,
     });
 
+    return this.sessionsRepository.save(session);
+  }
+
+  async setMediaDuration(id: number, input: SetMediaDurationInput, owner: User): Promise<Session> {
+    const session = await this.findOneOfOwner(id, owner);
+    this.sessionsRepository.merge(session, { mediaDuration: input.mediaDuration });
     return this.sessionsRepository.save(session);
   }
 

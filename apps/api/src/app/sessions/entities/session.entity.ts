@@ -128,7 +128,12 @@ export class Session extends BaseEntity {
   @IsOptional()
   lockAnnotationDelete?: boolean;
 
-  @ManyToOne(() => Media, { nullable: true })
+  @Column({ nullable: true, default: false })
+  @Field({ nullable: true, description: 'Indicates if this is a live session without media' })
+  @IsOptional()
+  isLiveSession?: boolean;
+
+  @ManyToOne(() => Media, { nullable: true, eager: true, onDelete: 'SET NULL' })
   @Field((type) => Media, {
     nullable: true,
     description: 'Associated Media File',
@@ -188,6 +193,10 @@ export class Session extends BaseEntity {
   @Field({ nullable: true })
   @Column({ nullable: true })
   playPosition: number;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  mediaDuration: number;
 
   @Field({ nullable: true })
   @Column({ nullable: true })

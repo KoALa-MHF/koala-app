@@ -6,6 +6,7 @@
       <button
         pButton
         pRipple
+        data-cy="participant-add-btn"
         label="{{ 'SESSION.MAINTAIN.PARTICIPANTS.ADD_BTN' | translate }}"
         (click)="onAddParticipantRequested()"
       ></button>
@@ -18,7 +19,7 @@
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-participant>
-    <tr>
+    <tr data-cy="participant-table-row">
       <td>
         {{
           participant.owner.email
@@ -32,7 +33,7 @@
           pButton
           pRipple
           *ngIf="participant.owner.id !== sessionOwnerId"
-          data-column="delete"
+          data-cy="participant-delete-btn"
           icon="pi pi-trash"
           class="p-button-text"
           attr.aria-label="{{ 'SESSION.MAINTAIN.PARTICIPANTS.ACC.DELETE_BTN_ACC' | translate }}"
@@ -78,6 +79,7 @@
     <button
       pButton
       pRipple
+      data-cy="participant-dialog-create-btn"
       [disabled]="!participantForm.valid"
       (click)="onAddParticipant()"
       label="Anlegen"
@@ -87,6 +89,7 @@
     <button
       pButton
       pRipple
+      data-cy="participant-dialog-cancel-btn"
       (click)="onCancel()"
       label="Abbrechen"
       class="p-button-raised p-button-plain p-button-text"

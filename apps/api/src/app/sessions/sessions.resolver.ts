@@ -15,6 +15,7 @@ import { RegisteredUserGuard } from '../core/guards/registerd-user.guard';
 import { PubSub } from 'graphql-subscriptions';
 import { SetPlayModeInput } from './dto/set-play-mode.input';
 import { SetPlayPositionInput } from './dto/set-play-position.input';
+import { SetMediaDurationInput } from './dto/set-media-duration.input';
 import { SessionOwnerInterceptor } from './session-owner.interceptor';
 
 const pubSub = new PubSub();
@@ -110,6 +111,17 @@ export class SessionsResolver {
     const session = this.sessionsService.setPlayPosition(id, setPlayPositionInput, user);
     pubSub.publish('sessionUpdated', { sessionUpdated: session });
     return session;
+  }
+
+  @Mutation(() => Session)
+  @UseGuards(AuthGuard, RegisteredUserGuard)
+  @UseInterceptors(SessionOwnerInterceptor)
+  setMediaDuration(
+    @Args('id', { type: () => Int }) id: number,
+    @Args('setMediaDurationInput') setMediaDurationInput: SetMediaDurationInput,
+    @CurrentUser() user: User
+  ) {
+    return this.sessionsService.setMediaDuration(id, setMediaDurationInput, user);
   }
 
   @Mutation(() => Session)

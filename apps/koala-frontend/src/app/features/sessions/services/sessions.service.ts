@@ -15,6 +15,7 @@ import {
   GetOneSessionBySessionCodeGQL,
   SetPlayModeGQL,
   SetPlayPositionGQL,
+  SetMediaDurationGQL,
   SetPlayModeInput,
   ToolbarMarker,
   SessionExportGQL,
@@ -72,6 +73,7 @@ export class SessionsService {
     private readonly getOneSessionBySessionCodeGQL: GetOneSessionBySessionCodeGQL,
     private readonly setPlayModeGQL: SetPlayModeGQL,
     private readonly setPlayPositionGQL: SetPlayPositionGQL,
+    private readonly setMediaDurationGQL: SetMediaDurationGQL,
     private readonly toolbarService: ToolbarsService,
     private readonly sessionExportGQL: SessionExportGQL,
     private readonly sessionCSVExportGQL: SessionCsvExportGQL,
@@ -225,10 +227,21 @@ export class SessionsService {
     );
   }
 
+  setMediaDuration(sessionId: number, mediaDuration: number) {
+    return this.setMediaDurationGQL.mutate({ sessionId, setMediaDurationInput: { mediaDuration } });
+  }
+
   setFocusSession(sessionId: number) {
     return this.getOne(sessionId).pipe(
       tap((session: Session) => {
         this.focusSession = session;
+        if (
+          this.focusSession?.media?.mimeType?.startsWith('video/') ||
+          this.focusSession?.media?.mimeType.startsWith('external')
+        ) {
+          this.focusSession.isVideoSession = true;
+        }
+
         if (this.focusSession?.enablePlayer) {
           //mix in local play mode
           this.focusSession.playMode = this.localPlayMode;

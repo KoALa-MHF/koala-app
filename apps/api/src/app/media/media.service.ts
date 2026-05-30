@@ -6,6 +6,8 @@ import { CreateMediaInput } from './dto/create-media.input';
 import { Media } from './entities/media.entity';
 import { FileUpload } from 'graphql-upload';
 import { ensureMediaFolder, getFilePath } from './media.util';
+import { unlink } from 'node:fs/promises';
+import { CreateExternalMediaInput } from './dto/create-external-media.input';
 
 @Injectable()
 export class MediaService {
@@ -24,6 +26,28 @@ export class MediaService {
     const media = await this.mediaRepository.save(newMedia);
 
     await this.writeMediaFile(media.id, file);
+
+    return media;
+  }
+
+  async createExternal(createExternalMediaInput: CreateExternalMediaInput): Promise<Media> {
+    const newMedia = this.mediaRepository.create();
+    const url = createExternalMediaInput.url;
+
+    const youtubeMatch = url.match(/youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/)([a-zA-Z0-9_-]+)/);
+    const switchtubeMatch = url.match(/tube\.switch\.ch\/(?:videos|embed)\/([a-zA-Z0-9_-]+)/);
+
+    if (youtubeMatch) {
+      newMedia.name = `https://www.youtube.com/embed/${youtubeMatch[1]}`;
+      newMedia.mimeType = 'external/youtube';
+    } else if (switchtubeMatch) {
+      newMedia.name = `https://tube.switch.ch/embed/${switchtubeMatch[1]}`;
+      newMedia.mimeType = 'external/switchtube';
+    } else {
+      throw new BadRequestException('Unsupported media type');
+    }
+
+    const media = await this.mediaRepository.save(newMedia);
 
     return media;
   }
@@ -54,7 +78,40 @@ export class MediaService {
     return this.mediaRepository.findOneByOrFail({ id });
   }
 
-  remove(id: number) {
-    return this.mediaRepository.delete(id);
+  async remove(id: number) {
+    const media = await this.findOne(id);
+
+    if (!media) {
+      throw new BadRequestException('Media not found');
+    }
+
+    await this.deleteMediaFile(id, media.name);
+
+    await this.mediaRepository.delete(id);
+
+    return media;
+  }
+
+  private async deleteMediaFile(id: number, filename: string): Promise<void> {
+    return new Promise(async (resolve, reject) => {
+      const filePath = getFilePath(id, filename);
+
+      try {
+        await unlink(filePath);
+
+        console.log(`Successfully deleted ${filePath}`);
+
+        resolve();
+      } catch (error: any) {
+        if (error.code === 'ENOENT') {
+          console.log(`File ${filePath} does not exist, skipping deletion.`);
+
+          resolve();
+        } else {
+          console.error(`Error deleting file ${filePath}:`, error);
+          reject(new BadRequestException('Could not delete file'));
+        }
+      }
+    });
   }
 }

@@ -1,6 +1,7 @@
 <form [formGroup]="markerDataForm" class="form">
   <div>
     <p-dropdown
+      data-cy="marker-type-dropdown"
       placeholder="{{ 'MARKER.MAINTAIN.MARKER_TYPE_LABEL' | translate }}"
       [options]="markerTypes"
       optionLabel="name"
@@ -69,7 +70,12 @@
 
   <div *ngIf="markerType === MarkerType.Slider">
     <span class="p-float-label">
-      <p-inputNumber id="marker-value-range-from-input" type="number" formControlName="valueRangeFrom"></p-inputNumber>
+      <p-inputNumber
+        data-cy="marker-value-range-from"
+        id="marker-value-range-from-input"
+        type="number"
+        formControlName="valueRangeFrom"
+      ></p-inputNumber>
       <label for="marker-value-range-from-input">
         {{ 'MARKER.MAINTAIN.MARKER_RANGE_FROM_INPUT_LABEL' | translate }}
       </label>
@@ -81,7 +87,12 @@
 
   <div *ngIf="markerType === MarkerType.Slider">
     <span class="p-float-label">
-      <p-inputNumber id="marker-value-range-to-input" type="number" formControlName="valueRangeTo"></p-inputNumber>
+      <p-inputNumber
+        data-cy="marker-value-range-to"
+        id="marker-value-range-to-input"
+        type="number"
+        formControlName="valueRangeTo"
+      ></p-inputNumber>
       <label for="marker-value-range-to-input">
         {{ 'MARKER.MAINTAIN.MARKER_RANGE_TO_INPUT_LABEL' | translate }}
       </label>
@@ -98,6 +109,7 @@
       </h5>
       <p-colorPicker #markerColor formControlName="color"></p-colorPicker>
       <input
+        data-cy="marker-color-text-input"
         pInputText
         type="text"
         (change)="onColorChanged(markerColor)"
@@ -119,11 +131,16 @@
           : ('MARKER.MAINTAIN.MARKER_CONTENT_COLOR_INPUT_SLIDER_LABEL' | translate)
       }}
     </h5>
-    <p-inputSwitch inputId="contentColorSwitch" formControlName="contentColor"></p-inputSwitch>
+    <p-inputSwitch
+      data-cy="marker-content-color-switch"
+      inputId="contentColorSwitch"
+      formControlName="contentColor"
+    ></p-inputSwitch>
   </div>
 
   <div *ngIf="markerType !== MarkerType.Slider">
     <p-dropdown
+      data-cy="marker-icon-dropdown"
       placeholder="{{ 'MARKER.MAINTAIN.MARKER_ICON_INPUT_LABEL' | translate }}"
       [options]="icons"
       optionValue="code"

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ApplicationRef, HostListener } from '@angular/core';
+import { Component, OnDestroy, OnInit, ApplicationRef, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
 import { MarkerService } from '../../../markers/services/marker.service';
@@ -25,6 +25,7 @@ import { MediaService } from '../../services/media.service';
 import { Comment } from '../../types/comment.entity';
 import { CreateAnnotationTextComment } from '../../components/annotation-text-comment-list/annotation-text-comment-list.component';
 import { BlockNavigationIfUnsavedChanges } from '../../guards/session-unsaved-changes.guard';
+import { Media } from '../../types/media.entity';
 
 @Component({
   selector: 'koala-app-session',
@@ -34,6 +35,8 @@ import { BlockNavigationIfUnsavedChanges } from '../../guards/session-unsaved-ch
   ],
 })
 export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedChanges {
+  @ViewChild('sessionVideo', { static: true }) sessionVideo!: ElementRef<HTMLMediaElement>;
+
   sidePanelForm: FormGroup;
   ToolbarMode = ToolbarMode;
   PlayMode = PlayMode;
@@ -117,15 +120,24 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
         this.setSidePanelFormData(session);
         this.updateMediaControlSettings();
         if (!session.isSessionOwner && session.isAudioSession && !session.enablePlayer) {
-          this.mediaControlService.setPosition(session.playPosition || 0);
+          if (session.isVideoSession && session.mediaDuration) {
+            this.totalAudioTime = session.mediaDuration;
+          }
           this.currentAudioTime = session.playPosition || 0;
+          if (!session.isVideoSession) {
+            this.mediaControlService.setPosition(this.currentAudioTime);
+          }
 
           if (session.playMode === PlayMode.Running) {
             this.audioTimerSubscription?.unsubscribe();
             this.audioTimerSubscription = timer(100, 100).subscribe(() => {
-              const newAudioPosition = this.mediaControlService.getCurrentTime() + 0.1;
-              this.mediaControlService.setPosition(newAudioPosition);
-              this.currentAudioTime = newAudioPosition;
+              if (session.isVideoSession) {
+                this.currentAudioTime += 0.1;
+              } else {
+                const newAudioPosition = this.mediaControlService.getCurrentTime() + 0.1;
+                this.mediaControlService.setPosition(newAudioPosition);
+                this.currentAudioTime = newAudioPosition;
+              }
             });
           } else {
             this.audioTimerSubscription?.unsubscribe();
@@ -135,14 +147,14 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
         }
 
         if (session.playMode !== PlayMode.Running) {
-          if (session.playPosition == 0) {
+          if (session.playPosition == 0 && this.myUserSession) {
             this.loadAnnotations([
               this.myUserSession,
             ]);
           }
         }
 
-        if (session.liveSessionStart && session.playMode === PlayMode.Running) {
+        if (session.isLiveSession && session.playMode === PlayMode.Running) {
           this.timerSubscription?.unsubscribe();
           this.timer = '0:00';
 
@@ -193,14 +205,20 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
         });
       }
 
-      if (focusSession.isAudioSession && focusSession.media) {
+      const shouldLoadMedia =
+        focusSession.isAudioSession &&
+        focusSession.media &&
+        (focusSession.isSessionOwner || focusSession.enablePlayer || !focusSession.isVideoSession);
+
+      if (shouldLoadMedia) {
         this.mediaControlService.uuid = focusSession.id;
         this.waveContainer = `waveContainer-${focusSession.id}`;
 
-        await this.loadMediaData(focusSession.media.id);
+        await this.loadMediaData(focusSession.media!);
 
         this.updateMediaControlSettings();
       } else {
+        this.totalAudioTime = focusSession.mediaDuration || 0;
         this.isBusy = false;
       }
 
@@ -244,14 +262,19 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
 
   private updateMediaControlSettings() {
     const focusSession = this.sessionService.getFocusSession();
-    if (focusSession && !focusSession.isSessionOwner) {
+    if (
+      focusSession &&
+      !focusSession.isLiveSession &&
+      !focusSession.isSessionOwner &&
+      (!focusSession.isVideoSession || focusSession.enablePlayer)
+    ) {
       this.mediaControlService.setInteraction(focusSession.enablePlayer ? true : false);
     }
   }
 
-  private loadMediaData(id: string): Promise<void> {
+  private loadMediaData(media: Media): Promise<void> {
     return this.mediaControlService
-      .load(`${this.mediaUri}/${id}`, this.waveContainer)
+      .load(`${this.mediaUri}/${media.id}`, this.waveContainer)
       .then(() => {
         this.mediaControlService.addEventHandler('audioprocess', (time) => {
           // to reduce update frequency
@@ -285,14 +308,40 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
               this.audioPaused = false;
             },
           });
+
+        if (this.sessionService.getFocusSession()?.isVideoSession) {
+          this.mediaControlService.mediaPlayStateChanged$
+            .pipe(filter((action) => action === MediaActions.Play || action === MediaActions.Stop))
+            .subscribe({
+              next: (action) => {
+                const session = this.sessionService.getFocusSession();
+                const sessionId = parseInt(session?.id || '0');
+                if (action === MediaActions.Play) {
+                  const currentPos = this.mediaControlService.getCurrentTime();
+                  this.sessionService.setPlayPosition(sessionId, currentPos).subscribe({
+                    next: () => {
+                      this.sessionService.setPlayMode(sessionId, { playMode: PlayMode.Running }).subscribe();
+                    },
+                  });
+                } else {
+                  this.sessionService.setPlayMode(sessionId, { playMode: PlayMode.Paused }).subscribe();
+                }
+              },
+            });
+        }
+
         return new Promise<void>((resolve) => {
           this.mediaControlService.mediaPlayStateChanged$
             .pipe(filter((mediaAction) => mediaAction === MediaActions.Ready))
             .subscribe({
               next: () => {
                 this.totalAudioTime = this.sessionControlService.getDuration();
-                //switch off busy state
                 this.isBusy = false;
+
+                const focusSession = this.sessionService.getFocusSession();
+                if (focusSession?.isSessionOwner && focusSession.mediaDuration !== this.totalAudioTime) {
+                  this.sessionService.setMediaDuration(parseInt(focusSession.id), this.totalAudioTime).subscribe();
+                }
 
                 resolve();
               },
@@ -392,6 +441,14 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
     }
   }
 
+  private getCurrentTimeMs(): number {
+    const focusSession = this.sessionService.getFocusSession();
+    if (focusSession?.isVideoSession && !focusSession.isSessionOwner && !focusSession.enablePlayer) {
+      return Math.floor(this.currentAudioTime * 1000);
+    }
+    return this.sessionControlService.getCurrentTime();
+  }
+
   onMarkerButtonEvent({ marker, value }: { marker: Marker; value?: number }) {
     let aData = this.AnnotationData.get(marker.id);
     if (aData == undefined) {
@@ -414,7 +471,7 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
   }
 
   onMarkerEvent(m: Marker, aData: DataPoint[]) {
-    let t = this.sessionControlService.getCurrentTime();
+    let t = this.getCurrentTimeMs();
     t = Math.floor(t);
 
     const dp: DataPoint = {
@@ -430,13 +487,13 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
   }
 
   onMarkerRange(m: Marker, aData: DataPoint[]) {
-    let t = this.sessionControlService.getCurrentTime();
+    let t = this.getCurrentTimeMs();
     t = Math.floor(t);
     if (aData.length > 0) {
       const latest = aData.at(-1);
       if (latest) {
         if (latest.active) {
-          latest.endTime = Math.floor(this.sessionControlService.getCurrentTime());
+          latest.endTime = Math.floor(this.getCurrentTimeMs());
           latest.active = false;
           this.saveAnnotation(latest, m.id);
           return;
@@ -456,7 +513,7 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
 
   onMarkerSliderRange(m: Marker, aData: DataPoint[], value: number) {
     const strength = value;
-    let t = this.sessionControlService.getCurrentTime();
+    let t = this.getCurrentTimeMs();
     t = Math.floor(t);
     const latest = aData.at(-1);
     if (latest) {

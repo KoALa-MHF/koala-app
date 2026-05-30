@@ -9,6 +9,8 @@ import MP3Tag from 'mp3tag.js';
 import { Subject } from 'rxjs';
 import { SessionsService } from './sessions.service';
 import { AccessTokenService } from '../../auth/services/access-token.service';
+import { SwitchTubeWaveSurferMock } from './switchtube-wavesurfer.mock';
+import { YouTubeWaveSurferMock } from './youtube-wavesurfer.mock';
 
 export enum MediaActions {
   Play = 1,
@@ -29,7 +31,7 @@ export interface MediaEvent {
 })
 export class MediaControlService {
   uuid!: string | HTMLElement;
-  private waves = new Map<string | HTMLElement, WaveSurfer>();
+  private waves = new Map<string | HTMLElement, WaveSurfer | SwitchTubeWaveSurferMock | YouTubeWaveSurferMock>();
 
   private lastPlayPositionUpdate = -1;
 
@@ -43,35 +45,73 @@ export class MediaControlService {
 
   async load(trackurl: string, uuid: string) {
     this.uuid = uuid;
-    let audioBlob: Blob = new Blob();
 
-    try {
-      audioBlob = await this.fetchAudioBlob(trackurl);
-    } catch (e) {
-      throw new Error('error fetching audio file');
+    let mediaElement;
+    let mediaIFrame: HTMLIFrameElement;
+    const media = this.sessionService.getFocusSession()?.media;
+
+    const isExternalVideo = media?.mimeType === 'external/switchtube' || media?.mimeType === 'external/youtube';
+
+    let mediaBlob: Blob = new Blob();
+    if (!isExternalVideo) {
+      try {
+        mediaBlob = await this.fetchMediaBlob(trackurl);
+      } catch (e) {
+        throw new Error('error fetching media file');
+      }
+    } else {
+      // Yield one macrotask so Angular can render the *ngIf="session.isVideoSession"
+      // container before we try to append the iframe into it.
+      await new Promise<void>((resolve) => setTimeout(resolve));
     }
-    const audio = new Audio();
-    audio.src = URL.createObjectURL(audioBlob);
-    this.createMediadata(audioBlob);
+
+    if (this.sessionService.getFocusSession()?.isVideoSession) {
+      if (isExternalVideo) {
+        mediaIFrame = document.createElement('iframe');
+        mediaIFrame.style.width = '100%';
+        mediaIFrame.style.height = '100%';
+        mediaIFrame.style.border = 'none';
+        mediaIFrame.src = media?.name + '?enablejsapi=1' || '';
+        mediaIFrame.allow = 'autoplay; fullscreen; picture-in-picture';
+
+        document.getElementById('sessionVideo')?.appendChild(mediaIFrame);
+      } else {
+        mediaElement = document.createElement('video');
+        mediaElement.style.width = '100%';
+        mediaElement.style.height = '100%';
+        mediaElement.controls = true;
+        document.getElementById('sessionVideo')?.appendChild(mediaElement);
+        mediaElement.src = URL.createObjectURL(mediaBlob);
+      }
+    } else {
+      mediaElement = new Audio();
+      mediaElement.src = URL.createObjectURL(mediaBlob);
+    }
+
+    this.createMediadata(mediaBlob);
+
     this.waves.set(
       this.uuid,
-      WaveSurfer.create({
-        container: `#${this.uuid}`,
-        cursorColor: 'rgba(73,157,255,.95)',
-        cursorWidth: 2,
-        progressColor: 'rgba(0,0,0,.9)',
-        waveColor: 'rgba(73,157,158,1)',
-        autoCenter: true,
-        normalize: true,
-        hideScrollbar: false,
-        height: 100,
-        media: audio,
-        plugins: [],
-      })
+      media?.mimeType === 'external/switchtube'
+        ? new SwitchTubeWaveSurferMock(mediaIFrame!)
+        : media?.mimeType === 'external/youtube'
+        ? new YouTubeWaveSurferMock(mediaIFrame!)
+        : WaveSurfer.create({
+            container: `#${this.uuid}`,
+            cursorColor: 'rgba(73,157,255,.95)',
+            cursorWidth: 2,
+            progressColor: 'rgba(0,0,0,.9)',
+            waveColor: 'rgba(73,157,158,1)',
+            autoCenter: true,
+            normalize: true,
+            hideScrollbar: false,
+            height: 100,
+            media: mediaElement,
+            plugins: [],
+          })
     );
-    try {
-      const w = this.getWave();
 
+    try {
       this.addEventHandler('pause', () => {
         this.mediaPlayStateChangedSubject.next(MediaActions.Stop);
       });
@@ -150,7 +190,7 @@ export class MediaControlService {
     });
   }
 
-  private async fetchAudioBlob(url: string) {
+  private async fetchMediaBlob(url: string) {
     const resp = await fetch(url, {
       headers: {
         Authorization: `Bearer ${this.accessTokenService.getAccessToken()}`,
@@ -159,7 +199,7 @@ export class MediaControlService {
     return resp.blob();
   }
 
-  private getWave(): WaveSurfer {
+  private getWave(): WaveSurfer | SwitchTubeWaveSurferMock | YouTubeWaveSurferMock {
     const w = this.waves.get(this.uuid);
     if (w == undefined) {
       throw Error('no wavesurfer instance');
@@ -279,7 +319,8 @@ export class MediaControlService {
   }
 
   private createTimelinePlugin() {
-    const timelineContainer = document.getElementById(`${this.uuid}-timeline`)!;
+    const timelineContainer = document.getElementById(`${this.uuid}-timeline`);
+    if (!timelineContainer) return;
     const w = this.getWave();
     let interval = 5;
     const ratio = timelineContainer.getBoundingClientRect().width / (w.getDuration() / 10);

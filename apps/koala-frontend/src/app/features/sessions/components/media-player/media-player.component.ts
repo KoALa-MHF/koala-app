@@ -2,15 +2,15 @@ import { Component, Input, EventEmitter, Output, OnInit } from '@angular/core';
 import { MediaControlService, MediaActions, MediaEvent } from '../../services/media-control.service';
 
 @Component({
-  selector: 'koala-audio-player',
-  templateUrl: './audio-player.component.html',
+  selector: 'koala-media-player',
+  templateUrl: './media-player.component.html',
   styleUrls: [
-    './audio-player.component.scss',
+    './media-player.component.scss',
     '../../session-common.scss',
   ],
   providers: [],
 })
-export class AudioPlayerComponent implements OnInit {
+export class MediaPlayerComponent implements OnInit {
   @Input() metadata: MediaMetadata | undefined;
   @Output() mediaEvent: EventEmitter<MediaEvent> = new EventEmitter<MediaEvent>();
 
@@ -34,29 +34,22 @@ export class AudioPlayerComponent implements OnInit {
 
     this.mediaControlService.mediaPlayStateChanged$.subscribe({
       next: (mediaAction) => {
-        if (mediaAction == MediaActions.Finish) {
-          this.onStop();
+        if (mediaAction === MediaActions.Play) {
+          this.playing = true;
+          this.playIcon = 'pi pi-pause';
+        } else if (mediaAction === MediaActions.Stop || mediaAction === MediaActions.Finish) {
+          this.playing = false;
+          this.playIcon = 'pi pi-play';
         }
       },
     });
   }
 
   onPlay() {
-    if (!this.playing) {
-      this.playIcon = 'pi pi-pause';
-      this.playing = true;
-    } else {
-      this.playIcon = 'pi pi-play';
-      this.playing = false;
-    }
     this.mediaEvent.emit({ actions: MediaActions.Play });
   }
 
   onStop() {
-    if (this.playing) {
-      this.playIcon = 'pi pi-play';
-      this.playing = false;
-    }
     this.mediaEvent.emit({ actions: MediaActions.Stop });
   }
 }
