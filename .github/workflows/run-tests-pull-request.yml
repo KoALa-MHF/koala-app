@@ -27,6 +27,7 @@ jobs:
       env:
         koalaFrontendUrl: http://localhost:4200
         koalaAssetsUrl: http://localhost:4200/assets
+        koalaPublicUrl: http://localhost:4200/
         database__name: database/koala.e2e
         database__synchronize: true
         database__dropSchema: true
