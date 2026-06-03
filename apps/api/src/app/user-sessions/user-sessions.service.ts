@@ -66,6 +66,7 @@ export class UserSessionsService {
               message: message,
               sessionUrl: config.koalaFrontendUrl + '?sessionCode=' + userSession.code,
               koalaLogoSrc: config.koalaAssetsUrl + 'koala-logo.png',
+              koalaPublicUrl: config.koalaPublicUrl,
             },
           });
           userSession.invitedAt = new Date();
