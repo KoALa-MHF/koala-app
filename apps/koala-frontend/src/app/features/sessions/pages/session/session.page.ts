@@ -658,7 +658,7 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
   onAnnotationTextCommentCreate(createComment: CreateAnnotationTextComment) {
     this.annotationService.createComment(createComment.annotationId, createComment.text).subscribe({
       next: () => {
-        this.sessionService.setFocusSession(parseInt(this.sessionService.getFocusSession()?.id || '0')).subscribe();
+        this.reloadAnnotationsFromFocusSession();
       },
       error: () => {
         console.log('Error in Comment Creation');
@@ -669,7 +669,7 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
   onAnnotationTextCommentUpdate(comment: Comment) {
     this.annotationService.updateComment(comment.id, comment.text).subscribe({
       next: () => {
-        this.sessionService.setFocusSession(parseInt(this.sessionService.getFocusSession()?.id || '0')).subscribe();
+        this.reloadAnnotationsFromFocusSession();
       },
       error: () => {
         console.log('Error in Comment Update');
@@ -680,11 +680,20 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
   onAnnotationTextCommentRemove(commentId: number) {
     this.annotationService.removeComment(commentId).subscribe({
       next: () => {
-        this.sessionService.setFocusSession(parseInt(this.sessionService.getFocusSession()?.id || '0')).subscribe();
+        this.reloadAnnotationsFromFocusSession();
       },
       error: () => {
         console.log('Error in Comment Removal');
       },
+    });
+  }
+
+  private reloadAnnotationsFromFocusSession() {
+    this.sessionService.setFocusSession(this.sessionId).subscribe((focusSession: Session) => {
+      const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
+      if (userSessions) {
+        this.loadAnnotations(userSessions);
+      }
     });
   }
 
