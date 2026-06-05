@@ -72,7 +72,9 @@ export class MediaControlService {
         mediaIFrame.style.height = '100%';
         mediaIFrame.style.border = 'none';
         mediaIFrame.src = media?.name + '?enablejsapi=1' || '';
-        mediaIFrame.allow = 'autoplay; fullscreen; picture-in-picture';
+        mediaIFrame.allow =
+          'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        mediaIFrame.allowFullscreen = true;
 
         document.getElementById('sessionVideo')?.appendChild(mediaIFrame);
       } else {
