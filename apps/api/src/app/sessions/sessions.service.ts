@@ -123,7 +123,7 @@ export class SessionsService {
         console.log(err);
       });
     } else if (
-      updateSessionInput.mediaId !== null &&
+      updateSessionInput.mediaId != null &&
       session.mediaId != null &&
       updateSessionInput.mediaId !== session.mediaId
     ) {
