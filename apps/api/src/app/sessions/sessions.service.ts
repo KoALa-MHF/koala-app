@@ -124,6 +124,7 @@ export class SessionsService {
       });
     } else if (
       updateSessionInput.mediaId !== null &&
+      updateSessionInput.mediaId !== undefined &&
       session.mediaId != null &&
       updateSessionInput.mediaId !== session.mediaId
     ) {
