@@ -185,10 +185,11 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
       const markerIds: Array<number> = toolbarMarkers.map((marker) => parseInt(marker.markerId));
       this.markerService.getAll(markerIds).subscribe((result) => {
         const markers = result.data?.markers;
-        for (const marker of markers) {
-          const toolbarMarker = toolbarMarkers.find((t) => parseInt(t.markerId) == marker.id);
-          const m = { visible: toolbarMarker ? toolbarMarker.visible : true, ...marker };
-          this.markers.push(m);
+        for (const toolbarMarker of toolbarMarkers) {
+          const marker = markers.find((t) => t.id == parseInt(toolbarMarker.markerId));
+          if (marker) {
+            this.markers.push({ visible: toolbarMarker ? toolbarMarker.visible : true, ...marker });
+          }
         }
         this.markers = [
           ...this.markers,
@@ -223,15 +224,6 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
               comments: annotation.comments,
             });
         }
-      }
-      if (this.userSessionAnnotationData.get(userSession.id)?.AnnotationData) {
-        // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
-        this.userSessionAnnotationData.get(userSession.id)!.AnnotationData = new Map(
-          [
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            ...this.userSessionAnnotationData.get(userSession.id)!.AnnotationData.entries(),
-          ].sort()
-        );
       }
     }
   }

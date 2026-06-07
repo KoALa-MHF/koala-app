@@ -396,24 +396,12 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
         this.markers = [
           ...this.markers,
         ];
-
-        this.AnnotationData = new Map(
-          [
-            ...this.AnnotationData.entries(),
-          ].sort()
-        );
       });
     }
   }
 
   private loadAnnotations(userSessions: any[]): void {
     if (userSessions.length > 0 && userSessions[0].annotations) {
-      this.AnnotationData = new Map(
-        [
-          ...this.AnnotationData.entries(),
-        ].sort()
-      );
-
       this.AnnotationData.forEach((data, key) => {
         this.AnnotationData.set(key, new Array<DataPoint>());
       });
