@@ -22,3 +22,6 @@ export const getMediaDeleteButton = () => cy.get('[data-cy="session-media-delete
 export const pressMediaDeleteButton = () => getMediaDeleteButton().click();
 export const confirmMediaDelete = () => cy.get('.p-confirm-dialog-accept').click();
 export const cancelMediaDeleteConfirm = () => cy.get('.p-confirm-dialog-reject').click();
+
+export const getMediaUrlInput = () => cy.get('[data-cy="session-media-url-input"]');
+export const pressSettingsTab = () => cy.contains('.p-tabview-nav a', 'Session Einstellungen').click();

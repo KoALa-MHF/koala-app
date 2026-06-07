@@ -9,10 +9,12 @@ import {
   getLiveSessionCheckbox,
   getAudioVideoTab,
   pressAudioTab,
+  pressSettingsTab,
   getMediaDeleteButton,
   pressMediaDeleteButton,
   confirmMediaDelete,
   cancelMediaDeleteConfirm,
+  getMediaUrlInput,
 } from '../support/session-manage.po';
 import {
   pressCreateSessionButton,
@@ -205,6 +207,75 @@ describe('koala-frontend', () => {
 
     getLiveSessionCheckbox().click();
     getAudioVideoTab().should('exist');
+  });
+
+  it('Video media reference is not cleared when a session settings checkbox is toggled', () => {
+    cy.intercept('POST', '/graphql', (req) => {
+      const body = req.body as { operationName?: string };
+      if (body.operationName === 'GetOneSession') {
+        req.alias = 'getOneSession';
+      } else if (body.operationName === 'updateSession') {
+        req.alias = 'updateSession';
+      }
+    });
+
+    pressCreateSessionButton();
+    getCreateSessionNameField().type('Video Persistence Test');
+    pressDialogCreateSessionButton();
+    cy.url().should('include', '/sessions/update/');
+    cy.wait('@getOneSession');
+
+    // Set up real media via API — cy.request goes Node→server, bypassing cy.intercept,
+    // so it does not consume the updateSession alias we set up above.
+    cy.url().then((url) => {
+      const match = url.match(/\/sessions\/update\/(\d+)/);
+      const sessionId = parseInt(match?.[1] ?? '0');
+      cy.task<string>('generateAuthToken', 1).then((token) => {
+        const headers = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
+        cy.request({
+          method: 'POST',
+          url: Cypress.env('graphqlUrl'),
+          headers,
+          body: {
+            query: `mutation createExternalMedia($media: CreateExternalMediaInput!) {
+              createExternalMedia(createExternalMediaInput: $media) { id }
+            }`,
+            variables: { media: { url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' } },
+          },
+        }).then((mediaRes) => {
+          const mediaId = parseInt(mediaRes.body.data.createExternalMedia.id);
+          cy.request({
+            method: 'POST',
+            url: Cypress.env('graphqlUrl'),
+            headers,
+            body: {
+              query: `mutation updateSession($id: Int!, $session: UpdateSessionInput!) {
+                updateSession(id: $id, updateSessionInput: $session) { id media { id } }
+              }`,
+              variables: { id: sessionId, session: { mediaId } },
+            },
+          });
+        });
+      });
+    });
+
+    // Reload to fetch the session from the real backend — it should now have media linked.
+    cy.reload();
+    cy.wait('@getOneSession');
+    pressAudioTab();
+    getMediaUrlInput().should('not.have.value', '');
+
+    // Toggle a general settings checkbox — this triggers updateSession({ enablePlayer: true }).
+    pressSettingsTab();
+    getPlayerCheckbox().click();
+    cy.wait('@updateSession');
+
+    // Reload again so GetOneSession reflects the actual backend state after the update.
+    // With the bug: the media reference is cleared → URL input is empty → assertion fails.
+    cy.reload();
+    cy.wait('@getOneSession');
+    pressAudioTab();
+    getMediaUrlInput().should('not.have.value', '');
   });
 
   it('Delete media file confirmation dialog cancels and confirms correctly', () => {
