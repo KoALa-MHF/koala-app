@@ -49,6 +49,7 @@ export class MediaControlService {
     let mediaElement;
     let mediaIFrame: HTMLIFrameElement;
     const media = this.sessionService.getFocusSession()?.media;
+    const isVideoSession = this.sessionService.getFocusSession()?.isVideoSession;
 
     const isExternalVideo = media?.mimeType === 'external/switchtube' || media?.mimeType === 'external/youtube';
 
@@ -65,7 +66,7 @@ export class MediaControlService {
       await new Promise<void>((resolve) => setTimeout(resolve));
     }
 
-    if (this.sessionService.getFocusSession()?.isVideoSession) {
+    if (isVideoSession) {
       if (isExternalVideo) {
         mediaIFrame = document.createElement('iframe');
         mediaIFrame.style.width = '100%';
@@ -108,7 +109,7 @@ export class MediaControlService {
             autoCenter: true,
             normalize: true,
             hideScrollbar: false,
-            height: 100,
+            height: isVideoSession ? 0 : 100,
             media: mediaElement,
             plugins: [],
           })
@@ -128,7 +129,9 @@ export class MediaControlService {
         this.mediaPlayStateChangedSubject.next(MediaActions.Seeking);
       });
       this.addEventHandler('ready', () => {
-        this.createTimelinePlugin();
+        if (!isVideoSession) {
+          this.createTimelinePlugin();
+        }
         this.mediaPlayStateChangedSubject.next(MediaActions.Ready);
       });
       this.addEventHandler('audioprocess', (currentTime) => {
