@@ -8,6 +8,6 @@ COPY ./libs /usr/src/app/libs
 RUN npx nx build koala-frontend
 RUN npm prune --production
 
-FROM nginx:1.17.1-alpine
+FROM nginx:1.31.2-alpine
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=build /usr/src/app/dist/apps/koala-frontend /usr/share/nginx/html
