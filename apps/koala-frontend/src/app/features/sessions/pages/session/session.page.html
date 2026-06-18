@@ -52,6 +52,13 @@
       [waveContainer]="waveContainer"
     >
     </koala-app-media-wave>
+    <koala-marker-toolbar
+      *ngIf="session.isVideoSession"
+      class="content-centered-horizontally"
+      [toolbarMode]="( ( ( session.editable || session.isSessionOwner ) && session.playMode === PlayMode.Running ) || ( session.isSessionOwner && session.liveSessionEnd === null ) || ( session.enablePlayer && !audioPaused ) ) ? ToolbarMode.Session : ToolbarMode.SessionDisabled"
+      [markers]="markers"
+      (event)="onMarkerButtonEvent($event)"
+    ></koala-marker-toolbar>
     <koala-app-annotation
       *ngIf="session.isAudioSession || session.mediaDuration"
       [annotationData]="AnnotationData"
@@ -68,6 +75,7 @@
       (annotationAudioCommentDelete)="onAnnotationAudioCommentDelete($event)"
     ></koala-app-annotation>
     <koala-marker-toolbar
+      *ngIf="!session.isVideoSession"
       class="content-centered-horizontally"
       [toolbarMode]="( ( ( session.editable || session.isSessionOwner ) && session.playMode === PlayMode.Running ) || ( session.isSessionOwner && session.liveSessionEnd === null ) || ( session.enablePlayer && !audioPaused ) ) ? ToolbarMode.Session : ToolbarMode.SessionDisabled"
       [markers]="markers"
