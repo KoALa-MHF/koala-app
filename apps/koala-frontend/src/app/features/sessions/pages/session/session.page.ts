@@ -298,6 +298,7 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
           .subscribe({
             next: () => {
               this.audioPaused = true;
+              this.endActiveSliders(this.currentAudioTime);
             },
           });
 
@@ -532,7 +533,6 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
           if (this.audioPaused) {
             this.sessionControlService.startSession().subscribe();
           } else {
-            this.endActiveSliders(this.currentAudioTime);
             this.sessionControlService.pauseSession().subscribe();
           }
           this.sessionService.setFocusSession(this.sessionId).subscribe();
@@ -542,7 +542,6 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
         break;
       case MediaActions.Stop:
         try {
-          this.endActiveSliders(this.currentAudioTime);
           this.sessionControlService.stopSession().subscribe();
           this.sessionService.setFocusSession(this.sessionId).subscribe();
           this.currentAudioTime = 0;
