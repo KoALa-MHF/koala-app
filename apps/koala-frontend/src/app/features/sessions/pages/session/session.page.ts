@@ -14,7 +14,7 @@ import { Marker } from '../../types/marker.entity';
 import { MarkerType, PlayMode } from '../../../../graphql/generated/graphql';
 import { ToolbarMode } from '../../components/marker-toolbar/marker-toolbar.component';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
-import { filter, timer, Subscription } from 'rxjs';
+import { filter, forkJoin, map, of, timer, Observable, Subscription } from 'rxjs';
 import { ToolbarsService } from '../../services/toolbars.service';
 import { NavigationService } from '../../services/navigation.service';
 import { UserSession } from '../../types/user-session.entity';
@@ -241,6 +241,31 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
         return false;
       });
     });
+  }
+
+  saveUnsavedChanges(): Observable<boolean> {
+    const saves: Observable<unknown>[] = [];
+    this.AnnotationData.forEach((annotations, markerId) => {
+      annotations.forEach((annotation) => {
+        if (annotation.display !== Display.Circle && annotation.active) {
+          annotation.active = false;
+          annotation.endTime = Math.floor(this.currentAudioTime * 1000);
+          saves.push(
+            this.annotationService.create({
+              start: annotation.startTime,
+              end: annotation.endTime,
+              value: annotation.strength,
+              userSessionId: this.myUserSession?.id || 0,
+              markerId: markerId,
+            })
+          );
+        }
+      });
+    });
+    if (saves.length === 0) {
+      return of(true);
+    }
+    return forkJoin(saves).pipe(map(() => true));
   }
 
   @HostListener('window:beforeunload', [
