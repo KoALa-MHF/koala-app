@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 
 export interface BlockNavigationIfUnsavedChanges {
   hasUnsavedChanges(): boolean;
+  saveUnsavedChanges(): Observable<boolean>;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -15,7 +16,7 @@ export class UnsavedChangesGuard<T extends BlockNavigationIfUnsavedChanges> impl
       return true;
     }
     if (window.confirm(this.translateService.instant('SESSION.UNSAVED_CHNAGES_WARNING'))) {
-      return true;
+      return component.saveUnsavedChanges();
     } else {
       return false;
     }

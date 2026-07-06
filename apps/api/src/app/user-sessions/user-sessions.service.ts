@@ -127,8 +127,9 @@ export class UserSessionsService {
           ownerId: user?.id,
         },
         {
-          // or the session owner is allowed to see all user sessions
+          // or the session owner is allowed to see all user sessions (excluding orphaned records with no owner)
           sessionId: sessionId,
+          ownerId: Not(IsNull()),
           session: {
             ownerId: user?.id,
           },

@@ -179,7 +179,7 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
 
   private loadMarkerData(userSessions: any): void {
     const toolbars = this.session?.toolbars;
-    if (toolbars) {
+    if (toolbars && toolbars.length > 0) {
       const toolbar = toolbars[0];
       const toolbarMarkers = toolbar?.markers || [];
       const markerIds: Array<number> = toolbarMarkers.map((marker) => parseInt(marker.markerId));
@@ -196,6 +196,8 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
         ];
         this.loadAnnotations(userSessions);
       });
+    } else {
+      this.loadAnnotations(userSessions);
     }
   }
 
