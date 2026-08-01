@@ -748,18 +748,20 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
     return this.sidePanelForm.get('markersArray') as FormGroup;
   }
 
-  endActiveSliders(time: number) {
+  endActiveSliders(time?: number) {
+    const currentTime = time ?? this.currentAudioTime ?? 0;
+
     this.AnnotationData.forEach((marker, id) => {
-      this.AnnotationData.get(id)?.forEach((annotation, i) => {
-        if (annotation.display == Display.Circle) {
+      this.AnnotationData.get(id)?.forEach((annotation) => {
+        if (annotation.display === Display.Circle) {
           return;
         }
         if (annotation.active) {
           annotation.active = false;
-          annotation.endTime = Math.floor(time * 1000);
+
+          annotation.endTime = Math.floor(currentTime * 1000);
           this.saveAnnotation(annotation, id);
         }
-        return;
       });
     });
   }
