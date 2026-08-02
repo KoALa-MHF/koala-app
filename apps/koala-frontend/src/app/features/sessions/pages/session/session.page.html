@@ -31,9 +31,16 @@
 
     <div
       *ngIf="session.isVideoSession && (session.isSessionOwner || session.enablePlayer)"
-      style="display: flex; flex-direction: column; align-items: center"
+      style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; margin-bottom: 1rem"
     >
       <div id="sessionVideo"></div>
+      <koala-marker-toolbar
+        *ngIf="session.isVideoSession"
+        class="content-centered-horizontally"
+        [toolbarMode]="( ( ( session.editable || session.isSessionOwner ) && session.playMode === PlayMode.Running ) || ( session.isSessionOwner && session.liveSessionEnd === null ) || ( session.enablePlayer && !audioPaused ) ) ? ToolbarMode.Session : ToolbarMode.SessionDisabled"
+        [markers]="markers"
+        (event)="onMarkerButtonEvent($event)"
+      ></koala-marker-toolbar>
       <koala-video-timeline
         *ngIf="session.media?.mimeType?.startsWith('external')"
         [totalTime]="totalAudioTime"
@@ -41,6 +48,13 @@
       ></koala-video-timeline>
     </div>
 
+    <koala-marker-toolbar
+      *ngIf="session.isVideoSession && !session.isSessionOwner"
+      class="content-centered-horizontally"
+      [toolbarMode]="( ( ( session.editable || session.isSessionOwner ) && session.playMode === PlayMode.Running ) || ( session.isSessionOwner && session.liveSessionEnd === null ) || ( session.enablePlayer && !audioPaused ) ) ? ToolbarMode.Session : ToolbarMode.SessionDisabled"
+      [markers]="markers"
+      (event)="onMarkerButtonEvent($event)"
+    ></koala-marker-toolbar>
     <koala-video-timeline
       *ngIf="session.isVideoSession && !session.isSessionOwner && !session.enablePlayer"
       [totalTime]="totalAudioTime"
@@ -52,13 +66,7 @@
       [waveContainer]="waveContainer"
     >
     </koala-app-media-wave>
-    <koala-marker-toolbar
-      *ngIf="session.isVideoSession"
-      class="content-centered-horizontally"
-      [toolbarMode]="( ( ( session.editable || session.isSessionOwner ) && session.playMode === PlayMode.Running ) || ( session.isSessionOwner && session.liveSessionEnd === null ) || ( session.enablePlayer && !audioPaused ) ) ? ToolbarMode.Session : ToolbarMode.SessionDisabled"
-      [markers]="markers"
-      (event)="onMarkerButtonEvent($event)"
-    ></koala-marker-toolbar>
+
     <koala-app-annotation
       *ngIf="session.isAudioSession || session.mediaDuration"
       [annotationData]="AnnotationData"
