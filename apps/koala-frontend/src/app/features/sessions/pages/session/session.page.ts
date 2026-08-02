@@ -61,6 +61,7 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
   toolbarUpdatedSubscription?: Subscription;
   private timerSubscription?: Subscription;
   private audioTimerSubscription?: Subscription;
+  private focusSessionSubscription?: Subscription;
 
   sessionSettingsToggled$ = this.navigationService.sessionSettingsSidePanelToggled$;
   session$ = this.sessionService.focusSessionChanged$;
@@ -112,7 +113,7 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
       },
     });
 
-    this.session$.subscribe((session?: Session) => {
+    this.focusSessionSubscription = this.session$.subscribe((session?: Session) => {
       if (session) {
         this.myUserSession = this.sessionService
           .getFocusSession()
@@ -251,12 +252,20 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
   }
 
   ngOnDestroy(): void {
-    if (this.sessionService.getFocusSession()?.isAudioSession) {
-      this.sessionControlService.stopSession();
+    const focusSession = this.sessionService.getFocusSession();
+    if (focusSession?.isSessionOwner && focusSession.playMode === PlayMode.Running) {
+      //has to be subscribed, otherwise the mutation is never sent and the session keeps running for the participants
+      this.sessionControlService.stopSession().subscribe({
+        error: (error) => {
+          console.log(error);
+        },
+      });
     }
+    this.focusSessionSubscription?.unsubscribe();
     this.sessionUpdatedSubscription?.unsubscribe();
     this.toolbarUpdatedSubscription?.unsubscribe();
     this.timerSubscription?.unsubscribe();
+    this.audioTimerSubscription?.unsubscribe();
     this.mediaControlService.destroy();
   }
 
