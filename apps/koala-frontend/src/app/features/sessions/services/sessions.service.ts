@@ -59,6 +59,7 @@ const csvNewLine = '\n';
 export class SessionsService {
   private localPlayMode = PlayMode.Paused;
   private focusSession?: Session;
+  private lastPlayPosition = 0;
 
   private focusSessionSubject = new Subject<Session>();
   public focusSessionChanged$ = this.focusSessionSubject.asObservable();
@@ -201,6 +202,9 @@ export class SessionsService {
       return of({ ...this.focusSession, playMode: PlayMode.Running } as Session);
     } else {
       this.localPlayMode = PlayMode.Paused;
+
+      this.lastPlayPosition = this.focusSession?.playPosition || 0;
+
       return this.setPlayModeGQL.mutate({ sessionId, setPlayModeInput: playModeInput }).pipe(
         map((response) => {
           const session = response.data?.setPlayMode;
@@ -225,6 +229,14 @@ export class SessionsService {
         }
       })
     );
+  }
+
+  setLastPlayPosition(position: number) {
+    this.lastPlayPosition = position;
+  }
+
+  getLastPlayPosition(): number {
+    return this.lastPlayPosition;
   }
 
   setMediaDuration(sessionId: number, mediaDuration: number) {
