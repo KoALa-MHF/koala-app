@@ -14,11 +14,22 @@ import { filter } from 'rxjs';
 export class MarkerButtonComponent implements OnInit {
   MarkerType = MarkerType;
   @Input() marker!: Marker;
-  @Input() enabled = false;
   @Output() event = new EventEmitter<{ marker: Marker; value?: number }>();
   @Input() active = false;
   range = 0;
   sliderValue = 0;
+  _enabled = false;
+
+  @Input() set enabled(value: boolean) {
+    this._enabled = value;
+    if (!value) {
+      this.active = false;
+    }
+  }
+
+  get enabled(): boolean {
+    return this._enabled;
+  }
 
   constructor(private readonly mediaControlService: MediaControlService) {}
 
