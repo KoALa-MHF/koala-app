@@ -14,7 +14,7 @@ import { Marker } from '../../types/marker.entity';
 import { MarkerType, PlayMode } from '../../../../graphql/generated/graphql';
 import { ToolbarMode } from '../../components/marker-toolbar/marker-toolbar.component';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
-import { filter, timer, Subscription } from 'rxjs';
+import { catchError, filter, forkJoin, firstValueFrom, of, Subscription, tap, timer } from 'rxjs';
 import { ToolbarsService } from '../../services/toolbars.service';
 import { NavigationService } from '../../services/navigation.service';
 import { UserSession } from '../../types/user-session.entity';
@@ -124,6 +124,11 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
           if (session.isVideoSession && session.mediaDuration) {
             this.totalAudioTime = session.mediaDuration;
           }
+
+          if (this.currentAudioTime !== 0) {
+            this.sessionService.setLastPlayPosition(this.currentAudioTime);
+          }
+
           this.currentAudioTime = session.playPosition || 0;
           if (!session.isVideoSession) {
             this.mediaControlService.setPosition(this.currentAudioTime);
@@ -148,11 +153,17 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
         }
 
         if (session.playMode !== PlayMode.Running) {
-          if (session.playPosition == 0 && this.myUserSession) {
-            this.loadAnnotations([
-              this.myUserSession,
-            ]);
-          }
+          this.endActiveSliders(this.sessionService.getLastPlayPosition())
+            .then(() => {
+              if (session.playPosition == 0 && this.myUserSession) {
+                this.loadAnnotations([
+                  this.myUserSession,
+                ]);
+              }
+            })
+            .catch((error) => {
+              console.error('Failed to end active sliders before loading annotations', error);
+            });
         }
 
         if (session.isLiveSession && session.playMode === PlayMode.Running) {
@@ -253,6 +264,9 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
 
   ngOnDestroy(): void {
     const focusSession = this.sessionService.getFocusSession();
+
+    this.endActiveSliders(this.currentAudioTime);
+
     if (focusSession?.isSessionOwner && focusSession.playMode === PlayMode.Running) {
       //has to be subscribed, otherwise the mutation is never sent and the session keeps running for the participants
       this.sessionControlService.stopSession().subscribe({
@@ -551,6 +565,7 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
         break;
       case MediaActions.Stop:
         try {
+          //this.endActiveSliders(this.currentAudioTime);
           this.sessionControlService.stopSession().subscribe();
           this.sessionService.setFocusSession(this.sessionId).subscribe();
           this.currentAudioTime = 0;
@@ -757,8 +772,9 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
     return this.sidePanelForm.get('markersArray') as FormGroup;
   }
 
-  endActiveSliders(time?: number) {
+  endActiveSliders(time?: number): Promise<any> {
     const currentTime = time ?? this.currentAudioTime ?? 0;
+    const requests: Array<ReturnType<typeof this.saveAnnotation>> = [];
 
     this.AnnotationData.forEach((marker, id) => {
       this.AnnotationData.get(id)?.forEach((annotation) => {
@@ -769,10 +785,16 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
           annotation.active = false;
 
           annotation.endTime = Math.floor(currentTime * 1000);
-          this.saveAnnotation(annotation, id);
+          requests.push(this.saveAnnotation(annotation, id));
         }
       });
     });
+
+    if (requests.length === 0) {
+      return Promise.resolve([]);
+    }
+
+    return firstValueFrom(forkJoin(requests));
   }
 
   updateAnnotations(time: number, aData: DataPoint[]) {
@@ -796,7 +818,7 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
   }
 
   saveAnnotation(d: DataPoint, markerID: number) {
-    this.annotationService
+    return this.annotationService
       .create({
         start: d.startTime,
         end: d.endTime,
@@ -804,15 +826,16 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
         userSessionId: this.myUserSession?.id || 0,
         markerId: markerID,
       })
-      .subscribe({
-        next: (result) => {
+      .pipe(
+        tap((result) => {
           d.id = result.data?.createAnnotation.id || 1;
-        },
-        error: (error) => {
+        }),
+        catchError((error) => {
           this.showErrorMessage('error', 'SESSION.ERROR_DIALOG.ANNOTATION_ERROR', '');
           console.log(error);
-        },
-      });
+          return of(null);
+        })
+      );
   }
 
   onMarkerDisplayChange(value: boolean, marker: Marker) {
