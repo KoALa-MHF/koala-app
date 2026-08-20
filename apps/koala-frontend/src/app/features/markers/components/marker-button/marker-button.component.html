@@ -13,7 +13,7 @@
 >
   <koala-marker-icon [iconCode]="marker.icon" [style.color]="marker.contentColor"></koala-marker-icon>
   <span [style.color]="marker.contentColor" [style.margin-left]="marker.icon && marker.abbreviation ? '10px' : '0px'">{{
-    active ? 'STOP' : marker.abbreviation
+    active && enabled ? 'STOP' : marker.abbreviation
   }}</span>
 </button>
 
