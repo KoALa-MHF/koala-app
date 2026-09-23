@@ -29,13 +29,9 @@
       ></koala-session-timer>
     </div>
 
-    <div
-      *ngIf="session.isVideoSession && (session.isSessionOwner || session.enablePlayer)"
-      style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; margin-bottom: 1rem"
-    >
+    <div *ngIf="session.isVideoSession && (session.isSessionOwner || session.enablePlayer)" class="video-section">
       <div id="sessionVideo"></div>
       <koala-marker-toolbar
-        *ngIf="session.isVideoSession"
         class="content-centered-horizontally"
         [toolbarMode]="( ( ( session.editable || session.isSessionOwner ) && session.playMode === PlayMode.Running ) || ( session.isSessionOwner && session.liveSessionEnd === null ) || ( session.enablePlayer && !audioPaused ) ) ? ToolbarMode.Session : ToolbarMode.SessionDisabled"
         [markers]="markers"
@@ -49,7 +45,7 @@
     </div>
 
     <koala-marker-toolbar
-      *ngIf="session.isVideoSession && !session.isSessionOwner"
+      *ngIf="session.isVideoSession && !session.isSessionOwner && !session.enablePlayer"
       class="content-centered-horizontally"
       [toolbarMode]="( ( ( session.editable || session.isSessionOwner ) && session.playMode === PlayMode.Running ) || ( session.isSessionOwner && session.liveSessionEnd === null ) || ( session.enablePlayer && !audioPaused ) ) ? ToolbarMode.Session : ToolbarMode.SessionDisabled"
       [markers]="markers"
