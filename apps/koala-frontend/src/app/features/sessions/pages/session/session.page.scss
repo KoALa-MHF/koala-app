@@ -4,7 +4,9 @@
 
 .content {
   margin-right: 30px;
-  flex: 1 0 auto;
+  /* allow shrinking below the intrinsic width of the timeline/annotation svgs */
+  flex: 1 1 0;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 30px;
@@ -27,6 +29,26 @@
 .content-centered-horizontally {
   justify-content: center;
   display: flex;
+  max-width: 100%;
+}
+
+:host ::ng-deep .content-centered-horizontally .drag-drop-group {
+  justify-content: center;
+}
+
+.video-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .content {
+    margin-right: 0;
+  }
 }
 
 .sideBar {
@@ -40,7 +62,8 @@
 
 #sessionVideo {
   align-self: center;
-  width: min(100%, calc(100cqh / 2 * 16 / 9));
+  /* at most half of the visible viewport height, never wider than the container */
+  width: min(100%, calc(50dvh * 16 / 9));
   aspect-ratio: 16 / 9;
   overflow: hidden;
 }
