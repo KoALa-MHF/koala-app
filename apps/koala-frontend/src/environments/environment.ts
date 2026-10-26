@@ -8,7 +8,7 @@ export const environment = {
   graphqlBaseUrl: 'http://localhost:4200',
   wsBaseUrl: 'ws://localhost:3333',
   samlUrl: 'http://localhost:3333/api/auth/sso/saml/login',
-  mediaUrl: 'http://localhost:4200/api/media',
+  apiUrl: 'http://localhost:4200/api',
   showSAMLLoginOption: true,
   samlUrlOption: 'http://localhost:3333/api/auth/sso/saml/option/login',
 };

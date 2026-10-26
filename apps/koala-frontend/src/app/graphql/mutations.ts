@@ -84,25 +84,25 @@ const DELETE_ANNOTATION = gql`
   }
 `;
 
-const CREATE_MEDIA = gql`
-  mutation createMedia($media: CreateMediaInput!) {
-    createMedia(createMediaInput: $media) {
+const CREATE_SESSION_MEDIA = gql`
+  mutation createSessionMedia($id: Int!, $createMediaInput: CreateMediaInput!) {
+    createSessionMedia(id: $id, createMediaInput: $createMediaInput) {
       id
     }
   }
 `;
 
-const CREATE_EXTERNAL_MEDIA = gql`
-  mutation createExternalMedia($media: CreateExternalMediaInput!) {
-    createExternalMedia(createExternalMediaInput: $media) {
+const CREATE_SESSION_EXTERNAL_MEDIA = gql`
+  mutation createSessionExternalMedia($id: Int!, $createExternalMediaInput: CreateExternalMediaInput!) {
+    createSessionExternalMedia(id: $id, createExternalMediaInput: $createExternalMediaInput) {
       id
     }
   }
 `;
 
-const DELETE_MEDIA = gql`
-  mutation deleteMedia($id: Float!) {
-    deleteMedia(id: $id) {
+const REMOVE_SESSION_MEDIA = gql`
+  mutation removeSessionMedia($id: Int!) {
+    removeSessionMedia(id: $id) {
       id
     }
   }
@@ -408,13 +408,10 @@ const UPDATE_ANNOTATION_NOTE = gql`
   }
 `;
 
-const UPDATE_ANNOTATION_MEDIA = gql`
-  mutation updateAnnotationAudio($id: Int!, $mediaId: Int!) {
-    updateAnnotation(id: $id, updateAnnotationInput: { mediaId: $mediaId }) {
+const CREATE_ANNOTATION_MEDIA = gql`
+  mutation createAnnotationMedia($id: Int!, $createMediaInput: CreateMediaInput!) {
+    createAnnotationMedia(id: $id, createMediaInput: $createMediaInput) {
       id
-      media {
-        id
-      }
     }
   }
 `;

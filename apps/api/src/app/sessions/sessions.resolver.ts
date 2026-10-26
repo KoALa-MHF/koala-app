@@ -17,6 +17,8 @@ import { SetPlayModeInput } from './dto/set-play-mode.input';
 import { SetPlayPositionInput } from './dto/set-play-position.input';
 import { SetMediaDurationInput } from './dto/set-media-duration.input';
 import { SessionOwnerInterceptor } from './session-owner.interceptor';
+import { CreateMediaInput } from '../media/dto/create-media.input';
+import { CreateExternalMediaInput } from '../media/dto/create-external-media.input';
 
 const pubSub = new PubSub();
 
@@ -83,6 +85,41 @@ export class SessionsResolver {
 
     session.isSessionOwner = user.id === session.ownerId;
 
+    pubSub.publish('sessionUpdated', { sessionUpdated: session });
+    return session;
+  }
+
+  @Mutation(() => Session)
+  @UseGuards(AuthGuard, RegisteredUserGuard)
+  @UseInterceptors(SessionOwnerInterceptor)
+  async createSessionMedia(
+    @Args('id', { type: () => Int }) id: number,
+    @Args('createMediaInput') createMediaInput: CreateMediaInput,
+    @CurrentUser() user: User
+  ) {
+    const session = await this.sessionsService.createMedia(id, createMediaInput, user);
+    pubSub.publish('sessionUpdated', { sessionUpdated: session });
+    return session;
+  }
+
+  @Mutation(() => Session)
+  @UseGuards(AuthGuard, RegisteredUserGuard)
+  @UseInterceptors(SessionOwnerInterceptor)
+  async createSessionExternalMedia(
+    @Args('id', { type: () => Int }) id: number,
+    @Args('createExternalMediaInput') createExternalMediaInput: CreateExternalMediaInput,
+    @CurrentUser() user: User
+  ) {
+    const session = await this.sessionsService.createExternalMedia(id, createExternalMediaInput, user);
+    pubSub.publish('sessionUpdated', { sessionUpdated: session });
+    return session;
+  }
+
+  @Mutation(() => Session)
+  @UseGuards(AuthGuard, RegisteredUserGuard)
+  @UseInterceptors(SessionOwnerInterceptor)
+  async removeSessionMedia(@Args('id', { type: () => Int }) id: number, @CurrentUser() user: User) {
+    const session = await this.sessionsService.removeMedia(id, user);
     pubSub.publish('sessionUpdated', { sessionUpdated: session });
     return session;
   }

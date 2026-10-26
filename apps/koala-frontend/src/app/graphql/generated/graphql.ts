@@ -86,8 +86,6 @@ export type CreateAnnotationInput = {
   end?: InputMaybe<Scalars['Int']['input']>;
   /** Associated Marker */
   markerId: Scalars['Int']['input'];
-  /** Assigned Media */
-  mediaId?: InputMaybe<Scalars['Int']['input']>;
   /** Annotation Note */
   note?: InputMaybe<Scalars['String']['input']>;
   /** Annotation Start Seconds */
@@ -143,8 +141,6 @@ export type CreateSessionInput = {
   end?: InputMaybe<Scalars['DateTime']['input']>;
   isLiveSession?: InputMaybe<Scalars['Boolean']['input']>;
   lockAnnotationDelete?: InputMaybe<Scalars['Boolean']['input']>;
-  /** Assigned Media */
-  mediaId?: InputMaybe<Scalars['Int']['input']>;
   name: Scalars['String']['input'];
   start?: InputMaybe<Scalars['DateTime']['input']>;
   status?: InputMaybe<SessionStatus>;
@@ -228,19 +224,20 @@ export type Mutation = {
   authenticateSession: Authentication;
   authenticateUserSession: Authentication;
   createAnnotation: Annotation;
+  createAnnotationMedia: Annotation;
   createComment: Comment;
-  createExternalMedia: Media;
   createMarker: Marker;
-  createMedia: Media;
   createSession: Session;
+  createSessionExternalMedia: Session;
+  createSessionMedia: Session;
   createUserSession: UserSession;
-  deleteMedia: Media;
   inviteUserSession: Array<UserSession>;
   removeAnnotation: Annotation;
   removeAnnotationMedia: Annotation;
   removeComment: Comment;
   removeMarker: Marker;
   removeSession: Session;
+  removeSessionMedia: Session;
   removeUserSession: UserSession;
   setMarkerVisible: Toolbar;
   setMediaDuration: Session;
@@ -267,32 +264,35 @@ export type MutationCreateAnnotationArgs = {
   createAnnotationInput: CreateAnnotationInput;
 };
 
-export type MutationCreateCommentArgs = {
-  createCommentInput: CreateCommentInput;
+export type MutationCreateAnnotationMediaArgs = {
+  createMediaInput: CreateMediaInput;
+  id: Scalars['Int']['input'];
 };
 
-export type MutationCreateExternalMediaArgs = {
-  createExternalMediaInput: CreateExternalMediaInput;
+export type MutationCreateCommentArgs = {
+  createCommentInput: CreateCommentInput;
 };
 
 export type MutationCreateMarkerArgs = {
   createMarkerInput: CreateMarkerInput;
 };
 
-export type MutationCreateMediaArgs = {
-  createMediaInput: CreateMediaInput;
-};
-
 export type MutationCreateSessionArgs = {
   createSessionInput: CreateSessionInput;
 };
 
-export type MutationCreateUserSessionArgs = {
-  createUserSessionInput: CreateUserSessionInput;
+export type MutationCreateSessionExternalMediaArgs = {
+  createExternalMediaInput: CreateExternalMediaInput;
+  id: Scalars['Int']['input'];
 };
 
-export type MutationDeleteMediaArgs = {
-  id: Scalars['Float']['input'];
+export type MutationCreateSessionMediaArgs = {
+  createMediaInput: CreateMediaInput;
+  id: Scalars['Int']['input'];
+};
+
+export type MutationCreateUserSessionArgs = {
+  createUserSessionInput: CreateUserSessionInput;
 };
 
 export type MutationInviteUserSessionArgs = {
@@ -316,6 +316,10 @@ export type MutationRemoveMarkerArgs = {
 };
 
 export type MutationRemoveSessionArgs = {
+  id: Scalars['Int']['input'];
+};
+
+export type MutationRemoveSessionMediaArgs = {
   id: Scalars['Int']['input'];
 };
 
@@ -533,8 +537,6 @@ export type ToolbarMarker = {
 };
 
 export type UpdateAnnotationInput = {
-  /** Assigned Media */
-  mediaId?: InputMaybe<Scalars['Int']['input']>;
   /** Annotation Note */
   note?: InputMaybe<Scalars['String']['input']>;
   /** Annotation Value */
@@ -577,8 +579,6 @@ export type UpdateSessionInput = {
   isLiveSession?: InputMaybe<Scalars['Boolean']['input']>;
   liveSessionStart?: InputMaybe<Scalars['Float']['input']>;
   lockAnnotationDelete?: InputMaybe<Scalars['Boolean']['input']>;
-  /** Assigned Media */
-  mediaId?: InputMaybe<Scalars['Int']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   start?: InputMaybe<Scalars['DateTime']['input']>;
   status?: InputMaybe<SessionStatus>;
@@ -720,26 +720,34 @@ export type DeleteAnnotationMutation = {
   removeAnnotation: { __typename?: 'Annotation'; id: number };
 };
 
-export type CreateMediaMutationVariables = Exact<{
-  media: CreateMediaInput;
+export type CreateSessionMediaMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  createMediaInput: CreateMediaInput;
 }>;
 
-export type CreateMediaMutation = { __typename?: 'Mutation'; createMedia: { __typename?: 'Media'; id: string } };
-
-export type CreateExternalMediaMutationVariables = Exact<{
-  media: CreateExternalMediaInput;
-}>;
-
-export type CreateExternalMediaMutation = {
+export type CreateSessionMediaMutation = {
   __typename?: 'Mutation';
-  createExternalMedia: { __typename?: 'Media'; id: string };
+  createSessionMedia: { __typename?: 'Session'; id: string };
 };
 
-export type DeleteMediaMutationVariables = Exact<{
-  id: Scalars['Float']['input'];
+export type CreateSessionExternalMediaMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  createExternalMediaInput: CreateExternalMediaInput;
 }>;
 
-export type DeleteMediaMutation = { __typename?: 'Mutation'; deleteMedia: { __typename?: 'Media'; id: string } };
+export type CreateSessionExternalMediaMutation = {
+  __typename?: 'Mutation';
+  createSessionExternalMedia: { __typename?: 'Session'; id: string };
+};
+
+export type RemoveSessionMediaMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type RemoveSessionMediaMutation = {
+  __typename?: 'Mutation';
+  removeSessionMedia: { __typename?: 'Session'; id: string };
+};
 
 export type CreateMarkerMutationVariables = Exact<{
   createMarker: CreateMarkerInput;
@@ -1022,14 +1030,14 @@ export type UpdateAnnotationNoteMutation = {
   updateAnnotation: { __typename?: 'Annotation'; id: number; note?: string | null };
 };
 
-export type UpdateAnnotationAudioMutationVariables = Exact<{
+export type CreateAnnotationMediaMutationVariables = Exact<{
   id: Scalars['Int']['input'];
-  mediaId: Scalars['Int']['input'];
+  createMediaInput: CreateMediaInput;
 }>;
 
-export type UpdateAnnotationAudioMutation = {
+export type CreateAnnotationMediaMutation = {
   __typename?: 'Mutation';
-  updateAnnotation: { __typename?: 'Annotation'; id: number; media?: { __typename?: 'Media'; id: string } | null };
+  createAnnotationMedia: { __typename?: 'Annotation'; id: number };
 };
 
 export type RemoveAnnotationAudioMutationVariables = Exact<{
@@ -1530,9 +1538,9 @@ export class DeleteAnnotationGQL extends Apollo.Mutation<DeleteAnnotationMutatio
     super(apollo);
   }
 }
-export const CreateMediaDocument = gql`
-  mutation createMedia($media: CreateMediaInput!) {
-    createMedia(createMediaInput: $media) {
+export const CreateSessionMediaDocument = gql`
+  mutation createSessionMedia($id: Int!, $createMediaInput: CreateMediaInput!) {
+    createSessionMedia(id: $id, createMediaInput: $createMediaInput) {
       id
     }
   }
@@ -1541,37 +1549,19 @@ export const CreateMediaDocument = gql`
 @Injectable({
   providedIn: 'root',
 })
-export class CreateMediaGQL extends Apollo.Mutation<CreateMediaMutation, CreateMediaMutationVariables> {
-  override document = CreateMediaDocument;
-
-  constructor(apollo: Apollo.Apollo) {
-    super(apollo);
-  }
-}
-export const CreateExternalMediaDocument = gql`
-  mutation createExternalMedia($media: CreateExternalMediaInput!) {
-    createExternalMedia(createExternalMediaInput: $media) {
-      id
-    }
-  }
-`;
-
-@Injectable({
-  providedIn: 'root',
-})
-export class CreateExternalMediaGQL extends Apollo.Mutation<
-  CreateExternalMediaMutation,
-  CreateExternalMediaMutationVariables
+export class CreateSessionMediaGQL extends Apollo.Mutation<
+  CreateSessionMediaMutation,
+  CreateSessionMediaMutationVariables
 > {
-  override document = CreateExternalMediaDocument;
+  override document = CreateSessionMediaDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
   }
 }
-export const DeleteMediaDocument = gql`
-  mutation deleteMedia($id: Float!) {
-    deleteMedia(id: $id) {
+export const CreateSessionExternalMediaDocument = gql`
+  mutation createSessionExternalMedia($id: Int!, $createExternalMediaInput: CreateExternalMediaInput!) {
+    createSessionExternalMedia(id: $id, createExternalMediaInput: $createExternalMediaInput) {
       id
     }
   }
@@ -1580,8 +1570,32 @@ export const DeleteMediaDocument = gql`
 @Injectable({
   providedIn: 'root',
 })
-export class DeleteMediaGQL extends Apollo.Mutation<DeleteMediaMutation, DeleteMediaMutationVariables> {
-  override document = DeleteMediaDocument;
+export class CreateSessionExternalMediaGQL extends Apollo.Mutation<
+  CreateSessionExternalMediaMutation,
+  CreateSessionExternalMediaMutationVariables
+> {
+  override document = CreateSessionExternalMediaDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const RemoveSessionMediaDocument = gql`
+  mutation removeSessionMedia($id: Int!) {
+    removeSessionMedia(id: $id) {
+      id
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class RemoveSessionMediaGQL extends Apollo.Mutation<
+  RemoveSessionMediaMutation,
+  RemoveSessionMediaMutationVariables
+> {
+  override document = RemoveSessionMediaDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
@@ -2035,13 +2049,10 @@ export class UpdateAnnotationNoteGQL extends Apollo.Mutation<
     super(apollo);
   }
 }
-export const UpdateAnnotationAudioDocument = gql`
-  mutation updateAnnotationAudio($id: Int!, $mediaId: Int!) {
-    updateAnnotation(id: $id, updateAnnotationInput: { mediaId: $mediaId }) {
+export const CreateAnnotationMediaDocument = gql`
+  mutation createAnnotationMedia($id: Int!, $createMediaInput: CreateMediaInput!) {
+    createAnnotationMedia(id: $id, createMediaInput: $createMediaInput) {
       id
-      media {
-        id
-      }
     }
   }
 `;
@@ -2049,11 +2060,11 @@ export const UpdateAnnotationAudioDocument = gql`
 @Injectable({
   providedIn: 'root',
 })
-export class UpdateAnnotationAudioGQL extends Apollo.Mutation<
-  UpdateAnnotationAudioMutation,
-  UpdateAnnotationAudioMutationVariables
+export class CreateAnnotationMediaGQL extends Apollo.Mutation<
+  CreateAnnotationMediaMutation,
+  CreateAnnotationMediaMutationVariables
 > {
-  override document = UpdateAnnotationAudioDocument;
+  override document = CreateAnnotationMediaDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

@@ -27,7 +27,8 @@ export class AnnotationAudioCommentComponent implements OnDestroy {
     this._mediaId = value;
 
     if (value !== 0) {
-      this.fetchAudioBlob(value).then((audioUrl) => {
+      // annotationId is bound before mediaId in the template, so it is already set here
+      this.fetchAudioBlob(this.annotationId).then((audioUrl) => {
         this.annotationAudioSource = audioUrl;
       });
     }
@@ -35,7 +36,7 @@ export class AnnotationAudioCommentComponent implements OnDestroy {
   @Output() save = new EventEmitter<AnnotationAudioComment>();
   @Output() delete = new EventEmitter();
 
-  mediaUrl = environment.mediaUrl;
+  apiUrl = environment.apiUrl;
   recordedAudioSource?: string;
   annotationAudioSource?: string;
   _mediaId = 0;
@@ -109,8 +110,8 @@ export class AnnotationAudioCommentComponent implements OnDestroy {
     this.onCancel();
   }
 
-  private async fetchAudioBlob(mediaId: number): Promise<string> {
-    const response = await fetch(`${this.mediaUrl}/${mediaId}`, {
+  private async fetchAudioBlob(annotationId: number): Promise<string> {
+    const response = await fetch(`${this.apiUrl}/annotations/${annotationId}/media`, {
       headers: {
         Authorization: `Bearer ${this.accessTokenService.getAccessToken()}`,
       },
