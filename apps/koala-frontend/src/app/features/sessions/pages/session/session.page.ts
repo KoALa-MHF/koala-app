@@ -573,7 +573,8 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
         break;
       case MediaActions.Stop:
         try {
-          //this.endActiveSliders(this.currentAudioTime);
+          // end active ranges and sliders before stopping, because stopping resets the current time to 0
+          this.endActiveSliders(this.getCurrentTimeMs() / 1000);
           this.sessionControlService.stopSession().subscribe();
           this.sessionService.setFocusSession(this.sessionId).subscribe();
           this.currentAudioTime = 0;
