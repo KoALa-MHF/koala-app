@@ -152,7 +152,7 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
         }
 
         if (session.playMode !== PlayMode.Running) {
-          this.endActiveSliders(this.sessionService.getLastPlayPosition())
+          this.endActiveSliders(this.getStopTime(session))
             .then(() => {
               if (session.playPosition == 0 && this.myUserSession) {
                 this.loadAnnotations([
@@ -460,6 +460,14 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
     return this.sessionControlService.getCurrentTime();
   }
 
+  // time in seconds at which the session got stopped, based on the same clock as the annotations
+  private getStopTime(session: Session): number {
+    if (!session.isAudioSession && session.liveSessionStart && session.liveSessionEnd) {
+      return (session.liveSessionEnd - session.liveSessionStart) / 1000;
+    }
+    return this.sessionService.getLastPlayPosition() || this.getCurrentTimeMs() / 1000;
+  }
+
   onMarkerButtonEvent({ marker, value }: { marker: Marker; value?: number }) {
     let aData = this.AnnotationData.get(marker.id);
     if (aData == undefined) {
@@ -494,7 +502,7 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
     };
 
     this.AnnotationData.get(m.id)?.push(dp);
-    this.saveAnnotation(dp, m.id);
+    this.saveAnnotation(dp, m.id).subscribe();
   }
 
   onMarkerRange(m: Marker, aData: DataPoint[]) {
@@ -506,7 +514,7 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
         if (latest.active) {
           latest.endTime = Math.floor(this.getCurrentTimeMs());
           latest.active = false;
-          this.saveAnnotation(latest, m.id);
+          this.saveAnnotation(latest, m.id).subscribe();
           return;
         }
       }
@@ -531,7 +539,7 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
       if (latest.active) {
         latest.endTime = t;
         latest.active = false;
-        this.saveAnnotation(latest, m.id);
+        this.saveAnnotation(latest, m.id).subscribe();
       }
     }
     if (strength != 0) {
@@ -564,7 +572,8 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
         break;
       case MediaActions.Stop:
         try {
-          //this.endActiveSliders(this.currentAudioTime);
+          // end active ranges and sliders before stopping, because stopping resets the current time to 0
+          this.endActiveSliders(this.getCurrentTimeMs() / 1000);
           this.sessionControlService.stopSession().subscribe();
           this.sessionService.setFocusSession(this.sessionId).subscribe();
           this.currentAudioTime = 0;
@@ -773,7 +782,8 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
         if (annotation.active) {
           annotation.active = false;
 
-          annotation.endTime = Math.floor(currentTime * 1000);
+          // the end must never be before the start, otherwise the annotation is displayed wrongly
+          annotation.endTime = Math.max(Math.floor(currentTime * 1000), annotation.startTime);
           requests.push(this.saveAnnotation(annotation, id));
         }
       });
