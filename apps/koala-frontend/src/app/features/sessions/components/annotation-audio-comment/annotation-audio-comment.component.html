@@ -1,5 +1,5 @@
 <div class="tab-container">
-  <div style="display: flex; justify-content: center; align-items: center; gap: 15px">
+  <div *ngIf="editable" style="display: flex; justify-content: center; align-items: center; gap: 15px">
     <button
       pButton
       pRipple
@@ -11,6 +11,10 @@
     ></button>
 
     <span *ngIf="recording">{{ recordingTime | date : 'mm:ss' }}</span>
+  </div>
+
+  <div *ngIf="!editable && !_mediaId" style="display: flex; justify-content: center">
+    <span>{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.NO_AUDIO_COMMENT' | translate }}</span>
   </div>
 
   <div style="display: flex; justify-content: center">
@@ -49,7 +53,7 @@
     <button
       pButton
       pRipple
-      *ngIf="!recording && annotationAudioSource && !recordedAudioSource"
+      *ngIf="editable && !recording && annotationAudioSource && !recordedAudioSource"
       label="{{ 'SESSION.ANNOTATION.DETAIL_OVERLAY.DELETE_BTN' | translate }}"
       icon="pi pi-times"
       data-cy="annotation-detail-delete-btn"

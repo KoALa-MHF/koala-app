@@ -71,6 +71,7 @@
       [currentTime]="currentAudioTime"
       [enableAnnotationDelete]="!session.lockAnnotationDelete"
       [deactivateAnnotationDelete]="!audioPaused"
+      [enableAudioCommentEdit]="true"
       (deleteAnnotations)="onDeleteAnnotations($event)"
       (annotationTextCommentCreate)="onAnnotationTextCommentCreate($event)"
       (annotationTextCommentUpdate)="onAnnotationTextCommentUpdate($event)"

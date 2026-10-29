@@ -35,6 +35,7 @@
         [displayMode]="true"
         [enableAnnotationDelete]="false"
         [disableComments]="userSession.owner?.id === session.owner?.id"
+        [enableAudioCommentEdit]="userSession.owner?.id === userID.toString()"
         (annotationTextCommentCreate)="onAnnotationTextCommentCreate($event)"
         (annotationTextCommentUpdate)="onAnnotationTextCommentUpdate($event)"
         (annotationTextCommentRemove)="onAnnotationTextCommentRemove($event)"

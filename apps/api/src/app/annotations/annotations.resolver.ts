@@ -11,7 +11,6 @@ import { CurrentUser } from '../core/decorators/user.decorator';
 import { User } from '../users/entities/user.entity';
 import { MediaService } from '../media/media.service';
 import { Comment } from '../comments/entities/comment.entity';
-import { RegisteredUserGuard } from '../core/guards/registerd-user.guard';
 import { CreateMediaInput } from '../media/dto/create-media.input';
 
 @Resolver(() => Annotation)
@@ -48,7 +47,6 @@ export class AnnotationsResolver {
   }
 
   @Mutation(() => Annotation)
-  @UseGuards(RegisteredUserGuard)
   createAnnotationMedia(
     @Args('id', { type: () => Int }) id: number,
     @Args('createMediaInput') createMediaInput: CreateMediaInput,

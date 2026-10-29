@@ -33,6 +33,7 @@ export class AnnotationAudioCommentComponent implements OnDestroy {
       });
     }
   }
+  @Input() editable = false;
   @Output() save = new EventEmitter<AnnotationAudioComment>();
   @Output() delete = new EventEmitter();
 

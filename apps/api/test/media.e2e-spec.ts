@@ -397,11 +397,14 @@ describe('Media (e2e) - GraphQL', () => {
       expect(body.errors[0].message).toBe('Unauthorized');
     });
 
-    it('Not registered user should not be able to upload an audio comment', async () => {
+    it('Not registered annotation owner should upload an audio comment and replace the previous file', async () => {
       const { body } = await uploadMedia(CREATE_ANNOTATION_MEDIA, 1, UsersData.sessionParticipant1.id);
 
-      expect(body.errors).toHaveLength(1);
-      expect(body.errors[0].message).toBe('Forbidden resource');
+      expect(body.errors).toBeUndefined();
+      expect(body.data).toEqual({
+        createAnnotationMedia: { id: 1, media: { id: `${NEW_MEDIA_ID}`, name: UPLOAD_FILE_NAME } },
+      });
+      await expect(readFile(getFilePath(ANNOTATION_MEDIA_ID, 'test.mp3'))).rejects.toThrow('ENOENT');
     });
 
     it('Session owner should not be able to upload an audio comment for an annotation of a participant', async () => {
