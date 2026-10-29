@@ -1,6 +1,7 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { AnnotationsService } from './annotations.service';
 import { AnnotationsResolver } from './annotations.resolver';
+import { AnnotationsController } from './annotations.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Annotation } from './entities/annotation.entity';
 import { MarkersModule } from '../markers/markers.module';
@@ -19,6 +20,9 @@ import { MediaModule } from '../media/media.module';
   providers: [
     AnnotationsResolver,
     AnnotationsService,
+  ],
+  controllers: [
+    AnnotationsController,
   ],
   exports: [
     AnnotationsService,

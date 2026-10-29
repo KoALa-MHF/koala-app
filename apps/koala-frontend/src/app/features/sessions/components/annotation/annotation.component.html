@@ -35,6 +35,7 @@
   <koala-annotation-detail
     #annotationDetail
     [annotation]="selectedDataPoint"
+    [enableAudioCommentEdit]="enableAudioCommentEdit"
     (createTextComment)="onAnnotationTextCommentCreate($event)"
     (updateTextComment)="onAnnotationTextCommentUpdate($event)"
     (removeTextComment)="onAnnotationTextCommentRemove($event)"

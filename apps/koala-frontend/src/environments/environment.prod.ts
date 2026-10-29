@@ -4,7 +4,7 @@ export const environment = {
   graphqlBaseUrl: 'https://koala.mh-freiburg.de',
   wsBaseUrl: 'wss://koala.mh-freiburg.de',
   samlUrl: 'https://koala.mh-freiburg.de/api/auth/sso/saml/login',
-  mediaUrl: 'https://koala.mh-freiburg.de/api/media',
+  apiUrl: 'https://koala.mh-freiburg.de/api',
   showSAMLLoginOption: true,
   samlUrlOption: 'https://koala.mh-freiburg.de/api/auth/sso/saml/option/login',
 };

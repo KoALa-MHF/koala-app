@@ -35,6 +35,8 @@ export class AnnotationDetailComponent {
 
   private _annotation!: DataPoint | null;
 
+  @Input() enableAudioCommentEdit = false;
+
   @Output() createTextComment = new EventEmitter<CreateAnnotationTextComment>();
   @Output() updateTextComment = new EventEmitter<Comment>();
   @Output() removeTextComment = new EventEmitter<number>();

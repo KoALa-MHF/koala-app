@@ -7,6 +7,8 @@ import { CreateAnnotationInput } from './dto/create-annotation.input';
 import { UpdateAnnotationInput } from './dto/update-annotation.input';
 import { Annotation } from './entities/annotation.entity';
 import { Comment } from '../comments/entities/comment.entity';
+import { MediaService } from '../media/media.service';
+import { CreateMediaInput } from '../media/dto/create-media.input';
 
 @Injectable()
 export class AnnotationsService {
@@ -14,7 +16,8 @@ export class AnnotationsService {
     @InjectRepository(Annotation)
     private annotationsRepository: Repository<Annotation>,
     @Inject(forwardRef(() => UserSessionsService))
-    private readonly userSessionsService: UserSessionsService
+    private readonly userSessionsService: UserSessionsService,
+    private readonly mediaService: MediaService
   ) {}
 
   async create(createAnnotationInput: CreateAnnotationInput, user: User) {
@@ -29,9 +32,6 @@ export class AnnotationsService {
       },
       userSession: {
         id: userSession.id,
-      },
-      media: {
-        id: createAnnotationInput.mediaId,
       },
       note: createAnnotationInput.note,
     });
@@ -68,6 +68,7 @@ export class AnnotationsService {
 
     await this.annotationsRepository.save(updatedAnnotations);
     await this.annotationsRepository.remove(futureAnnotations);
+    await this.removeAudioComments(futureAnnotations.map((annotation) => annotation.mediaId));
     return this.annotationsRepository.save(newAnnotation);
   }
 
@@ -110,18 +111,38 @@ export class AnnotationsService {
 
     this.annotationsRepository.merge(annotation, {
       note: updateAnnotationInput.note,
-      ...(updateAnnotationInput.mediaId && { media: { id: updateAnnotationInput.mediaId } }),
     });
 
     return this.annotationsRepository.save(annotation);
   }
 
+  async createMedia(id: number, createMediaInput: CreateMediaInput, user: User) {
+    // only the annotation owner is allowed to add an audio comment
+    const annotation = await this.findOne(id, user);
+    const previousMediaId = annotation.mediaId;
+    const media = await this.mediaService.create(createMediaInput);
+
+    annotation.media = media;
+    annotation.mediaId = media.id;
+    const savedAnnotation = await this.annotationsRepository.save(annotation);
+
+    await this.removeAudioComments([
+      previousMediaId,
+    ]);
+
+    return savedAnnotation;
+  }
+
   async removeMedia(id: number, user: User) {
     const annotation = await this.findOne(id, user);
-    this.annotationsRepository.update(id, {
+    await this.annotationsRepository.update(id, {
       mediaId: null,
       media: null,
     });
+
+    await this.removeAudioComments([
+      annotation.mediaId,
+    ]);
 
     return { ...annotation, mediaId: null, media: null };
   }
@@ -130,6 +151,9 @@ export class AnnotationsService {
     const annotation = await this.findOne(id, user);
 
     await this.annotationsRepository.remove(annotation);
+    await this.removeAudioComments([
+      annotation.mediaId,
+    ]);
 
     annotation.id = id;
     return annotation;
@@ -159,5 +183,16 @@ export class AnnotationsService {
     });
 
     return annotation ? annotation.comments : [];
+  }
+
+  // removes the media including the files of audio comments which are not used anymore
+  private async removeAudioComments(mediaIds: number[]): Promise<void> {
+    for (const mediaId of mediaIds) {
+      if (mediaId) {
+        await this.mediaService.remove(mediaId).catch((err) => {
+          console.log(err);
+        });
+      }
+    }
   }
 }

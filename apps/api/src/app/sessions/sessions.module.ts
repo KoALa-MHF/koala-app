@@ -2,6 +2,7 @@ import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SessionsService } from './sessions.service';
 import { SessionsResolver } from './sessions.resolver';
+import { SessionsController } from './sessions.controller';
 import { Session } from './entities/session.entity';
 import { MediaModule } from '../media/media.module';
 import { ToolbarsModule } from '../toolbars/toolbars.module';
@@ -21,6 +22,9 @@ import { UsersModule } from '../users/users.module';
   providers: [
     SessionsResolver,
     SessionsService,
+  ],
+  controllers: [
+    SessionsController,
   ],
   exports: [
     SessionsService,

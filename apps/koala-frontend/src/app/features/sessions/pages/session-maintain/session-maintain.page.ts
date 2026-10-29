@@ -223,7 +223,7 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
         ) {
           if (newUrl === null || newUrl === undefined || newUrl === '') {
             if (this.session?.media) {
-              this.mediaService.delete(parseInt(this.session.media.id)).subscribe({
+              this.mediaService.removeSessionMedia(parseInt(this.session.id)).subscribe({
                 next: () => {
                   this.loadSessionData(parseInt(this.session?.id || '0'));
                 },
@@ -233,20 +233,9 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
               });
             }
           } else {
-            this.mediaService.createExternal(newUrl).subscribe({
-              next: (value) => {
-                this.sessionService
-                  .update(parseInt(this.session?.id || '0'), {
-                    mediaId: parseInt(value.data?.createExternalMedia.id || '0'),
-                  })
-                  .subscribe({
-                    next: () => {
-                      this.loadSessionData(parseInt(this.session?.id || '0'));
-                    },
-                    error: (err) => {
-                      console.log(err);
-                    },
-                  });
+            this.mediaService.createSessionExternalMedia(parseInt(this.session?.id || '0'), newUrl).subscribe({
+              next: () => {
+                this.loadSessionData(parseInt(this.session?.id || '0'));
               },
               error: () => {
                 this.messageService.add({
@@ -620,44 +609,29 @@ export class SessionMaintainPage implements OnInit, OnDestroy, AfterViewInit {
   Audio/Media Handling
   ------------------------------*/
   public onFileUpload(file: File) {
-    this.mediaService
-      .create({
-        file,
-      })
-      .subscribe({
-        next: (value) => {
-          this.sessionService
-            .update(parseInt(this.session?.id || '0'), {
-              mediaId: parseInt(value.data?.createMedia.id || '0'),
-            })
-            .subscribe({
-              next: () => {
-                this.messageService.add({
-                  severity: 'success',
-                  summary: this.translateService.instant('SESSION.MAINTAIN.AUDIO.UPLOAD_SUCCESS_MESSAGE_TITLE'),
-                  detail: this.translateService.instant('SESSION.MAINTAIN.AUDIO.UPLOAD_SUCCESS_MESSAGE'),
-                });
+    this.mediaService.createSessionMedia(parseInt(this.session?.id || '0'), file).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: this.translateService.instant('SESSION.MAINTAIN.AUDIO.UPLOAD_SUCCESS_MESSAGE_TITLE'),
+          detail: this.translateService.instant('SESSION.MAINTAIN.AUDIO.UPLOAD_SUCCESS_MESSAGE'),
+        });
 
-                this.loadSessionData(parseInt(this.session?.id || '0'));
-              },
-              error: (err) => {
-                console.log(err);
-              },
-            });
-        },
-        error: () => {
-          this.messageService.add({
-            severity: 'error',
-            summary: this.translateService.instant('SESSION.MAINTAIN.AUDIO.UPLOAD_ERROR_MESSAGE_TITLE'),
-            detail: this.translateService.instant('SESSION.MAINTAIN.AUDIO.UPLOAD_ERROR_MESSAGE'),
-          });
-        },
-      });
+        this.loadSessionData(parseInt(this.session?.id || '0'));
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: this.translateService.instant('SESSION.MAINTAIN.AUDIO.UPLOAD_ERROR_MESSAGE_TITLE'),
+          detail: this.translateService.instant('SESSION.MAINTAIN.AUDIO.UPLOAD_ERROR_MESSAGE'),
+        });
+      },
+    });
   }
 
   public onDeleteMedia() {
     if (this.session?.media) {
-      this.mediaService.delete(parseInt(this.session.media.id)).subscribe({
+      this.mediaService.removeSessionMedia(parseInt(this.session.id)).subscribe({
         next: () => {
           this.messageService.add({
             severity: 'success',

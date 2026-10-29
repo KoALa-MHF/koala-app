@@ -3,7 +3,11 @@
     "target": "http://localhost:3333/graphql",
     "secure": false
   },
-  "/api/media": {
+  "/api/sessions": {
+    "target": "http://localhost:3333",
+    "secure": false
+  },
+  "/api/annotations": {
     "target": "http://localhost:3333",
     "secure": false
   }
