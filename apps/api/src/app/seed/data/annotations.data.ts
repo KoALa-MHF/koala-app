@@ -6,5 +6,6 @@ export const AnnotationsData: Partial<Annotation>[] = [
     markerId: 1,
     userSessionId: 6,
     start: 200,
+    mediaId: 2,
   },
 ];

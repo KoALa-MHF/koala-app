@@ -12,6 +12,9 @@ import { SetPlayPositionInput } from './dto/set-play-position.input';
 import { SetMediaDurationInput } from './dto/set-media-duration.input';
 import { UserSession } from '../user-sessions/entities/user-session.entity';
 import { MediaService } from '../media/media.service';
+import { Media } from '../media/entities/media.entity';
+import { CreateMediaInput } from '../media/dto/create-media.input';
+import { CreateExternalMediaInput } from '../media/dto/create-external-media.input';
 
 @Injectable()
 export class SessionsService {
@@ -27,9 +30,6 @@ export class SessionsService {
 
     const newSession = this.sessionsRepository.create({
       ...createSessionInput,
-      media: {
-        id: createSessionInput.mediaId,
-      },
       toolbars: [
         new Toolbar(),
       ],
@@ -122,15 +122,6 @@ export class SessionsService {
       this.mediaService.remove(session.mediaId).catch((err) => {
         console.log(err);
       });
-    } else if (
-      updateSessionInput.mediaId !== null &&
-      updateSessionInput.mediaId !== undefined &&
-      session.mediaId != null &&
-      updateSessionInput.mediaId !== session.mediaId
-    ) {
-      this.mediaService.remove(session.mediaId).catch((err) => {
-        console.log(err);
-      });
     }
 
     this.sessionsRepository.merge(session, {
@@ -146,12 +137,31 @@ export class SessionsService {
       liveSessionStart: updateSessionInput.liveSessionStart,
       lockAnnotationDelete: updateSessionInput.lockAnnotationDelete,
       isLiveSession: updateSessionInput.isLiveSession,
-      ...(archivingWithMedia
-        ? { media: null, mediaId: null }
-        : updateSessionInput.mediaId && { media: { id: updateSessionInput.mediaId } }),
+      ...(archivingWithMedia && { media: null, mediaId: null }),
     });
 
     return this.sessionsRepository.save(session);
+  }
+
+  async createMedia(id: number, createMediaInput: CreateMediaInput, owner: User): Promise<Session> {
+    const session = await this.findOneOfOwner(id, owner);
+    const media = await this.mediaService.create(createMediaInput);
+    return this.replaceMedia(session, media);
+  }
+
+  async createExternalMedia(
+    id: number,
+    createExternalMediaInput: CreateExternalMediaInput,
+    owner: User
+  ): Promise<Session> {
+    const session = await this.findOneOfOwner(id, owner);
+    const media = await this.mediaService.createExternal(createExternalMediaInput);
+    return this.replaceMedia(session, media);
+  }
+
+  async removeMedia(id: number, owner: User): Promise<Session> {
+    const session = await this.findOneOfOwner(id, owner);
+    return this.replaceMedia(session, null);
   }
 
   async setPlayMode(id: number, setPlayModeInput: SetPlayModeInput, owner: User): Promise<Session> {
@@ -196,5 +206,22 @@ export class SessionsService {
     await this.sessionsRepository.softRemove(session);
     session.id = id;
     return session;
+  }
+
+  // assigns the media to the session and removes the previously assigned media including its file
+  private async replaceMedia(session: Session, media: Media | null): Promise<Session> {
+    const previousMediaId = session.mediaId;
+
+    session.media = media;
+    session.mediaId = media?.id ?? null;
+    const savedSession = await this.sessionsRepository.save(session);
+
+    if (previousMediaId) {
+      await this.mediaService.remove(previousMediaId).catch((err) => {
+        console.log(err);
+      });
+    }
+
+    return savedSession;
   }
 }

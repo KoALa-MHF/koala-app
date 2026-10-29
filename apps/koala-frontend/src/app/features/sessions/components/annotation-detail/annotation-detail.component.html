@@ -26,6 +26,7 @@
         #audioComment
         [annotationId]="annotation?.id || 0"
         [mediaId]="annotation?.mediaId || 0"
+        [editable]="enableAudioCommentEdit"
         (save)="onAudioCommentSave($event)"
         (delete)="onAudioCommentDelete()"
       ></koala-annotation-audio-comment>

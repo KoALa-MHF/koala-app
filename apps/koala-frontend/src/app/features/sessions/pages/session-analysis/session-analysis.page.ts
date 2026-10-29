@@ -19,7 +19,6 @@ import { CreateAnnotationTextComment } from '../../components/annotation-text-co
 import { Comment } from '../../types/comment.entity';
 import { AnnotationAudioComment } from '../../components/annotation-audio-comment/annotation-audio-comment.component';
 import { MediaService } from '../../services/media.service';
-import { Media } from '../../types/media.entity';
 
 export interface AnnotationData {
   AnnotationData: Map<number, Array<DataPoint>>;
@@ -33,7 +32,7 @@ export interface AnnotationData {
   ],
 })
 export class SessionAnalysisPage implements OnInit, OnDestroy {
-  mediaUri: string = environment.mediaUrl;
+  apiUrl: string = environment.apiUrl;
   sessionId = 0;
   userID = -1;
   userSessionAnnotationData: Map<number, AnnotationData> = new Map<number, AnnotationData>();
@@ -98,7 +97,7 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
           this.mediaControlService.uuid = this.session.id;
           this.waveContainer = `waveContainer-${this.session.id}`;
 
-          await this.loadMediaData(this.session.media);
+          await this.loadMediaData(this.session);
         }
       } else {
         if (this.session.liveSessionStart && this.session.liveSessionEnd) {
@@ -126,9 +125,9 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
     }
   }
 
-  private loadMediaData(media: Media): Promise<void> {
+  private loadMediaData(session: Session): Promise<void> {
     return this.mediaControlService
-      .load(`${this.mediaUri}/${media.id}`, this.waveContainer)
+      .load(`${this.apiUrl}/sessions/${session.id}/media`, this.waveContainer)
       .then(() => {
         this.mediaControlService.addEventHandler('audioprocess', (time) => {
           // to reduce update frequency
@@ -230,8 +229,9 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
 
   onAnnotationAudioComment(annotationAudioComment: AnnotationAudioComment) {
     this.mediaService
-      .create({
-        file: new File(
+      .createAnnotationMedia(
+        annotationAudioComment.annotationId,
+        new File(
           [
             annotationAudioComment.comment,
           ],
@@ -239,27 +239,16 @@ export class SessionAnalysisPage implements OnInit, OnDestroy {
           {
             type: 'audio/mp3',
           }
-        ),
-      })
+        )
+      )
       .subscribe({
-        next: (response) => {
-          const mediaId = response.data?.createMedia.id;
-          if (mediaId) {
-            //always is there, because otherwise mediaService would return error
-            this.annotationService.updateMedia(annotationAudioComment.annotationId, parseInt(mediaId)).subscribe({
-              next: (response) => {
-                this.sessionService.setFocusSession(this.sessionId).subscribe((focusSession: Session) => {
-                  const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
-                  if (userSessions) {
-                    this.loadAnnotations(userSessions);
-                  }
-                });
-              },
-              error: (error) => {
-                console.log(error);
-              },
-            });
-          }
+        next: () => {
+          this.sessionService.setFocusSession(this.sessionId).subscribe((focusSession: Session) => {
+            const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
+            if (userSessions) {
+              this.loadAnnotations(userSessions);
+            }
+          });
         },
         error: (error) => {
           console.log(error);

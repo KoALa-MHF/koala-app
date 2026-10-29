@@ -252,7 +252,8 @@
         "DELETE_CONFIRM_DIALOG_CONFIRM": "Supprimer",
         "DELETE_CONFIRM_DIALOG_REJECT": "Annuler",
         "OWN_COMMENT_LEGEND": "je",
-        "OTHER_COMMENT_LEGEND": "Propriétaire de la session"
+        "OTHER_COMMENT_LEGEND": "Propriétaire de la session",
+        "NO_AUDIO_COMMENT": "Aucun commentaire audio disponible"
       }
     }
   },

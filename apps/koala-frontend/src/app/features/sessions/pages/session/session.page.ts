@@ -25,7 +25,6 @@ import { MediaService } from '../../services/media.service';
 import { Comment } from '../../types/comment.entity';
 import { CreateAnnotationTextComment } from '../../components/annotation-text-comment-list/annotation-text-comment-list.component';
 import { BlockNavigationIfUnsavedChanges } from '../../guards/session-unsaved-changes.guard';
-import { Media } from '../../types/media.entity';
 
 @Component({
   selector: 'koala-app-session',
@@ -42,7 +41,7 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
   PlayMode = PlayMode;
 
   waveContainer!: string;
-  mediaUri: string = environment.mediaUrl;
+  apiUrl: string = environment.apiUrl;
   sessionId = 0;
   AnnotationData: Map<number, Array<DataPoint>> = new Map<number, Array<DataPoint>>();
   AnnotationDislay = Display;
@@ -226,7 +225,7 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
         this.mediaControlService.uuid = focusSession.id;
         this.waveContainer = `waveContainer-${focusSession.id}`;
 
-        await this.loadMediaData(focusSession.media!);
+        await this.loadMediaData(focusSession);
 
         this.updateMediaControlSettings();
       } else {
@@ -295,9 +294,9 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
     }
   }
 
-  private loadMediaData(media: Media): Promise<void> {
+  private loadMediaData(session: Session): Promise<void> {
     return this.mediaControlService
-      .load(`${this.mediaUri}/${media.id}`, this.waveContainer)
+      .load(`${this.apiUrl}/sessions/${session.id}/media`, this.waveContainer)
       .then(() => {
         this.mediaControlService.addEventHandler('audioprocess', (time) => {
           // to reduce update frequency
@@ -710,8 +709,9 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
 
   onAnnotationAudioComment(annotationAudioComment: AnnotationAudioComment) {
     this.mediaService
-      .create({
-        file: new File(
+      .createAnnotationMedia(
+        annotationAudioComment.annotationId,
+        new File(
           [
             annotationAudioComment.comment,
           ],
@@ -719,27 +719,16 @@ export class SessionPage implements OnInit, OnDestroy, BlockNavigationIfUnsavedC
           {
             type: 'audio/mp3',
           }
-        ),
-      })
+        )
+      )
       .subscribe({
-        next: (response) => {
-          const mediaId = response.data?.createMedia.id;
-          if (mediaId) {
-            //always is there, because otherwise mediaService would return error
-            this.annotationService.updateMedia(annotationAudioComment.annotationId, parseInt(mediaId)).subscribe({
-              next: (response) => {
-                this.sessionService.setFocusSession(this.sessionId).subscribe((focusSession: Session) => {
-                  const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
-                  if (userSessions) {
-                    this.loadAnnotations(userSessions);
-                  }
-                });
-              },
-              error: (error) => {
-                console.log(error);
-              },
-            });
-          }
+        next: () => {
+          this.sessionService.setFocusSession(this.sessionId).subscribe((focusSession: Session) => {
+            const userSessions = focusSession.userSessions?.filter((s) => (s.owner?.id || 0) == this.userID);
+            if (userSessions) {
+              this.loadAnnotations(userSessions);
+            }
+          });
         },
         error: (error) => {
           console.log(error);

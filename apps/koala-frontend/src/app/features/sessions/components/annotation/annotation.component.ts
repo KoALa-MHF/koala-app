@@ -59,6 +59,8 @@ export class AnnotationComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input() enableAnnotationDelete = false;
   @Input() deactivateAnnotationDelete = false;
   @Input() disableComments = false;
+  // only the annotation owner is allowed to record and delete audio comments
+  @Input() enableAudioCommentEdit = false;
 
   @Output() deleteAnnotations = new EventEmitter<Marker>();
   @Output() annotationTextCommentCreate = new EventEmitter<CreateAnnotationTextComment>();

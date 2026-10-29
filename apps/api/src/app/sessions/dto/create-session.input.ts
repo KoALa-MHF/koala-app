@@ -1,4 +1,4 @@
-import { InputType, Field, Int } from '@nestjs/graphql';
+import { InputType, Field } from '@nestjs/graphql';
 import { IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
 import { SessionStatus } from '../entities/session.entity';
 
@@ -48,8 +48,4 @@ export class CreateSessionInput {
   @Field({ nullable: true })
   @IsOptional()
   isLiveSession?: boolean;
-
-  @Field(() => Int, { nullable: true, description: 'Assigned Media' })
-  @IsOptional()
-  mediaId?: number;
 }
