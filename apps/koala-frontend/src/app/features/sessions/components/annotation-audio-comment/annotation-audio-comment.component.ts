@@ -111,12 +111,18 @@ export class AnnotationAudioCommentComponent implements OnDestroy {
     this.onCancel();
   }
 
-  private async fetchAudioBlob(annotationId: number): Promise<string> {
+  private async fetchAudioBlob(annotationId: number): Promise<string | undefined> {
     const response = await fetch(`${this.apiUrl}/annotations/${annotationId}/media`, {
       headers: {
         Authorization: `Bearer ${this.accessTokenService.getAccessToken()}`,
       },
     });
+
+    // e.g. the file is missing, the error response must not be used as audio source
+    if (!response.ok) {
+      console.log(`Audio comment of annotation ${annotationId} could not be loaded: ${response.status}`);
+      return undefined;
+    }
 
     return window.URL.createObjectURL(await response.blob());
   }
