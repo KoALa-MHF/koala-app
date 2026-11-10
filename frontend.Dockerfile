@@ -1,4 +1,4 @@
-FROM node:18-bullseye-slim AS build
+FROM node:24-bookworm-slim AS build
 RUN apt-get update && apt-get install -y --no-install-recommends dumb-init python3 make g++
 WORKDIR /usr/src/app
 COPY package.json package-lock.json nx.json decorate-angular-cli.js tsconfig.base.json ./
