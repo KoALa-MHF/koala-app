@@ -315,7 +315,7 @@ describe('Media (e2e) - GraphQL', () => {
       expect(data).toEqual({
         createSessionExternalMedia: {
           id: '1',
-          media: { name: 'https://www.youtube.com/embed/abc123', mimeType: 'external/youtube' },
+          media: { name: 'https://www.youtube-nocookie.com/embed/abc123', mimeType: 'external/youtube' },
         },
       });
       await expect(readFile(getFilePath(SESSION_MEDIA_ID, 'test.mp3'))).rejects.toThrow('ENOENT');

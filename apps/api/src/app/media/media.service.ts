@@ -38,7 +38,7 @@ export class MediaService {
     const switchtubeMatch = url.match(/tube\.switch\.ch\/(?:videos|embed)\/([a-zA-Z0-9_-]+)/);
 
     if (youtubeMatch) {
-      newMedia.name = `https://www.youtube.com/embed/${youtubeMatch[1]}`;
+      newMedia.name = `https://www.youtube-nocookie.com/embed/${youtubeMatch[1]}`;
       newMedia.mimeType = 'external/youtube';
     } else if (switchtubeMatch) {
       newMedia.name = `https://tube.switch.ch/embed/${switchtubeMatch[1]}`;
